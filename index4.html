@@ -2,13 +2,13 @@
 <html>
 <head>
   <base target="_top">
-  <link rel="stylesheet" href="tour-runtime.css">
-  <script src="tour-data.js"></script>
-  <script src="tour-runtime.js"></script>
+  <link rel="stylesheet" href="tour-runtime.css?v=20260916-final3">
+  <script src="tour-data.js?v=20260916-final3"></script>
+  <script src="tour-runtime.js?v=20260916-final3"></script>
   
   <!-- FIXED_TOUR_AUDIO -->
-  <script src="tour-audio-map.js"></script>
-  <script src="tour-audio.js"></script>
+  <script src="tour-audio-map.js?v=20260916-final3"></script>
+  <script src="tour-audio.js?v=20260916-final3"></script>
 <meta name="referrer" content="no-referrer">
 
   <meta charset="UTF-8">
@@ -3314,6 +3314,10 @@
 }
 </style>
   <script>/* FIXED_AUDIO_NO_CUTOFF */</script>
+
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
 </head>
 
 
@@ -5650,7 +5654,7 @@
       } catch (error) {}
     }
 
-    arabicEnabled = safeGet(AR_KEY, '0') === '1';
+    arabicEnabled = safeGet(AR_KEY,'1') === '1';
     voiceEnabled = safeGet(VOICE_KEY, '1') !== '0';
 
     function syncControls() {
@@ -6349,5 +6353,108 @@
 })();
 </script>
 
+<script id="numero-final-compact-controls">
+(function(){
+  'use strict';
+  var AR_KEY='support_center_ar', VOICE_KEY='support_center_voice';
+
+  function get(ids){
+    for(var i=0;i<ids.length;i++){
+      var el=document.getElementById(ids[i]);
+      if(el) return el;
+    }
+    return null;
+  }
+  function compact(el){
+    if(!el) return;
+    el.style.setProperty('min-width','46px','important');
+    el.style.setProperty('width','46px','important');
+    el.style.setProperty('height','38px','important');
+    el.style.setProperty('padding','0','important');
+    el.style.setProperty('font-size','18px','important');
+    el.style.setProperty('letter-spacing','0','important');
+    el.style.setProperty('display','inline-flex','important');
+    el.style.setProperty('align-items','center','important');
+    el.style.setProperty('justify-content','center','important');
+  }
+  function pref(key, fallback){
+    try{ var v=localStorage.getItem(key); return v===null?fallback:v==='1'; }
+    catch(e){ return fallback; }
+  }
+  function infer(text, key, fallback){
+    text=String(text||'').toUpperCase();
+    if(/\bOFF\b/.test(text)) return false;
+    if(/\bON\b/.test(text)) return true;
+    return pref(key,fallback);
+  }
+  var trIcon='<span aria-hidden="true" style="position:relative;width:25px;height:22px;display:inline-block;pointer-events:none">'+
+    '<span style="position:absolute;right:0;top:1px;width:16px;height:17px;border-radius:3px;background:#eef1f4;border:1px solid #bcc5ce;display:flex;align-items:center;justify-content:center;color:#4d5964;font:700 10px Arial;line-height:1">文</span>'+
+    '<span style="position:absolute;left:0;bottom:0;width:17px;height:17px;border-radius:3px;background:#4285f4;display:flex;align-items:center;justify-content:center;color:#fff;font:700 10px Arial;line-height:1;box-shadow:0 1px 2px rgba(0,0,0,.18)">G</span>'+
+    '</span>';
+
+  function sync(){
+    var ar=get(['arBtn','arabicToggle','tourArabicToggle']);
+    var voice=get(['voiceBtn','voiceToggle','tourVoiceToggle']);
+    var pause=get(['pauseBtn','pauseToggle','tourPauseToggle']);
+
+    if(ar){
+      var raw=ar.getAttribute('data-numero-last-native') || ar.textContent;
+      if(/\b(?:AR\s+)?(?:ON|OFF)\b/i.test(ar.textContent||'')){
+        raw=ar.textContent; ar.setAttribute('data-numero-last-native',raw);
+      }
+      var on=infer(raw,AR_KEY,true);
+      compact(ar);
+      if(ar.innerHTML!==trIcon) ar.innerHTML=trIcon;
+      ar.title=on?'Arabic translation: ON':'Arabic translation: OFF';
+      ar.setAttribute('aria-label',ar.title);
+      ar.style.setProperty('background',on?'#ffffff':'rgba(9,17,23,.78)','important');
+      ar.style.setProperty('border-color',on?'#ffffff':'rgba(255,255,255,.18)','important');
+      ar.style.setProperty('opacity',on?'1':'.65','important');
+    }
+
+    if(voice){
+      var vraw=voice.getAttribute('data-numero-last-native') || voice.textContent;
+      if(/\bVOICE\s+(?:ON|OFF)\b/i.test(voice.textContent||'')){
+        vraw=voice.textContent; voice.setAttribute('data-numero-last-native',vraw);
+      }
+      var von=infer(vraw,VOICE_KEY,true);
+      compact(voice);
+      var ico=von?'🔊':'🔇';
+      if(voice.textContent!==ico) voice.textContent=ico;
+      voice.title=von?'Sound: ON':'Sound: MUTED';
+      voice.setAttribute('aria-label',voice.title);
+      voice.style.setProperty('background',von?'rgba(9,17,23,.78)':'#b42318','important');
+      voice.style.setProperty('border-color',von?'rgba(255,255,255,.18)':'#ff6b5f','important');
+      voice.style.setProperty('color','#fff','important');
+    }
+
+    if(pause){
+      var praw=pause.getAttribute('data-numero-last-native') || pause.textContent;
+      if(/PAUSE|PLAY|REPLAY/i.test(pause.textContent||'')){
+        praw=pause.textContent; pause.setAttribute('data-numero-last-native',praw);
+      }
+      compact(pause);
+      var picon=/PLAY/i.test(praw)?'▶️':(/REPLAY/i.test(praw)?'↻':'⏸️');
+      if(pause.textContent!==picon) pause.textContent=picon;
+      pause.title=picon==='▶️'?'Play':(picon==='↻'?'Replay':'Pause');
+      pause.setAttribute('aria-label',pause.title);
+    }
+  }
+
+  function install(){
+    sync();
+    document.addEventListener('click',function(e){
+      var id=(e.target&&e.target.id)||'';
+      if(/^(arBtn|arabicToggle|tourArabicToggle|voiceBtn|voiceToggle|tourVoiceToggle|pauseBtn|pauseToggle|tourPauseToggle)$/.test(id)){
+        setTimeout(sync,80);
+        setTimeout(sync,250);
+      }
+    },true);
+    setInterval(sync,700);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',install,{once:true});
+  else install();
+})();
+</script>
 </body>
 </html>
