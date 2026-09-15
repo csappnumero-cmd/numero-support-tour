@@ -635,29 +635,51 @@
     hideLegacyControls();
     syncMasterControls();
 
-    var observer = new MutationObserver(function(){
-      hideLegacyControls();
-      syncMasterControls();
+    // Only watch for newly-added native controls. Do NOT call syncMasterControls()
+    // from a character/DOM observer: changing our own button text would trigger the
+    // observer again and can create an infinite mutation loop.
+    var observer = new MutationObserver(function(mutations){
+      var added = false;
+      for (var i=0;i<mutations.length;i++){
+        if (mutations[i].type === 'childList' && mutations[i].addedNodes && mutations[i].addedNodes.length){
+          added = true;
+          break;
+        }
+      }
+      if (added) hideLegacyControls();
     });
-    observer.observe(document.body, {subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class']});
+    observer.observe(document.body, {subtree:true,childList:true});
+
+    // Lightweight status refresh for native page pause state.
+    nativeSetInterval(syncMasterControls, 600);
   }
 
   function syncMasterControls(){
     if (!controlsEl) return;
     if (muteBtn) {
-      muteBtn.textContent = masterMuted || masterVolume <= 0.001 ? '🔇' : '🔊';
-      muteBtn.setAttribute('aria-label', masterMuted ? 'Unmute tour audio' : 'Mute tour audio');
+      var muteText = masterMuted || masterVolume <= 0.001 ? '🔇' : '🔊';
+      var muteLabel = masterMuted ? 'Unmute tour audio' : 'Mute tour audio';
+      if (muteBtn.textContent !== muteText) muteBtn.textContent = muteText;
+      if (muteBtn.getAttribute('aria-label') !== muteLabel) muteBtn.setAttribute('aria-label', muteLabel);
     }
-    if (volumeInput && document.activeElement !== volumeInput) volumeInput.value = String(Math.round(masterVolume * 100));
+    if (volumeInput && document.activeElement !== volumeInput) {
+      var vv = String(Math.round(masterVolume * 100));
+      if (volumeInput.value !== vv) volumeInput.value = vv;
+    }
     if (pauseBtn) {
-      pauseBtn.textContent = pageLooksPaused() ? '▶' : '⏸';
-      pauseBtn.setAttribute('aria-label', pageLooksPaused() ? 'Play tour' : 'Pause tour');
+      var isPausedNow = pageLooksPaused();
+      var pauseText = isPausedNow ? '▶' : '⏸';
+      var pauseLabel = isPausedNow ? 'Play tour' : 'Pause tour';
+      if (pauseBtn.textContent !== pauseText) pauseBtn.textContent = pauseText;
+      if (pauseBtn.getAttribute('aria-label') !== pauseLabel) pauseBtn.setAttribute('aria-label', pauseLabel);
     }
     if (rewindBtn) {
       var can = historyEntries.length > 0 && !replaying;
-      rewindBtn.disabled = !can;
-      rewindBtn.style.opacity = can ? '1' : '.42';
-      rewindBtn.style.cursor = can ? 'pointer' : 'default';
+      if (rewindBtn.disabled === can) rewindBtn.disabled = !can;
+      var op = can ? '1' : '.42';
+      var cur = can ? 'pointer' : 'default';
+      if (rewindBtn.style.opacity !== op) rewindBtn.style.opacity = op;
+      if (rewindBtn.style.cursor !== cur) rewindBtn.style.cursor = cur;
     }
   }
 
@@ -714,6 +736,18 @@
 
     start.addEventListener('click', function(){
       unlockOriginAudio();
+
+      // If the first narration already tried to start and was blocked by autoplay,
+      // start that exact MP3 inside this user gesture. One click is enough.
+      if (activeAudio) {
+        try {
+          applyVolume(activeAudio);
+          var pp = activeAudio.play();
+          if (pp && pp.catch) pp.catch(function(){});
+          removeAutoplayGate();
+        } catch(e) {}
+      }
+
       releaseStartTimers();
       try { gate.parentNode.removeChild(gate); } catch(e) {}
       buildMasterControls();
@@ -722,8 +756,12 @@
 
   /* ---------- BOOT ---------- */
   function boot(){
+    if (isDoorPage) {
+      showStartTourGate();
+      hideLegacyControls();
+      return;
+    }
     buildMasterControls();
-    if (isDoorPage) showStartTourGate();
     hideLegacyControls();
     syncMasterControls();
   }
