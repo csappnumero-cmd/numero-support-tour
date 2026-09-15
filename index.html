@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <link rel="stylesheet" href="tour-runtime.css">
+  <script src="tour-data.js"></script>
+  <script src="tour-runtime.js"></script>
+  
+  <!-- FIXED_TOUR_AUDIO -->
+  <script src="tour-audio-map.js"></script>
+  <script src="tour-audio.js"></script>
+<meta name="referrer" content="no-referrer">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preload" as="image" href="assets/images/Q5DSMWO.png">
+  <title>Support Team</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      overflow: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #111;
+    }
+
+    .scene {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+
+      background:
+        radial-gradient(
+          circle at 62% 30%,
+          rgba(255, 240, 215, 0.15),
+          transparent 34%
+        ),
+        linear-gradient(
+          135deg,
+          #aaa59d 0%,
+          #918c85 45%,
+          #716d68 100%
+        );
+    }
+
+    .wall-texture {
+      position: absolute;
+      inset: 0;
+      opacity: 0.28;
+
+      background-image:
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,0.03) 0px,
+          rgba(255,255,255,0.03) 1px,
+          transparent 1px,
+          transparent 5px
+        );
+
+      pointer-events: none;
+    }
+
+    .ambient-light {
+      position: absolute;
+      right: 3%;
+      top: 4%;
+      width: 55vw;
+      height: 60vh;
+
+      background:
+        radial-gradient(
+          ellipse at center,
+          rgba(255, 238, 205, 0.17),
+          transparent 68%
+        );
+
+      pointer-events: none;
+    }
+
+    .floor {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 19%;
+
+      background:
+        linear-gradient(
+          to bottom,
+          #5a524a,
+          #403a35
+        );
+
+      box-shadow:
+        inset 0 18px 35px rgba(0,0,0,0.20);
+    }
+
+    .floor::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 2px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    /* =========================
+       DOOR AREA
+    ========================== */
+
+    .door-container {
+      position: absolute;
+      left: 10%;
+      bottom: 8%;
+
+      width: min(36vw, 540px);
+      height: 80vh;
+
+      min-width: 420px;
+      min-height: 570px;
+
+      perspective: 1800px;
+
+      animation: fadeIn 0.8s ease both;
+    }
+
+    .door-frame {
+      position: relative;
+      width: 100%;
+      height: 100%;
+
+      padding: 15px;
+      border-radius: 5px;
+
+      background:
+        linear-gradient(
+          90deg,
+          #1d130f 0%,
+          #3d281d 45%,
+          #251711 100%
+        );
+
+      box-shadow:
+        0 34px 65px rgba(0,0,0,0.43),
+        0 9px 18px rgba(0,0,0,0.24);
+
+      overflow: hidden;
+    }
+
+    .door-frame::before {
+      content: "";
+      position: absolute;
+      inset: 4px;
+
+      border: 1px solid rgba(198,148,88,0.12);
+
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* =========================
+       OFFICE BEHIND DOOR
+    ========================== */
+
+    .office-view {
+      position: absolute;
+      inset: 15px;
+
+      z-index: 1;
+
+      background-image:
+        linear-gradient(
+          rgba(0,0,0,0.08),
+          rgba(0,0,0,0.10)
+        ),
+        url('assets/images/XBOBxjJ.png');
+
+      background-size: cover;
+      background-position: center center;
+
+      transform: scale(1.08);
+      opacity: 0;
+
+      transition:
+        opacity 1.4s ease,
+        transform 3.2s ease;
+    }
+
+    .door-frame.open .office-view {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .office-view::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+
+      background:
+        radial-gradient(
+          circle at center,
+          transparent 40%,
+          rgba(0,0,0,0.24) 100%
+        );
+    }
+
+    /* =========================
+       DOOR
+    ========================== */
+
+    .door {
+      position: relative;
+      z-index: 5;
+
+      width: 100%;
+      height: 100%;
+
+      overflow: hidden;
+
+      transform-origin: left center;
+      transform-style: preserve-3d;
+
+      border:
+        1px solid rgba(217,164,95,0.28);
+
+      background:
+        linear-gradient(
+          112deg,
+          rgba(255,255,255,0.055) 0%,
+          rgba(255,255,255,0.008) 20%,
+          transparent 34%
+        ),
+        radial-gradient(
+          ellipse at 50% 20%,
+          rgba(128,72,43,0.78),
+          transparent 58%
+        ),
+        linear-gradient(
+          90deg,
+          #3a1f16 0%,
+          #5a3122 48%,
+          #321811 100%
+        );
+
+      box-shadow:
+        inset 0 0 65px rgba(0,0,0,0.52),
+        inset 10px 0 20px rgba(255,255,255,0.015),
+        inset -12px 0 24px rgba(0,0,0,0.16);
+
+      transition:
+        transform 2.4s cubic-bezier(.65,.05,.2,1),
+        box-shadow 2.4s ease;
+    }
+
+    .door-frame.open .door {
+      transform: rotateY(-78deg);
+
+      box-shadow:
+        18px 20px 55px rgba(0,0,0,0.45),
+        inset 0 0 65px rgba(0,0,0,0.52);
+    }
+
+    .door::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+
+      opacity: 0.11;
+
+      background-image:
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,0.04) 0px,
+          transparent 2px,
+          transparent 8px
+        );
+    }
+
+    .door::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+
+      width: 32%;
+      height: 100%;
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,0.035),
+          transparent
+        );
+
+      pointer-events: none;
+    }
+
+    .door-panel {
+      position: absolute;
+      inset: 5.5%;
+
+      border:
+        1px solid rgba(205,155,95,0.23);
+
+      box-shadow:
+        inset 0 0 0 5px rgba(20,8,4,0.055);
+
+      pointer-events: none;
+    }
+
+    /* =========================
+       LOGO
+    ========================== */
+
+    .logo {
+      position: absolute;
+      top: 18.5%;
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      width: 148px;
+      height: 148px;
+
+      object-fit: contain;
+      border-radius: 24px;
+
+      filter:
+        drop-shadow(0 11px 17px rgba(0,0,0,0.40))
+        drop-shadow(0 0 1px rgba(255,255,255,0.18));
+    }
+
+    .brand-slogan {
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 88%;
+      text-align: center;
+      white-space: nowrap;
+      font-size: clamp(12px, 1.05vw, 16px);
+      line-height: 1.25;
+      font-weight: 700;
+      letter-spacing: 0.25px;
+      color: #f4e8ff;
+      text-shadow:
+        0 2px 5px rgba(0,0,0,0.72),
+        0 0 10px rgba(104,93,255,0.28);
+      z-index: 7;
+    }
+
+    /* =========================
+       TITLE
+    ========================== */
+
+    .door-title {
+      position: absolute;
+      top: 53.5%;
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      width: 86%;
+      padding: 0 16px;
+
+      text-align: center;
+      white-space: normal;
+      line-height: 1.12;
+
+      color: #fff8f0;
+
+      font-size:
+        clamp(
+          24px,
+          2.15vw,
+          34px
+        );
+
+      font-weight: 700;
+      letter-spacing: 3px;
+
+      text-shadow:
+        0 4px 8px rgba(0,0,0,0.62),
+        0 0 18px rgba(205,151,90,0.14);
+    }
+
+    /* =========================
+       HANDLE
+    ========================== */
+
+    .handle {
+      position: absolute;
+      right: 5.5%;
+      top: 50%;
+
+      width: 14px;
+      height: 92px;
+
+      border-radius: 8px;
+
+      background:
+        linear-gradient(
+          90deg,
+          #6e4d2f,
+          #d0a567 45%,
+          #8a653f
+        );
+
+      box-shadow:
+        2px 5px 12px rgba(0,0,0,0.42),
+        inset 1px 0 2px rgba(255,255,255,0.25);
+    }
+
+    .handle::before,
+    .handle::after {
+      content: "";
+
+      position: absolute;
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      width: 19px;
+      height: 6px;
+
+      border-radius: 4px;
+
+      background:
+        linear-gradient(
+          90deg,
+          #60422a,
+          #c99a61,
+          #60422a
+        );
+    }
+
+    .handle::before {
+      top: -2px;
+    }
+
+    .handle::after {
+      bottom: -2px;
+    }
+
+    /* =========================
+       GLASS PANEL
+    ========================== */
+
+    .glass-wrap {
+      position: absolute;
+      right: 10%;
+      top: 28%;
+
+      width: min(30vw, 460px);
+      min-width: 380px;
+
+      animation: fadeIn 1s ease 0.15s both;
+
+      transition:
+        opacity 1s ease,
+        transform 1s ease;
+    }
+
+    .scene.opening .glass-wrap {
+      opacity: 0.58;
+      transform: translateX(18px);
+    }
+
+    .glass-panel {
+      position: relative;
+
+      width: 100%;
+      min-height: 300px;
+
+      padding: 34px 38px 38px;
+
+      color: white;
+
+      border-radius: 20px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255,255,255,0.18),
+          rgba(255,255,255,0.08)
+        );
+
+      border:
+        1px solid rgba(255,255,255,0.35);
+
+      box-shadow:
+        0 24px 60px rgba(0,0,0,0.24),
+        inset 0 1px 0 rgba(255,255,255,0.28);
+
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+
+      overflow: hidden;
+    }
+
+    .glass-panel::before {
+      content: "";
+
+      position: absolute;
+
+      width: 70%;
+      height: 170%;
+
+      right: -35%;
+      top: -40%;
+
+      transform: rotate(24deg);
+
+      background:
+        linear-gradient(
+          to right,
+          transparent,
+          rgba(255,255,255,0.10),
+          transparent
+        );
+
+      pointer-events: none;
+    }
+
+    .screw {
+      position: absolute;
+
+      width: 11px;
+      height: 11px;
+
+      border-radius: 50%;
+
+      background:
+        radial-gradient(
+          circle at 35% 35%,
+          #ecc684,
+          #80572d 65%,
+          #3a2614
+        );
+
+      box-shadow:
+        0 2px 4px rgba(0,0,0,0.35);
+    }
+
+    .s1 { top: 15px; left: 15px; }
+    .s2 { top: 15px; right: 15px; }
+    .s3 { bottom: 15px; left: 15px; }
+    .s4 { bottom: 15px; right: 15px; }
+
+    .panel-label {
+      position: relative;
+
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+
+      color: rgba(255,255,255,0.70);
+
+      margin-bottom: 13px;
+    }
+
+    .panel-title {
+      position: relative;
+
+      margin-bottom: 16px;
+
+      font-size:
+        clamp(
+          25px,
+          2vw,
+          32px
+        );
+
+      font-weight: 650;
+      letter-spacing: -0.5px;
+    }
+
+    .gold-line {
+      position: relative;
+
+      width: 70px;
+      height: 2px;
+
+      margin-bottom: 22px;
+
+      background:
+        linear-gradient(
+          to right,
+          #e0b778,
+          #986736
+        );
+
+      box-shadow:
+        0 0 8px rgba(201,154,97,0.2);
+    }
+
+    .panel-summary {
+      position: relative;
+
+      max-width: 95%;
+
+      color: rgba(255,255,255,0.86);
+
+      font-size: 16px;
+      line-height: 1.75;
+
+      white-space: pre-line;
+    }
+
+    /* =========================
+       OPENING GLOW
+    ========================== */
+
+    .opening-glow {
+      position: absolute;
+
+      left: 4%;
+      bottom: 0;
+
+      width: 55%;
+      height: 82%;
+
+      opacity: 0;
+
+      background:
+        radial-gradient(
+          ellipse at 42% 45%,
+          rgba(255,235,190,0.24),
+          transparent 68%
+        );
+
+      pointer-events: none;
+
+      transition:
+        opacity 1.8s ease;
+
+      z-index: 2;
+    }
+
+    .scene.opening .opening-glow {
+      opacity: 1;
+    }
+
+    /* =========================
+       TRANSITION TO STAGE 2
+    ========================== */
+
+    .transition-cover {
+      position: fixed;
+      inset: 0;
+
+      z-index: 9999;
+
+      pointer-events: none;
+
+      opacity: 0;
+
+      background:
+        radial-gradient(
+          circle at 35% 50%,
+          rgba(255,242,210,0.88),
+          rgba(26,22,18,0.98) 70%
+        );
+
+      transition:
+        opacity 0.8s ease;
+    }
+
+    .transition-cover.active {
+      opacity: 1;
+    }
+
+    /* =========================
+       ANIMATION
+    ========================== */
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================== */
+
+    @media (max-width: 1000px) {
+
+      .door-container {
+        left: 5%;
+        width: 42vw;
+        min-width: 340px;
+      }
+
+      .glass-wrap {
+        right: 4%;
+        width: 43vw;
+        min-width: 330px;
+      }
+    }
+
+    @media (max-width: 760px) {
+
+      body {
+        overflow-y: auto;
+      }
+
+      .scene {
+        min-height: 1100px;
+      }
+
+      .door-container {
+        left: 50%;
+        top: 40px;
+        bottom: auto;
+
+        transform: translateX(-50%);
+
+        width: 84vw;
+        height: 650px;
+        min-width: 0;
+      }
+
+      .glass-wrap {
+        left: 50%;
+        right: auto;
+        top: 730px;
+
+        transform: translateX(-50%);
+
+        width: 84vw;
+        min-width: 0;
+      }
+
+      .floor {
+        height: 15%;
+      }
+    }
+    /* =========================
+       PRESENTATION PLAY / PAUSE
+    ========================== */
+
+    .presentation-control {
+      position: fixed;
+      right: 24px;
+      bottom: 22px;
+      z-index: 20000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      color: #fff;
+      background: rgba(15, 12, 10, 0.72);
+      border: 1px solid rgba(255,255,255,0.20);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.08);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .presentation-control:hover {
+      transform: translateY(-2px);
+      background: rgba(23, 18, 14, 0.88);
+      border-color: rgba(224,183,120,0.45);
+    }
+
+    .presentation-control-icon {
+      width: 20px;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .presentation-control-text {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+    }
+
+    body.presentation-paused * {
+      animation-play-state: paused !important;
+    }
+
+    @media (max-width: 760px) {
+      .presentation-control {
+        right: 14px;
+        bottom: 14px;
+      }
+      .presentation-control-text {
+        display: none;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <main id="scene" class="scene">
+
+    <div class="wall-texture"></div>
+    <div class="ambient-light"></div>
+    <div class="floor"></div>
+    <div class="opening-glow"></div>
+
+    <section class="door-container">
+
+      <div id="doorFrame" class="door-frame">
+
+        <div class="office-view"></div>
+
+        <div class="door">
+
+          <div class="door-panel"></div>
+
+          <img referrerpolicy="no-referrer"
+            id="companyLogo"
+            class="logo"
+            src="assets/images/Q5DSMWO.png"
+            alt="Company Logo"
+            loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+          >
+
+          <div class="brand-slogan">Numero eSIM - Be Local Anywhere</div>
+
+          <div
+            id="doorTitle"
+            class="door-title"
+          >
+            CUSTOMER SUPPORT<br>CENTER
+          </div>
+
+          <div class="handle"></div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="glass-wrap">
+
+      <div class="glass-panel">
+
+        <span class="screw s1"></span>
+        <span class="screw s2"></span>
+        <span class="screw s3"></span>
+        <span class="screw s4"></span>
+
+        <div class="panel-label">
+          TEAM OVERVIEW
+        </div>
+
+        <div class="panel-title">
+          Support Operations
+        </div>
+
+        <div class="gold-line"></div>
+
+        <div
+          id="teamSummary"
+          class="panel-summary"
+        >
+          A coordinated customer support operation built around fast response, clear ownership, consistent service quality, effective escalation, and continuous improvement.
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================
+       PRESENTATION CONTROL
+  ========================== -->
+
+  <button
+    id="presentationControl"
+    class="presentation-control"
+    type="button"
+    aria-label="Pause presentation"
+  >
+    <span id="presentationControlIcon" class="presentation-control-icon">⏸</span>
+    <span id="presentationControlText" class="presentation-control-text">PAUSE</span>
+  </button>
+
+  <div
+    id="transitionCover"
+    class="transition-cover"
+  ></div>
+
+  <script>
+
+    (function() {
+
+      'use strict';
+
+
+    /* =========================
+       PRESENTATION TIMER ENGINE
+    ========================== */
+
+    let presentationPaused = false;
+    const presentationTimers = new Set();
+
+    function presentationTimer(callback, delay) {
+      const timer = {
+        callback: callback,
+        remaining: delay,
+        startedAt: Date.now(),
+        timeoutId: null
+      };
+
+      timer.run = function() {
+        timer.startedAt = Date.now();
+        timer.timeoutId = window.setTimeout(function() {
+          presentationTimers.delete(timer);
+          timer.callback();
+        }, timer.remaining);
+      };
+
+      presentationTimers.add(timer);
+
+      if (!presentationPaused) {
+        timer.run();
+      }
+
+      return timer;
+    }
+
+    function pausePresentation() {
+      if (presentationPaused) return;
+      presentationPaused = true;
+      document.body.classList.add('presentation-paused');
+
+      presentationTimers.forEach(function(timer) {
+        if (timer.timeoutId !== null) {
+          window.clearTimeout(timer.timeoutId);
+          const elapsed = Date.now() - timer.startedAt;
+          timer.remaining = Math.max(0, timer.remaining - elapsed);
+          timer.timeoutId = null;
+        }
+      });
+
+      document.getElementById('presentationControlIcon').textContent = '▶';
+      document.getElementById('presentationControlText').textContent = 'PLAY';
+      document.getElementById('presentationControl').setAttribute('aria-label','Resume presentation');
+    }
+
+    function resumePresentation() {
+      if (!presentationPaused) return;
+      presentationPaused = false;
+      document.body.classList.remove('presentation-paused');
+
+      presentationTimers.forEach(function(timer) {
+        if (timer.timeoutId === null) {
+          timer.run();
+        }
+      });
+
+      document.getElementById('presentationControlIcon').textContent = '⏸';
+      document.getElementById('presentationControlText').textContent = 'PAUSE';
+      document.getElementById('presentationControl').setAttribute('aria-label','Pause presentation');
+    }
+
+    document.getElementById('presentationControl').addEventListener('click', function() {
+      if (presentationPaused) {
+        resumePresentation();
+      } else {
+        pausePresentation();
+      }
+    });
+
+
+    function loadStageTwo() {
+
+      const cover =
+        document.getElementById(
+          'transitionCover'
+        );
+
+      cover.classList.add('active');
+
+      presentationTimer(function() {
+
+        google.script.run
+
+          .withSuccessHandler(function(html) {
+
+            document.open();
+            document.write(html);
+            document.close();
+
+          })
+
+          .withFailureHandler(function(error) {
+
+            console.error(
+              'Stage 2 load failed:',
+              error
+            );
+
+          })
+
+          .getPage('index1');
+
+      }, 750);
+    }
+
+
+    /* Door and overview content are intentionally fixed in this file.
+       Google Sheets / getContent() must not overwrite them. */
+
+    /* =========================
+       TIMELINE
+
+       0 - 5 sec
+       قراءة اللوحة
+
+       5 sec
+       فتح الباب
+
+       7.8 sec تقريباً
+       انتقال للمرحلة الثانية
+    ========================== */
+
+    presentationTimer(function() {
+
+      document
+        .getElementById('doorFrame')
+        .classList
+        .add('open');
+
+      document
+        .getElementById('scene')
+        .classList
+        .add('opening');
+
+      presentationTimer(function() {
+        loadStageTwo();
+      }, 2800);
+
+    }, 5000);
+
+
+    })();
+
+  </script>
+
+</body>
+</html>

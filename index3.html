@@ -1,0 +1,9004 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <link rel="stylesheet" href="tour-runtime.css">
+  <script src="tour-data.js"></script>
+  <script src="tour-runtime.js"></script>
+  
+  <!-- FIXED_TOUR_AUDIO -->
+  <script src="tour-audio-map.js"></script>
+  <script src="tour-audio.js"></script>
+<meta name="referrer" content="no-referrer">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="preconnect" href="https://i.imgur.com" crossorigin>
+  <link rel="preload" as="image" href="assets/images/xViBSk1.png">
+
+  <title>Assistant Head of Customer Support Center</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      overflow: hidden;
+      background: #080706;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    /* =========================
+       MAIN SCENE
+    ========================== */
+
+    .assistant-scene {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      background: #080706;
+    }
+
+    .blur-bg {
+      position: absolute;
+      inset: -45px;
+
+      background-image:
+        url('assets/images/Idmel43.png');
+
+      background-size: cover;
+      background-position: center;
+
+      filter:
+        blur(28px)
+        brightness(0.42);
+
+      transform: scale(1.12);
+      opacity: 0.95;
+
+      transition:
+        transform 2.8s cubic-bezier(.18,.75,.2,1),
+        filter 2.8s ease,
+        opacity 2.8s ease;
+    }
+
+    .blur-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+
+      background:
+        radial-gradient(
+          circle at center,
+          transparent 30%,
+          rgba(0,0,0,0.62) 100%
+        );
+    }
+
+    /* =========================
+       PHOTO
+    ========================== */
+
+    .photo-wrap {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 16px 24px;
+
+      opacity: 0;
+      transform-origin: 50% 61%;
+
+      animation:
+        photoIn 1.3s ease forwards;
+
+      transition:
+        transform 3.2s cubic-bezier(.15,.8,.18,1),
+        filter 2.2s ease,
+        opacity 2.2s ease;
+    }
+
+    .assistant-photo {
+      display: block;
+
+      width: auto;
+      height: 100%;
+
+      max-width: 100%;
+      max-height: 100%;
+
+      object-fit: contain;
+
+      border-radius: 6px;
+
+      box-shadow:
+        0 35px 90px
+        rgba(0,0,0,0.52);
+    }
+
+    /* =========================
+       SHADOWS
+    ========================== */
+
+    .top-shadow,
+    .bottom-shadow {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      z-index: 3;
+
+      pointer-events: none;
+
+      transition:
+        opacity 1.5s ease;
+    }
+
+    .top-shadow {
+      top: 0;
+      height: 18%;
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(0,0,0,0.50),
+          transparent
+        );
+    }
+
+    .bottom-shadow {
+      bottom: 0;
+      height: 34%;
+
+      background:
+        linear-gradient(
+          to top,
+          rgba(0,0,0,0.78),
+          transparent
+        );
+    }
+
+    /* =========================
+       ROLE
+    ========================== */
+
+    .role-indicator {
+      position: absolute;
+      z-index: 5;
+
+      top: 5%;
+      left: 4%;
+
+      opacity: 0;
+      transform: translateY(-10px);
+
+      animation:
+        roleIn 0.9s ease 0.9s forwards;
+
+      transition:
+        opacity 0.8s ease;
+    }
+
+    .role-small {
+      margin-bottom: 8px;
+
+      color:
+        rgba(255,255,255,0.58);
+
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 4px;
+    }
+
+    .role-name {
+      max-width: 470px;
+
+      color: white;
+
+      font-size:
+        clamp(
+          18px,
+          1.7vw,
+          28px
+        );
+
+      font-weight: 600;
+      line-height: 1.25;
+    }
+
+    .role-line {
+      width: 58px;
+      height: 2px;
+
+      margin-top: 13px;
+
+      background:
+        linear-gradient(
+          to right,
+          #d8a05b,
+          transparent
+        );
+    }
+
+    /* =========================
+       DIALOGUE
+    ========================== */
+
+    .dialogue {
+      position: absolute;
+      z-index: 8;
+
+      left: 50%;
+      bottom: 5%;
+
+      width:
+        min(
+          780px,
+          76vw
+        );
+
+      opacity: 0;
+
+      transform:
+        translateX(-50%)
+        translateY(24px);
+
+      transition:
+        opacity .75s ease,
+        transform .75s ease;
+    }
+
+    .dialogue.show {
+      opacity: 1;
+
+      transform:
+        translateX(-50%)
+        translateY(0);
+    }
+
+    .dialogue.hide {
+      opacity: 0;
+
+      transform:
+        translateX(-50%)
+        translateY(-12px);
+    }
+
+    .dialogue-name {
+      margin-bottom: 8px;
+      text-align: center;
+
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+
+      color:
+        rgba(220,169,101,0.86);
+    }
+
+    .visitor .dialogue-name {
+      color:
+        rgba(255,255,255,0.58);
+    }
+
+    .dialogue-box {
+      position: relative;
+
+      padding: 20px 30px;
+
+      text-align: center;
+      color: white;
+
+      font-size:
+        clamp(
+          18px,
+          1.55vw,
+          26px
+        );
+
+      line-height: 1.45;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(8,8,8,0.86),
+          rgba(28,23,19,0.78)
+        );
+
+      border:
+        1px solid
+        rgba(255,255,255,0.18);
+
+      border-radius: 15px;
+
+      box-shadow:
+        0 22px 50px
+        rgba(0,0,0,0.48);
+
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+    }
+
+    .visitor .dialogue-box {
+      background:
+        linear-gradient(
+          135deg,
+          rgba(16,16,16,0.88),
+          rgba(24,24,24,0.80)
+        );
+    }
+
+    .dialogue-box::after {
+      content: "";
+      position: absolute;
+
+      left: 50%;
+      bottom: -1px;
+
+      transform:
+        translateX(-50%);
+
+      width: 100px;
+      height: 2px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          #d9a15c,
+          transparent
+        );
+    }
+
+    /* =========================
+       COMPUTER PROMPT
+    ========================== */
+
+    .computer-prompt {
+      position: absolute;
+      z-index: 9;
+
+      left: 50%;
+      bottom: 6%;
+
+      width:
+        min(
+          760px,
+          74vw
+        );
+
+      opacity: 0;
+
+      transform:
+        translateX(-50%)
+        translateY(20px);
+
+      transition:
+        opacity .9s ease,
+        transform .9s ease;
+    }
+
+    .computer-prompt.show {
+      opacity: 1;
+
+      transform:
+        translateX(-50%)
+        translateY(0);
+    }
+
+    .computer-prompt.hide {
+      opacity: 0;
+
+      transform:
+        translateX(-50%)
+        translateY(-10px);
+    }
+
+    .computer-prompt-box {
+      padding: 19px 28px;
+
+      text-align: center;
+      color: white;
+
+      font-size:
+        clamp(
+          18px,
+          1.5vw,
+          25px
+        );
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(9,9,9,0.86),
+          rgba(31,25,19,0.78)
+        );
+
+      border:
+        1px solid
+        rgba(255,255,255,0.18);
+
+      border-radius: 15px;
+
+      box-shadow:
+        0 22px 50px
+        rgba(0,0,0,0.48);
+
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+    }
+
+    /* =========================
+       SCREEN HANDOFF
+       Subtle cinematic dissolve instead of
+       an exaggerated physical zoom to the laptop.
+    ========================== */
+
+    .assistant-scene::after {
+      content: "";
+
+      position: absolute;
+      inset: 0;
+
+      z-index: 20;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(0,0,0,.12),
+          rgba(0,0,0,.58)
+        );
+
+      transition:
+        opacity 2.2s ease;
+    }
+
+    .assistant-scene.zoom-laptop::after {
+      opacity: 1;
+    }
+
+    .assistant-scene.zoom-laptop
+    .role-indicator {
+      opacity: 0;
+    }
+
+    .assistant-scene.zoom-laptop
+    .blur-bg {
+      transform:
+        scale(1.16);
+
+      filter:
+        blur(32px)
+        brightness(0.24);
+
+      opacity: .60;
+    }
+
+    .assistant-scene.zoom-laptop
+    .photo-wrap {
+      transform:
+        scale(1.07)
+        translateY(-1%);
+
+      filter:
+        brightness(0.54)
+        saturate(.86);
+    }
+
+    /* =========================
+       WINDOWS DESKTOP
+    ========================== */
+
+    .desktop-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 30;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      transition:
+        opacity 1.35s ease;
+    }
+
+    .desktop-layer.show {
+      opacity: 1;
+
+      pointer-events: auto;
+    }
+
+    .desktop-bg {
+      position: absolute;
+      inset: 0;
+
+      background:
+        radial-gradient(
+          circle at 22% 18%,
+          rgba(75,135,173,.13),
+          transparent 34%
+        ),
+        radial-gradient(
+          circle at 82% 76%,
+          rgba(71,153,145,.08),
+          transparent 32%
+        ),
+        linear-gradient(
+          135deg,
+          #101820 0%,
+          #18232d 48%,
+          #0d151c 100%
+        );
+    }
+
+    /* =========================
+       APP WINDOW
+    ========================== */
+
+    .app-window {
+      position: absolute;
+
+      left: 50%;
+      top: calc(50% - 24px);
+
+      width: 94vw;
+      height: calc(100vh - 78px);
+
+      transform:
+        translate(-50%, -50%);
+
+      overflow: hidden;
+
+      border-radius: 12px;
+
+      background: #17212a;
+
+      border:
+        1px solid
+        rgba(255,255,255,0.12);
+
+      box-shadow:
+        0 35px 90px
+        rgba(0,0,0,0.55);
+    }
+
+    .window-header {
+      height: 50px;
+
+      padding:
+        0 16px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      background: #1b2731;
+
+      border-bottom:
+        1px solid
+        rgba(255,255,255,0.08);
+    }
+
+    .window-header-left {
+      display: flex;
+      align-items: center;
+
+      gap: 12px;
+    }
+
+    .window-app-icon {
+      width: 27px;
+      height: 27px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 6px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #547e9c,
+          #5a9a91
+        );
+    }
+
+    .window-title {
+      color: white;
+
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .window-actions {
+      height: 100%;
+
+      display: flex;
+      align-items: center;
+    }
+
+    .window-action {
+      width: 45px;
+      height: 100%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      color:
+        rgba(255,255,255,.65);
+
+      font-size: 13px;
+    }
+
+    .window-body {
+      height:
+        calc(
+          100% - 50px
+        );
+
+      display: flex;
+    }
+
+    /* =========================
+       SIDEBAR
+    ========================== */
+
+    .sidebar {
+      width: 220px;
+
+      padding:
+        22px 15px;
+
+      flex-shrink: 0;
+
+      background: #121c24;
+
+      border-right:
+        1px solid
+        rgba(255,255,255,.07);
+    }
+
+    .sidebar-section-title {
+      margin-bottom: 14px;
+
+      color:
+        rgba(255,255,255,.34);
+
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+    }
+
+    .sidebar-item {
+      margin-bottom: 7px;
+
+      padding:
+        12px 14px;
+
+      border-radius: 9px;
+
+      color:
+        rgba(255,255,255,.7);
+
+      font-size: 13px;
+    }
+
+    .sidebar-item.active {
+      color: white;
+
+      background:
+        rgba(255,255,255,.09);
+    }
+
+    /* =========================
+       CONTENT
+    ========================== */
+
+    .content-area {
+      flex: 1;
+      min-width: 0;
+
+      display: flex;
+      flex-direction: column;
+
+      background: #17222b;
+    }
+
+    .content-top {
+      padding:
+        23px 25px 18px;
+
+      flex-shrink: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .content-title {
+      color: white;
+
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .content-subtitle {
+      margin-top: 6px;
+
+      color:
+        rgba(255,255,255,.4);
+
+      font-size: 10px;
+      letter-spacing: 2px;
+    }
+
+    .live-badge {
+      display: flex;
+      align-items: center;
+
+      gap: 8px;
+
+      padding:
+        9px 13px;
+
+      border-radius: 100px;
+
+      color:
+        rgba(255,255,255,.72);
+
+      font-size: 11px;
+
+      background:
+        rgba(255,255,255,.04);
+
+      border:
+        1px solid
+        rgba(255,255,255,.07);
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+
+      border-radius: 50%;
+
+      background: #55ba68;
+
+      box-shadow:
+        0 0 10px
+        rgba(85,186,104,.45);
+    }
+
+    /* =========================
+       LOADING / EMPTY
+    ========================== */
+
+    .systems-message {
+      padding: 50px 25px;
+
+      text-align: center;
+
+      color:
+        rgba(255,255,255,.45);
+
+      font-size: 14px;
+    }
+
+    /* =========================
+       SCROLL
+    ========================== */
+
+    .systems-scroll {
+      flex: 1;
+      min-height: 0;
+
+      overflow-y: auto;
+
+      padding:
+        0 25px 30px;
+
+      scrollbar-width: thin;
+
+      scrollbar-color:
+        #607b86 #17222b;
+    }
+
+    .systems-scroll::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    .systems-scroll::-webkit-scrollbar-track {
+      background: #181818;
+    }
+
+    .systems-scroll::-webkit-scrollbar-thumb {
+      background: #607b86;
+
+      border-radius: 10px;
+
+      border:
+        2px solid #17222b;
+    }
+
+    /* =========================
+       SYSTEM GRID
+    ========================== */
+
+    .systems-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          3,
+          minmax(0,1fr)
+        );
+
+      gap: 18px;
+
+      padding-bottom: 20px;
+    }
+
+    /* =========================
+       CARDS
+    ========================== */
+
+    .system-card {
+      position: relative;
+
+      min-height: 210px;
+
+      padding: 22px;
+
+      overflow: hidden;
+
+      cursor: pointer;
+
+      border-radius: 18px;
+
+      color: white;
+
+      border:
+        1px solid
+        rgba(255,255,255,.14);
+
+      box-shadow:
+        0 16px 34px
+        rgba(0,0,0,.28);
+
+      transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+    }
+
+    .system-card:hover {
+      transform:
+        translateY(-6px);
+
+      box-shadow:
+        0 22px 44px
+        rgba(0,0,0,.40);
+    }
+
+
+    .system-card.auto-focus {
+      transform:
+        translateY(-4px)
+        scale(1.018);
+
+      border-color:
+        rgba(208,190,151,.72);
+
+      box-shadow:
+        0 0 0 1px
+        rgba(208,190,151,.14),
+        0 24px 52px
+        rgba(0,0,0,.42),
+        0 0 32px
+        rgba(72,143,154,.12);
+    }
+
+
+    .system-showcase-strip {
+      margin:
+        0 25px 15px;
+
+      padding:
+        14px 17px;
+
+      display: grid;
+
+      grid-template-columns:
+        auto 1fr auto;
+
+      gap: 14px;
+
+      align-items: center;
+
+      border-radius: 13px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(80,126,151,.12),
+          rgba(72,139,132,.07)
+        );
+
+      border:
+        1px solid
+        rgba(188,202,206,.10);
+    }
+
+
+    .system-showcase-kicker {
+      color:
+        rgba(210,191,150,.70);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing: 2.5px;
+    }
+
+
+    .system-showcase-name {
+      color: white;
+
+      font-size: 15px;
+
+      font-weight: 700;
+    }
+
+
+    .system-showcase-description {
+      margin-top: 3px;
+
+      color:
+        rgba(255,255,255,.46);
+
+      font-size: 11px;
+
+      line-height: 1.4;
+    }
+
+
+    .system-showcase-step {
+      color:
+        rgba(255,255,255,.42);
+
+      font-size: 10px;
+
+      letter-spacing: 1px;
+    }
+
+    .system-card.blue {
+      background:
+        linear-gradient(
+          145deg,
+          #29485e,
+          #182d3a
+        );
+    }
+
+    .system-card.green {
+      background:
+        linear-gradient(
+          145deg,
+          #274b42,
+          #182f2a
+        );
+    }
+
+    .system-card.purple {
+      background:
+        linear-gradient(
+          145deg,
+          #443e59,
+          #29253a
+        );
+    }
+
+    .system-card.orange {
+      background:
+        linear-gradient(
+          145deg,
+          #514233,
+          #312820
+        );
+    }
+
+    .system-card.red {
+      background:
+        linear-gradient(
+          145deg,
+          #50373a,
+          #302326
+        );
+    }
+
+    .system-card.cyan {
+      background:
+        linear-gradient(
+          145deg,
+          #2a4e55,
+          #193139
+        );
+    }
+
+    .system-card.gold {
+      background:
+        linear-gradient(
+          145deg,
+          #514735,
+          #312a21
+        );
+    }
+
+    .system-card.indigo {
+      background:
+        linear-gradient(
+          145deg,
+          #39465d,
+          #242c3c
+        );
+    }
+
+    .system-card.teal {
+      background:
+        linear-gradient(
+          145deg,
+          #294c49,
+          #18302f
+        );
+    }
+
+    .system-card.pink {
+      background:
+        linear-gradient(
+          145deg,
+          #503b45,
+          #30252b
+        );
+    }
+
+    .system-icon-large {
+      width: 54px;
+      height: 54px;
+
+      margin-bottom: 24px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 15px;
+
+      font-size: 26px;
+
+      background:
+        rgba(255,255,255,.16);
+
+      border:
+        1px solid
+        rgba(255,255,255,.18);
+    }
+
+    .system-number {
+      position: absolute;
+
+      top: 18px;
+      right: 18px;
+
+      color:
+        rgba(255,255,255,.58);
+
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .system-name {
+      margin-bottom: 10px;
+
+      font-size: 23px;
+      font-weight: 600;
+    }
+
+    .system-desc {
+      max-width: 90%;
+
+      color:
+        rgba(255,255,255,.79);
+
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .system-arrow {
+      position: absolute;
+
+      right: 20px;
+      bottom: 17px;
+
+      font-size: 23px;
+
+      color:
+        rgba(255,255,255,.70);
+    }
+
+    /* =========================
+       WINDOWS TASKBAR
+    ========================== */
+
+    .taskbar {
+      position: absolute;
+
+      left: 0;
+      right: 0;
+      bottom: 0;
+
+      height: 48px;
+
+      z-index: 50;
+
+      display: flex;
+      align-items: center;
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(26,26,26,.98),
+          rgba(15,15,15,1)
+        );
+
+      border-top:
+        1px solid
+        rgba(255,255,255,.08);
+
+      box-shadow:
+        0 -8px 25px
+        rgba(0,0,0,.28);
+    }
+
+    .taskbar-left {
+      height: 100%;
+
+      display: flex;
+      align-items: center;
+    }
+
+    .windows-button {
+      width: 48px;
+      height: 48px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .windows-logo {
+      width: 18px;
+      height: 18px;
+
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      grid-template-rows:
+        1fr 1fr;
+
+      gap: 2px;
+    }
+
+    .windows-logo span {
+      background: white;
+    }
+
+    .windows-search {
+      width: 215px;
+      height: 38px;
+
+      padding:
+        0 13px;
+
+      display: flex;
+      align-items: center;
+
+      gap: 11px;
+
+      background: #f3f3f3;
+
+      color: #202020;
+
+      font-size: 13px;
+    }
+
+    .search-icon {
+      width: 15px;
+      height: 15px;
+
+      position: relative;
+
+      border:
+        1.7px solid #222;
+
+      border-radius: 50%;
+    }
+
+    .search-icon::after {
+      content: "";
+
+      position: absolute;
+
+      width: 6px;
+      height: 1.7px;
+
+      right: -5px;
+      bottom: -3px;
+
+      background: #222;
+
+      transform:
+        rotate(45deg);
+    }
+
+    .taskbar-apps {
+      height: 100%;
+
+      display: flex;
+      align-items: center;
+    }
+
+    .taskbar-app {
+      position: relative;
+
+      width: 48px;
+      height: 48px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 20px;
+    }
+
+    .taskbar-app.active {
+      background:
+        rgba(255,255,255,.06);
+    }
+
+    .taskbar-app.active::after {
+      content: "";
+
+      position: absolute;
+
+      left: 8px;
+      right: 8px;
+      bottom: 0;
+
+      height: 2px;
+
+      background: #49a7f6;
+    }
+
+    .notification-badge {
+      position: absolute;
+
+      right: 4px;
+      top: 4px;
+
+      min-width: 16px;
+      height: 16px;
+
+      padding:
+        0 4px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 10px;
+
+      color: white;
+
+      font-size: 9px;
+      font-weight: 700;
+
+      background: #d74444;
+    }
+
+    .taskbar-right {
+      margin-left: auto;
+
+      height: 100%;
+
+      display: flex;
+      align-items: center;
+
+      color:
+        rgba(255,255,255,.88);
+    }
+
+    .tray-icons {
+      height: 100%;
+
+      padding:
+        0 11px;
+
+      display: flex;
+      align-items: center;
+
+      gap: 11px;
+
+      font-size: 13px;
+    }
+
+    .clock {
+      height: 100%;
+
+      min-width: 82px;
+
+      padding:
+        0 10px;
+
+      display: flex;
+      flex-direction: column;
+
+      align-items: flex-end;
+      justify-content: center;
+
+      font-size: 11px;
+      line-height: 1.3;
+    }
+
+    .show-desktop {
+      width: 5px;
+      height: 100%;
+
+      border-left:
+        1px solid
+        rgba(255,255,255,.22);
+    }
+
+    /* =========================
+       MODAL
+    ========================== */
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+
+      z-index: 120;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 30px;
+
+      opacity: 0;
+      pointer-events: none;
+
+      background:
+        rgba(0,0,0,.74);
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      transition:
+        opacity .35s ease;
+    }
+
+    .modal-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal {
+      position: relative;
+
+      width:
+        min(
+          1000px,
+          92vw
+        );
+
+      max-height: 88vh;
+
+      overflow-y: auto;
+
+      padding: 34px;
+
+      border-radius: 20px;
+
+      background: #151515;
+
+      border:
+        1px solid
+        rgba(255,255,255,.12);
+
+      box-shadow:
+        0 40px 100px
+        rgba(0,0,0,.68);
+    }
+
+    .modal-close {
+      position: absolute;
+
+      top: 18px;
+      right: 20px;
+
+      width: 38px;
+      height: 38px;
+
+      cursor: pointer;
+
+      border-radius: 50%;
+
+      color:
+        rgba(255,255,255,.74);
+
+      background:
+        rgba(255,255,255,.06);
+
+      border:
+        1px solid
+        rgba(255,255,255,.08);
+    }
+
+    .modal-label {
+      margin-bottom: 8px;
+
+      color:
+        rgba(255,255,255,.4);
+
+      font-size: 10px;
+      font-weight: 700;
+
+      letter-spacing: 3px;
+    }
+
+    .modal-title {
+      margin-bottom: 15px;
+
+      color: white;
+
+      font-size: 34px;
+      font-weight: 600;
+    }
+
+    .modal-description {
+      margin-bottom: 25px;
+
+      color:
+        rgba(255,255,255,.65);
+
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .modal-image-wrap {
+      width: 100%;
+
+      min-height: 220px;
+
+      margin-bottom: 22px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      overflow: hidden;
+
+      border-radius: 15px;
+
+      background:
+        rgba(255,255,255,.03);
+
+      border:
+        1px solid
+        rgba(255,255,255,.07);
+    }
+
+    .modal-image {
+      display: none;
+
+      width: 100%;
+      max-height: 460px;
+
+      object-fit: contain;
+    }
+
+    .modal-image-placeholder {
+      padding: 40px;
+
+      color:
+        rgba(255,255,255,.32);
+
+      text-align: center;
+
+      font-size: 13px;
+    }
+
+    .modal-link {
+      display: inline-flex;
+      align-items: center;
+
+      gap: 10px;
+
+      padding:
+        12px 18px;
+
+      border-radius: 10px;
+
+      color: #111;
+
+      text-decoration: none;
+
+      font-size: 13px;
+      font-weight: 700;
+
+      background: white;
+    }
+
+    .modal-link.hidden {
+      display: none;
+    }
+
+    /* =========================
+       ANIMATION
+    ========================== */
+
+    @keyframes photoIn {
+      from {
+        opacity: 0;
+        transform: scale(1.02);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes roleIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .systems-grid {
+        grid-template-columns:
+          repeat(
+            2,
+            minmax(0,1fr)
+          );
+      }
+    }
+
+    @media (max-width: 800px) {
+      .systems-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .windows-search {
+        display: none;
+      }
+    }
+
+    /* =========================
+       PRESENTATION PLAY / PAUSE
+    ========================== */
+
+    .presentation-control {
+      position: fixed;
+      right: 24px;
+      bottom: 66px;
+      z-index: 20000;
+
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      padding: 10px 14px;
+
+      border-radius: 999px;
+
+      color: #ffffff;
+
+      background: rgba(12,12,12,0.80);
+
+      border: 1px solid rgba(255,255,255,0.16);
+
+      box-shadow:
+        0 12px 30px rgba(0,0,0,0.36),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+
+      cursor: pointer;
+      user-select: none;
+
+      transition:
+        transform .25s ease,
+        background .25s ease,
+        border-color .25s ease;
+    }
+
+    .presentation-control:hover {
+      transform: translateY(-2px);
+      background: rgba(24,24,24,0.94);
+      border-color: rgba(255,255,255,0.30);
+    }
+
+    .presentation-control-icon {
+      width: 20px;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .presentation-control-text {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+    }
+
+    body.presentation-paused * {
+      animation-play-state: paused !important;
+    }
+
+    @media (max-width: 800px) {
+      .presentation-control {
+        right: 14px;
+        bottom: 62px;
+      }
+
+      .presentation-control-text {
+        display: none;
+      }
+    }
+
+
+    /* =========================
+       END OF ROLE / CONTINUE TOUR
+    ========================== */
+
+    .desktop-layer.closing-mode {
+      filter: brightness(.62);
+    }
+
+    .end-dialogue {
+      position: fixed;
+      z-index: 21000;
+
+      left: 50%;
+      bottom: 11%;
+
+      width: min(820px, 78vw);
+
+      opacity: 0;
+      pointer-events: none;
+
+      transform:
+        translateX(-50%)
+        translateY(22px);
+
+      transition:
+        opacity .72s ease,
+        transform .72s ease;
+    }
+
+    .end-dialogue.show {
+      opacity: 1;
+
+      transform:
+        translateX(-50%)
+        translateY(0);
+    }
+
+    .end-dialogue.hide {
+      opacity: 0;
+
+      transform:
+        translateX(-50%)
+        translateY(-12px);
+    }
+
+    .end-dialogue .dialogue-name {
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .end-dialogue .dialogue-box {
+      position: relative;
+      padding: 20px 30px;
+      text-align: center;
+
+      color: white;
+
+      font-size:
+        clamp(
+          18px,
+          1.45vw,
+          25px
+        );
+
+      line-height: 1.45;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(8,8,8,.92),
+          rgba(28,23,19,.86)
+        );
+
+      border:
+        1px solid
+        rgba(255,255,255,.18);
+
+      border-radius: 15px;
+
+      box-shadow:
+        0 22px 55px
+        rgba(0,0,0,.54);
+
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .continue-tour {
+      position: fixed;
+
+      right: 24px;
+      bottom: 118px;
+
+      z-index: 20000;
+
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      padding: 11px 16px;
+
+      border-radius: 999px;
+
+      opacity: 0;
+      pointer-events: none;
+
+      color: rgba(255,255,255,.9);
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255,255,255,.09),
+          rgba(255,255,255,.035)
+        );
+
+      border:
+        1px solid rgba(255,255,255,.16);
+
+      box-shadow:
+        0 14px 34px rgba(0,0,0,.32);
+
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+
+      cursor: pointer;
+
+      transition:
+        opacity .5s ease,
+        transform .25s ease,
+        background .25s ease;
+    }
+
+    .continue-tour.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .continue-tour:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.12);
+    }
+
+    .continue-tour-text {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.3px;
+    }
+
+    .next-transition-cover {
+      position: fixed;
+      inset: 0;
+
+      z-index: 30000;
+
+      opacity: 0;
+      pointer-events: none;
+
+      background:
+        radial-gradient(
+          circle at center,
+          rgba(42,34,25,.92),
+          rgba(5,5,5,1) 72%
+        );
+
+      transition: opacity .8s ease;
+    }
+
+    .next-transition-cover.active {
+      opacity: 1;
+    }
+
+
+    /* =========================
+       EXECUTIVE OPERATIONS DASHBOARD
+    ========================== */
+
+    .ops-dashboard {
+      padding:
+        0 25px 18px;
+
+      flex-shrink: 0;
+    }
+
+    .ops-dashboard-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          4,
+          minmax(0, 1fr)
+        );
+
+      gap: 12px;
+    }
+
+    .ops-metric {
+      position: relative;
+
+      min-height: 104px;
+
+      padding:
+        16px 17px;
+
+      overflow: hidden;
+
+      border-radius: 14px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(255,255,255,.055),
+          rgba(255,255,255,.022)
+        );
+
+      border:
+        1px solid
+        rgba(255,255,255,.085);
+
+      box-shadow:
+        0 12px 28px
+        rgba(0,0,0,.20);
+
+      transition:
+        transform .25s ease,
+        border-color .25s ease,
+        background .25s ease;
+    }
+
+    .ops-metric:hover {
+      transform:
+        translateY(-3px);
+
+      border-color:
+        rgba(255,255,255,.18);
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(255,255,255,.075),
+          rgba(255,255,255,.028)
+        );
+    }
+
+    .ops-metric::after {
+      content: "";
+
+      position: absolute;
+
+      right: -24px;
+      top: -24px;
+
+      width: 85px;
+      height: 85px;
+
+      border-radius: 50%;
+
+      background:
+        rgba(255,255,255,.035);
+    }
+
+    .ops-metric-top {
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 10px;
+
+      margin-bottom: 12px;
+    }
+
+    .ops-metric-label {
+      color:
+        rgba(255,255,255,.42);
+
+      font-size: 9px;
+      font-weight: 700;
+
+      letter-spacing: 1.7px;
+
+      text-transform: uppercase;
+    }
+
+    .ops-metric-icon {
+      position: relative;
+      z-index: 2;
+
+      width: 31px;
+      height: 31px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 9px;
+
+      font-size: 15px;
+
+      background:
+        rgba(255,255,255,.06);
+
+      border:
+        1px solid
+        rgba(255,255,255,.07);
+    }
+
+    .ops-metric-value {
+      position: relative;
+      z-index: 2;
+
+      color: white;
+
+      font-size: 25px;
+      font-weight: 650;
+
+      letter-spacing: -.5px;
+    }
+
+    .ops-metric-caption {
+      position: relative;
+      z-index: 2;
+
+      margin-top: 4px;
+
+      color:
+        rgba(255,255,255,.33);
+
+      font-size: 10px;
+    }
+
+    .ops-metric-status {
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 6px;
+    }
+
+    .ops-status-dot {
+      width: 7px;
+      height: 7px;
+
+      border-radius: 50%;
+
+      background: #5dd88b;
+
+      box-shadow:
+        0 0 10px
+        rgba(93,216,139,.45);
+    }
+
+    .ops-command-strip {
+      margin-top: 12px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 16px;
+
+      padding:
+        10px 13px;
+
+      border-radius: 10px;
+
+      color:
+        rgba(255,255,255,.42);
+
+      font-size: 10px;
+
+      background:
+        rgba(255,255,255,.025);
+
+      border:
+        1px solid
+        rgba(255,255,255,.055);
+    }
+
+    .ops-command-left {
+      display: flex;
+
+      align-items: center;
+
+      gap: 8px;
+    }
+
+    .ops-command-badge {
+      padding:
+        4px 7px;
+
+      border-radius: 999px;
+
+      color:
+        rgba(255,255,255,.72);
+
+      background:
+        rgba(255,255,255,.06);
+    }
+
+    .ops-command-right {
+      letter-spacing: 1.2px;
+    }
+
+    @media (max-width: 1100px) {
+
+      .ops-dashboard-grid {
+        grid-template-columns:
+          repeat(
+            2,
+            minmax(0, 1fr)
+          );
+      }
+
+    }
+
+    @media (max-width: 700px) {
+
+      .ops-dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .ops-command-strip {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+    }
+
+
+    /* =========================================
+       VIEWPORT FIT V2
+       Keep the simulated computer inside the
+       actual browser viewport at any screen height.
+    ========================================== */
+
+    .desktop-layer {
+      position: fixed;
+      inset: 0;
+
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+    }
+
+    .app-window {
+      left: 3vw;
+      top: 12px;
+
+      width: 94vw;
+
+      height:
+        calc(100vh - 76px);
+
+      height:
+        calc(100dvh - 76px);
+
+      transform: none;
+    }
+
+    .taskbar {
+      position: fixed;
+    }
+
+
+    /* =========================================
+       SYSTEM TITLE + EMOJI
+    ========================================== */
+
+    .system-title-row {
+      position: relative;
+
+      z-index: 2;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 11px;
+
+      min-width: 0;
+
+      padding-right: 82px;
+
+      margin-bottom: 10px;
+    }
+
+    .system-icon-inline {
+      width: 39px;
+      height: 39px;
+
+      flex: 0 0 39px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 11px;
+
+      font-size: 21px;
+
+      background:
+        rgba(255,255,255,.13);
+
+      border:
+        1px solid
+        rgba(255,255,255,.16);
+
+      box-shadow:
+        inset 0 1px 0
+        rgba(255,255,255,.08);
+    }
+
+    .system-title-row
+    .system-name {
+      min-width: 0;
+
+      margin-bottom: 0;
+
+      line-height: 1.18;
+    }
+
+
+    /* =========================================
+       SHORT VIEWPORT / PROJECTOR MODE
+    ========================================== */
+
+    @media (max-height: 760px) {
+
+      .app-window {
+        top: 8px;
+
+        height:
+          calc(100vh - 64px);
+
+        height:
+          calc(100dvh - 64px);
+      }
+
+      .window-header {
+        height: 40px;
+
+        padding:
+          0 13px;
+      }
+
+      .window-body {
+        height:
+          calc(100% - 40px);
+      }
+
+      .sidebar {
+        width: 205px;
+
+        padding:
+          13px 12px;
+      }
+
+      .sidebar-section-title {
+        margin-bottom: 8px;
+      }
+
+      .sidebar-item {
+        margin-bottom: 4px;
+
+        padding:
+          9px 11px;
+
+        font-size: 12px;
+      }
+
+      .content-top {
+        padding:
+          10px 20px 8px;
+      }
+
+      .content-title {
+        font-size: 22px;
+      }
+
+      .content-subtitle {
+        margin-top: 3px;
+
+        font-size: 9px;
+      }
+
+      .live-badge {
+        padding:
+          7px 10px;
+      }
+
+      .ops-dashboard {
+        padding:
+          0 20px 8px;
+      }
+
+      .ops-dashboard-grid {
+        gap: 8px;
+      }
+
+      .ops-metric {
+        min-height: 72px;
+
+        padding:
+          9px 11px;
+
+        border-radius: 11px;
+      }
+
+      .ops-metric-top {
+        margin-bottom: 4px;
+      }
+
+      .ops-metric-label {
+        font-size: 8px;
+
+        letter-spacing: 1.3px;
+      }
+
+      .ops-metric-icon {
+        width: 25px;
+        height: 25px;
+
+        font-size: 13px;
+      }
+
+      .ops-metric-value {
+        font-size: 19px;
+      }
+
+      .ops-metric-caption {
+        display: none;
+      }
+
+      .ops-command-strip {
+        margin-top: 7px;
+
+        padding:
+          6px 9px;
+
+        font-size: 9px;
+      }
+
+      .system-showcase-strip {
+        margin:
+          0 20px 8px;
+
+        padding:
+          8px 11px;
+
+        border-radius: 10px;
+      }
+
+      .system-showcase-name {
+        font-size: 13px;
+      }
+
+      .system-showcase-description {
+        margin-top: 2px;
+
+        font-size: 10px;
+      }
+
+      .systems-scroll {
+        padding:
+          0 20px 18px;
+      }
+
+      .systems-grid {
+        gap: 12px;
+
+        padding-bottom: 14px;
+      }
+
+      .system-card {
+        min-height: 146px;
+
+        padding: 14px;
+
+        border-radius: 14px;
+      }
+
+      .system-title-row {
+        gap: 9px;
+
+        padding-right: 72px;
+
+        margin-bottom: 7px;
+      }
+
+      .system-icon-inline {
+        width: 34px;
+        height: 34px;
+
+        flex-basis: 34px;
+
+        border-radius: 9px;
+
+        font-size: 18px;
+      }
+
+      .system-number {
+        top: 14px;
+        right: 14px;
+
+        font-size: 8px;
+      }
+
+      .system-name {
+        font-size: 18px;
+      }
+
+      .system-desc {
+        max-width: 94%;
+
+        font-size: 11px;
+
+        line-height: 1.42;
+      }
+
+      .system-arrow {
+        right: 14px;
+        bottom: 11px;
+
+        font-size: 18px;
+      }
+
+      .taskbar {
+        height: 48px;
+      }
+
+    }
+
+    /* =========================================
+       LUXURY SYSTEM PALETTE V3
+       Obsidian Navy + Brushed Steel + Soft Teal
+    ========================================== */
+
+    .desktop-layer {
+      background:
+        radial-gradient(
+          circle at 18% 18%,
+          rgba(92,136,160,.14),
+          transparent 34%
+        ),
+        radial-gradient(
+          circle at 82% 80%,
+          rgba(92,143,135,.08),
+          transparent 32%
+        ),
+        linear-gradient(
+          135deg,
+          #0d141b 0%,
+          #14202a 48%,
+          #0a1117 100%
+        ) !important;
+    }
+
+    .app-window {
+      background:
+        linear-gradient(
+          145deg,
+          #15212b,
+          #101922
+        ) !important;
+
+      border:
+        1px solid
+        rgba(161,183,196,.16) !important;
+
+      box-shadow:
+        0 32px 90px
+        rgba(0,0,0,.52),
+        inset 0 1px 0
+        rgba(255,255,255,.035) !important;
+    }
+
+    .window-header,
+    .sidebar {
+      background:
+        rgba(14,24,32,.90) !important;
+
+      border-color:
+        rgba(160,182,195,.10) !important;
+    }
+
+    .content-area {
+      background:
+        linear-gradient(
+          135deg,
+          rgba(19,31,41,.96),
+          rgba(14,24,32,.98)
+        ) !important;
+    }
+
+    .ops-metric {
+      background:
+        linear-gradient(
+          145deg,
+          rgba(38,55,67,.78),
+          rgba(25,39,50,.88)
+        ) !important;
+
+      border:
+        1px solid
+        rgba(167,188,199,.11) !important;
+    }
+
+    .ops-command-strip,
+    .system-showcase-strip {
+      background:
+        linear-gradient(
+          135deg,
+          rgba(45,69,82,.72),
+          rgba(27,46,57,.72)
+        ) !important;
+
+      border:
+        1px solid
+        rgba(180,197,205,.12) !important;
+    }
+
+    /*
+      All system cards share one luxury material.
+      Sheet color is used only as a restrained accent.
+    */
+
+    .system-card,
+    .system-card.blue,
+    .system-card.green,
+    .system-card.purple,
+    .system-card.orange,
+    .system-card.red,
+    .system-card.cyan,
+    .system-card.gold,
+    .system-card.indigo,
+    .system-card.teal,
+    .system-card.pink {
+      background:
+        linear-gradient(
+          145deg,
+          rgba(34,51,63,.96),
+          rgba(23,37,47,.98)
+        ) !important;
+
+      border:
+        1px solid
+        rgba(171,190,200,.11) !important;
+
+      box-shadow:
+        0 17px 34px
+        rgba(0,0,0,.24),
+        inset 0 1px 0
+        rgba(255,255,255,.025) !important;
+    }
+
+    .system-card.blue   { --lux-accent: #7694a7; }
+    .system-card.green  { --lux-accent: #789b8e; }
+    .system-card.purple { --lux-accent: #938aa4; }
+    .system-card.orange { --lux-accent: #a48b72; }
+    .system-card.red    { --lux-accent: #9a777c; }
+    .system-card.cyan   { --lux-accent: #739da0; }
+    .system-card.gold   { --lux-accent: #b29b6d; }
+    .system-card.indigo { --lux-accent: #7f8fa8; }
+    .system-card.teal   { --lux-accent: #719a93; }
+    .system-card.pink   { --lux-accent: #987f8b; }
+
+    .system-card::before {
+      content: "";
+
+      position: absolute;
+
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 2px;
+
+      background:
+        linear-gradient(
+          90deg,
+          var(--lux-accent, #7e9ca9),
+          rgba(255,255,255,.08),
+          transparent 86%
+        ) !important;
+    }
+
+    .system-card:hover,
+    .system-card.auto-focus {
+      background:
+        linear-gradient(
+          145deg,
+          rgba(42,61,73,.99),
+          rgba(27,43,54,.99)
+        ) !important;
+
+      border-color:
+        rgba(193,177,137,.34) !important;
+
+      box-shadow:
+        0 24px 52px
+        rgba(0,0,0,.34),
+        0 0 0 1px
+        rgba(193,177,137,.055),
+        0 0 34px
+        rgba(92,145,151,.08) !important;
+    }
+
+    .system-icon-inline,
+    .modal-title-emoji {
+      background:
+        linear-gradient(
+          145deg,
+          rgba(191,208,216,.10),
+          rgba(91,127,143,.08)
+        ) !important;
+
+      border:
+        1px solid
+        rgba(190,207,215,.13) !important;
+    }
+
+    .system-arrow {
+      color:
+        #b9a77f !important;
+    }
+
+    .modal {
+      background:
+        linear-gradient(
+          145deg,
+          #17232c,
+          #101a22
+        ) !important;
+
+      border:
+        1px solid
+        rgba(180,197,205,.13) !important;
+    }
+
+    .modal-title-row {
+      display: flex;
+
+      align-items: center;
+
+      gap: 14px;
+
+      margin-bottom: 13px;
+    }
+
+    .modal-title-emoji {
+      width: 48px;
+      height: 48px;
+
+      flex: 0 0 48px;
+
+      display: none;
+
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 13px;
+
+      font-size: 25px;
+    }
+
+    .modal-title-row
+    .modal-title {
+      margin-bottom: 0;
+    }
+
+    /* =========================================
+       FINAL ASSISTANT-HEAD OVERRIDES
+    ========================================== */
+
+    html,
+    body,
+    .assistant-scene {
+      width: 100% !important;
+      height: 100vh !important;
+      min-height: 100vh !important;
+      margin: 0 !important;
+      overflow: hidden !important;
+      background: #0d141b !important;
+    }
+
+    #desktopLayer {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      min-height: 100vh !important;
+      overflow: hidden !important;
+      background:
+        linear-gradient(
+          135deg,
+          #0d141b,
+          #14202a 50%,
+          #0a1117
+        ) !important;
+    }
+
+    #desktopLayer .desktop-bg {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      background:
+        radial-gradient(
+          circle at 16% 18%,
+          rgba(105,146,167,.14),
+          transparent 35%
+        ),
+        radial-gradient(
+          circle at 84% 78%,
+          rgba(94,144,137,.08),
+          transparent 34%
+        ),
+        linear-gradient(
+          135deg,
+          #0d141b,
+          #14202a 50%,
+          #0a1117
+        ) !important;
+    }
+
+    #desktopLayer .app-window {
+      position: absolute !important;
+      left: 0 !important;
+      top: 0 !important;
+      right: 0 !important;
+      bottom: 48px !important;
+      width: 100% !important;
+      height: auto !important;
+      transform: none !important;
+      overflow: hidden !important;
+      border-radius: 0 !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      background:
+        linear-gradient(
+          145deg,
+          #15212b,
+          #101922
+        ) !important;
+    }
+
+    #desktopLayer .taskbar {
+      position: absolute !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100% !important;
+      height: 48px !important;
+      margin: 0 !important;
+    }
+
+    .system-card {
+      position: relative !important;
+      overflow: hidden !important;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(34,51,63,.98),
+          rgba(22,36,46,.99)
+        ) !important;
+      border:
+        1px solid
+        rgba(177,195,204,.13) !important;
+      box-shadow:
+        0 18px 38px rgba(0,0,0,.25),
+        inset 0 1px 0 rgba(255,255,255,.025) !important;
+    }
+
+    .system-card::before {
+      content: "" !important;
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 2px !important;
+      background:
+        linear-gradient(
+          90deg,
+          var(--lux-accent, #7898aa),
+          rgba(255,255,255,.08),
+          transparent 88%
+        ) !important;
+    }
+
+    .system-card:hover,
+    .system-card.auto-focus {
+      background:
+        linear-gradient(
+          145deg,
+          rgba(43,62,74,.99),
+          rgba(27,43,54,.99)
+        ) !important;
+      border-color:
+        rgba(196,179,139,.34) !important;
+      box-shadow:
+        0 24px 52px rgba(0,0,0,.35),
+        0 0 0 1px rgba(196,179,139,.05),
+        0 0 32px rgba(96,148,154,.08) !important;
+    }
+
+    .system-name-inline {
+      position: relative !important;
+      z-index: 2 !important;
+      padding-right: 76px !important;
+      margin: 18px 0 10px !important;
+      color: white !important;
+      font-size: 20px !important;
+      font-weight: 650 !important;
+      line-height: 1.22 !important;
+    }
+
+    .system-arrow {
+      color: #c0ae84 !important;
+    }
+
+    @media (max-height: 760px) {
+
+      #desktopLayer .app-window {
+        bottom: 44px !important;
+      }
+
+      #desktopLayer .taskbar {
+        height: 44px !important;
+      }
+
+      .window-header {
+        height: 38px !important;
+      }
+
+      .window-body {
+        height: calc(100% - 38px) !important;
+      }
+
+      .content-top {
+        padding: 8px 20px 6px !important;
+      }
+
+      .content-title {
+        font-size: 20px !important;
+      }
+
+      .ops-dashboard {
+        padding: 0 20px 7px !important;
+      }
+
+      .ops-metric {
+        min-height: 66px !important;
+        padding: 8px 10px !important;
+      }
+
+      .ops-metric-caption {
+        display: none !important;
+      }
+
+      .system-showcase-strip {
+        margin: 0 20px 7px !important;
+        padding: 7px 10px !important;
+      }
+
+      .systems-scroll {
+        padding: 0 20px 12px !important;
+      }
+
+      .system-card {
+        min-height: 132px !important;
+        padding: 12px 14px !important;
+      }
+
+      .system-name-inline {
+        margin: 12px 0 7px !important;
+        font-size: 17px !important;
+      }
+
+      .system-desc {
+        font-size: 10.5px !important;
+        line-height: 1.38 !important;
+      }
+    }
+
+
+    /* =========================================
+       ASSISTANT HEAD — HERO IDENTITY
+    ========================================== */
+
+    .executive-suite-badge {
+      width: fit-content;
+
+      margin-top: 13px;
+
+      padding:
+        7px 11px;
+
+      border-radius: 999px;
+
+      color:
+        rgba(220,193,142,.86);
+
+      font-size: 8px;
+
+      font-weight: 700;
+
+      letter-spacing: 2.1px;
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(197,163,103,.12),
+          rgba(255,255,255,.025)
+        );
+
+      border:
+        1px solid
+        rgba(204,171,111,.18);
+
+      box-shadow:
+        0 8px 24px
+        rgba(0,0,0,.18);
+
+      backdrop-filter:
+        blur(10px);
+    }
+
+
+    /* =========================================
+       PRIVATE EXECUTIVE EXIT DOOR
+       Assistant Head -> Quality Manager
+    ========================================== */
+
+    .next-transition-cover.executive-exit-door {
+      overflow: hidden;
+
+      background:
+        linear-gradient(
+          to top,
+          rgba(8,10,10,.72),
+          rgba(8,10,10,.09) 55%
+        ),
+        url('assets/images/xViBSk1.png')
+        center / cover no-repeat;
+
+      perspective:
+        1600px;
+    }
+
+    .executive-exit-door::before,
+    .executive-exit-door::after {
+      content: "";
+
+      position: absolute;
+
+      z-index: 5;
+
+      top: 0;
+
+      width: 50.3%;
+      height: 100%;
+
+      background:
+        linear-gradient(
+          90deg,
+          #211a14,
+          #43301f 44%,
+          #292018 100%
+        );
+
+      box-shadow:
+        inset 0 0 0 1px
+        rgba(225,190,129,.11),
+        inset 0 0 60px
+        rgba(0,0,0,.46);
+
+      transition:
+        transform 1.45s
+        cubic-bezier(.18,.76,.18,1)
+        .30s;
+    }
+
+    .executive-exit-door::before {
+      left: 0;
+
+      transform-origin:
+        left center;
+
+      border-right:
+        1px solid
+        rgba(224,188,126,.28);
+    }
+
+    .executive-exit-door::after {
+      right: 0;
+
+      transform-origin:
+        right center;
+
+      border-left:
+        1px solid
+        rgba(224,188,126,.28);
+    }
+
+    .executive-exit-door.active::before {
+      transform:
+        perspective(1600px)
+        rotateY(-89deg)
+        translateX(-3%);
+    }
+
+    .executive-exit-door.active::after {
+      transform:
+        perspective(1600px)
+        rotateY(89deg)
+        translateX(3%);
+    }
+
+    .exit-plaque,
+    .exit-destination {
+      position: absolute;
+
+      z-index: 9;
+
+      left: 50%;
+
+      transform:
+        translateX(-50%)
+        translateY(10px);
+
+      opacity: 0;
+
+      text-align: center;
+
+      transition:
+        opacity .55s ease .85s,
+        transform .75s ease .85s;
+    }
+
+    .exit-plaque {
+      bottom: 12%;
+
+      color:
+        #e1c48f;
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing: 3px;
+    }
+
+    .exit-destination {
+      bottom: 8.3%;
+
+      color:
+        rgba(255,255,255,.70);
+
+      font-size: 9px;
+
+      letter-spacing: 2px;
+    }
+
+    .executive-exit-door.active
+    .exit-plaque,
+    .executive-exit-door.active
+    .exit-destination {
+      opacity: 1;
+
+      transform:
+        translateX(-50%)
+        translateY(0);
+    }
+
+    .assistant-scene.return-from-command
+    .photo-wrap {
+      transform:
+        scale(1) !important;
+
+      filter:
+        none !important;
+
+      opacity:
+        1 !important;
+    }
+
+    .assistant-scene.return-from-command
+    .blur-bg {
+      transform:
+        scale(1.12) !important;
+
+      filter:
+        blur(28px)
+        brightness(.42) !important;
+
+      opacity:
+        .95 !important;
+    }
+
+
+    /* 2050 V2 — stable single image reveal */
+    .photo-wrap {
+      opacity: 1 !important;
+      animation: none !important;
+    }
+    
+
+    /* =========================================
+       V2 — REAL EXECUTIVE EXIT DOOR
+       Explicit DOM leaves, not pseudo-elements.
+    ========================================== */
+
+    .next-transition-cover.executive-exit-door {
+      overflow: hidden;
+
+      background:
+        #0f1314 !important;
+
+      perspective:
+        1800px !important;
+    }
+
+
+    .executive-exit-door::before,
+    .executive-exit-door::after {
+      display: none !important;
+    }
+
+
+    .executive-corridor {
+      position: absolute;
+
+      inset: 0;
+
+      overflow: hidden;
+
+      background:
+        radial-gradient(
+          ellipse at 50% 42%,
+          rgba(222,199,151,.16),
+          transparent 24%
+        ),
+        linear-gradient(
+          90deg,
+          #151b1c 0%,
+          #2e3837 18%,
+          #3f4844 50%,
+          #2e3837 82%,
+          #151b1c 100%
+        );
+
+      opacity: .28;
+
+      transform:
+        scale(1.08);
+
+      transition:
+        opacity .7s ease .50s,
+        transform 1.85s
+        cubic-bezier(.18,.76,.18,1)
+        .50s;
+    }
+
+
+    .executive-exit-door.open
+    .executive-corridor {
+      opacity: 1;
+
+      transform:
+        scale(1);
+    }
+
+
+    .corridor-ceiling {
+      position: absolute;
+
+      left: 18%;
+      right: 18%;
+      top: 0;
+
+      height: 28%;
+
+      clip-path:
+        polygon(
+          0 0,
+          100% 0,
+          72% 100%,
+          28% 100%
+        );
+
+      background:
+        linear-gradient(
+          to bottom,
+          #252b2a,
+          #3c423e
+        );
+
+      border-bottom:
+        1px solid
+        rgba(224,201,157,.12);
+    }
+
+
+    .corridor-ceiling::before {
+      content: "";
+
+      position: absolute;
+
+      left: 49.5%;
+      top: 0;
+
+      width: 1px;
+      height: 100%;
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(224,201,157,.65),
+          transparent
+        );
+
+      box-shadow:
+        0 0 24px
+        rgba(224,201,157,.22);
+    }
+
+
+    .corridor-floor {
+      position: absolute;
+
+      left: 13%;
+      right: 13%;
+      bottom: 0;
+
+      height: 47%;
+
+      clip-path:
+        polygon(
+          26% 0,
+          74% 0,
+          100% 100%,
+          0 100%
+        );
+
+      background:
+        linear-gradient(
+          to bottom,
+          #2b302d,
+          #181d1e
+        );
+
+      border-top:
+        1px solid
+        rgba(224,201,157,.10);
+    }
+
+
+    .corridor-floor::before,
+    .corridor-floor::after {
+      content: "";
+
+      position: absolute;
+
+      top: 0;
+      bottom: 0;
+
+      width: 1px;
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(224,201,157,.44),
+          transparent
+        );
+    }
+
+
+    .corridor-floor::before {
+      left: 31%;
+    }
+
+
+    .corridor-floor::after {
+      right: 31%;
+    }
+
+
+    .corridor-destination {
+      position: absolute;
+
+      left: 50%;
+      top: 39%;
+
+      transform:
+        translate(-50%,-50%);
+
+      color:
+        #e0c58f;
+
+      font-size:
+        clamp(
+          18px,
+          2vw,
+          30px
+        );
+
+      font-weight: 650;
+
+      letter-spacing: 5px;
+
+      text-shadow:
+        0 12px 36px
+        rgba(0,0,0,.48);
+    }
+
+
+    .corridor-subtitle {
+      position: absolute;
+
+      left: 50%;
+      top: 45%;
+
+      transform:
+        translateX(-50%);
+
+      color:
+        rgba(255,255,255,.46);
+
+      font-size: 8px;
+
+      letter-spacing: 2.4px;
+    }
+
+
+    .executive-door-frame {
+      position: absolute;
+
+      z-index: 8;
+
+      inset: 0;
+
+      pointer-events: none;
+
+      box-shadow:
+        inset 0 0 0 13px
+        #17120e,
+        inset 0 0 0 14px
+        rgba(225,190,129,.16),
+        inset 0 0 90px
+        rgba(0,0,0,.55);
+    }
+
+
+    .executive-door-frame::before {
+      content: "";
+
+      position: absolute;
+
+      z-index: 14;
+
+      left: 50%;
+      top: 0;
+
+      width: 2px;
+      height: 100%;
+
+      transform:
+        translateX(-50%);
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(232,203,149,.32),
+          rgba(232,203,149,.10),
+          rgba(232,203,149,.32)
+        );
+
+      transition:
+        opacity .25s ease .55s;
+    }
+
+
+    .executive-exit-door.open
+    .executive-door-frame::before {
+      opacity: 0;
+    }
+
+
+    .executive-door-leaf {
+      position: absolute;
+
+      z-index: 10;
+
+      top: 13px;
+      bottom: 13px;
+
+      width:
+        calc(50% - 13px);
+
+      overflow: hidden;
+
+      background:
+        linear-gradient(
+          100deg,
+          #1e1711,
+          #4b3421 47%,
+          #241a13
+        );
+
+      box-shadow:
+        inset 0 0 0 1px
+        rgba(231,194,130,.10),
+        inset 0 0 55px
+        rgba(0,0,0,.36),
+        0 0 40px
+        rgba(0,0,0,.35);
+
+      transition:
+        transform 1.45s
+        cubic-bezier(.16,.78,.16,1);
+    }
+
+
+    .executive-door-leaf.door-left {
+      left: 13px;
+
+      transform-origin:
+        left center;
+    }
+
+
+    .executive-door-leaf.door-right {
+      right: 13px;
+
+      transform-origin:
+        right center;
+    }
+
+
+    .executive-exit-door.open
+    .executive-door-leaf.door-left {
+      transform:
+        perspective(1800px)
+        rotateY(-92deg);
+    }
+
+
+    .executive-exit-door.open
+    .executive-door-leaf.door-right {
+      transform:
+        perspective(1800px)
+        rotateY(92deg);
+    }
+
+
+    .door-panel-line {
+      position: absolute;
+
+      left: 11%;
+      right: 11%;
+
+      height: 1px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(229,194,132,.18),
+          transparent
+        );
+    }
+
+
+    .door-panel-line.line-a {
+      top: 31%;
+    }
+
+
+    .door-panel-line.line-b {
+      bottom: 31%;
+    }
+
+
+    .door-handle {
+      position: absolute;
+
+      top: 50%;
+
+      width: 8px;
+      height: 54px;
+
+      transform:
+        translateY(-50%);
+
+      border-radius: 999px;
+
+      background:
+        linear-gradient(
+          to right,
+          #806b47,
+          #dfbd7d,
+          #816c49
+        );
+
+      box-shadow:
+        0 4px 15px
+        rgba(0,0,0,.38);
+    }
+
+
+    .handle-left {
+      right: 24px;
+    }
+
+
+    .handle-right {
+      left: 24px;
+    }
+
+
+    .door-center-light {
+      position: absolute;
+
+      z-index: 16;
+
+      left: 50%;
+      top: 0;
+
+      width: 3px;
+      height: 100%;
+
+      transform:
+        translateX(-50%)
+        scaleY(.08);
+
+      opacity: 0;
+
+      background:
+        linear-gradient(
+          to bottom,
+          transparent,
+          #e5ca96 26%,
+          #fff2cf 50%,
+          #e5ca96 74%,
+          transparent
+        );
+
+      box-shadow:
+        0 0 24px
+        rgba(234,207,153,.52);
+
+      transition:
+        opacity .25s ease,
+        transform .65s ease;
+    }
+
+
+    .executive-exit-door.open
+    .door-center-light {
+      opacity: 1;
+
+      transform:
+        translateX(-50%)
+        scaleY(1);
+    }
+
+
+    .executive-exit-door
+    .exit-plaque,
+    .executive-exit-door
+    .exit-destination {
+      z-index: 30;
+    }
+
+
+    .executive-exit-door.open
+    .exit-plaque,
+    .executive-exit-door.open
+    .exit-destination {
+      opacity: 0 !important;
+
+      transition-delay: 0s !important;
+    }
+
+
+    /* =========================================
+       CREATIVE V3 — SINGLE VISIBLE PHOTO
+    ========================================== */
+
+    .blur-bg {
+      background-image: none !important;
+      background:
+        radial-gradient(
+          circle at 50% 42%,
+          rgba(195,167,111,.10),
+          transparent 31%
+        ),
+        linear-gradient(
+          135deg,
+          #22292a,
+          #111617
+        ) !important;
+    }
+
+    .assistant-photo {
+      animation: none !important;
+      transform: none !important;
+    }
+
+
+    /* =========================================
+       CREATIVE V3 — REALISTIC WALNUT EXIT DOOR
+       Reuses the successful entrance-door language.
+    ========================================== */
+
+    .next-transition-cover.executive-exit-door {
+      overflow: hidden;
+      background: #111414 !important;
+      perspective: 1800px;
+    }
+
+    .executive-exit-door::before,
+    .executive-exit-door::after,
+    .executive-exit-door .executive-corridor,
+    .executive-exit-door .executive-door-frame,
+    .executive-exit-door .executive-door-leaf,
+    .executive-exit-door .door-center-light,
+    .executive-exit-door .exit-plaque,
+    .executive-exit-door .exit-destination {
+      display: none !important;
+    }
+
+    .walnut-exit-scene {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+
+      opacity: 0;
+      transform: scale(1.018);
+
+      background:
+        radial-gradient(
+          circle at 50% 15%,
+          rgba(216,187,133,.10),
+          transparent 26%
+        ),
+        linear-gradient(
+          180deg,
+          #303533,
+          #242927 64%,
+          #171b1b
+        );
+
+      transition:
+        opacity .48s ease,
+        transform .9s ease;
+    }
+
+    .executive-exit-door.active .walnut-exit-scene {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .exit-wall-light {
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 43%;
+
+      background:
+        radial-gradient(
+          ellipse at 50% 0%,
+          rgba(226,198,146,.13),
+          transparent 58%
+        );
+    }
+
+    .exit-floor {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 30%;
+
+      background:
+        linear-gradient(
+          to bottom,
+          #282d2b,
+          #161a1a
+        );
+
+      border-top:
+        1px solid
+        rgba(255,255,255,.045);
+    }
+
+    .walnut-door-container {
+      position: absolute;
+      left: 50%;
+      bottom: 7%;
+
+      width:
+        min(
+          35vw,
+          480px
+        );
+
+      height: 82vh;
+
+      min-width: 360px;
+      min-height: 520px;
+
+      transform:
+        translateX(-50%);
+
+      perspective: 1800px;
+
+      transition:
+        transform 1.45s
+        cubic-bezier(.18,.76,.18,1);
+    }
+
+    .executive-exit-door.walk
+    .walnut-door-container {
+      transform:
+        translateX(-50%)
+        scale(1.46)
+        translateY(4%);
+    }
+
+    .walnut-door-frame {
+      position: relative;
+
+      width: 100%;
+      height: 100%;
+
+      padding: 15px;
+
+      overflow: hidden;
+
+      border-radius: 5px;
+
+      background:
+        linear-gradient(
+          90deg,
+          #1d130f 0%,
+          #3d281d 45%,
+          #251711 100%
+        );
+
+      box-shadow:
+        0 34px 65px
+        rgba(0,0,0,.43),
+        0 9px 18px
+        rgba(0,0,0,.24);
+    }
+
+    .walnut-door-frame::before {
+      content: "";
+
+      position: absolute;
+
+      inset: 4px;
+
+      z-index: 12;
+
+      pointer-events: none;
+
+      border:
+        1px solid
+        rgba(198,148,88,.12);
+    }
+
+    .quality-corridor-view {
+      position: absolute;
+
+      inset: 15px;
+
+      z-index: 1;
+
+      overflow: hidden;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      opacity: .30;
+
+      transform:
+        scale(1.08);
+
+      background:
+        radial-gradient(
+          circle at 50% 38%,
+          rgba(216,194,153,.11),
+          transparent 22%
+        ),
+        linear-gradient(
+          90deg,
+          #171d1d,
+          #424b48 50%,
+          #171d1d
+        );
+
+      transition:
+        opacity 1.25s ease .50s,
+        transform 2.35s ease .50s;
+    }
+
+    .executive-exit-door.open
+    .quality-corridor-view {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .quality-corridor-view::before {
+      content: "";
+
+      position: absolute;
+
+      left: 14%;
+      right: 14%;
+      top: 0;
+
+      height: 28%;
+
+      clip-path:
+        polygon(
+          0 0,
+          100% 0,
+          73% 100%,
+          27% 100%
+        );
+
+      background:
+        linear-gradient(
+          to bottom,
+          #2d3331,
+          #434945
+        );
+    }
+
+    .quality-corridor-view::after {
+      content: "";
+
+      position: absolute;
+
+      left: 15%;
+      right: 15%;
+      bottom: 0;
+
+      height: 39%;
+
+      clip-path:
+        polygon(
+          26% 0,
+          74% 0,
+          100% 100%,
+          0 100%
+        );
+
+      background:
+        linear-gradient(
+          to bottom,
+          #2a302d,
+          #161b1b
+        );
+    }
+
+    .corridor-sign {
+      position: relative;
+
+      z-index: 4;
+
+      margin-top: -34px;
+
+      color: #e1c38b;
+
+      font-size: 17px;
+
+      font-weight: 650;
+
+      letter-spacing: 4px;
+
+      text-shadow:
+        0 8px 24px
+        rgba(0,0,0,.42);
+    }
+
+    .corridor-line {
+      position: absolute;
+
+      z-index: 4;
+
+      left: 50%;
+
+      top: 55%;
+
+      width: 1px;
+
+      height: 28%;
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(224,194,139,.45),
+          transparent
+        );
+    }
+
+    .walnut-door {
+      position: relative;
+
+      z-index: 5;
+
+      width: 100%;
+      height: 100%;
+
+      overflow: hidden;
+
+      transform-origin:
+        left center;
+
+      transform-style:
+        preserve-3d;
+
+      border:
+        1px solid
+        rgba(217,164,95,.28);
+
+      background:
+        linear-gradient(
+          112deg,
+          rgba(255,255,255,.055) 0%,
+          rgba(255,255,255,.008) 20%,
+          transparent 34%
+        ),
+        radial-gradient(
+          ellipse at 50% 20%,
+          rgba(128,72,43,.78),
+          transparent 58%
+        ),
+        linear-gradient(
+          90deg,
+          #3a1f16 0%,
+          #5a3122 48%,
+          #321811 100%
+        );
+
+      box-shadow:
+        inset 0 0 65px
+        rgba(0,0,0,.52),
+        inset 10px 0 20px
+        rgba(255,255,255,.015),
+        inset -12px 0 24px
+        rgba(0,0,0,.16);
+
+      transition:
+        transform 2.1s
+        cubic-bezier(.65,.05,.2,1),
+        box-shadow 2.1s ease;
+    }
+
+    .executive-exit-door.open .walnut-door {
+      transform:
+        rotateY(-78deg);
+
+      box-shadow:
+        18px 20px 55px
+        rgba(0,0,0,.45),
+        inset 0 0 65px
+        rgba(0,0,0,.52);
+    }
+
+    .walnut-door::before {
+      content: "";
+
+      position: absolute;
+
+      inset: 0;
+
+      opacity: .11;
+
+      background-image:
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,.04) 0px,
+          transparent 2px,
+          transparent 8px
+        );
+    }
+
+    .walnut-door::after {
+      content: "";
+
+      position: absolute;
+
+      left: 0;
+      top: 0;
+
+      width: 32%;
+      height: 100%;
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,.035),
+          transparent
+        );
+    }
+
+    .walnut-door-panel {
+      position: absolute;
+
+      inset: 5.5%;
+
+      border:
+        1px solid
+        rgba(205,155,95,.23);
+
+      box-shadow:
+        inset 0 0 0 5px
+        rgba(20,8,4,.055);
+    }
+
+    .walnut-door-label {
+      position: absolute;
+
+      top: 43%;
+      left: 50%;
+
+      width: 78%;
+
+      transform:
+        translateX(-50%);
+
+      text-align: center;
+
+      color: #fff3e6;
+
+      font-size:
+        clamp(
+          14px,
+          1.55vw,
+          22px
+        );
+
+      font-weight: 650;
+
+      letter-spacing: 2px;
+
+      text-shadow:
+        0 8px 18px
+        rgba(0,0,0,.36);
+    }
+
+    .walnut-door-handle {
+      position: absolute;
+
+      right: 8%;
+      top: 52%;
+
+      width: 10px;
+      height: 68px;
+
+      transform:
+        translateY(-50%);
+
+      border-radius: 999px;
+
+      background:
+        linear-gradient(
+          to right,
+          #806a45,
+          #ddba79,
+          #806a45
+        );
+
+      box-shadow:
+        0 5px 14px
+        rgba(0,0,0,.38);
+    }
+
+    .exit-route-caption {
+      position: absolute;
+
+      left: 50%;
+      bottom: 2.6%;
+
+      transform:
+        translateX(-50%);
+
+      color:
+        rgba(229,204,157,.66);
+
+      font-size: 8px;
+
+      font-weight: 700;
+
+      letter-spacing: 2.2px;
+
+      transition:
+        opacity .35s ease;
+    }
+
+    .executive-exit-door.walk
+    .exit-route-caption {
+      opacity: 0;
+    }
+
+    @media (max-height: 760px) {
+
+      .walnut-door-container {
+        width:
+          min(
+            30vw,
+            360px
+          );
+
+        height: 78vh;
+
+        min-width: 300px;
+        min-height: 430px;
+      }
+
+    }
+
+
+    /* =========================================
+       CREATIVE V3 — ASSISTANT HEAD
+       EXECUTIVE COMMAND DECK
+    ========================================== */
+
+    .system-showcase-strip {
+      position: relative !important;
+      min-height: 158px !important;
+      margin: 8px 20px 12px !important;
+      padding: 24px 120px 24px 26px !important;
+      overflow: hidden !important;
+      display: block !important;
+      border-radius: 18px !important;
+
+      background:
+        radial-gradient(
+          circle at 83% 50%,
+          rgba(111,158,165,.13),
+          transparent 23%
+        ),
+        radial-gradient(
+          circle at 83% 50%,
+          transparent 0 44px,
+          rgba(202,177,126,.11) 45px 46px,
+          transparent 47px 64px,
+          rgba(112,156,163,.07) 65px 66px,
+          transparent 67px
+        ),
+        linear-gradient(
+          135deg,
+          rgba(39,57,68,.98),
+          rgba(18,31,40,.99)
+        ) !important;
+
+      border:
+        1px solid
+        rgba(182,200,208,.12) !important;
+
+      box-shadow:
+        0 24px 58px
+        rgba(0,0,0,.28),
+        inset 0 1px 0
+        rgba(255,255,255,.025) !important;
+    }
+
+    .system-showcase-strip::before {
+      content: "EXECUTIVE SYSTEM SPOTLIGHT";
+      position: absolute;
+      right: 25px;
+      top: 20px;
+      width: 118px;
+      color: rgba(204,179,128,.56);
+      text-align: right;
+      font-size: 7px;
+      font-weight: 700;
+      letter-spacing: 1.7px;
+    }
+
+    .system-showcase-strip::after {
+      content: "";
+      position: absolute;
+      right: 57px;
+      top: 50%;
+      width: 44px;
+      height: 44px;
+      transform: translateY(-50%);
+      border-radius: 50%;
+      border:
+        1px solid
+        rgba(203,178,127,.30);
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(203,178,127,.20),
+          rgba(112,156,163,.05) 45%,
+          transparent 47%
+        );
+
+      box-shadow:
+        0 0 34px
+        rgba(111,158,164,.10);
+    }
+
+    .system-showcase-kicker {
+      margin-bottom: 10px !important;
+      color: rgba(202,176,124,.70) !important;
+      font-size: 8px !important;
+      letter-spacing: 2.8px !important;
+    }
+
+    .system-showcase-name {
+      max-width: 760px;
+      color: white !important;
+      font-size:
+        clamp(
+          23px,
+          2.2vw,
+          34px
+        ) !important;
+      font-weight: 650 !important;
+      line-height: 1.15 !important;
+    }
+
+    .system-showcase-description {
+      max-width: 760px;
+      margin-top: 10px !important;
+      color: rgba(255,255,255,.48) !important;
+      font-size: 11px !important;
+      line-height: 1.55 !important;
+    }
+
+    .system-showcase-step {
+      position: absolute !important;
+      right: 24px !important;
+      bottom: 18px !important;
+      color: rgba(255,255,255,.34) !important;
+      font-size: 9px !important;
+    }
+
+    .systems-scroll {
+      flex: 0 0 auto !important;
+      min-height: 0 !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      padding: 0 20px 14px !important;
+    }
+
+    .systems-grid {
+      width: max-content !important;
+      display: flex !important;
+      grid-template-columns: none !important;
+      gap: 9px !important;
+      padding: 0 2px 4px !important;
+    }
+
+    .executive-dock-item {
+      --lux-accent: #7898aa;
+      position: relative;
+      width: 178px;
+      min-width: 178px;
+      height: 82px;
+      padding: 11px 12px;
+      overflow: hidden;
+      cursor: pointer;
+      text-align: left;
+      color: white;
+      border-radius: 11px;
+      border:
+        1px solid
+        rgba(181,199,207,.09);
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(35,52,63,.88),
+          rgba(21,35,44,.94)
+        );
+
+      box-shadow:
+        inset 0 1px 0
+        rgba(255,255,255,.02);
+
+      transition:
+        transform .25s ease,
+        background .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
+    }
+
+    .executive-dock-item::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 3px;
+      height: 100%;
+      opacity: .45;
+      background: var(--lux-accent);
+    }
+
+    .executive-dock-item:hover,
+    .executive-dock-item.auto-focus {
+      transform: translateY(-4px);
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(48,67,79,.98),
+          rgba(28,44,54,.99)
+        );
+
+      border-color:
+        rgba(207,179,126,.26);
+
+      box-shadow:
+        0 16px 34px
+        rgba(0,0,0,.28),
+        0 0 24px
+        rgba(108,154,161,.06);
+    }
+
+    .executive-dock-item.auto-focus::before {
+      opacity: 1;
+    }
+
+    .dock-number {
+      margin-bottom: 6px;
+      color: rgba(204,179,128,.48);
+      font-size: 7px;
+      font-weight: 700;
+      letter-spacing: 1.3px;
+    }
+
+    .dock-title {
+      overflow: hidden;
+      color: rgba(255,255,255,.90);
+      font-size: 11px;
+      font-weight: 650;
+      line-height: 1.2;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .dock-status {
+      margin-top: 7px;
+      color: rgba(255,255,255,.22);
+      font-size: 6.5px;
+      letter-spacing: .9px;
+    }
+
+    @media (max-height: 760px) {
+
+      .system-showcase-strip {
+        min-height: 118px !important;
+        padding:
+          16px 100px 16px 19px !important;
+      }
+
+      .system-showcase-name {
+        font-size: 20px !important;
+      }
+
+      .system-showcase-description {
+        margin-top: 6px !important;
+        font-size: 9px !important;
+      }
+
+      .executive-dock-item {
+        width: 154px;
+        min-width: 154px;
+        height: 68px;
+      }
+
+      .dock-status {
+        display: none;
+      }
+
+    }
+
+
+    /* =========================================
+       CONTINUE TOUR — HARD INTERACTION FIX
+    ========================================== */
+
+    #continueTour {
+      z-index:
+        50000 !important;
+
+      pointer-events:
+        auto !important;
+
+      touch-action:
+        manipulation;
+
+      user-select:
+        none;
+
+      -webkit-user-select:
+        none;
+    }
+
+
+    #continueTour.show {
+      opacity:
+        1 !important;
+
+      visibility:
+        visible !important;
+
+      pointer-events:
+        auto !important;
+    }
+
+
+    #continueTour:disabled {
+      pointer-events:
+        none !important;
+    }
+
+
+    /* =========================================
+       FINAL CLOSEOUT — ASSISTANT HEAD SYSTEMS
+       Restore full-size cards + visible description.
+    ========================================== */
+
+    .systems-scroll {
+      flex:
+        1 !important;
+
+      min-height:
+        0 !important;
+
+      overflow-x:
+        hidden !important;
+
+      overflow-y:
+        auto !important;
+
+      padding:
+        0 24px 30px !important;
+
+      scrollbar-width:
+        thin;
+    }
+
+
+    .systems-grid {
+      width:
+        100% !important;
+
+      display:
+        grid !important;
+
+      grid-template-columns:
+        repeat(
+          3,
+          minmax(0,1fr)
+        ) !important;
+
+      gap:
+        14px !important;
+
+      padding:
+        0 0 18px !important;
+    }
+
+
+    .system-card {
+      width:
+        auto !important;
+
+      min-width:
+        0 !important;
+
+      height:
+        auto !important;
+
+      min-height:
+        174px !important;
+
+      padding:
+        16px !important;
+
+      text-align:
+        left !important;
+
+      border-radius:
+        15px !important;
+
+      cursor:
+        pointer !important;
+    }
+
+
+    .system-title-row {
+      display:
+        flex !important;
+
+      align-items:
+        center !important;
+
+      gap:
+        8px !important;
+
+      padding-right:
+        70px !important;
+
+      margin:
+        18px 0 9px !important;
+    }
+
+
+    .system-icon-inline {
+      flex:
+        0 0 auto;
+
+      font-size:
+        18px !important;
+    }
+
+
+    .system-name {
+      margin:
+        0 !important;
+
+      color:
+        white !important;
+
+      font-size:
+        18px !important;
+
+      font-weight:
+        650 !important;
+
+      line-height:
+        1.22 !important;
+    }
+
+
+    .system-desc {
+      display:
+        block !important;
+
+      max-width:
+        92% !important;
+
+      color:
+        rgba(255,255,255,.48) !important;
+
+      font-size:
+        11px !important;
+
+      line-height:
+        1.52 !important;
+    }
+
+
+    .system-number {
+      display:
+        block !important;
+    }
+
+
+    .system-arrow {
+      display:
+        block !important;
+    }
+
+
+    @media (max-height: 760px) {
+
+      .systems-scroll {
+        padding:
+          0 20px 15px !important;
+      }
+
+      .systems-grid {
+        gap:
+          11px !important;
+      }
+
+      .system-card {
+        min-height:
+          132px !important;
+
+        padding:
+          12px 14px !important;
+      }
+
+      .system-title-row {
+        margin:
+          12px 0 7px !important;
+      }
+
+      .system-name {
+        font-size:
+          16px !important;
+      }
+
+      .system-desc {
+        font-size:
+          10px !important;
+
+        line-height:
+          1.4 !important;
+      }
+
+    }
+
+
+    @media (max-width: 1080px) {
+
+      .systems-grid {
+        grid-template-columns:
+          repeat(
+            2,
+            minmax(0,1fr)
+          ) !important;
+      }
+
+    }
+
+
+    @media (max-width: 720px) {
+
+      .systems-grid {
+        grid-template-columns:
+          1fr !important;
+      }
+
+    }
+
+
+    /* =========================================
+       FINAL CLOSEOUT — REAL ENTRANCE-STYLE DOOR
+       Same single walnut panel language used by
+       the original presentation entrance.
+    ========================================== */
+
+    .next-transition-cover.executive-exit-door {
+      overflow:
+        hidden !important;
+
+      background:
+        #2a2926 !important;
+
+      perspective:
+        1800px !important;
+    }
+
+
+    .executive-exit-door::before,
+    .executive-exit-door::after {
+      content:
+        none !important;
+
+      display:
+        none !important;
+    }
+
+
+    .office-exit-scene {
+      position:
+        absolute;
+
+      inset:
+        0;
+
+      overflow:
+        hidden;
+
+      opacity:
+        0;
+
+      background:
+        linear-gradient(
+          to bottom,
+          #746d64,
+          #575149
+        );
+
+      transition:
+        opacity .65s ease;
+    }
+
+
+    .executive-exit-door.active
+    .office-exit-scene {
+      opacity:
+        1;
+    }
+
+
+    .exit-wall-texture {
+      position:
+        absolute;
+
+      inset:
+        0 0 30% 0;
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,.018),
+          transparent 18%,
+          rgba(255,255,255,.014) 50%,
+          transparent 82%
+        );
+    }
+
+
+    .exit-ambient-light {
+      position:
+        absolute;
+
+      inset:
+        0;
+
+      background:
+        radial-gradient(
+          ellipse at 50% 15%,
+          rgba(255,238,202,.17),
+          transparent 45%
+        );
+    }
+
+
+    .exit-floor {
+      position:
+        absolute;
+
+      left:
+        0;
+
+      bottom:
+        0;
+
+      width:
+        100%;
+
+      height:
+        30%;
+
+      background:
+        linear-gradient(
+          to bottom,
+          #5a524a,
+          #403a35
+        );
+
+      box-shadow:
+        inset 0 18px 35px
+        rgba(0,0,0,.20);
+    }
+
+
+    .exit-floor::before {
+      content:
+        "";
+
+      position:
+        absolute;
+
+      left:
+        0;
+
+      top:
+        0;
+
+      width:
+        100%;
+
+      height:
+        2px;
+
+      background:
+        rgba(255,255,255,.08);
+    }
+
+
+    .exit-door-container {
+      position:
+        absolute;
+
+      left:
+        50%;
+
+      bottom:
+        7%;
+
+      width:
+        min(
+          36vw,
+          540px
+        );
+
+      height:
+        80vh;
+
+      min-width:
+        420px;
+
+      min-height:
+        570px;
+
+      transform:
+        translateX(-50%);
+
+      perspective:
+        1800px;
+    }
+
+
+    .exit-door-frame {
+      position:
+        relative;
+
+      width:
+        100%;
+
+      height:
+        100%;
+
+      padding:
+        15px;
+
+      overflow:
+        hidden;
+
+      border-radius:
+        5px;
+
+      background:
+        linear-gradient(
+          90deg,
+          #1d130f 0%,
+          #3d281d 45%,
+          #251711 100%
+        );
+
+      box-shadow:
+        0 34px 65px
+        rgba(0,0,0,.43),
+        0 9px 18px
+        rgba(0,0,0,.24);
+    }
+
+
+    .exit-door-frame::before {
+      content:
+        "";
+
+      position:
+        absolute;
+
+      inset:
+        4px;
+
+      z-index:
+        10;
+
+      pointer-events:
+        none;
+
+      border:
+        1px solid
+        rgba(198,148,88,.12);
+    }
+
+
+    .exit-corridor-view {
+      position:
+        absolute;
+
+      inset:
+        15px;
+
+      z-index:
+        1;
+
+      overflow:
+        hidden;
+
+      opacity:
+        0;
+
+      transform:
+        scale(1.05);
+
+      background:
+        linear-gradient(
+          90deg,
+          #202626 0%,
+          #4a514d 18%,
+          #5a605a 50%,
+          #4a514d 82%,
+          #202626 100%
+        );
+
+      transition:
+        opacity 1.35s ease,
+        transform 2.8s ease;
+    }
+
+
+    .executive-exit-door.open
+    .exit-corridor-view {
+      opacity:
+        1;
+
+      transform:
+        scale(1);
+    }
+
+
+    .exit-corridor-view::before {
+      content:
+        "";
+
+      position:
+        absolute;
+
+      left:
+        18%;
+
+      right:
+        18%;
+
+      top:
+        0;
+
+      height:
+        28%;
+
+      clip-path:
+        polygon(
+          0 0,
+          100% 0,
+          72% 100%,
+          28% 100%
+        );
+
+      background:
+        linear-gradient(
+          to bottom,
+          #333936,
+          #555b55
+        );
+    }
+
+
+    .exit-corridor-view::after {
+      content:
+        "";
+
+      position:
+        absolute;
+
+      left:
+        13%;
+
+      right:
+        13%;
+
+      bottom:
+        0;
+
+      height:
+        44%;
+
+      clip-path:
+        polygon(
+          26% 0,
+          74% 0,
+          100% 100%,
+          0 100%
+        );
+
+      background:
+        linear-gradient(
+          to bottom,
+          #353a36,
+          #1e2322
+        );
+    }
+
+
+    .corridor-wall-left,
+    .corridor-wall-right {
+      position:
+        absolute;
+
+      top:
+        0;
+
+      bottom:
+        0;
+
+      width:
+        18%;
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(255,255,255,.025),
+          rgba(0,0,0,.12)
+        );
+    }
+
+
+    .corridor-wall-left {
+      left:
+        0;
+    }
+
+
+    .corridor-wall-right {
+      right:
+        0;
+    }
+
+
+    .corridor-ceiling-light {
+      position:
+        absolute;
+
+      z-index:
+        3;
+
+      left:
+        50%;
+
+      top:
+        3%;
+
+      width:
+        2px;
+
+      height:
+        34%;
+
+      transform:
+        translateX(-50%);
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(255,236,199,.85),
+          transparent
+        );
+
+      box-shadow:
+        0 0 22px
+        rgba(255,232,190,.25);
+    }
+
+
+    .corridor-quality-sign {
+      position:
+        absolute;
+
+      z-index:
+        4;
+
+      left:
+        50%;
+
+      top:
+        41%;
+
+      transform:
+        translate(-50%,-50%);
+
+      color:
+        #e1c38b;
+
+      font-size:
+        15px;
+
+      font-weight:
+        650;
+
+      letter-spacing:
+        4px;
+
+      text-shadow:
+        0 8px 22px
+        rgba(0,0,0,.38);
+    }
+
+
+    .exit-door {
+      position:
+        relative;
+
+      z-index:
+        5;
+
+      width:
+        100%;
+
+      height:
+        100%;
+
+      overflow:
+        hidden;
+
+      transform-origin:
+        left center;
+
+      transform-style:
+        preserve-3d;
+
+      border:
+        1px solid
+        rgba(217,164,95,.28);
+
+      background:
+        linear-gradient(
+          112deg,
+          rgba(255,255,255,.055) 0%,
+          rgba(255,255,255,.008) 20%,
+          transparent 34%
+        ),
+        radial-gradient(
+          ellipse at 50% 20%,
+          rgba(128,72,43,.78),
+          transparent 58%
+        ),
+        linear-gradient(
+          90deg,
+          #3a1f16 0%,
+          #5a3122 48%,
+          #321811 100%
+        );
+
+      box-shadow:
+        inset 0 0 65px
+        rgba(0,0,0,.52),
+        inset 10px 0 20px
+        rgba(255,255,255,.015),
+        inset -12px 0 24px
+        rgba(0,0,0,.16);
+
+      transition:
+        transform 2.4s
+        cubic-bezier(.65,.05,.2,1),
+        box-shadow 2.4s ease;
+    }
+
+
+    .executive-exit-door.open
+    .exit-door {
+      transform:
+        rotateY(-78deg);
+
+      box-shadow:
+        18px 20px 55px
+        rgba(0,0,0,.45),
+        inset 0 0 65px
+        rgba(0,0,0,.52);
+    }
+
+
+    .exit-door::before {
+      content:
+        "";
+
+      position:
+        absolute;
+
+      inset:
+        0;
+
+      opacity:
+        .11;
+
+      background-image:
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,.04) 0,
+          transparent 2px,
+          transparent 8px
+        );
+    }
+
+
+    .exit-door::after {
+      content:
+        "";
+
+      position:
+        absolute;
+
+      left:
+        0;
+
+      top:
+        0;
+
+      width:
+        32%;
+
+      height:
+        100%;
+
+      pointer-events:
+        none;
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,.035),
+          transparent
+        );
+    }
+
+
+    .exit-door-panel {
+      position:
+        absolute;
+
+      inset:
+        5.5%;
+
+      pointer-events:
+        none;
+
+      border:
+        1px solid
+        rgba(205,155,95,.23);
+
+      box-shadow:
+        inset 0 0 0 5px
+        rgba(20,8,4,.055);
+    }
+
+
+    .exit-door-title {
+      position:
+        absolute;
+
+      left:
+        50%;
+
+      top:
+        48%;
+
+      width:
+        78%;
+
+      transform:
+        translateX(-50%);
+
+      color:
+        #fff6ec;
+
+      text-align:
+        center;
+
+      white-space:
+        nowrap;
+
+      font-size:
+        clamp(
+          20px,
+          1.8vw,
+          31px
+        );
+
+      font-weight:
+        650;
+
+      letter-spacing:
+        3.4px;
+
+      text-shadow:
+        0 3px 5px
+        rgba(0,0,0,.52),
+        0 0 16px
+        rgba(205,151,90,.10);
+    }
+
+
+    .exit-handle {
+      position:
+        absolute;
+
+      right:
+        5.5%;
+
+      top:
+        50%;
+
+      width:
+        14px;
+
+      height:
+        92px;
+
+      border-radius:
+        8px;
+
+      background:
+        linear-gradient(
+          90deg,
+          #6e4d2f,
+          #d0a567 45%,
+          #8a653f
+        );
+
+      box-shadow:
+        2px 5px 12px
+        rgba(0,0,0,.42),
+        inset 1px 0 2px
+        rgba(255,255,255,.25);
+    }
+
+
+    .exit-handle::before,
+    .exit-handle::after {
+      content:
+        "";
+
+      position:
+        absolute;
+
+      left:
+        50%;
+
+      width:
+        19px;
+
+      height:
+        6px;
+
+      transform:
+        translateX(-50%);
+
+      border-radius:
+        4px;
+
+      background:
+        linear-gradient(
+          90deg,
+          #60422a,
+          #c99a61,
+          #60422a
+        );
+    }
+
+
+    .exit-handle::before {
+      top:
+        -2px;
+    }
+
+
+    .exit-handle::after {
+      bottom:
+        -2px;
+    }
+
+
+    .exit-door-caption {
+      position:
+        absolute;
+
+      left:
+        50%;
+
+      bottom:
+        2.5%;
+
+      transform:
+        translateX(-50%);
+
+      color:
+        rgba(255,245,227,.62);
+
+      font-size:
+        8px;
+
+      font-weight:
+        700;
+
+      letter-spacing:
+        2px;
+    }
+
+
+    @media (max-height: 760px) {
+
+      .exit-door-container {
+        width:
+          min(
+            30vw,
+            390px
+          );
+
+        height:
+          77vh;
+
+        min-width:
+          310px;
+
+        min-height:
+          430px;
+      }
+
+    }
+
+
+    /* =========================================
+       FINAL SINGLE-PRESS INTERACTION FIX
+    ========================================== */
+
+    #systemsGrid .system-card {
+      pointer-events:
+        auto !important;
+
+      touch-action:
+        manipulation;
+
+      user-select:
+        none;
+
+      -webkit-user-select:
+        none;
+    }
+
+
+    #continueTour {
+      z-index:
+        60000 !important;
+
+      pointer-events:
+        auto !important;
+
+      touch-action:
+        manipulation;
+
+      user-select:
+        none;
+
+      -webkit-user-select:
+        none;
+    }
+
+
+    #continueTour.show {
+      opacity:
+        1 !important;
+
+      visibility:
+        visible !important;
+
+      pointer-events:
+        auto !important;
+    }
+
+
+    /* =========================================
+       CLEAN QUALITY TRANSITION — NO DOOR
+    ========================================== */
+
+    .next-transition-cover.clean-quality-transition {
+      overflow:
+        hidden;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      background:
+        radial-gradient(
+          ellipse at 50% 44%,
+          rgba(195,165,111,.12),
+          transparent 28%
+        ),
+        linear-gradient(
+          180deg,
+          rgba(21,25,25,.95),
+          #090b0b 100%
+        ) !important;
+
+      transition:
+        opacity .90s ease !important;
+    }
+
+
+    .quality-transition-line {
+      position:
+        absolute;
+
+      left:
+        50%;
+
+      top:
+        18%;
+
+      bottom:
+        18%;
+
+      width:
+        1px;
+
+      opacity:
+        0;
+
+      transform:
+        translateX(-50%)
+        scaleY(.20);
+
+      background:
+        linear-gradient(
+          to bottom,
+          transparent,
+          rgba(216,184,128,.38),
+          transparent
+        );
+
+      transition:
+        opacity .45s ease,
+        transform .75s ease;
+    }
+
+
+    .clean-quality-transition.active
+    .quality-transition-line {
+      opacity:
+        1;
+
+      transform:
+        translateX(-50%)
+        scaleY(1);
+    }
+
+
+    .quality-transition-label {
+      position:
+        absolute;
+
+      left:
+        50%;
+
+      bottom:
+        10%;
+
+      transform:
+        translateX(-50%)
+        translateY(8px);
+
+      opacity:
+        0;
+
+      color:
+        rgba(231,210,169,.68);
+
+      font-size:
+        9px;
+
+      font-weight:
+        700;
+
+      letter-spacing:
+        2.5px;
+
+      transition:
+        opacity .4s ease .2s,
+        transform .55s ease .2s;
+    }
+
+
+    .clean-quality-transition.active
+    .quality-transition-label {
+      opacity:
+        1;
+
+      transform:
+        translateX(-50%)
+        translateY(0);
+    }
+
+  
+
+    /* V30 readability pass — keep the photo visible and remove heavy black dialogue cards. */
+    .dialogue{width:min(940px,78vw) !important;bottom:3.2% !important;}
+    .dialogue-box{
+      padding:9px 16px !important;
+      border:none !important;
+      border-radius:10px !important;
+      background:rgba(8,14,18,.16) !important;
+      box-shadow:none !important;
+      backdrop-filter:none !important;
+      -webkit-backdrop-filter:none !important;
+      color:#fff !important;
+      text-shadow:0 2px 9px rgba(0,0,0,.95),0 1px 2px rgba(0,0,0,.9) !important;
+    }
+    .dialogue-box::after{display:none !important;}
+    .tour-ar-subtitle{
+      margin-top:4px !important;
+      padding-top:4px !important;
+      border-top:none !important;
+      color:#fff !important;
+      line-height:1.45 !important;
+      text-shadow:0 2px 9px rgba(0,0,0,.98) !important;
+    }
+    .role-indicator{top:3.2% !important;left:3.2% !important;max-width:36vw !important;}
+    .role-name{max-width:410px !important;font-size:clamp(17px,1.55vw,25px) !important;line-height:1.14 !important;}
+    @media(max-width:820px){.dialogue{width:94vw !important;}}
+
+  </style>
+
+<style id="systemDescriptionReadingStyle">
+.system-showcase-description.is-speaking-description{
+  color:#0b0d0f !important;
+  background:rgba(255,255,255,.94) !important;
+  border-radius:10px !important;
+  padding:8px 10px !important;
+  font-weight:800 !important;
+  box-shadow:0 8px 22px rgba(0,0,0,.16) !important;
+}
+</style>
+  <script>/* FIXED_AUDIO_NO_CUTOFF */</script>
+</head>
+
+<body>
+
+  <main
+    id="assistantScene"
+    class="assistant-scene"
+  >
+
+    <div class="blur-bg"></div>
+
+    <div class="photo-wrap">
+      <img referrerpolicy="no-referrer"
+        class="assistant-photo"
+        src="assets/images/Idmel43.png"
+        alt="Assistant Head"
+      >
+    </div>
+
+    <div class="top-shadow"></div>
+    <div class="bottom-shadow"></div>
+
+    <div class="role-indicator">
+
+      <div class="role-small">
+        CUSTOMER SUPPORT CENTER
+      </div>
+
+      <div class="role-name">
+        Assistant Head of Customer Support Center
+      </div>
+
+      <div class="role-line"></div>
+
+      <div class="executive-suite-badge">
+        PRIVATE EXECUTIVE OPERATIONS SUITE
+      </div>
+
+    </div>
+
+    <div
+      id="dialogue1"
+      class="dialogue visitor"
+    >
+      <div class="dialogue-name">
+        VISITOR
+      </div>
+
+      <div class="dialogue-box">
+        Now that I understand your role, can you show me how you manage the operation from here?
+      </div>
+    </div>
+
+    <div
+      id="dialogue2"
+      class="dialogue"
+      data-lookup-text="Certainly. From here I connect daily operations, performance follow-up, system control and cross-team coordination."
+      data-ar-fixed="بالتأكيد. من هنا أربط بين العمليات اليومية، ومتابعة الأداء، والتحكم بالأنظمة، والتنسيق بين الفرق. كما أُعدّ تقارير احترافية عند الحاجة، وأحوّل البيانات التشغيلية والمشكلات المحددة إلى تحليلات واضحة وعروض تقديمية جاهزة للإدارة."
+    >
+      <div class="dialogue-name">
+        ASSISTANT HEAD
+      </div>
+
+      <div class="dialogue-box">
+        Certainly. From here I connect daily operations, performance follow-up, system control and cross-team coordination.
+        I also prepare professional reports whenever needed, turning operational data and specific issues into clear analysis and management-ready presentations.
+      </div>
+    </div>
+
+    <div
+      id="dialogue3"
+      class="dialogue visitor"
+    >
+      <div class="dialogue-name">
+        VISITOR
+      </div>
+
+      <div class="dialogue-box">
+        And these are the systems you use to keep that work visible?
+      </div>
+    </div>
+
+    <div
+      id="dialogue4"
+      class="dialogue"
+    >
+      <div class="dialogue-name">
+        ASSISTANT HEAD
+      </div>
+
+      <div class="dialogue-box">
+        Exactly. Let me show you the operational systems behind the center.
+      </div>
+    </div>
+
+    <div
+      id="computerPrompt"
+      class="computer-prompt"
+      data-speaker-key="assistant_head"
+      data-ar-fixed="يمكنك الآن إلقاء نظرة أقرب على محطة العمل التنفيذية للعمليات."
+    >
+      <div class="computer-prompt-box">
+        You can take a closer look at the executive operations workstation.
+      </div>
+    </div>
+
+    <!-- WINDOWS -->
+
+    <section
+      id="desktopLayer"
+      class="desktop-layer"
+      style="position:fixed;inset:0;width:100vw;height:100vh;min-height:100vh;overflow:hidden;"
+    >
+
+      <div class="desktop-bg"></div>
+
+      <div
+        class="app-window"
+        style="position:absolute;left:0;top:0;width:100%;height:calc(100% - 48px);transform:none;border-radius:0;"
+      >
+
+        <div class="window-header">
+
+          <div class="window-header-left">
+
+            <div class="window-app-icon">
+              🖥️
+            </div>
+
+            <div class="window-title">
+              Systems & Tools
+            </div>
+
+          </div>
+
+          <div class="window-actions">
+
+            <div class="window-action">—</div>
+            <div class="window-action">□</div>
+            <div class="window-action">✕</div>
+
+          </div>
+
+        </div>
+
+        <div class="window-body">
+
+          <aside class="sidebar">
+
+            <div class="sidebar-section-title">
+              CATEGORIES
+            </div>
+
+            <div class="sidebar-item active">
+              🖥️ &nbsp; My Systems
+            </div>
+
+            <div class="sidebar-item">
+              🛠️ &nbsp; Operational Tools
+            </div>
+
+            <div class="sidebar-item">
+              📊 &nbsp; Reports
+            </div>
+
+            <div class="sidebar-item">
+              🤖 &nbsp; Scripts & Automation
+            </div>
+
+          </aside>
+
+          <section class="content-area">
+
+            <div class="content-top">
+
+              <div>
+
+                <div class="content-title">
+                  Systems Overview
+                </div>
+
+                <div class="content-subtitle">
+                  INTERACTIVE OPERATIONS VIEW
+                </div>
+
+              </div>
+
+              <div class="live-badge">
+                <span class="live-dot"></span>
+                Systems Ready
+              </div>
+
+            </div>
+
+            <!-- =========================
+                 EXECUTIVE OPERATIONS DASHBOARD
+            ========================== -->
+
+            <div class="ops-dashboard">
+
+              <div class="ops-dashboard-grid">
+
+                <div class="ops-metric">
+
+                  <div class="ops-metric-top">
+
+                    <div class="ops-metric-label">
+                      Active Systems
+                    </div>
+
+                    <div class="ops-metric-icon">
+                      🖥️
+                    </div>
+
+                  </div>
+
+                  <div
+                    id="opsSystemsCount"
+                    class="ops-metric-value"
+                  >
+                    0
+                  </div>
+
+                  <div class="ops-metric-caption">
+                    Connected operational tools
+                  </div>
+
+                </div>
+
+
+                <div class="ops-metric">
+
+                  <div class="ops-metric-top">
+
+                    <div class="ops-metric-label">
+                      Operations Status
+                    </div>
+
+                    <div class="ops-metric-icon">
+                      ⚙️
+                    </div>
+
+                  </div>
+
+                  <div class="ops-metric-value">
+
+                    <span class="ops-metric-status">
+
+                      <span class="ops-status-dot"></span>
+
+                      LIVE
+
+                    </span>
+
+                  </div>
+
+                  <div class="ops-metric-caption">
+                    Center workflow is active
+                  </div>
+
+                </div>
+
+
+                <div class="ops-metric">
+
+                  <div class="ops-metric-top">
+
+                    <div class="ops-metric-label">
+                      Automation
+                    </div>
+
+                    <div class="ops-metric-icon">
+                      🤖
+                    </div>
+
+                  </div>
+
+                  <div class="ops-metric-value">
+                    READY
+                  </div>
+
+                  <div class="ops-metric-caption">
+                    Scripts & workflow support
+                  </div>
+
+                </div>
+
+
+                <div class="ops-metric">
+
+                  <div class="ops-metric-top">
+
+                    <div class="ops-metric-label">
+                      Reporting
+                    </div>
+
+                    <div class="ops-metric-icon">
+                      📊
+                    </div>
+
+                  </div>
+
+                  <div class="ops-metric-value">
+                    ONLINE
+                  </div>
+
+                  <div class="ops-metric-caption">
+                    Operational visibility available
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              <div class="ops-command-strip">
+
+                <div class="ops-command-left">
+
+                  <span class="ops-command-badge">
+                    ASSISTANT HEAD · EXECUTIVE VIEW
+                  </span>
+
+                  <span>
+                    Centralized operational control and system access
+                  </span>
+
+                </div>
+
+                <div class="ops-command-right">
+                  OPERATE · COORDINATE · IMPROVE
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div
+              id="systemShowcaseStrip"
+              class="system-showcase-strip"
+            >
+
+              <div class="system-showcase-kicker">
+                AUTO SHOWCASE
+              </div>
+
+              <div>
+
+                <div
+                  id="systemShowcaseName"
+                  class="system-showcase-name"
+                >
+                  Preparing systems...
+                </div>
+
+                <div
+                  id="systemShowcaseDescription"
+                  class="system-showcase-description"
+                >
+                  The presentation will review every system automatically.
+                </div>
+
+              </div>
+
+              <div
+                id="systemShowcaseStep"
+                class="system-showcase-step"
+              >
+                —
+              </div>
+
+            </div>
+
+
+            <div
+              id="systemsScroll"
+              class="systems-scroll"
+            >
+
+              <div
+                id="systemsGrid"
+                class="systems-grid"
+              ></div>
+
+              <div
+                id="systemsMessage"
+                class="systems-message"
+              >
+                Loading systems...
+              </div>
+
+            </div>
+
+          </section>
+
+        </div>
+
+      </div>
+
+      <!-- TASKBAR -->
+
+      <div
+        class="taskbar"
+        style="position:absolute;left:0;right:0;bottom:0;height:48px;"
+      >
+
+        <div class="taskbar-left">
+
+          <div class="windows-button">
+
+            <div class="windows-logo">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+
+          </div>
+
+          <div class="windows-search">
+
+            <div class="search-icon"></div>
+
+            <span>
+              Type here to search
+            </span>
+
+          </div>
+
+          <div class="taskbar-apps">
+
+            <div class="taskbar-app">
+              📁
+            </div>
+
+            <div class="taskbar-app">
+              🌐
+            </div>
+
+            <div class="taskbar-app active">
+              🖥️
+            </div>
+
+            <div class="taskbar-app">
+              📊
+            </div>
+
+            <div class="taskbar-app">
+              💬
+
+              <span class="notification-badge">
+                4
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="taskbar-right">
+
+          <div class="tray-icons">
+            <span>⌃</span>
+            <span>🌐</span>
+            <span>🔊</span>
+          </div>
+
+          <div class="clock">
+
+            <span id="windowsTime">
+              --:--
+            </span>
+
+            <span id="windowsDate">
+              --/--/----
+            </span>
+
+          </div>
+
+          <div class="show-desktop"></div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================
+       PRESENTATION CONTROL
+  ========================== -->
+
+  <button
+    id="presentationControl"
+    class="presentation-control"
+    type="button"
+    aria-label="Pause presentation"
+  >
+    <span
+      id="presentationControlIcon"
+      class="presentation-control-icon"
+    >⏸</span>
+
+    <span
+      id="presentationControlText"
+      class="presentation-control-text"
+    >PAUSE</span>
+  </button>
+
+
+
+  <!-- =========================
+       END OF ASSISTANT HEAD SECTION
+  ========================== -->
+
+  <div
+    id="endDialogue1"
+    class="end-dialogue visitor"
+  >
+    <div class="dialogue-name">
+      VISITOR
+    </div>
+
+    <div class="dialogue-box">
+      That gives me a clear view of how the center is managed day to day.
+    </div>
+  </div>
+
+
+  <div
+    id="endDialogue2"
+    class="end-dialogue"
+  >
+    <div class="dialogue-name">
+      ASSISTANT HEAD
+    </div>
+
+    <div class="dialogue-box">
+      Exactly. These systems help us coordinate operations, follow performance, and keep the support center running smoothly.
+    </div>
+  </div>
+
+
+  <div
+    id="endDialogue3"
+    class="end-dialogue"
+  >
+    <div class="dialogue-name">
+      ASSISTANT HEAD
+    </div>
+
+    <div class="dialogue-box">
+      Let’s continue the tour and meet our Quality Manager.
+    </div>
+  </div>
+
+
+  <button
+    id="continueTour"
+    class="continue-tour"
+    type="button"
+  >
+    <span class="continue-tour-text">
+      CONTINUE TOUR
+    </span>
+
+    <span>→</span>
+  </button>
+
+
+  <div
+    id="nextTransitionCover"
+    class="next-transition-cover clean-quality-transition"
+  >
+
+    <div class="quality-transition-line"></div>
+
+    <div class="quality-transition-label">
+      QUALITY MANAGEMENT
+    </div>
+
+  </div>
+
+
+  <!-- =====================================
+       SYSTEM DETAILS
+       Restored after the door transition.
+  ====================================== -->
+
+  <div
+    id="modalOverlay"
+    class="modal-overlay"
+  >
+
+    <div class="modal">
+
+      <button
+        class="modal-close"
+        type="button"
+        onclick="closeSystem()"
+        aria-label="Close system details"
+      >
+        ✕
+      </button>
+
+      <div class="modal-label">
+        SYSTEM DETAILS
+      </div>
+
+      <div
+        id="modalTitle"
+        class="modal-title"
+      ></div>
+
+      <div
+        id="modalDescription"
+        class="modal-description"
+      ></div>
+
+      <div class="modal-image-wrap">
+
+        <img referrerpolicy="no-referrer"
+          id="modalImage"
+          class="modal-image"
+          alt="System Screenshot"
+        >
+
+        <div
+          id="modalImagePlaceholder"
+          class="modal-image-placeholder"
+        >
+          No screenshot available.
+        </div>
+
+      </div>
+
+      <a
+        id="modalLink"
+        class="modal-link"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Open System ↗
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    /*
+      WORLD CLASS TIMELINE ENGINE
+
+      One master clock controls the whole scene.
+      This avoids stacked timeout conflicts between
+      presentation pages loaded with document.write().
+    */
+
+    (function() {
+
+      'use strict';
+
+
+      /* =========================
+         ELEMENTS
+      ========================== */
+
+      const scene =
+        document.getElementById(
+          'assistantScene'
+        );
+
+      const desktopLayer =
+        document.getElementById(
+          'desktopLayer'
+        );
+
+      const computerPrompt =
+        document.getElementById(
+          'computerPrompt'
+        );
+
+      const modalOverlay =
+        document.getElementById(
+          'modalOverlay'
+        );
+
+      const presentationControl =
+        document.getElementById(
+          'presentationControl'
+        );
+
+      const presentationControlIcon =
+        document.getElementById(
+          'presentationControlIcon'
+        );
+
+      const presentationControlText =
+        document.getElementById(
+          'presentationControlText'
+        );
+
+      const continueTour =
+        document.getElementById(
+          'continueTour'
+        );
+
+      const transitionCover =
+        document.getElementById(
+          'nextTransitionCover'
+        );
+
+      const d1 =
+        document.getElementById(
+          'dialogue1'
+        );
+
+      const d2 =
+        document.getElementById(
+          'dialogue2'
+        );
+
+      const d3 =
+        document.getElementById(
+          'dialogue3'
+        );
+
+      const d4 =
+        document.getElementById(
+          'dialogue4'
+        );
+
+      const end1 =
+        document.getElementById(
+          'endDialogue1'
+        );
+
+      const end2 =
+        document.getElementById(
+          'endDialogue2'
+        );
+
+      const end3 =
+        document.getElementById(
+          'endDialogue3'
+        );
+
+
+      /* =========================
+         STATE
+      ========================== */
+
+      let systemsData = [];
+
+      let manualPaused =
+        false;
+
+      let interactionPaused =
+        false;
+
+      let phase =
+        'intro';
+
+      let phaseElapsed =
+        0;
+
+      let lastTick =
+        performance.now();
+
+      let firedEvents =
+        new Set();
+
+      let systemsLoaded =
+        false;
+
+      let systemsReady =
+        false;
+
+      let showcaseLastIndex =
+        -1;
+
+      /*
+        Index3 dialogue sequencing is voice-aware.
+        A line advances only after its narration finishes.
+        Each stage also has a generous visual fallback so the tour
+        still continues when browser speech is disabled/unavailable.
+      */
+      let introDialogueStage = 0;
+      let introDialogueStageStartedAt = 0;
+      let endingDialogueStage = 0;
+      let endingDialogueStageStartedAt = 0;
+      let dialogueVoiceCompleted = new Set();
+
+      window.supportIndex3DialogueVoiceFinished =
+        function(node) {
+          if (node && node.id) {
+            dialogueVoiceCompleted.add(node.id);
+          }
+        };
+
+      /* V31: system cards advance only after narration finishes. */
+      let showcaseChainStarted = false;
+      let showcaseChainToken = 0;
+
+      const systemShowcaseDwell =
+        8500;
+
+      let transitionStarted =
+        false;
+
+
+      /*
+        Hard exit guard:
+        prevents duplicate continue / auto-finish calls.
+      */
+
+      let assistantExitStarted =
+        false;
+
+
+      /* =========================
+         PAUSE STATE
+      ========================== */
+
+      function isPresentationPaused() {
+
+        return (
+          manualPaused ||
+          interactionPaused
+        );
+
+      }
+
+
+      function syncPauseState() {
+
+        if (
+          isPresentationPaused()
+        ) {
+
+          document.body
+            .classList
+            .add(
+              'presentation-paused'
+            );
+
+        }
+        else {
+
+          document.body
+            .classList
+            .remove(
+              'presentation-paused'
+            );
+
+        }
+
+
+        presentationControlIcon
+          .textContent =
+            manualPaused
+              ? '▶'
+              : '⏸';
+
+
+        presentationControlText
+          .textContent =
+            manualPaused
+              ? 'PLAY'
+              : 'PAUSE';
+
+
+        presentationControl
+          .setAttribute(
+            'aria-label',
+            manualPaused
+              ? 'Resume presentation'
+              : 'Pause presentation'
+          );
+
+      }
+
+
+      presentationControl
+        .addEventListener(
+          'click',
+          function() {
+
+            manualPaused =
+              !manualPaused;
+
+            syncPauseState();
+
+          }
+        );
+
+
+      function startInteractionPause() {
+
+        interactionPaused =
+          true;
+
+        syncPauseState();
+
+      }
+
+
+      function endInteractionPause() {
+
+        interactionPaused =
+          false;
+
+        syncPauseState();
+
+      }
+
+
+      /* =========================
+         MASTER CLOCK
+      ========================== */
+
+      function fireOnce(
+        key,
+        atTime,
+        callback
+      ) {
+
+        if (
+          firedEvents.has(key)
+        ) {
+
+          return;
+
+        }
+
+
+        if (
+          phaseElapsed >=
+          atTime
+        ) {
+
+          firedEvents.add(
+            key
+          );
+
+          callback();
+
+        }
+
+      }
+
+
+      function switchPhase(
+        nextPhase
+      ) {
+
+        phase =
+          nextPhase;
+
+        phaseElapsed =
+          0;
+
+        firedEvents
+          .clear();
+
+        if (nextPhase === 'showcase') {
+          showcaseLastIndex = -1;
+          showcaseChainStarted = false;
+          showcaseChainToken += 1;
+        }
+
+        if (nextPhase === 'ending') {
+          endingDialogueStage = 0;
+          endingDialogueStageStartedAt = 0;
+          ['endDialogue1','endDialogue2','endDialogue3'].forEach(
+            function(id) {
+              dialogueVoiceCompleted.delete(id);
+            }
+          );
+        }
+
+        lastTick =
+          performance.now();
+
+      }
+
+
+      function runIntroPhase() {
+
+        function stageExpired(node, fallbackMs) {
+          if (
+            node &&
+            dialogueVoiceCompleted.has(node.id)
+          ) {
+            return true;
+          }
+
+          return (
+            phaseElapsed -
+            introDialogueStageStartedAt
+          ) >= fallbackMs;
+        }
+
+
+        /*
+          Stage 0:
+          visitor asks how the operation is managed.
+        */
+        if (
+          introDialogueStage === 0 &&
+          phaseElapsed >= 1500
+        ) {
+          d1.classList.add('show');
+          introDialogueStage = 1;
+          introDialogueStageStartedAt = phaseElapsed;
+          return;
+        }
+
+
+        /*
+          Each following line waits for the previous spoken line.
+          This prevents the Assistant Head from moving to the systems
+          before the visitor's question has actually been heard.
+        */
+        if (
+          introDialogueStage === 1 &&
+          stageExpired(d1, 12000)
+        ) {
+          d1.classList.add('hide');
+          d2.classList.add('show');
+          introDialogueStage = 2;
+          introDialogueStageStartedAt = phaseElapsed;
+          return;
+        }
+
+
+        if (
+          introDialogueStage === 2 &&
+          stageExpired(d2, 32000)
+        ) {
+          d2.classList.add('hide');
+          d3.classList.add('show');
+          introDialogueStage = 3;
+          introDialogueStageStartedAt = phaseElapsed;
+          return;
+        }
+
+
+        if (
+          introDialogueStage === 3 &&
+          stageExpired(d3, 14000)
+        ) {
+          d3.classList.add('hide');
+          d4.classList.add('show');
+          introDialogueStage = 4;
+          introDialogueStageStartedAt = phaseElapsed;
+          return;
+        }
+
+
+        if (
+          introDialogueStage === 4 &&
+          stageExpired(d4, 14000)
+        ) {
+          d4.classList.add('hide');
+          computerPrompt.classList.add('show');
+          introDialogueStage = 5;
+          introDialogueStageStartedAt = phaseElapsed;
+          return;
+        }
+
+
+        if (
+          introDialogueStage === 5 &&
+          stageExpired(computerPrompt, 14000)
+        ) {
+          computerPrompt.classList.add('hide');
+
+          scene.classList.add(
+            'zoom-laptop'
+          );
+
+          introDialogueStage = 6;
+          introDialogueStageStartedAt = phaseElapsed;
+          return;
+        }
+
+
+        if (
+          introDialogueStage === 6 &&
+          (
+            phaseElapsed -
+            introDialogueStageStartedAt
+          ) >= 2500
+        ) {
+          desktopLayer.classList.add('show');
+
+          if (!systemsLoaded) {
+            systemsLoaded = true;
+            loadSystems();
+          }
+
+          introDialogueStage = 7;
+
+          switchPhase(
+            'showcase'
+          );
+        }
+
+      }
+
+      function runShowcasePhase() {
+
+        if (!systemsReady) {
+          return;
+        }
+
+        fireOnce(
+          'continue-show',
+          700,
+          function() {
+            continueTour.classList.add('show');
+          }
+        );
+
+        if (showcaseChainStarted) {
+          return;
+        }
+
+        showcaseChainStarted = true;
+        showcaseChainToken += 1;
+        const chainToken = showcaseChainToken;
+        const total = systemsData.length;
+
+        if (!total) {
+          window.setTimeout(function() {
+            if (chainToken === showcaseChainToken && phase === 'showcase') {
+              forceAssistantHeadExit();
+            }
+          }, 3500);
+          return;
+        }
+
+        function waitWhileRespectingPause(ms, callback) {
+          let remaining = Math.max(0, Number(ms || 0));
+          let last = Date.now();
+          const timer = window.setInterval(function() {
+            if (chainToken !== showcaseChainToken || phase !== 'showcase') {
+              window.clearInterval(timer);
+              return;
+            }
+            const now = Date.now();
+            const elapsed = now - last;
+            last = now;
+            if (!isPresentationPaused()) remaining -= elapsed;
+            if (remaining <= 0) {
+              window.clearInterval(timer);
+              callback();
+            }
+          }, 160);
+        }
+
+        function narrateSystem(index) {
+          if (chainToken !== showcaseChainToken || phase !== 'showcase') return;
+
+          if (index >= total) {
+            waitWhileRespectingPause(950, function() {
+              if (chainToken === showcaseChainToken && phase === 'showcase') {
+                forceAssistantHeadExit();
+              }
+            });
+            return;
+          }
+
+          focusSystemCard(index, function() {
+            waitWhileRespectingPause(850, function() {
+              narrateSystem(index + 1);
+            });
+          });
+        }
+
+        narrateSystem(0);
+      }
+
+
+      function focusSystemCard(
+        index,
+        onNarrationComplete
+      ) {
+
+        const cards =
+          Array.from(
+            document.querySelectorAll(
+              '#systemsGrid .system-card'
+            )
+          );
+
+
+        cards.forEach(
+          function(card) {
+
+            card.classList
+              .remove(
+                'auto-focus'
+              );
+
+          }
+        );
+
+
+        const card =
+          cards[index];
+
+
+        const system =
+          systemsData[index];
+
+
+        if (
+          !card ||
+          !system
+        ) {
+
+          return;
+
+        }
+
+
+        showcaseLastIndex =
+          index;
+
+
+        card.classList
+          .add(
+            'auto-focus'
+          );
+
+
+        card.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+          inline: 'nearest'
+        });
+
+
+        document
+          .getElementById(
+            'systemShowcaseName'
+          )
+          .textContent =
+            (
+              system.emoji
+                ? (
+                    system.emoji +
+                    '  '
+                  )
+                : ''
+            ) +
+            (
+              system.system_name ||
+              'System'
+            );
+
+
+        const showcaseDescriptionEl =
+          document.getElementById('systemShowcaseDescription');
+
+        showcaseDescriptionEl.classList.remove('is-speaking-description');
+        showcaseDescriptionEl.removeAttribute('data-reading-index');
+        showcaseDescriptionEl.textContent =
+          system.description ||
+          'Operational system used by the support center.';
+
+        const systemNarration = String(system.description || '').trim();
+        if (window.supportTourSpeakSystem && systemNarration) {
+          showcaseDescriptionEl.dataset.readingIndex = String(index);
+          showcaseDescriptionEl.classList.add('is-speaking-description');
+
+          window.supportTourSpeakSystem(
+            systemNarration,
+            'assistant_head',
+            function() {
+              if (showcaseDescriptionEl.dataset.readingIndex === String(index)) {
+                showcaseDescriptionEl.classList.remove('is-speaking-description');
+                showcaseDescriptionEl.removeAttribute('data-reading-index');
+              }
+              if (typeof onNarrationComplete === 'function') onNarrationComplete();
+            }
+          );
+        }
+        else if (typeof onNarrationComplete === 'function') {
+          showcaseDescriptionEl.classList.remove('is-speaking-description');
+          showcaseDescriptionEl.removeAttribute('data-reading-index');
+          /* Voice off / unavailable: keep a readable visual dwell. */
+          const fallbackMs = Math.max(5200, Math.min(13000, systemNarration.length * 55 + 2200));
+          window.setTimeout(onNarrationComplete, fallbackMs);
+        }
+
+
+        document
+          .getElementById(
+            'systemShowcaseStep'
+          )
+          .textContent =
+            String(
+              index + 1
+            ) +
+            ' / ' +
+            String(
+              systemsData.length
+            );
+
+      }
+
+
+      function runEndingPhase() {
+
+        function stageExpired(node, fallbackMs) {
+          if (
+            node &&
+            dialogueVoiceCompleted.has(node.id)
+          ) {
+            return true;
+          }
+
+          return (
+            phaseElapsed -
+            endingDialogueStageStartedAt
+          ) >= fallbackMs;
+        }
+
+
+        /*
+          The closing conversation follows the same rule:
+          finish one spoken line before showing the next.
+        */
+        if (
+          endingDialogueStage === 0 &&
+          phaseElapsed >= 1400
+        ) {
+          end1.classList.add('show');
+          endingDialogueStage = 1;
+          endingDialogueStageStartedAt = phaseElapsed;
+          return;
+        }
+
+
+        if (
+          endingDialogueStage === 1 &&
+          stageExpired(end1, 12000)
+        ) {
+          end1.classList.add('hide');
+          end2.classList.add('show');
+          endingDialogueStage = 2;
+          endingDialogueStageStartedAt = phaseElapsed;
+          return;
+        }
+
+
+        if (
+          endingDialogueStage === 2 &&
+          stageExpired(end2, 16000)
+        ) {
+          end2.classList.add('hide');
+          end3.classList.add('show');
+          endingDialogueStage = 3;
+          endingDialogueStageStartedAt = phaseElapsed;
+          return;
+        }
+
+
+        if (
+          endingDialogueStage === 3 &&
+          stageExpired(end3, 12000)
+        ) {
+          end3.classList.add('hide');
+
+          transitionCover.classList.add(
+            'active'
+          );
+
+          endingDialogueStage = 4;
+          endingDialogueStageStartedAt = phaseElapsed;
+          return;
+        }
+
+
+        if (
+          endingDialogueStage === 4 &&
+          (
+            phaseElapsed -
+            endingDialogueStageStartedAt
+          ) >= 1400
+        ) {
+          endingDialogueStage = 5;
+          loadIndex4();
+        }
+
+      }
+
+      function masterTick() {
+
+        const now =
+          performance.now();
+
+        const delta =
+          now -
+          lastTick;
+
+        lastTick =
+          now;
+
+
+        if (
+          !isPresentationPaused()
+        ) {
+
+          phaseElapsed +=
+            delta;
+
+        }
+
+
+        if (
+          phase ===
+          'intro'
+        ) {
+
+          runIntroPhase();
+
+        }
+        else if (
+          phase ===
+          'showcase'
+        ) {
+
+          runShowcasePhase();
+
+        }
+        else if (
+          phase ===
+          'ending'
+        ) {
+
+          runEndingPhase();
+
+        }
+
+      }
+
+
+      /*
+        Use one reliable interval instead of many
+        independent setTimeout calls.
+      */
+
+      window.setInterval(
+        masterTick,
+        50
+      );
+
+
+      /* =========================
+         LOAD SYSTEMS
+      ========================== */
+
+      function loadSystems() {
+
+        google.script.run
+
+          .withSuccessHandler(
+            function(systems) {
+
+              systemsData =
+                systems || [];
+
+              renderSystems(
+                systemsData
+              );
+
+
+              systemsReady =
+                true;
+
+
+              if (
+                phase ===
+                'showcase'
+              ) {
+
+                phaseElapsed =
+                  0;
+
+                firedEvents
+                  .clear();
+
+                showcaseLastIndex =
+                  -1;
+
+                showcaseChainStarted = false;
+                showcaseChainToken += 1;
+
+              }
+
+            }
+          )
+
+          .withFailureHandler(
+            function(error) {
+
+              console.error(
+                error
+              );
+
+              document
+                .getElementById(
+                  'systemsMessage'
+                )
+                .textContent =
+                  'Unable to load systems.';
+
+            }
+          )
+
+          .getSystems();
+
+      }
+
+
+      /* =========================
+         RENDER SYSTEMS
+      ========================== */
+
+      function getLuxuryAccent(
+        color,
+        index
+      ) {
+
+        const accents = {
+          blue: '#7898aa',
+          green: '#7b9f91',
+          purple: '#968ca7',
+          orange: '#aa9177',
+          red: '#9f7c80',
+          cyan: '#76a0a3',
+          gold: '#b8a06f',
+          indigo: '#8191aa',
+          teal: '#749d95',
+          pink: '#9c828e'
+        };
+
+
+        const key =
+          String(
+            color ||
+            ''
+          )
+          .toLowerCase();
+
+
+        if (accents[key]) {
+          return accents[key];
+        }
+
+
+        const fallback = [
+          '#7898aa',
+          '#749d95',
+          '#b8a06f',
+          '#8191aa'
+        ];
+
+
+        return fallback[
+          index %
+          fallback.length
+        ];
+
+      }
+
+
+      function renderSystems(
+        systems
+      ) {
+
+        const grid =
+          document.getElementById(
+            'systemsGrid'
+          );
+
+        const message =
+          document.getElementById(
+            'systemsMessage'
+          );
+
+        const opsCount =
+          document.getElementById(
+            'opsSystemsCount'
+          );
+
+
+        grid.innerHTML =
+          '';
+
+
+        if (
+          !systems.length
+        ) {
+
+          message.style.display =
+            'block';
+
+          message.textContent =
+            'No systems added yet.';
+
+          opsCount.textContent =
+            '0';
+
+          return;
+
+        }
+
+
+        message.style.display =
+          'none';
+
+        opsCount.textContent =
+          systems.length;
+
+
+        systems.forEach(
+          function(
+            system,
+            index
+          ) {
+
+            const card =
+              document.createElement(
+                'div'
+              );
+
+
+            const allowedColors = [
+              'blue',
+              'green',
+              'purple',
+              'orange',
+              'red',
+              'cyan',
+              'gold',
+              'indigo',
+              'teal',
+              'pink'
+            ];
+
+
+            const color =
+              allowedColors.includes(
+                system.color
+              )
+                ? system.color
+                : allowedColors[
+                    index %
+                    allowedColors.length
+                  ];
+
+
+            card.className =
+              'system-card ' +
+              color;
+
+
+            card.dataset.systemIndex =
+              String(
+                index
+              );
+
+
+            card.innerHTML = `
+
+              <div class="system-number">
+                SYSTEM ${String(
+                  index + 1
+                ).padStart(
+                  2,
+                  '0'
+                )}
+              </div>
+
+              <div class="system-title-row">
+
+                ${
+                  system.emoji
+                    ? `
+                      <div class="system-icon-inline">
+                        ${escapeHtml(
+                          system.emoji
+                        )}
+                      </div>
+                    `
+                    : ''
+                }
+
+                <div class="system-name">
+                  ${escapeHtml(
+                    system.system_name
+                  )}
+                </div>
+
+              </div>
+
+              <div class="system-desc">
+                ${escapeHtml(
+                  system.description ||
+                  ''
+                )}
+              </div>
+
+              <div class="system-arrow">
+                →
+              </div>
+
+            `;
+
+
+            /*
+              Open details on the FIRST physical press.
+              This avoids missed clicks while the
+              automatic showcase is scrolling.
+            */
+
+            card.setAttribute(
+              'role',
+              'button'
+            );
+
+
+            card.setAttribute(
+              'tabindex',
+              '0'
+            );
+
+
+            card.addEventListener(
+              'pointerdown',
+              function(event) {
+
+                if (
+                  typeof event.button ===
+                  'number' &&
+                  event.button !==
+                  0
+                ) {
+
+                  return;
+
+                }
+
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+
+                openSystem(
+                  system
+                );
+
+              }
+            );
+
+
+            card.addEventListener(
+              'keydown',
+              function(event) {
+
+                if (
+                  event.key ===
+                  'Enter' ||
+                  event.key ===
+                  ' '
+                ) {
+
+                  event.preventDefault();
+
+                  openSystem(
+                    system
+                  );
+
+                }
+
+              }
+            );
+
+
+            grid.appendChild(
+              card
+            );
+
+          }
+        );
+
+      }
+
+
+      /* =========================
+         SYSTEM DETAILS
+      ========================== */
+
+      function openSystem(
+        system
+      ) {
+
+
+        startInteractionPause();
+
+
+        document
+          .getElementById(
+            'modalTitle'
+          )
+          .textContent =
+            (
+              system.emoji
+                ? (
+                    system.emoji +
+                    '  '
+                  )
+                : ''
+            ) +
+            (
+              system.system_name ||
+              ''
+            );
+
+
+        document
+          .getElementById(
+            'modalDescription'
+          )
+          .textContent =
+            system.long_description ||
+            'No additional details added yet.';
+
+
+        const image =
+          document.getElementById(
+            'modalImage'
+          );
+
+        const placeholder =
+          document.getElementById(
+            'modalImagePlaceholder'
+          );
+
+        const link =
+          document.getElementById(
+            'modalLink'
+          );
+
+
+        if (
+          system.image_url
+        ) {
+
+          image.src =
+            system.image_url;
+
+          image.style.display =
+            'block';
+
+          placeholder.style.display =
+            'none';
+
+        }
+        else {
+
+          image.removeAttribute(
+            'src'
+          );
+
+          image.style.display =
+            'none';
+
+          placeholder.style.display =
+            'block';
+
+        }
+
+
+        if (
+          system.link &&
+          system.link !==
+          '#'
+        ) {
+
+          link.href =
+            system.link;
+
+          link.classList
+            .remove(
+              'hidden'
+            );
+
+        }
+        else {
+
+          link.removeAttribute(
+            'href'
+          );
+
+          link.classList
+            .add(
+              'hidden'
+            );
+
+        }
+
+
+        modalOverlay
+          .classList
+          .add(
+            'show'
+          );
+
+      }
+
+
+      function closeSystem() {
+
+        const wasOpen =
+          modalOverlay
+            .classList
+            .contains(
+              'show'
+            );
+
+
+        modalOverlay
+          .classList
+          .remove(
+            'show'
+          );
+
+
+        if (
+          wasOpen
+        ) {
+
+          endInteractionPause();
+
+        }
+
+      }
+
+
+      modalOverlay
+        .addEventListener(
+          'click',
+          function(event) {
+
+            if (
+              event.target ===
+              modalOverlay
+            ) {
+
+              closeSystem();
+
+            }
+
+          }
+        );
+
+
+      document
+        .addEventListener(
+          'keydown',
+          function(event) {
+
+            if (
+              event.key ===
+              'Escape'
+            ) {
+
+              closeSystem();
+
+            }
+
+          }
+        );
+
+
+      window.closeSystem =
+        closeSystem;
+
+
+      /* =========================
+         FINISH SECTION
+      ========================== */
+
+      function forceAssistantHeadExit() {
+
+        /*
+          IMPORTANT:
+          This exit path must work even if the showcase
+          is paused, a modal was previously opened,
+          interactionPaused was left true, or the
+          Master Clock is currently waiting.
+        */
+
+        if (
+          assistantExitStarted
+        ) {
+
+          return;
+
+        }
+
+
+        assistantExitStarted =
+          true;
+
+
+        /*
+          Release every possible pause source.
+        */
+
+        manualPaused =
+          false;
+
+        interactionPaused =
+          false;
+
+
+        syncPauseState();
+
+
+        /*
+          Close the system modal without depending
+          on closeSystem() or its previous state.
+        */
+
+        if (
+          modalOverlay
+        ) {
+
+          modalOverlay
+            .classList
+            .remove(
+              'show'
+            );
+
+        }
+
+
+        /*
+          Disable the shortcut immediately so a
+          double click cannot start the exit twice.
+        */
+
+        continueTour
+          .classList
+          .remove(
+            'show'
+          );
+
+
+        continueTour.disabled =
+          true;
+
+
+        /*
+          Clear system focus.
+        */
+
+        document
+          .querySelectorAll(
+            '#systemsGrid .system-card'
+          )
+          .forEach(
+            function(item) {
+
+              item.classList
+                .remove(
+                  'auto-focus'
+                );
+
+            }
+          );
+
+
+        showcaseLastIndex =
+          -1;
+
+
+        /*
+          Reset horizontal System Dock.
+        */
+
+        const systemsScroll =
+          document.querySelector(
+            '.systems-scroll'
+          );
+
+
+        if (
+          systemsScroll
+        ) {
+
+          systemsScroll.scrollTo({
+            left: 0,
+            top: 0,
+            behavior: 'auto'
+          });
+
+        }
+
+
+        /*
+          Return from Executive Command Deck
+          to the Assistant Head immediately.
+        */
+
+        if (
+          desktopLayer
+        ) {
+
+          desktopLayer
+            .classList
+            .remove(
+              'show',
+              'closing-mode'
+            );
+
+        }
+
+
+        if (
+          scene
+        ) {
+
+          scene
+            .classList
+            .remove(
+              'zoom-laptop'
+            );
+
+
+          scene
+            .classList
+            .add(
+              'return-from-command'
+            );
+
+        }
+
+
+        /*
+          Clean any stale ending dialogue state.
+        */
+
+        [
+          end1,
+          end2,
+          end3
+        ]
+        .forEach(
+          function(dialogue) {
+
+            if (
+              dialogue
+            ) {
+
+              dialogue.classList
+                .remove(
+                  'show',
+                  'hide'
+                );
+
+            }
+
+          }
+        );
+
+
+        /*
+          Reset transition door in case a previous
+          failed attempt left a class behind.
+        */
+
+        if (
+          transitionCover
+        ) {
+
+          transitionCover
+            .classList
+            .remove(
+              'active'
+            );
+
+        }
+
+
+        /*
+          Switch directly to the ending timeline.
+          switchPhase() resets elapsed time and
+          fired events and the pause flags above
+          guarantee the clock can continue.
+        */
+
+        switchPhase(
+          'ending'
+        );
+
+      }
+
+
+      /*
+        Backward-compatible alias.
+        Any older call still uses the same route.
+      */
+
+      function finishAssistantHeadSection() {
+
+        forceAssistantHeadExit();
+
+      }
+
+
+      /*
+        Expose a direct emergency route to the button.
+        This protects the presentation from a future
+        event-listener or interaction-state regression.
+      */
+
+      window.forceAssistantHeadExit =
+        forceAssistantHeadExit;
+
+
+      /*
+        Continue Tour:
+        one physical press = immediate exit.
+        No click / pointerup double-event chain.
+      */
+
+      continueTour
+        .addEventListener(
+          'pointerdown',
+          function(event) {
+
+            if (
+              typeof event.button ===
+              'number' &&
+              event.button !==
+              0
+            ) {
+
+              return;
+
+            }
+
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+
+            forceAssistantHeadExit();
+
+          }
+        );
+
+
+      continueTour
+        .addEventListener(
+          'keydown',
+          function(event) {
+
+            if (
+              event.key ===
+              'Enter' ||
+              event.key ===
+              ' '
+            ) {
+
+              event.preventDefault();
+
+              forceAssistantHeadExit();
+
+            }
+
+          }
+        );
+
+
+      /* =========================
+         INDEX4
+      ========================== */
+
+      function loadIndex4() {
+
+        if (
+          transitionStarted
+        ) {
+
+          return;
+
+        }
+
+
+        transitionStarted =
+          true;
+
+
+        google.script.run
+
+          .withSuccessHandler(
+            function(html) {
+
+              document.open();
+
+              document.write(
+                html
+              );
+
+              document.close();
+
+            }
+          )
+
+          .withFailureHandler(
+            function(error) {
+
+              console.error(
+                'Index4 load failed:',
+                error
+              );
+
+
+              transitionStarted =
+                false;
+
+
+              assistantExitStarted =
+                false;
+
+
+              continueTour.disabled =
+                false;
+
+
+              transitionCover
+                .classList
+                .remove(
+                  'active'
+                );
+
+
+              desktopLayer
+                .classList
+                .add(
+                  'show'
+                );
+
+
+              scene
+                .classList
+                .add(
+                  'zoom-laptop'
+                );
+
+
+              scene
+                .classList
+                .remove(
+                  'return-from-command'
+                );
+
+
+              end1.classList
+                .remove(
+                  'show',
+                  'hide'
+                );
+
+              end2.classList
+                .remove(
+                  'show',
+                  'hide'
+                );
+
+              end3.classList
+                .remove(
+                  'show',
+                  'hide'
+                );
+
+
+              continueTour
+                .classList
+                .add(
+                  'show'
+                );
+
+
+              switchPhase(
+                'showcase'
+              );
+
+            }
+          )
+
+          .getPage(
+            'index4'
+          );
+
+      }
+
+
+      /* =========================
+         ESCAPE HTML
+      ========================== */
+
+      function escapeHtml(
+        value
+      ) {
+
+        return String(
+          value ||
+          ''
+        )
+
+        .replaceAll(
+          '&',
+          '&amp;'
+        )
+
+        .replaceAll(
+          '<',
+          '&lt;'
+        )
+
+        .replaceAll(
+          '>',
+          '&gt;'
+        )
+
+        .replaceAll(
+          '"',
+          '&quot;'
+        )
+
+        .replaceAll(
+          "'",
+          '&#039;'
+        );
+
+      }
+
+
+      /* =========================
+         WINDOWS CLOCK
+      ========================== */
+
+      function updateWindowsClock() {
+
+        const now =
+          new Date();
+
+
+        document
+          .getElementById(
+            'windowsTime'
+          )
+          .textContent =
+            now.toLocaleTimeString(
+              [],
+              {
+                hour:
+                  '2-digit',
+
+                minute:
+                  '2-digit'
+              }
+            );
+
+
+        document
+          .getElementById(
+            'windowsDate'
+          )
+          .textContent =
+            now.toLocaleDateString();
+
+      }
+
+
+      updateWindowsClock();
+
+
+      window.setInterval(
+        updateWindowsClock,
+        30000
+      );
+
+
+      syncPauseState();
+
+    })();
+
+  </script>
+
+
+
+  <!-- =========================================================
+       GLOBAL VIEWER SETTINGS · index2 onward
+       AR and VOICE persist across every following page.
+  ========================================================== -->
+  <style id="tourGlobalSettingsStyle">
+    .tour-global-settings {
+      position: fixed;
+      top: 18px;
+      right: 20px;
+      z-index: 60000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      pointer-events: auto;
+    }
+
+    .tour-global-toggle {
+      min-height: 34px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 999px;
+      color: rgba(255,255,255,.86);
+      background: rgba(12,14,13,.72);
+      box-shadow: 0 10px 30px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.05);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      font: 700 10px/1 Arial, Helvetica, sans-serif;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: transform .22s ease, border-color .22s ease, background .22s ease, opacity .22s ease;
+    }
+
+    .tour-global-toggle:hover {
+      transform: translateY(-2px);
+      border-color: rgba(215,181,118,.42);
+      background: rgba(24,22,18,.88);
+    }
+
+    .tour-global-toggle.active {
+      color: #f2dfbf;
+      border-color: rgba(215,181,118,.46);
+      background: rgba(46,37,25,.82);
+    }
+
+    .tour-global-toggle.off {
+      opacity: .62;
+    }
+
+    .tour-ar-subtitle {
+      display: none;
+      margin-top: 10px;
+      padding-top: 9px;
+      border-top: 1px solid rgba(255,255,255,.10);
+      color: rgba(255,255,255,.74);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: .72em;
+      font-weight: 500;
+      line-height: 1.65;
+      letter-spacing: 0;
+      direction: rtl;
+      text-align: center;
+    }
+
+    body.tour-arabic-enabled .tour-ar-subtitle {
+      display: block;
+    }
+
+    .tour-ar-extra {
+      display: none;
+      margin-top: 7px;
+      color: rgba(255,255,255,.74);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: .72em;
+      font-weight: 500;
+      line-height: 1.65;
+      letter-spacing: 0;
+      direction: rtl;
+      text-align: center;
+    }
+
+    body.tour-arabic-enabled .tour-ar-extra {
+      display: block;
+    }
+
+    @media (max-width: 720px) {
+      .tour-global-settings {
+        top: 12px;
+        right: 12px;
+        gap: 6px;
+      }
+      .tour-global-toggle {
+        min-height: 31px;
+        padding: 7px 9px;
+        font-size: 8px;
+      }
+    }
+  </style>
+
+  <div id="tourGlobalSettings" class="tour-global-settings" aria-label="Presentation settings">
+    <button id="tourArabicToggle" class="tour-global-toggle" type="button">AR OFF · عربي</button>
+    <button id="tourVoiceToggle" class="tour-global-toggle" type="button">VOICE ON</button>
+  </div>
+
+  <script>
+  (function() {
+    'use strict';
+
+    var AR_KEY = 'support_center_ar';
+    var VOICE_KEY = 'support_center_voice';
+    var arabicEnabled = false;
+    var voiceEnabled = true;
+    var voiceProfiles = {};
+    var dialogueRows = [];
+    var dialogueLookup = {};
+    var browserVoices = [];
+    var voiceAssignments = {};
+    var currentDialogueNode = null;
+    var activeVoiceUtterance = null;
+    var voiceSequenceToken = 0;
+    var pendingDialogueQueue = [];
+    var voiceBusy = false;
+    var activeVoiceWatchdog = null;
+
+    var arButton = document.getElementById('tourArabicToggle');
+    var voiceButton = document.getElementById('tourVoiceToggle');
+
+    var fallbackProfiles = {
+      visitor: { title:'VISITOR', gender:'female', lang:'en-US', voice_hint:'', rate:1.00, pitch:1.03 },
+      support_manager: { title:'HEAD OF CUSTOMER SUPPORT CENTER', gender:'male', lang:'en-US', voice_hint:'', rate:.93, pitch:.91 },
+      assistant_head: { title:'ASSISTANT HEAD', gender:'male', lang:'en-US', voice_hint:'', rate:.96, pitch:.97 },
+      quality_manager: { title:'QUALITY MANAGER', gender:'male', lang:'en-US', voice_hint:'', rate:.94, pitch:.92 },
+      quality_team: { title:'QUALITY TEAM', gender:'neutral', lang:'en-US', voice_hint:'', rate:.97, pitch:1.00 },
+      supervisor: { title:'SUPERVISOR', gender:'neutral', lang:'en-US', voice_hint:'', rate:.96, pitch:.98 },
+      team_leaders: { title:'TEAM LEADERS', gender:'female', lang:'en-US', voice_hint:'', rate:.97, pitch:1.00 },
+      system: { title:'SYSTEM', gender:'female', lang:'en-US', voice_hint:'', rate:.98, pitch:.98 }
+    };
+
+    function safeGet(key, fallback) {
+      try {
+        var value = window.localStorage.getItem(key);
+        return value === null ? fallback : value;
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    function safeSet(key, value) {
+      try {
+        window.localStorage.setItem(key, value);
+      } catch (error) {}
+    }
+
+    arabicEnabled = safeGet(AR_KEY, '0') === '1';
+    voiceEnabled = safeGet(VOICE_KEY, '1') !== '0';
+
+    function syncControls() {
+      document.body.classList.toggle('tour-arabic-enabled', arabicEnabled);
+      arButton.textContent = arabicEnabled ? 'AR ON · عربي' : 'AR OFF · عربي';
+      arButton.classList.toggle('active', arabicEnabled);
+
+      if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+        voiceButton.textContent = 'VOICE N/A';
+        voiceButton.disabled = true;
+        voiceButton.classList.add('off');
+        return;
+      }
+
+      voiceButton.disabled = false;
+      voiceButton.textContent = voiceEnabled ? 'VOICE ON' : 'VOICE OFF';
+      voiceButton.classList.toggle('active', voiceEnabled);
+      voiceButton.classList.toggle('off', !voiceEnabled);
+    }
+
+    function normalizeText(value) {
+      return String(value || '')
+        .replace(/[’‘]/g, "'")
+        .replace(/[“”]/g, '"')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
+    }
+
+    function speakerKeyFromNode(node) {
+      var explicitKey = node && node.dataset ? String(node.dataset.speakerKey || '').trim() : '';
+      if (explicitKey) return explicitKey;
+
+      var nameNode = node.querySelector('.dialogue-name');
+      var label = normalizeText(nameNode ? nameNode.textContent : '');
+
+      if (label.indexOf('visitor') >= 0) return 'visitor';
+      if (label.indexOf('head of customer support') >= 0 || label.indexOf('support manager') >= 0) return 'support_manager';
+      if (label.indexOf('assistant head') >= 0) return 'assistant_head';
+      if (label.indexOf('quality manager') >= 0) return 'quality_manager';
+      if (label.indexOf('quality team') >= 0 || label.indexOf('quality operations team') >= 0) return 'quality_team';
+      if (label.indexOf('supervisor') >= 0) return 'supervisor';
+      if (label.indexOf('team leaders') >= 0) return 'team_leaders';
+      return 'system';
+    }
+
+    function englishTextFromNode(node) {
+      var box = node.querySelector('.dialogue-box, .computer-prompt-box');
+      if (!box) return '';
+      var clone = box.cloneNode(true);
+      clone.querySelectorAll('.tour-ar-subtitle, .tour-ar-extra').forEach(function(ar) {
+        if (ar && ar.parentNode) ar.parentNode.removeChild(ar);
+      });
+      return String(clone.textContent || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function lookupTextFromNode(node) {
+      var fixed = node && node.dataset ? String(node.dataset.lookupText || '').trim() : '';
+      return fixed || englishTextFromNode(node);
+    }
+
+    function buildDialogueLookup(rows) {
+      dialogueLookup = {};
+      (rows || []).forEach(function(row) {
+        var key = normalizeText(row.text_en || '');
+        if (key) dialogueLookup[key] = row;
+      });
+      hydrateArabicSubtitles();
+    }
+
+    function hydrateArabicSubtitles() {
+      var nodes = document.querySelectorAll('.dialogue, .end-dialogue, .computer-prompt');
+      Array.prototype.forEach.call(nodes, function(node) {
+        var box = node.querySelector('.dialogue-box, .computer-prompt-box');
+        if (!box) return;
+        var row = dialogueLookup[normalizeText(lookupTextFromNode(node))] || null;
+        var fixedArabic = node && node.dataset ? String(node.dataset.arFixed || '').trim() : '';
+        /* Fixed page translations intentionally override Sheet text when present. */
+        var arabicText = fixedArabic || (row && row.text_ar ? row.text_ar : '');
+        var arNode = box.querySelector('.tour-ar-subtitle');
+        if (!arNode) {
+          arNode = document.createElement('div');
+          arNode.className = 'tour-ar-subtitle';
+          box.appendChild(arNode);
+        }
+        arNode.textContent = arabicText;
+        arNode.style.display = arabicText ? '' : 'none';
+      });
+    }
+
+    function normalizeGender(value) {
+      var clean = normalizeText(value);
+      if (clean === 'm' || clean === 'male' || clean === 'ذكر') return 'male';
+      if (clean === 'f' || clean === 'female' || clean === 'أنثى' || clean === 'انثى') return 'female';
+      return clean || 'neutral';
+    }
+
+    function getProfile(key) {
+      var base = fallbackProfiles[key] || fallbackProfiles.system;
+      var sheet = voiceProfiles[key] || {};
+      return {
+        title: sheet.title || base.title || key,
+        gender: normalizeGender(sheet.gender || base.gender),
+        lang: sheet.lang || base.lang || 'en-US',
+        voice_hint: sheet.voice_hint || base.voice_hint || '',
+        rate: Number(sheet.rate || base.rate || 1),
+        pitch: Number(sheet.pitch || base.pitch || 1)
+      };
+    }
+
+    function loadBrowserVoices() {
+      if (!('speechSynthesis' in window)) return;
+      browserVoices = window.speechSynthesis.getVoices() || [];
+      voiceAssignments = {};
+    }
+
+    function femaleName(name) {
+      return /samantha|victoria|karen|moira|tessa|zira|aria|jenny|sara|ava|susan|hazel|female/i.test(name || '');
+    }
+
+    function maleName(name) {
+      return /daniel|alex|fred|tom|arthur|george|guy|david|mark|ryan|christopher|male/i.test(name || '');
+    }
+
+    function pickVoice(key) {
+      if (voiceAssignments[key]) return voiceAssignments[key];
+      var profile = getProfile(key);
+      var all = browserVoices.length ? browserVoices : (window.speechSynthesis.getVoices() || []);
+      if (!all.length) return null;
+
+      var langBase = String(profile.lang || 'en-US').toLowerCase().split('-')[0];
+      var pool = all.filter(function(v) {
+        return String(v.lang || '').toLowerCase().indexOf(langBase) === 0;
+      });
+      if (!pool.length) pool = all.slice();
+
+      if (profile.voice_hint) {
+        var hint = String(profile.voice_hint).toLowerCase();
+        var hinted = pool.find(function(v) {
+          return String(v.name || '').toLowerCase().indexOf(hint) >= 0;
+        });
+        if (hinted) {
+          voiceAssignments[key] = hinted;
+          return hinted;
+        }
+      }
+
+
+      var genderPool = pool.filter(function(v) {
+        if (profile.gender === 'female') return femaleName(v.name);
+        if (profile.gender === 'male') return maleName(v.name);
+        return true;
+      });
+      if (genderPool.length) pool = genderPool;
+
+      /*
+        Keep management roles distinct whenever the browser offers more than
+        one suitable voice in the current language.
+      */
+      var blockedVoiceKeys = [];
+      if (key === 'assistant_head') blockedVoiceKeys = ['support_manager'];
+      else if (key === 'quality_manager') blockedVoiceKeys = ['support_manager', 'assistant_head'];
+      else if (key === 'quality_team') blockedVoiceKeys = ['support_manager', 'assistant_head', 'quality_manager'];
+
+      if (blockedVoiceKeys.length && pool.length > 1) {
+        var blockedNames = blockedVoiceKeys
+          .map(function(roleKey) {
+            var assigned = voiceAssignments[roleKey];
+            return assigned ? String(assigned.name || '') + '|' + String(assigned.lang || '') : '';
+          })
+          .filter(Boolean);
+
+        var uniquePool = pool.filter(function(v) {
+          var token = String(v.name || '') + '|' + String(v.lang || '');
+          return blockedNames.indexOf(token) === -1;
+        });
+
+        if (uniquePool.length) pool = uniquePool;
+      }
+
+      var order = ['visitor','support_manager','assistant_head','quality_manager','quality_team','supervisor','team_leaders','system'];
+      var idx = order.indexOf(key);
+      if (idx < 0) {
+        idx = String(key || '')
+          .split('')
+          .reduce(function(total, char) {
+            return total + char.charCodeAt(0);
+          }, 0);
+      }
+      var selected = pool[idx % pool.length];
+      voiceAssignments[key] = selected;
+      return selected;
+    }
+
+    /* V31: system descriptions reuse the SAME assigned role voice. */
+    window.supportTourResolveRoleVoice = function(roleKey) {
+      return {
+        voice: pickVoice(roleKey),
+        profile: getProfile(roleKey)
+      };
+    };
+
+    window.supportTourStopDialogueVoice = function() {
+      stopVoice();
+    };
+
+    function splitTourSpeech(
+      text,
+      maxLength
+    ) {
+      var source =
+        String(text || '')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+      var limit =
+        Number(maxLength || 100);
+
+      if (!source) return [];
+      if (window.supportTourFixedAudio && window.supportTourFixedAudio.usingFixedAudio) return [source]; /* FIXED_AUDIO_NO_SPLIT */
+
+      var parts =
+        source.match(
+          /[^.!?;:]+[.!?;:]?|[^.!?;:]+$/g
+        ) || [source];
+
+      var chunks = [];
+
+      parts.forEach(
+        function(part) {
+
+          var rest =
+            String(part || '').trim();
+
+          while (
+            rest.length > limit
+          ) {
+
+            var cut =
+              rest.lastIndexOf(
+                ',',
+                limit
+              );
+
+            if (cut < 42) {
+              cut =
+                rest.lastIndexOf(
+                  ' ',
+                  limit
+                );
+            }
+
+            if (cut < 42) {
+              cut = limit;
+            }
+
+            var piece =
+              rest
+                .slice(
+                  0,
+                  cut + (
+                    rest.charAt(cut) === ','
+                      ? 1
+                      : 0
+                  )
+                )
+                .trim();
+
+            if (piece) {
+              chunks.push(piece);
+            }
+
+            rest =
+              rest
+                .slice(
+                  cut + (
+                    rest.charAt(cut) === ','
+                      ? 1
+                      : 0
+                  )
+                )
+                .trim();
+
+          }
+
+          if (rest) {
+            chunks.push(rest);
+          }
+        }
+      );
+
+      return chunks;
+    }
+
+
+    function queueDialogueNode(node) {
+      if (!node) return;
+      if (node === currentDialogueNode) return;
+      if (pendingDialogueQueue.indexOf(node) >= 0) return;
+      pendingDialogueQueue.push(node);
+    }
+
+
+    function dequeueVisibleDialogueNode() {
+      while (pendingDialogueQueue.length) {
+        var next = pendingDialogueQueue.shift();
+        if (next && isDialogueVisible(next)) return next;
+      }
+      return null;
+    }
+
+
+    function removeQueuedDialogueNode(node) {
+      if (!pendingDialogueQueue.length) return;
+      pendingDialogueQueue = pendingDialogueQueue.filter(function(item) {
+        return item !== node;
+      });
+    }
+
+
+    function stopVoice() {
+      voiceSequenceToken += 1;
+      pendingDialogueQueue = [];
+      voiceBusy = false;
+      activeVoiceUtterance = null;
+
+      if (activeVoiceWatchdog) {
+        window.clearTimeout(activeVoiceWatchdog);
+        activeVoiceWatchdog = null;
+      }
+
+      if (!('speechSynthesis' in window)) {
+        return;
+      }
+
+      try {
+        window.speechSynthesis.cancel();
+      }
+      catch (error) {}
+    }
+
+
+    function speakNode(node) {
+
+      if (!voiceEnabled || !node) return;
+      if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) return;
+
+      /* Never interrupt the line that is already being read. */
+      if (voiceBusy && activeVoiceUtterance) {
+        queueDialogueNode(node);
+        return;
+      }
+
+      var text = englishTextFromNode(node);
+      if (!text) return;
+
+      var key = speakerKeyFromNode(node);
+      var profile = getProfile(key);
+      var selected = pickVoice(key);
+      var chunks = splitTourSpeech(text, 88);
+      if (!chunks.length) return;
+
+      voiceSequenceToken += 1;
+      var myToken = voiceSequenceToken;
+      var chunkIndex = 0;
+      var finished = false;
+      voiceBusy = true;
+
+      function clearWatchdog() {
+        if (activeVoiceWatchdog) {
+          window.clearTimeout(activeVoiceWatchdog);
+          activeVoiceWatchdog = null;
+        }
+      }
+
+      function finishVoiceLine() {
+        if (finished || myToken !== voiceSequenceToken) return;
+        finished = true;
+        clearWatchdog();
+        activeVoiceUtterance = null;
+        voiceBusy = false;
+
+        if (typeof window.supportIndex3DialogueVoiceFinished === 'function') {
+          try { window.supportIndex3DialogueVoiceFinished(node); } catch (error) {}
+        }
+
+        var nextNode = dequeueVisibleDialogueNode();
+        if (voiceEnabled && nextNode && nextNode !== node && isDialogueVisible(nextNode)) {
+          window.setTimeout(function(){ speakNode(nextNode); }, 140);
+        }
+      }
+
+      function speakNextChunk() {
+        if (finished || myToken !== voiceSequenceToken) return;
+        if (chunkIndex >= chunks.length) {
+          finishVoiceLine();
+          return;
+        }
+
+        var chunk = chunks[chunkIndex++];
+        var utterance = new SpeechSynthesisUtterance(chunk);
+        if (selected) {
+          utterance.voice = selected;
+          utterance.lang = selected.lang || profile.lang;
+        } else {
+          utterance.lang = profile.lang || 'en-US';
+        }
+        utterance.rate = Math.max(.82, Math.min(1.02, Number(profile.rate || 1)));
+        utterance.pitch = Math.max(.78, Math.min(1.14, Number(profile.pitch || 1)));
+        utterance.volume = 1;
+        activeVoiceUtterance = utterance;
+
+        var settled = false;
+        var wordCount = chunk.split(/\s+/).filter(Boolean).length;
+        clearWatchdog();
+        activeVoiceWatchdog = window.setTimeout(function(){
+          if (settled || finished || myToken !== voiceSequenceToken) return;
+          settled = true;
+          try { window.speechSynthesis.cancel(); } catch (error) {}
+          activeVoiceUtterance = null;
+          window.setTimeout(speakNextChunk, 180);
+        }, (window.supportTourFixedAudio && window.supportTourFixedAudio.usingFixedAudio) ? 120000 : Math.max(45000, 12000 + wordCount * 1600)); /* FIXED_AUDIO_WATCHDOG */
+
+        function finishChunk() {
+          if (settled || finished || myToken !== voiceSequenceToken) return;
+          settled = true;
+          clearWatchdog();
+          if (activeVoiceUtterance === utterance) activeVoiceUtterance = null;
+          window.setTimeout(speakNextChunk, 110);
+        }
+
+        utterance.onend = finishChunk;
+        utterance.onerror = finishChunk;
+        try {
+          window.speechSynthesis.speak(utterance);
+          if (document.body.classList.contains('presentation-paused')) {
+            window.speechSynthesis.pause();
+          }
+        } catch (error) {
+          finishChunk();
+        }
+      }
+
+      speakNextChunk();
+    }
+
+
+    function isDialogueVisible(node) {
+      if (!node) return false;
+      if (node.classList.contains('hide')) return false;
+      if (node.classList.contains('show')) return true;
+      var style = window.getComputedStyle(node);
+      return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 0) > .65;
+    }
+
+    function refreshDialogueVoice(node) {
+      var visible = isDialogueVisible(node);
+      if (!visible) {
+        node.setAttribute('data-tour-spoken', '0');
+        if (currentDialogueNode === node) currentDialogueNode = null;
+        removeQueuedDialogueNode(node);
+        return;
+      }
+
+      currentDialogueNode = node;
+      if (node.getAttribute('data-tour-spoken') === '1') return;
+      node.setAttribute('data-tour-spoken', '1');
+      speakNode(node);
+    }
+
+    function wireDialogueObservers() {
+      var nodes = document.querySelectorAll('.dialogue, .end-dialogue, .computer-prompt');
+      Array.prototype.forEach.call(nodes, function(node) {
+        node.setAttribute('data-tour-spoken', '0');
+        var observer = new MutationObserver(function() {
+          window.setTimeout(function() { refreshDialogueVoice(node); }, 40);
+        });
+        observer.observe(node, { attributes:true, attributeFilter:['class','style'] });
+        window.setTimeout(function() { refreshDialogueVoice(node); }, 80);
+      });
+    }
+
+    arButton.addEventListener('click', function() {
+      arabicEnabled = !arabicEnabled;
+      safeSet(AR_KEY, arabicEnabled ? '1' : '0');
+      syncControls();
+    });
+
+    voiceButton.addEventListener('click', function() {
+      voiceEnabled = !voiceEnabled;
+      safeSet(VOICE_KEY, voiceEnabled ? '1' : '0');
+      if (!voiceEnabled) stopVoice();
+      syncControls();
+      if (voiceEnabled && currentDialogueNode) speakNode(currentDialogueNode);
+    });
+
+    if ('speechSynthesis' in window) {
+      loadBrowserVoices();
+      if ('onvoiceschanged' in window.speechSynthesis) {
+        window.speechSynthesis.onvoiceschanged = loadBrowserVoices;
+      }
+    }
+
+    var bodyObserver = new MutationObserver(function() {
+      if (!voiceEnabled || !('speechSynthesis' in window)) return;
+      try {
+        if (document.body.classList.contains('presentation-paused')) window.speechSynthesis.pause();
+        else window.speechSynthesis.resume();
+      } catch (error) {}
+    });
+    bodyObserver.observe(document.body, { attributes:true, attributeFilter:['class'] });
+
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler(function(rows) {
+          dialogueRows = rows || [];
+          buildDialogueLookup(dialogueRows);
+        })
+        .withFailureHandler(function() { hydrateArabicSubtitles(); })
+        .getPresentationDialogue();
+
+      google.script.run
+        .withSuccessHandler(function(rows) {
+          voiceProfiles = {};
+          (rows || []).forEach(function(row) {
+            if (row && row.speaker_key) voiceProfiles[row.speaker_key] = row;
+          });
+          voiceAssignments = {};
+        })
+        .withFailureHandler(function() {})
+        .getVoiceProfiles();
+    }
+
+    syncControls();
+    hydrateArabicSubtitles();
+    wireDialogueObservers();
+
+    document.addEventListener('pointerdown', function() {
+      if (voiceEnabled && currentDialogueNode && currentDialogueNode.getAttribute('data-tour-spoken') !== '1') {
+        currentDialogueNode.setAttribute('data-tour-spoken', '1');
+        speakNode(currentDialogueNode);
+      }
+    }, { once:true, capture:true });
+  })();
+  </script>
+
+
+<script>
+(function(){
+  var systemVoiceUtterance = null;
+  var systemVoiceToken = 0;
+
+  function voiceEnabled(){
+    try { return window.localStorage.getItem('support_center_voice') !== '0'; }
+    catch (e) { return true; }
+  }
+
+  function resolveRole(role){
+    if (typeof window.supportTourResolveRoleVoice === 'function') {
+      try { return window.supportTourResolveRoleVoice(role) || {}; }
+      catch (e) {}
+    }
+    return {};
+  }
+
+  function finishOnce(token, done){
+    if (token !== systemVoiceToken) return;
+    systemVoiceUtterance = null;
+    if (typeof done === 'function') done();
+  }
+
+  window.supportTourSpeakSystem = function(text, role, onComplete){
+    text = String(text || '').replace(/\s+/g,' ').trim();
+    var doneCalled = false;
+    function done(){
+      if (doneCalled) return;
+      doneCalled = true;
+      if (typeof onComplete === 'function') onComplete();
+    }
+
+    if (!text) { done(); return; }
+
+    if (!voiceEnabled() || !('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+      var fallbackMs = Math.max(5200, Math.min(14000, text.length * 58 + 2200));
+      window.setTimeout(done, fallbackMs);
+      return;
+    }
+
+    /* Stop the previous dialogue exactly once when system narration takes over. */
+    if (typeof window.supportTourStopDialogueVoice === 'function') {
+      try { window.supportTourStopDialogueVoice(); } catch (e) {}
+    }
+
+    systemVoiceToken += 1;
+    var token = systemVoiceToken;
+    var resolved = resolveRole(role || 'assistant_head');
+    var profile = resolved.profile || {};
+    var selected = resolved.voice || null;
+    var u = new SpeechSynthesisUtterance(text);
+
+    if (selected) {
+      u.voice = selected;
+      u.lang = selected.lang || profile.lang || 'en-US';
+    } else {
+      u.lang = profile.lang || 'en-US';
+    }
+
+    u.rate = Math.max(.78, Math.min(.98, Number(profile.rate || .90)));
+    u.pitch = Math.max(.80, Math.min(1.08, Number(profile.pitch || .96)));
+    u.volume = 1;
+    systemVoiceUtterance = u;
+
+    var settled = false;
+    function settle(){
+      if (settled || token !== systemVoiceToken) return;
+      settled = true;
+      finishOnce(token, done);
+    }
+
+    u.onend = settle;
+    u.onerror = settle;
+
+    /* Generous safety net only for a browser that loses onend. */
+    var words = text.split(/\s+/).filter(Boolean).length;
+    var maxMs = Math.max(18000, Math.min(36000, 7000 + words * 850));
+    var watchdogStart = Date.now();
+    var watchdog = window.setInterval(function(){
+      if (settled || token !== systemVoiceToken) {
+        window.clearInterval(watchdog);
+        return;
+      }
+      if (window.speechSynthesis.paused) {
+        watchdogStart += 300;
+        return;
+      }
+      if (Date.now() - watchdogStart > maxMs) {
+        window.clearInterval(watchdog);
+        try { window.speechSynthesis.cancel(); } catch (e) {}
+        settle();
+      }
+    },300);
+
+    try { window.speechSynthesis.speak(u); }
+    catch (e) { window.clearInterval(watchdog); settle(); }
+  };
+})();
+</script>
+
+
+<script id="canonical-head-title-guard">
+(function () {
+  'use strict';
+  var CANONICAL_HEAD_TITLE = 'HEAD OF CUSTOMER SUPPORT CENTER';
+  var LEGACY = /^\s*support\s+manager\s*$/i;
+
+  function fixTextNode(node) {
+    if (!node || node.nodeType !== 3) return;
+    var parent = node.parentElement;
+    if (!parent || /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA)$/i.test(parent.tagName)) return;
+    if (LEGACY.test(String(node.nodeValue || ''))) {
+      node.nodeValue = CANONICAL_HEAD_TITLE;
+    }
+  }
+
+  function fixTree(root) {
+    if (!root) return;
+    if (root.nodeType === 3) { fixTextNode(root); return; }
+    if (root.nodeType !== 1 && root.nodeType !== 9 && root.nodeType !== 11) return;
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    var node;
+    while ((node = walker.nextNode())) fixTextNode(node);
+  }
+
+  function start() {
+    fixTree(document.body);
+    if (!document.body || !window.MutationObserver) return;
+    new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.type === 'characterData') {
+          fixTextNode(mutation.target);
+          return;
+        }
+        Array.prototype.forEach.call(mutation.addedNodes || [], fixTree);
+      });
+    }).observe(document.body, { childList: true, subtree: true, characterData: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start, { once: true });
+  } else {
+    start();
+  }
+})();
+</script>
+</body>
+</html>

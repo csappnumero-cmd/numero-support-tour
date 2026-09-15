@@ -1,0 +1,6353 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <link rel="stylesheet" href="tour-runtime.css">
+  <script src="tour-data.js"></script>
+  <script src="tour-runtime.js"></script>
+  
+  <!-- FIXED_TOUR_AUDIO -->
+  <script src="tour-audio-map.js"></script>
+  <script src="tour-audio.js"></script>
+<meta name="referrer" content="no-referrer">
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <link rel="preconnect" href="https://i.imgur.com" crossorigin>
+  <link rel="preload" as="image" href="assets/images/Qv0Swkg.png">
+
+  <title>Quality Manager</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      overflow: hidden;
+
+      background: #302f2b;
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      color: white;
+    }
+
+
+    /* =========================================
+       MAIN SCENE
+    ========================================== */
+
+    .quality-scene {
+      position: relative;
+
+      width: 100%;
+      height: 100vh;
+
+      overflow: hidden;
+
+      background: #302f2b;
+    }
+
+
+    /* =========================================
+       OFFICE BACKGROUND
+    ========================================== */
+
+    .office-blur {
+      position: absolute;
+
+      inset: -45px;
+
+      background-image:
+        url('assets/images/NJoRzzC.png');
+
+      background-size: cover;
+      background-position: center;
+
+      filter:
+        blur(28px)
+        brightness(.42);
+
+      transform: scale(1.13);
+
+      transition:
+        transform 2.8s ease,
+        filter 2.8s ease,
+        opacity 2s ease;
+    }
+
+    .office-blur::after {
+      content: "";
+
+      position: absolute;
+      inset: 0;
+
+      background:
+        radial-gradient(
+          circle at center,
+          transparent 35%,
+          rgba(0,0,0,.62) 100%
+        );
+    }
+
+
+    /* =========================================
+       OFFICE IMAGE
+    ========================================== */
+
+    .office-photo-wrap {
+      position: absolute;
+
+      inset: 0;
+
+      z-index: 2;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      padding:
+        14px 22px;
+
+      opacity: 0;
+
+      animation:
+        photoIn 1.2s ease forwards;
+
+      transition:
+        transform 3s
+        cubic-bezier(.18,.78,.2,1),
+        opacity 2s ease,
+        filter 2s ease;
+    }
+
+    .office-photo {
+      display: block;
+
+      width: auto;
+      height: 100%;
+
+      max-width: 100%;
+      max-height: 100%;
+
+      object-fit: contain;
+
+      border-radius: 5px;
+
+      box-shadow:
+        0 35px 90px
+        rgba(0,0,0,.55);
+    }
+
+
+    /* =========================================
+       CINEMATIC OVERLAYS
+    ========================================== */
+
+    .top-shadow,
+    .bottom-shadow {
+      position: absolute;
+
+      left: 0;
+
+      width: 100%;
+
+      z-index: 3;
+
+      pointer-events: none;
+
+      transition:
+        opacity 1.5s ease;
+    }
+
+    .top-shadow {
+      top: 0;
+
+      height: 23%;
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(0,0,0,.64),
+          transparent
+        );
+    }
+
+    .bottom-shadow {
+      bottom: 0;
+
+      height: 40%;
+
+      background:
+        linear-gradient(
+          to top,
+          rgba(0,0,0,.82),
+          transparent
+        );
+    }
+
+
+    /* =========================================
+       ROLE
+    ========================================== */
+
+    .role-indicator {
+      position: absolute;
+
+      z-index: 6;
+
+      top: 5%;
+      left: 4%;
+
+      opacity: 0;
+
+      transform:
+        translateY(-12px);
+
+      animation:
+        roleIn .9s ease .8s forwards;
+
+      transition:
+        opacity .8s ease;
+    }
+
+    .role-small {
+      margin-bottom: 8px;
+
+      color:
+        rgba(255,255,255,.5);
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing: 4px;
+    }
+
+    .role-name {
+      max-width: 500px;
+
+      color: white;
+
+      font-size:
+        clamp(
+          22px,
+          2vw,
+          32px
+        );
+
+      font-weight: 600;
+
+      line-height: 1.2;
+    }
+
+    .role-line {
+      width: 62px;
+      height: 2px;
+
+      margin-top: 13px;
+
+      background:
+        linear-gradient(
+          to right,
+          #8fd8d0,
+          transparent
+        );
+    }
+
+
+    /* =========================================
+       DIALOGUE
+    ========================================== */
+
+    .dialogue {
+      position: absolute;
+
+      z-index: 10;
+
+      left: 50%;
+      bottom: 5%;
+
+      width:
+        min(
+          780px,
+          76vw
+        );
+
+      opacity: 0;
+
+      transform:
+        translateX(-50%)
+        translateY(22px);
+
+      transition:
+        opacity .72s ease,
+        transform .72s ease;
+    }
+
+    .dialogue.show {
+      opacity: 1;
+
+      transform:
+        translateX(-50%)
+        translateY(0);
+    }
+
+    .dialogue.hide {
+      opacity: 0;
+
+      transform:
+        translateX(-50%)
+        translateY(-12px);
+    }
+
+    .dialogue-name {
+      margin-bottom: 8px;
+
+      text-align: center;
+
+      color:
+        rgba(111,218,206,.92);
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing: 3px;
+    }
+
+    .visitor .dialogue-name {
+      color:
+        rgba(255,255,255,.5);
+    }
+
+    .dialogue-box {
+      position: relative;
+
+      padding:
+        20px 30px;
+
+      text-align: center;
+
+      color: white;
+
+      font-size:
+        clamp(
+          18px,
+          1.5vw,
+          25px
+        );
+
+      line-height: 1.45;
+
+      border-radius: 15px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(8,12,12,.9),
+          rgba(13,25,24,.82)
+        );
+
+      border:
+        1px solid
+        rgba(255,255,255,.15);
+
+      box-shadow:
+        0 22px 55px
+        rgba(0,0,0,.5);
+
+      backdrop-filter:
+        blur(16px);
+
+      -webkit-backdrop-filter:
+        blur(16px);
+    }
+
+    .dialogue-box::after {
+      content: "";
+
+      position: absolute;
+
+      left: 50%;
+      bottom: -1px;
+
+      transform:
+        translateX(-50%);
+
+      width: 110px;
+      height: 2px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          #6fdace,
+          transparent
+        );
+    }
+
+
+    /* =========================================
+       TRANSITION TO WALL
+    ========================================== */
+
+    .quality-scene.wall-mode
+    .role-indicator {
+      opacity: 0;
+    }
+
+    .quality-scene.wall-mode
+    .office-photo-wrap {
+      transform:
+        scale(1.18)
+        translateY(2%);
+
+      opacity: .09;
+
+      filter:
+        blur(6px)
+        brightness(.32);
+    }
+
+    .quality-scene.wall-mode
+    .office-blur {
+      transform:
+        scale(1.28);
+
+      opacity: .28;
+
+      filter:
+        blur(45px)
+        brightness(.15);
+    }
+
+    .quality-scene.wall-mode
+    .top-shadow,
+    .quality-scene.wall-mode
+    .bottom-shadow {
+      opacity: .18;
+    }
+
+
+    /* =========================================
+       QUALITY WALL
+    ========================================== */
+
+    .quality-wall {
+      position: absolute;
+
+      inset: 0;
+
+      z-index: 30;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      transform:
+        scale(1.035);
+
+      transition:
+        opacity 1.25s ease,
+        transform 1.7s
+        cubic-bezier(.18,.75,.2,1);
+    }
+
+    .quality-wall.show {
+      opacity: 1;
+
+      pointer-events: auto;
+
+      transform:
+        scale(1);
+    }
+
+    .wall-background {
+      position: absolute;
+
+      inset: 0;
+
+      background:
+        radial-gradient(
+          circle at 56% 14%,
+          rgba(132,172,164,.13),
+          transparent 34%
+        ),
+        radial-gradient(
+          circle at 17% 82%,
+          rgba(196,176,135,.09),
+          transparent 31%
+        ),
+        linear-gradient(
+          135deg,
+          #34342f 0%,
+          #41413a 47%,
+          #2d2e2a 100%
+        );
+    }
+
+    .wall-grid {
+      position: absolute;
+
+      inset: 0;
+
+      opacity: .10;
+
+      background-image:
+        linear-gradient(
+          rgba(225,215,194,.11) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(225,215,194,.11) 1px,
+          transparent 1px
+        );
+
+      background-size:
+        45px 45px;
+
+      mask-image:
+        linear-gradient(
+          to bottom,
+          transparent,
+          black 14%,
+          black 85%,
+          transparent
+        );
+    }
+
+
+    /* =========================================
+       QUALITY WALL HEADER
+    ========================================== */
+
+    .wall-header {
+      position: relative;
+
+      z-index: 3;
+
+      height: 116px;
+
+      padding:
+        25px 38px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content:
+        space-between;
+
+      border-bottom:
+        1px solid
+        rgba(255,255,255,.08);
+
+      background:
+        rgba(51,50,45,.84);
+
+      backdrop-filter:
+        blur(18px);
+
+      -webkit-backdrop-filter:
+        blur(18px);
+    }
+
+    .wall-heading-small {
+      margin-bottom: 7px;
+
+      color:
+        rgba(111,218,206,.55);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing: 4px;
+    }
+
+    .wall-heading {
+      font-size:
+        clamp(
+          25px,
+          2.35vw,
+          38px
+        );
+
+      font-weight: 600;
+    }
+
+    .wall-subtitle {
+      margin-top: 5px;
+
+      color:
+        rgba(255,255,255,.32);
+
+      font-size: 10px;
+
+      letter-spacing: 2px;
+    }
+
+
+    /* =========================================
+       HEADER STATISTICS
+    ========================================== */
+
+    .wall-stats {
+      display: flex;
+
+      gap: 11px;
+    }
+
+    .wall-stat {
+      min-width: 102px;
+
+      padding:
+        10px 13px;
+
+      text-align: center;
+
+      border-radius: 11px;
+
+      background:
+        rgba(255,255,255,.035);
+
+      border:
+        1px solid
+        rgba(255,255,255,.07);
+    }
+
+    .wall-stat-value {
+      margin-bottom: 3px;
+
+      color: white;
+
+      font-size: 17px;
+
+      font-weight: 700;
+    }
+
+    .wall-stat-value.green {
+      color: #71dbc7;
+    }
+
+    .wall-stat-label {
+      color:
+        rgba(255,255,255,.32);
+
+      font-size: 8px;
+
+      letter-spacing: 1px;
+    }
+
+
+    /* =========================================
+       WALL BODY
+    ========================================== */
+
+    .wall-body {
+      position: relative;
+
+      z-index: 3;
+
+      height:
+        calc(100vh - 116px);
+
+      display: flex;
+    }
+
+
+    /* =========================================
+       SIDE NAVIGATION
+    ========================================== */
+
+    .wall-sidebar {
+      width: 218px;
+
+      flex-shrink: 0;
+
+      padding:
+        26px 17px;
+
+      border-right:
+        1px solid
+        rgba(255,255,255,.065);
+
+      background:
+        rgba(47,46,42,.86);
+
+      backdrop-filter:
+        blur(15px);
+
+      -webkit-backdrop-filter:
+        blur(15px);
+    }
+
+    .sidebar-title {
+      margin:
+        0 10px 17px;
+
+      color:
+        rgba(255,255,255,.26);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing: 3px;
+    }
+
+    .sidebar-item {
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+      margin-bottom: 6px;
+
+      padding:
+        12px 13px;
+
+      border-radius: 10px;
+
+      color:
+        rgba(255,255,255,.53);
+
+      font-size: 12px;
+    }
+
+    .sidebar-item.active {
+      color: white;
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(83,202,190,.13),
+          rgba(255,255,255,.035)
+        );
+
+      border:
+        1px solid
+        rgba(107,218,206,.13);
+    }
+
+    .sidebar-icon {
+      width: 19px;
+
+      text-align: center;
+    }
+
+    .sidebar-divider {
+      width: 100%;
+      height: 1px;
+
+      margin:
+        22px 0;
+
+      background:
+        rgba(255,255,255,.065);
+    }
+
+
+    /* =========================================
+       QUALITY PULSE
+    ========================================== */
+
+    .quality-pulse {
+      padding: 14px;
+
+      border-radius: 12px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(87,210,194,.09),
+          rgba(255,255,255,.018)
+        );
+
+      border:
+        1px solid
+        rgba(102,218,204,.12);
+    }
+
+    .pulse-title {
+      margin-bottom: 8px;
+
+      color:
+        rgba(255,255,255,.72);
+
+      font-size: 11px;
+
+      font-weight: 600;
+    }
+
+    .pulse-dot {
+      display: inline-block;
+
+      width: 8px;
+      height: 8px;
+
+      margin-right: 7px;
+
+      border-radius: 50%;
+
+      background: #6cdcca;
+
+      box-shadow:
+        0 0 12px
+        rgba(108,220,202,.58);
+    }
+
+    .pulse-text {
+      color:
+        rgba(255,255,255,.32);
+
+      font-size: 10px;
+
+      line-height: 1.55;
+    }
+
+
+    /* =========================================
+       SYSTEMS AREA
+    ========================================== */
+
+    .systems-area {
+      flex: 1;
+
+      min-width: 0;
+
+      display: flex;
+
+      flex-direction: column;
+    }
+
+    .systems-toolbar {
+      flex-shrink: 0;
+
+      padding:
+        23px 28px 17px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content:
+        space-between;
+    }
+
+    .systems-title {
+      font-size: 21px;
+
+      font-weight: 600;
+    }
+
+    .systems-caption {
+      margin-top: 5px;
+
+      color:
+        rgba(255,255,255,.3);
+
+      font-size: 9px;
+
+      letter-spacing: 2px;
+    }
+
+    .systems-count {
+      padding:
+        8px 12px;
+
+      border-radius: 100px;
+
+      color:
+        rgba(255,255,255,.55);
+
+      font-size: 11px;
+
+      background:
+        rgba(255,255,255,.035);
+
+      border:
+        1px solid
+        rgba(255,255,255,.065);
+    }
+
+
+    /* =========================================
+       SCROLL AREA
+    ========================================== */
+
+    .modules-scroll {
+      flex: 1;
+
+      min-height: 0;
+
+      overflow-y: auto;
+
+      padding:
+        0 28px 32px;
+
+      scrollbar-width: thin;
+
+      scrollbar-color:
+        #8e8a7d #35342f;
+    }
+
+    .modules-scroll::-webkit-scrollbar {
+      width: 9px;
+    }
+
+    .modules-scroll::-webkit-scrollbar-track {
+      background: #35342f;
+    }
+
+    .modules-scroll::-webkit-scrollbar-thumb {
+      background: #858276;
+
+      border-radius: 20px;
+
+      border:
+        2px solid #35342f;
+    }
+
+    .modules-scroll::-webkit-scrollbar-thumb:hover {
+      background: #9f9a8b;
+    }
+
+
+    /* =========================================
+       MODULE GRID
+    ========================================== */
+
+    .modules-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          3,
+          minmax(0,1fr)
+        );
+
+      gap: 17px;
+
+      padding-bottom: 25px;
+    }
+
+
+    /* =========================================
+       QUALITY MODULE
+    ========================================== */
+
+    .quality-module {
+      --module-color: #73b9b0;
+
+      position: relative;
+
+      min-height: 205px;
+
+      padding: 20px;
+
+      overflow: hidden;
+
+      cursor: pointer;
+
+      border-radius: 16px;
+
+      /*
+        One unified executive palette.
+        The Quality Wall should feel like one control system,
+        not a collection of colorful app tiles.
+      */
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(73,72,65,.94),
+          rgba(55,55,50,.96)
+        );
+
+      border:
+        1px solid
+        rgba(226,215,193,.105);
+
+      box-shadow:
+        0 18px 38px
+        rgba(0,0,0,.25),
+        inset 0 1px 0
+        rgba(255,255,255,.018);
+
+      transition:
+        transform .27s ease,
+        border-color .27s ease,
+        background .27s ease,
+        box-shadow .27s ease;
+    }
+
+    .quality-module:hover {
+      transform:
+        translateY(-5px);
+
+      border-color:
+        rgba(116,214,202,.34);
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(82,81,73,.98),
+          rgba(62,61,55,.98)
+        );
+
+      box-shadow:
+        0 22px 46px
+        rgba(0,0,0,.36),
+        0 0 0 1px
+        rgba(111,218,206,.025);
+    }
+
+    .quality-module.auto-focus {
+      transform:
+        translateY(-4px)
+        scale(1.016);
+
+      border-color:
+        rgba(208,192,157,.68);
+
+      box-shadow:
+        0 0 0 1px
+        rgba(208,192,157,.12),
+        0 24px 50px
+        rgba(23,22,20,.34),
+        0 0 32px
+        rgba(123,171,163,.10);
+    }
+
+
+    .quality-showcase-strip {
+      margin:
+        0 28px 15px;
+
+      padding:
+        14px 17px;
+
+      display: grid;
+
+      grid-template-columns:
+        auto 1fr auto;
+
+      gap: 14px;
+
+      align-items: center;
+
+      border-radius: 13px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(129,169,161,.12),
+          rgba(196,176,135,.09)
+        );
+
+      border:
+        1px solid
+        rgba(229,218,197,.12);
+    }
+
+
+    .quality-showcase-kicker {
+      color:
+        rgba(213,195,158,.82);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing: 2.5px;
+    }
+
+
+    .quality-showcase-name {
+      color: white;
+
+      font-size: 15px;
+
+      font-weight: 700;
+    }
+
+
+    .quality-showcase-description {
+      margin-top: 3px;
+
+      color:
+        rgba(255,255,255,.50);
+
+      font-size: 11px;
+
+      line-height: 1.4;
+    }
+
+
+    .quality-showcase-step {
+      color:
+        rgba(255,255,255,.44);
+
+      font-size: 10px;
+
+      letter-spacing: 1px;
+    }
+
+
+    .quality-module::before {
+      content: "";
+
+      position: absolute;
+
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 2px;
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(116,214,202,.92),
+          rgba(116,214,202,.26) 48%,
+          transparent 88%
+        );
+    }
+
+    .quality-module::after {
+      content: "";
+
+      position: absolute;
+
+      top: -72px;
+      left: -62px;
+
+      width: 175px;
+      height: 175px;
+
+      border-radius: 50%;
+
+      background:
+        var(--module-color);
+
+      opacity: .018;
+
+      filter: blur(22px);
+    }
+
+
+    /* =========================================
+       MODULE ICON
+    ========================================== */
+
+    .module-icon {
+      position: relative;
+
+      z-index: 2;
+
+      width: 50px;
+      height: 50px;
+
+      margin-bottom: 22px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 13px;
+
+      font-size: 24px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(111,218,206,.075),
+          rgba(255,255,255,.028)
+        );
+
+      border:
+        1px solid
+        rgba(111,218,206,.13);
+
+      box-shadow:
+        inset 0 1px 0
+        rgba(255,255,255,.035);
+    }
+
+    .module-number {
+      position: absolute;
+
+      top: 18px;
+      right: 18px;
+
+      color:
+        rgba(126,204,195,.36);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing: 2px;
+    }
+
+    .module-name {
+      position: relative;
+
+      z-index: 2;
+
+      margin-bottom: 9px;
+
+      color: white;
+
+      font-size: 19px;
+
+      font-weight: 600;
+    }
+
+    .module-description {
+      position: relative;
+
+      z-index: 2;
+
+      max-width: 88%;
+
+      color:
+        rgba(255,255,255,.47);
+
+      font-size: 12px;
+
+      line-height: 1.55;
+    }
+
+    .module-arrow {
+      position: absolute;
+
+      right: 18px;
+      bottom: 16px;
+
+      color:
+        #76d5ca;
+
+      font-size: 20px;
+    }
+
+
+    /* =========================================
+       EMPTY / LOADING
+    ========================================== */
+
+    .systems-message {
+      display: block;
+
+      padding: 50px;
+
+      text-align: center;
+
+      color:
+        rgba(255,255,255,.3);
+
+      font-size: 13px;
+    }
+
+
+    /* =========================================
+       DETAIL OVERLAY
+    ========================================== */
+
+    .detail-overlay {
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 120;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 28px;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      background:
+        rgba(38,37,34,.78);
+
+      backdrop-filter:
+        blur(18px);
+
+      -webkit-backdrop-filter:
+        blur(18px);
+
+      transition:
+        opacity .38s ease;
+    }
+
+    .detail-overlay.show {
+      opacity: 1;
+
+      pointer-events: auto;
+    }
+
+
+    /* =========================================
+       DETAIL PANEL
+    ========================================== */
+
+    .detail-panel {
+      position: relative;
+
+      width:
+        min(
+          1050px,
+          93vw
+        );
+
+      max-height: 88vh;
+
+      overflow-y: auto;
+
+      padding: 34px;
+
+      border-radius: 20px;
+
+      background:
+        linear-gradient(
+          145deg,
+          #3b3a35,
+          #4a4942
+        );
+
+      border:
+        1px solid
+        rgba(255,255,255,.1);
+
+      box-shadow:
+        0 45px 120px
+        rgba(0,0,0,.72);
+
+      transform:
+        translateY(18px)
+        scale(.98);
+
+      transition:
+        transform .38s ease;
+    }
+
+    .detail-overlay.show
+    .detail-panel {
+      transform:
+        translateY(0)
+        scale(1);
+    }
+
+
+    /* =========================================
+       CLOSE BUTTON
+    ========================================== */
+
+    .detail-close {
+      position: absolute;
+
+      top: 18px;
+      right: 18px;
+
+      width: 40px;
+      height: 40px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      cursor: pointer;
+
+      border-radius: 50%;
+
+      color:
+        rgba(255,255,255,.68);
+
+      background:
+        rgba(255,255,255,.045);
+
+      border:
+        1px solid
+        rgba(255,255,255,.075);
+    }
+
+
+    /* =========================================
+       DETAIL CONTENT
+    ========================================== */
+
+    .detail-label {
+      margin-bottom: 12px;
+
+      color:
+        rgba(111,218,206,.55);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing: 3px;
+    }
+
+    .detail-heading {
+      display: flex;
+
+      align-items: center;
+
+      gap: 15px;
+
+      margin-bottom: 14px;
+    }
+
+    .detail-icon {
+      width: 56px;
+      height: 56px;
+
+      flex-shrink: 0;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 14px;
+
+      font-size: 27px;
+
+      background:
+        rgba(255,255,255,.055);
+
+      border:
+        1px solid
+        rgba(255,255,255,.085);
+    }
+
+    .detail-title {
+      max-width: 80%;
+
+      color: white;
+
+      font-size:
+        clamp(
+          27px,
+          3vw,
+          42px
+        );
+
+      font-weight: 600;
+    }
+
+    .detail-description {
+      max-width: 780px;
+
+      margin:
+        0 0 25px 71px;
+
+      color:
+        rgba(255,255,255,.56);
+
+      font-size: 14px;
+
+      line-height: 1.7;
+    }
+
+
+    /* =========================================
+       DETAIL IMAGE
+    ========================================== */
+
+    .detail-image-wrap {
+      width: 100%;
+
+      min-height: 280px;
+
+      margin-bottom: 22px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      overflow: hidden;
+
+      border-radius: 15px;
+
+      background:
+        rgba(255,255,255,.025);
+
+      border:
+        1px solid
+        rgba(255,255,255,.065);
+    }
+
+    .detail-image {
+      display: none;
+
+      width: 100%;
+
+      max-height: 480px;
+
+      object-fit: contain;
+    }
+
+    .detail-placeholder {
+      padding: 45px;
+
+      text-align: center;
+
+      color:
+        rgba(255,255,255,.25);
+
+      font-size: 12px;
+    }
+
+
+    /* =========================================
+       OPEN SYSTEM
+    ========================================== */
+
+    .detail-link {
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 9px;
+
+      padding:
+        12px 18px;
+
+      border-radius: 9px;
+
+      color: #07100f;
+
+      text-decoration: none;
+
+      font-size: 12px;
+
+      font-weight: 700;
+
+      background:
+        linear-gradient(
+          135deg,
+          #9ce7dd,
+          #58c5b7
+        );
+    }
+
+    .detail-link.hidden {
+      display: none;
+    }
+
+
+    /* =========================================
+       ANIMATIONS
+    ========================================== */
+
+    @keyframes photoIn {
+
+      from {
+        opacity: 0;
+
+        transform:
+          scale(1.02);
+      }
+
+      to {
+        opacity: 1;
+
+        transform:
+          scale(1);
+      }
+
+    }
+
+    @keyframes roleIn {
+
+      from {
+        opacity: 0;
+
+        transform:
+          translateY(-12px);
+      }
+
+      to {
+        opacity: 1;
+
+        transform:
+          translateY(0);
+      }
+
+    }
+
+
+    /* =========================================
+       RESPONSIVE
+    ========================================== */
+
+    @media (
+      max-width: 1100px
+    ) {
+
+      .modules-grid {
+        grid-template-columns:
+          repeat(
+            2,
+            minmax(0,1fr)
+          );
+      }
+
+      .wall-stats {
+        display: none;
+      }
+
+    }
+
+    @media (
+      max-width: 780px
+    ) {
+
+      .wall-sidebar {
+        display: none;
+      }
+
+      .modules-grid {
+        grid-template-columns:
+          1fr;
+      }
+
+      .wall-header {
+        padding:
+          22px 24px;
+      }
+
+      .systems-toolbar {
+        padding:
+          20px;
+      }
+
+      .modules-scroll {
+        padding:
+          0 20px 30px;
+      }
+
+      .detail-description {
+        margin-left: 0;
+      }
+
+    }
+
+
+    /* =========================================
+       PRESENTATION PLAY / PAUSE
+    ========================================== */
+
+    .presentation-control {
+      position: fixed;
+
+      right: 24px;
+      bottom: 24px;
+
+      z-index: 20000;
+
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      padding: 10px 14px;
+
+      border-radius: 999px;
+
+      color: #ffffff;
+
+      background:
+        rgba(5, 12, 12, 0.82);
+
+      border:
+        1px solid
+        rgba(111,218,206,.22);
+
+      box-shadow:
+        0 12px 30px rgba(0,0,0,.36),
+        inset 0 1px 0 rgba(255,255,255,.06);
+
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+
+      cursor: pointer;
+      user-select: none;
+
+      transition:
+        transform .25s ease,
+        background .25s ease,
+        border-color .25s ease;
+    }
+
+    .presentation-control:hover {
+      transform: translateY(-2px);
+
+      background:
+        rgba(10, 24, 23, 0.95);
+
+      border-color:
+        rgba(111,218,206,.48);
+    }
+
+    .presentation-control-icon {
+      width: 20px;
+
+      text-align: center;
+
+      font-size: 15px;
+    }
+
+    .presentation-control-text {
+      font-size: 11px;
+
+      font-weight: 700;
+
+      letter-spacing: 1.5px;
+    }
+
+    body.presentation-paused * {
+      animation-play-state:
+        paused !important;
+    }
+
+
+    /* =========================================
+       CONTINUE TO INDEX5
+    ========================================== */
+
+    .continue-tour {
+      position: fixed;
+
+      right: 24px;
+      bottom: 78px;
+
+      z-index: 19000;
+
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      padding:
+        11px 16px;
+
+      border-radius: 999px;
+
+      opacity: 0;
+      pointer-events: none;
+
+      color:
+        rgba(255,255,255,.88);
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(78,188,175,.18),
+          rgba(255,255,255,.045)
+        );
+
+      border:
+        1px solid
+        rgba(111,218,206,.22);
+
+      box-shadow:
+        0 14px 34px
+        rgba(0,0,0,.30);
+
+      backdrop-filter:
+        blur(14px);
+
+      -webkit-backdrop-filter:
+        blur(14px);
+
+      cursor: pointer;
+
+      transition:
+        opacity .6s ease,
+        transform .25s ease,
+        background .25s ease,
+        border-color .25s ease;
+    }
+
+    .continue-tour.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .continue-tour:hover {
+      transform:
+        translateY(-2px);
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(90,213,198,.28),
+          rgba(255,255,255,.07)
+        );
+
+      border-color:
+        rgba(111,218,206,.48);
+    }
+
+    .continue-tour-text {
+      font-size: 11px;
+
+      font-weight: 700;
+
+      letter-spacing: 1.3px;
+    }
+
+    .continue-tour-arrow {
+      color: #71dbc7;
+
+      font-size: 17px;
+    }
+
+
+    /* =========================================
+       TRANSITION TO INDEX5
+    ========================================== */
+
+    .next-transition-cover {
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 30000;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      background:
+        radial-gradient(
+          circle at 60% 45%,
+          rgba(74,184,171,.18),
+          rgba(3,8,8,.97) 58%,
+          #020404 100%
+        );
+
+      transition:
+        opacity .8s ease;
+    }
+
+    .next-transition-cover.active {
+      opacity: 1;
+    }
+
+
+    @media (max-width: 780px) {
+
+      .presentation-control {
+        right: 14px;
+        bottom: 14px;
+      }
+
+      .presentation-control-text {
+        display: none;
+      }
+
+      .continue-tour {
+        right: 14px;
+        bottom: 66px;
+      }
+
+      .continue-tour-text {
+        display: none;
+      }
+
+    }
+
+
+    /* =========================================
+       VIEWPORT FIT V2
+    ========================================== */
+
+    .quality-wall {
+      position: fixed;
+
+      inset: 0;
+
+      width: 100vw;
+
+      height: 100vh;
+      height: 100dvh;
+    }
+
+    .wall-body {
+      height:
+        calc(100vh - 116px);
+
+      height:
+        calc(100dvh - 116px);
+    }
+
+
+    /* =========================================
+       QUALITY SYSTEM TITLE + EMOJI
+    ========================================== */
+
+    .module-title-row {
+      position: relative;
+
+      z-index: 2;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 11px;
+
+      min-width: 0;
+
+      margin-bottom: 10px;
+    }
+
+    .module-icon-inline {
+      width: 39px;
+      height: 39px;
+
+      flex: 0 0 39px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 11px;
+
+      font-size: 21px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(226,215,193,.095),
+          rgba(255,255,255,.035)
+        );
+
+      border:
+        1px solid
+        rgba(226,215,193,.13);
+
+      box-shadow:
+        inset 0 1px 0
+        rgba(255,255,255,.04);
+    }
+
+    .module-title-row
+    .module-name {
+      min-width: 0;
+
+      margin-bottom: 0;
+
+      line-height: 1.18;
+    }
+
+    .module-number {
+      display: none !important;
+    }
+
+
+    /* =========================================
+       SHORT VIEWPORT / PROJECTOR MODE
+    ========================================== */
+
+    @media (max-height: 760px) {
+
+      .wall-header {
+        height: 82px;
+
+        padding:
+          13px 24px;
+      }
+
+      .wall-heading-small {
+        margin-bottom: 4px;
+
+        font-size: 8px;
+      }
+
+      .wall-heading {
+        font-size: 26px;
+      }
+
+      .wall-subtitle {
+        margin-top: 3px;
+
+        font-size: 8px;
+      }
+
+      .wall-stats {
+        gap: 7px;
+      }
+
+      .wall-stat {
+        min-width: 82px;
+
+        padding:
+          7px 9px;
+      }
+
+      .wall-stat-value {
+        font-size: 14px;
+      }
+
+      .wall-stat-label {
+        font-size: 7px;
+      }
+
+      .wall-body {
+        height:
+          calc(100vh - 82px);
+
+        height:
+          calc(100dvh - 82px);
+      }
+
+      .wall-sidebar {
+        width: 192px;
+
+        padding:
+          14px 12px;
+      }
+
+      .sidebar-title {
+        margin:
+          0 8px 9px;
+      }
+
+      .sidebar-item {
+        margin-bottom: 3px;
+
+        padding:
+          9px 10px;
+
+        font-size: 11px;
+      }
+
+      .sidebar-divider {
+        margin:
+          12px 0;
+      }
+
+      .quality-pulse {
+        padding: 10px;
+      }
+
+      .pulse-title {
+        margin-bottom: 5px;
+
+        font-size: 10px;
+      }
+
+      .pulse-text {
+        font-size: 9px;
+      }
+
+      .systems-toolbar {
+        padding:
+          11px 20px 8px;
+      }
+
+      .systems-title {
+        font-size: 18px;
+      }
+
+      .systems-caption {
+        margin-top: 3px;
+
+        font-size: 8px;
+      }
+
+      .systems-count {
+        padding:
+          6px 9px;
+
+        font-size: 9px;
+      }
+
+      .quality-showcase-strip {
+        margin:
+          0 20px 8px;
+
+        padding:
+          8px 11px;
+
+        border-radius: 10px;
+      }
+
+      .quality-showcase-name {
+        font-size: 13px;
+      }
+
+      .quality-showcase-description {
+        margin-top: 2px;
+
+        font-size: 10px;
+      }
+
+      .modules-scroll {
+        padding:
+          0 20px 18px;
+      }
+
+      .modules-grid {
+        gap: 12px;
+
+        padding-bottom: 14px;
+      }
+
+      .quality-module {
+        min-height: 146px;
+
+        padding: 14px;
+
+        border-radius: 13px;
+      }
+
+      .module-title-row {
+        gap: 9px;
+
+        margin-bottom: 7px;
+      }
+
+      .module-icon-inline {
+        width: 34px;
+        height: 34px;
+
+        flex-basis: 34px;
+
+        border-radius: 9px;
+
+        font-size: 18px;
+      }
+
+      .module-name {
+        font-size: 17px;
+      }
+
+      .module-description {
+        max-width: 95%;
+
+        font-size: 11px;
+
+        line-height: 1.42;
+      }
+
+    }
+
+    /* =========================================
+       QUALITY LUXURY PALETTE V3
+       Smoked Sage Stone + Champagne Metal
+       More refined than brown, still warm.
+    ========================================== */
+
+    .quality-wall,
+    .wall-background {
+      background:
+        radial-gradient(
+          circle at 76% 16%,
+          rgba(139,170,158,.14),
+          transparent 34%
+        ),
+        radial-gradient(
+          circle at 18% 82%,
+          rgba(193,171,125,.10),
+          transparent 30%
+        ),
+        linear-gradient(
+          135deg,
+          #282c28 0%,
+          #343832 48%,
+          #242824 100%
+        ) !important;
+    }
+
+    .wall-header {
+      background:
+        rgba(38,42,38,.90) !important;
+
+      border-color:
+        rgba(218,207,182,.10) !important;
+    }
+
+    .wall-sidebar {
+      background:
+        rgba(35,39,35,.90) !important;
+
+      border-color:
+        rgba(218,207,182,.08) !important;
+    }
+
+    .sidebar-item.active {
+      background:
+        linear-gradient(
+          90deg,
+          rgba(133,164,153,.16),
+          rgba(193,171,125,.07)
+        ) !important;
+
+      border-color:
+        rgba(161,189,179,.16) !important;
+    }
+
+    .quality-pulse {
+      background:
+        linear-gradient(
+          145deg,
+          rgba(66,77,69,.72),
+          rgba(47,56,50,.76)
+        ) !important;
+
+      border-color:
+        rgba(144,173,163,.16) !important;
+    }
+
+    .quality-showcase-strip {
+      background:
+        linear-gradient(
+          135deg,
+          rgba(74,89,80,.80),
+          rgba(61,67,58,.78)
+        ) !important;
+
+      border:
+        1px solid
+        rgba(219,207,181,.12) !important;
+    }
+
+    .quality-module {
+      background:
+        linear-gradient(
+          145deg,
+          rgba(61,67,59,.97),
+          rgba(46,52,46,.98)
+        ) !important;
+
+      border:
+        1px solid
+        rgba(221,211,188,.105) !important;
+
+      box-shadow:
+        0 18px 38px
+        rgba(17,19,17,.24),
+        inset 0 1px 0
+        rgba(255,255,255,.026) !important;
+    }
+
+    .quality-module:hover,
+    .quality-module.auto-focus {
+      background:
+        linear-gradient(
+          145deg,
+          rgba(70,77,68,.99),
+          rgba(52,59,52,.99)
+        ) !important;
+
+      border-color:
+        rgba(198,177,132,.36) !important;
+
+      box-shadow:
+        0 24px 48px
+        rgba(16,18,16,.30),
+        0 0 0 1px
+        rgba(198,177,132,.05),
+        0 0 32px
+        rgba(126,164,153,.08) !important;
+    }
+
+    .quality-module::before {
+      background:
+        linear-gradient(
+          90deg,
+          #bca675,
+          rgba(129,162,151,.52) 48%,
+          transparent 88%
+        ) !important;
+    }
+
+    .module-icon-inline,
+    .detail-icon {
+      background:
+        linear-gradient(
+          145deg,
+          rgba(204,190,157,.12),
+          rgba(126,160,149,.08)
+        ) !important;
+
+      border:
+        1px solid
+        rgba(215,202,176,.14) !important;
+    }
+
+    .detail-panel {
+      background:
+        linear-gradient(
+          145deg,
+          #353a34,
+          #292e29
+        ) !important;
+
+      border:
+        1px solid
+        rgba(219,208,184,.13) !important;
+    }
+
+    .detail-link {
+      background:
+        linear-gradient(
+          135deg,
+          #d0bd92,
+          #ad9869
+        ) !important;
+    }
+
+    .systems-count,
+    .wall-stat {
+      background:
+        rgba(72,79,70,.64) !important;
+
+      border-color:
+        rgba(218,207,182,.10) !important;
+    }
+
+    /* =========================================
+       CINEMATIC RETURN BRIDGE
+       Systems -> Quality Manager -> next role
+    ========================================== */
+
+    .quality-scene:not(.wall-mode)
+    .office-photo-wrap {
+      transition:
+        transform 1.45s
+        cubic-bezier(.18,.78,.2,1),
+        opacity 1.20s ease,
+        filter 1.20s ease;
+    }
+
+    .quality-scene:not(.wall-mode)
+    .office-blur {
+      transition:
+        transform 1.45s ease,
+        filter 1.20s ease,
+        opacity 1.20s ease;
+    }
+
+    .quality-wall {
+      transition:
+        opacity 1.05s ease,
+        transform 1.25s
+        cubic-bezier(.18,.75,.2,1) !important;
+    }
+
+
+    /* =========================================
+       QUALITY MANAGER -> QUALITY TEAM
+       Optical focus instead of a separate door
+    ========================================== */
+
+    .next-transition-cover.quality-team-focus {
+      overflow: hidden;
+
+      background:
+        linear-gradient(
+          to top,
+          rgba(15,17,15,.64),
+          transparent 50%
+        ),
+        url('assets/images/Qv0Swkg.png')
+        center / cover no-repeat;
+
+      transform:
+        scale(1.18);
+
+      filter:
+        blur(10px)
+        brightness(.50)
+        saturate(.78);
+
+      clip-path:
+        inset(
+          23% 31%
+          round 24px
+        );
+
+      transition:
+        opacity .50s ease,
+        transform 1.60s
+        cubic-bezier(.18,.78,.18,1),
+        filter 1.35s ease,
+        clip-path 1.45s
+        cubic-bezier(.18,.78,.18,1);
+    }
+
+    .next-transition-cover.quality-team-focus.active {
+      opacity: 1;
+
+      transform:
+        scale(1);
+
+      filter:
+        blur(0)
+        brightness(.82)
+        saturate(.94);
+
+      clip-path:
+        inset(
+          0 round 0
+        );
+    }
+
+    .quality-team-focus::before {
+      content: "";
+
+      position: absolute;
+
+      inset: 22% 30%;
+
+      border:
+        1px solid
+        rgba(213,188,139,.52);
+
+      border-radius: 24px;
+
+      box-shadow:
+        0 0 0 999px
+        rgba(12,14,13,.22),
+        0 0 50px
+        rgba(200,176,130,.12);
+
+      opacity: 0;
+
+      transition:
+        inset 1.35s
+        cubic-bezier(.18,.78,.18,1),
+        border-radius 1.35s ease,
+        opacity .45s ease;
+    }
+
+    .quality-team-focus.active::before {
+      inset: 0;
+
+      border-radius: 0;
+
+      opacity: 1;
+    }
+
+    .focus-caption {
+      position: absolute;
+
+      z-index: 4;
+
+      left: 50%;
+      bottom: 8.5%;
+
+      transform:
+        translateX(-50%)
+        translateY(12px);
+
+      opacity: 0;
+
+      padding:
+        9px 14px;
+
+      border-radius: 999px;
+
+      color:
+        rgba(255,255,255,.82);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing: 2.1px;
+
+      background:
+        rgba(41,44,38,.52);
+
+      border:
+        1px solid
+        rgba(213,188,139,.18);
+
+      backdrop-filter:
+        blur(12px);
+
+      transition:
+        opacity .50s ease .58s,
+        transform .70s ease .58s;
+    }
+
+    .quality-team-focus.active
+    .focus-caption {
+      opacity: 1;
+
+      transform:
+        translateX(-50%)
+        translateY(0);
+    }
+
+
+    /* 2050 V2 — stable single image reveal */
+    .office-photo-wrap {
+      opacity: 1 !important;
+      animation: none !important;
+    }
+    
+
+    /* =========================================
+       V2 — QUALITY OPTICAL HANDOFF
+       No destination-photo double reveal.
+    ========================================== */
+    .next-transition-cover.quality-team-focus {
+      background:
+        radial-gradient(
+          circle at 50% 48%,
+          rgba(192,174,137,.15),
+          transparent 26%
+        ),
+        linear-gradient(
+          135deg,
+          #252a25,
+          #3a4038 48%,
+          #202520
+        ) !important;
+
+      filter: none !important;
+    }
+
+    .quality-team-focus::after {
+      content: "";
+
+      position: absolute;
+
+      inset: 18% 22%;
+
+      border-radius: 26px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(255,255,255,.035),
+          rgba(129,150,133,.09)
+        );
+
+      border:
+        1px solid
+        rgba(211,190,149,.18);
+
+      box-shadow:
+        0 0 70px
+        rgba(0,0,0,.22),
+        inset 0 0 45px
+        rgba(255,255,255,.02);
+
+      transform:
+        scale(.76);
+
+      opacity: 0;
+
+      transition:
+        transform 1.35s
+        cubic-bezier(.18,.78,.18,1),
+        opacity .45s ease;
+    }
+
+    .quality-team-focus.active::after {
+      transform:
+        scale(1.12);
+
+      opacity: 1;
+    }
+    
+
+    /* =========================================
+       CREATIVE V3 — SINGLE VISIBLE PHOTO
+    ========================================== */
+
+    .office-blur {
+      background-image: none !important;
+      background:
+        radial-gradient(
+          circle at 50% 42%,
+          rgba(195,167,111,.10),
+          transparent 31%
+        ),
+        linear-gradient(
+          135deg,
+          #22292a,
+          #111617
+        ) !important;
+    }
+
+    .office-photo {
+      animation: none !important;
+      transform: none !important;
+    }
+
+
+    /* =========================================
+       CREATIVE V3 — QUALITY MANAGER
+       QUALITY ORBIT / LENS
+    ========================================== */
+
+    .modules-scroll {
+      overflow: hidden !important;
+      padding:
+        0 18px 18px !important;
+    }
+
+    .quality-orbit-stage {
+      position: relative;
+      width: 100%;
+      height: 430px;
+      max-height: 48vh;
+      min-height: 330px;
+      overflow: hidden;
+      border-radius: 18px;
+
+      background:
+        radial-gradient(
+          circle at center,
+          rgba(153,167,146,.10),
+          transparent 27%
+        ),
+        radial-gradient(
+          circle at center,
+          transparent 0 31%,
+          rgba(212,190,147,.045) 31.3% 31.7%,
+          transparent 32% 47%,
+          rgba(132,155,139,.035) 47.3% 47.7%,
+          transparent 48%
+        ),
+        linear-gradient(
+          145deg,
+          rgba(52,59,50,.66),
+          rgba(34,40,35,.76)
+        );
+
+      border:
+        1px solid
+        rgba(211,190,149,.08);
+
+      box-shadow:
+        inset 0 0 60px
+        rgba(0,0,0,.16);
+    }
+
+    .quality-lens-core {
+      position: absolute;
+      z-index: 4;
+      left: 50%;
+      top: 50%;
+      width: 180px;
+      height: 180px;
+      transform:
+        translate(-50%,-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(105,127,108,.30),
+          rgba(46,56,48,.92) 56%,
+          rgba(31,37,33,.98) 72%
+        );
+
+      border:
+        1px solid
+        rgba(217,196,154,.22);
+
+      box-shadow:
+        0 0 0 9px
+        rgba(255,255,255,.012),
+        0 0 45px
+        rgba(0,0,0,.24),
+        inset 0 0 34px
+        rgba(255,255,255,.025);
+    }
+
+    .lens-ring {
+      position: absolute;
+      border-radius: 50%;
+      border:
+        1px solid
+        rgba(216,194,150,.13);
+    }
+
+    .ring-one {
+      inset: -23px;
+    }
+
+    .ring-two {
+      inset: -48px;
+      border-color:
+        rgba(139,159,142,.10);
+    }
+
+    .lens-center {
+      text-align: center;
+    }
+
+    .lens-small {
+      margin-bottom: 7px;
+      color:
+        rgba(213,190,146,.63);
+      font-size: 7px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .lens-main {
+      color: white;
+      font-size: 22px;
+      font-weight: 650;
+      letter-spacing: 1.7px;
+    }
+
+    .lens-sub {
+      margin-top: 8px;
+      color:
+        rgba(255,255,255,.26);
+      font-size: 6.5px;
+      letter-spacing: 1.3px;
+    }
+
+    .quality-orbit {
+      position: absolute !important;
+      inset: 0 !important;
+      display: block !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .quality-node {
+      --module-color: #a99b78;
+      position: absolute;
+      width: 116px;
+      min-height: 60px;
+      transform:
+        translate(-50%,-50%);
+      padding:
+        9px 10px 8px;
+      cursor: pointer;
+      text-align: center;
+      color: white;
+      border:
+        1px solid
+        rgba(215,194,151,.09);
+      border-radius: 999px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(65,73,62,.88),
+          rgba(42,49,43,.94)
+        );
+
+      box-shadow:
+        0 12px 28px
+        rgba(0,0,0,.18);
+
+      transition:
+        transform .28s ease,
+        border-color .28s ease,
+        background .28s ease,
+        box-shadow .28s ease;
+    }
+
+    .quality-node:hover,
+    .quality-node.auto-focus {
+      transform:
+        translate(-50%,-50%)
+        scale(1.12);
+      border-color:
+        rgba(215,190,142,.35);
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(81,91,76,.98),
+          rgba(52,61,53,.98)
+        );
+
+      box-shadow:
+        0 16px 34px
+        rgba(0,0,0,.27),
+        0 0 28px
+        rgba(158,141,104,.08);
+    }
+
+    .quality-node-dot {
+      position: absolute;
+      left: 50%;
+      top: -5px;
+      width: 9px;
+      height: 9px;
+      transform:
+        translateX(-50%);
+      border-radius: 50%;
+      background:
+        var(--module-color);
+      box-shadow:
+        0 0 18px
+        rgba(200,180,130,.10);
+    }
+
+    .quality-node-index {
+      margin-bottom: 3px;
+      color:
+        rgba(213,190,146,.42);
+      font-size: 6.5px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .quality-node-name {
+      overflow: hidden;
+      color:
+        rgba(255,255,255,.82);
+      font-size: 8.5px;
+      font-weight: 650;
+      line-height: 1.2;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    @media (max-height: 760px) {
+
+      .quality-orbit-stage {
+        height: 310px;
+        min-height: 280px;
+      }
+
+      .quality-lens-core {
+        width: 135px;
+        height: 135px;
+      }
+
+      .quality-node {
+        width: 96px;
+        min-height: 50px;
+        padding:
+          7px 8px;
+      }
+
+      .quality-node-name {
+        font-size: 7.5px;
+      }
+
+      .lens-main {
+        font-size: 17px;
+      }
+
+    }
+
+
+    /* =========================================
+       FINAL CLOSEOUT — QUALITY MANAGER SYSTEMS
+       No numbering. Name + description visible.
+    ========================================== */
+
+    .quality-node {
+      width:
+        152px !important;
+
+      min-height:
+        76px !important;
+
+      padding:
+        10px 12px !important;
+
+      border-radius:
+        16px !important;
+    }
+
+
+    .quality-node-index {
+      display:
+        none !important;
+    }
+
+
+    .quality-node-name {
+      overflow:
+        hidden;
+
+      margin-bottom:
+        5px;
+
+      color:
+        rgba(255,255,255,.90) !important;
+
+      font-size:
+        9.3px !important;
+
+      font-weight:
+        650 !important;
+
+      line-height:
+        1.22 !important;
+
+      white-space:
+        nowrap;
+
+      text-overflow:
+        ellipsis;
+    }
+
+
+    .quality-node-description {
+      display:
+        -webkit-box;
+
+      overflow:
+        hidden;
+
+      color:
+        rgba(255,255,255,.40);
+
+      font-size:
+        7.7px;
+
+      line-height:
+        1.35;
+
+      -webkit-line-clamp:
+        2;
+
+      -webkit-box-orient:
+        vertical;
+    }
+
+
+    @media (max-height: 760px) {
+
+      .quality-node {
+        width:
+          126px !important;
+
+        min-height:
+          62px !important;
+
+        padding:
+          8px 9px !important;
+      }
+
+      .quality-node-name {
+        margin-bottom:
+          3px;
+
+        font-size:
+          8px !important;
+      }
+
+      .quality-node-description {
+        font-size:
+          6.8px;
+      }
+
+    }
+
+
+    /* =========================================
+       QUALITY MANAGER — FOCUS / HOVER ONLY
+       Auto focus: larger and clearer.
+       Hover: larger again + full title/description.
+       No numbering.
+    ========================================== */
+
+    .quality-node {
+      z-index:
+        2;
+
+      width:
+        152px !important;
+
+      min-height:
+        76px !important;
+
+      overflow:
+        hidden;
+
+      transform:
+        translate(-50%,-50%)
+        scale(1);
+
+      transition:
+        transform .32s
+        cubic-bezier(.2,.72,.2,1),
+        width .32s ease,
+        min-height .32s ease,
+        background .28s ease,
+        border-color .28s ease,
+        box-shadow .28s ease,
+        z-index 0s;
+    }
+
+
+    /*
+      Automatic showcase:
+      slightly larger so the viewer can read it.
+    */
+    .quality-node.auto-focus {
+      z-index:
+        20;
+
+      width:
+        196px !important;
+
+      min-height:
+        96px !important;
+
+      transform:
+        translate(-50%,-50%)
+        scale(1.08) !important;
+
+      border-color:
+        rgba(221,196,150,.42) !important;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(83,94,79,.98),
+          rgba(51,61,52,.99)
+        ) !important;
+
+      box-shadow:
+        0 18px 42px
+        rgba(0,0,0,.34),
+        0 0 36px
+        rgba(183,159,112,.09) !important;
+    }
+
+
+    /*
+      Mouse hover:
+      larger than auto-focus and fully readable.
+    */
+    .quality-node:hover {
+      z-index:
+        40;
+
+      width:
+        232px !important;
+
+      min-height:
+        118px !important;
+
+      transform:
+        translate(-50%,-50%)
+        scale(1.12) !important;
+
+      border-color:
+        rgba(225,201,154,.52) !important;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(91,102,85,.99),
+          rgba(55,65,56,.99)
+        ) !important;
+
+      box-shadow:
+        0 22px 52px
+        rgba(0,0,0,.38),
+        0 0 42px
+        rgba(187,161,111,.12) !important;
+    }
+
+
+    /*
+      If the currently auto-focused node is hovered,
+      hover wins.
+    */
+    .quality-node.auto-focus:hover {
+      width:
+        242px !important;
+
+      min-height:
+        124px !important;
+
+      transform:
+        translate(-50%,-50%)
+        scale(1.14) !important;
+    }
+
+
+    .quality-node-name {
+      overflow:
+        hidden;
+
+      display:
+        block;
+
+      margin-bottom:
+        5px;
+
+      color:
+        rgba(255,255,255,.92) !important;
+
+      font-size:
+        9.3px !important;
+
+      font-weight:
+        650 !important;
+
+      line-height:
+        1.22 !important;
+
+      white-space:
+        nowrap;
+
+      text-overflow:
+        ellipsis;
+    }
+
+
+    .quality-node-description {
+      display:
+        -webkit-box;
+
+      overflow:
+        hidden;
+
+      color:
+        rgba(255,255,255,.43);
+
+      font-size:
+        7.7px;
+
+      line-height:
+        1.38;
+
+      -webkit-line-clamp:
+        2;
+
+      -webkit-box-orient:
+        vertical;
+    }
+
+
+    /*
+      Auto focus gets more room for description.
+    */
+    .quality-node.auto-focus
+    .quality-node-description {
+      color:
+        rgba(255,255,255,.58);
+
+      font-size:
+        8.2px;
+
+      -webkit-line-clamp:
+        3;
+    }
+
+
+    /*
+      Hover reveals the full text.
+    */
+    .quality-node:hover
+    .quality-node-name,
+    .quality-node.auto-focus:hover
+    .quality-node-name {
+      white-space:
+        normal;
+
+      overflow:
+        visible;
+
+      text-overflow:
+        clip;
+
+      font-size:
+        10.2px !important;
+    }
+
+
+    .quality-node:hover
+    .quality-node-description,
+    .quality-node.auto-focus:hover
+    .quality-node-description {
+      display:
+        block;
+
+      overflow:
+        visible;
+
+      color:
+        rgba(255,255,255,.68);
+
+      font-size:
+        8.7px;
+
+      line-height:
+        1.45;
+
+      -webkit-line-clamp:
+        unset;
+    }
+
+
+    /*
+      Numbering remains completely hidden.
+    */
+    .quality-node-index {
+      display:
+        none !important;
+    }
+
+
+    @media (max-height: 760px) {
+
+      .quality-node.auto-focus {
+        width:
+          164px !important;
+
+        min-height:
+          78px !important;
+      }
+
+      .quality-node:hover {
+        width:
+          198px !important;
+
+        min-height:
+          96px !important;
+      }
+
+      .quality-node.auto-focus:hover {
+        width:
+          206px !important;
+
+        min-height:
+          100px !important;
+      }
+
+      .quality-node:hover
+      .quality-node-name {
+        font-size:
+          9px !important;
+      }
+
+      .quality-node:hover
+      .quality-node-description {
+        font-size:
+          7.6px;
+      }
+
+    }
+
+  
+
+    /* V30 readability pass — keep the photo visible and remove heavy black dialogue cards. */
+    .dialogue{width:min(940px,78vw) !important;bottom:3.2% !important;}
+    .dialogue-box{
+      padding:9px 16px !important;
+      border:none !important;
+      border-radius:10px !important;
+      background:transparent !important;
+      box-shadow:none !important;
+      backdrop-filter:none !important;
+      -webkit-backdrop-filter:none !important;
+      color:#e6c17e !important;
+      text-shadow:0 2px 9px rgba(0,0,0,.98),0 1px 2px rgba(0,0,0,.95) !important;
+    }
+    .dialogue-box::after{display:none !important;}
+    .dialogue-box, .dialogue-box > div{color:#e6c17e !important;}
+    .tour-ar-subtitle{
+      margin-top:4px !important;
+      padding-top:4px !important;
+      border-top:none !important;
+      color:#e6c17e !important;
+      line-height:1.45 !important;
+      text-shadow:0 2px 9px rgba(0,0,0,.98) !important;
+    }
+    .role-indicator{top:3.2% !important;left:3.2% !important;max-width:36vw !important;}
+    .role-name{max-width:410px !important;font-size:clamp(17px,1.55vw,25px) !important;line-height:1.14 !important;}
+    @media(max-width:820px){.dialogue{width:94vw !important;}}
+
+  </style>
+
+<style id="systemDescriptionReadingStyle">
+.quality-showcase-description.is-speaking-description{
+  color:#0b0d0f !important;
+  background:rgba(255,255,255,.94) !important;
+  border-radius:10px !important;
+  padding:8px 10px !important;
+  font-weight:800 !important;
+  box-shadow:0 8px 22px rgba(0,0,0,.16) !important;
+}
+</style>
+  <script>/* FIXED_AUDIO_NO_CUTOFF */</script>
+</head>
+
+
+<body>
+
+  <main
+    id="qualityScene"
+    class="quality-scene"
+  >
+
+    <!-- =====================================
+         OFFICE BACKGROUND
+    ====================================== -->
+
+    <div class="office-blur"></div>
+
+
+    <!-- =====================================
+         QUALITY MANAGER PHOTO
+    ====================================== -->
+
+    <div class="office-photo-wrap">
+
+      <img referrerpolicy="no-referrer"
+        class="office-photo"
+        src="assets/images/NJoRzzC.png"
+        alt="Quality Manager"
+      >
+
+    </div>
+
+
+    <div class="top-shadow"></div>
+    <div class="bottom-shadow"></div>
+
+
+    <!-- =====================================
+         ROLE
+    ====================================== -->
+
+    <div class="role-indicator">
+
+      <div class="role-small">
+        CUSTOMER SUPPORT CENTER
+      </div>
+
+      <div class="role-name">
+        Quality Manager
+      </div>
+
+      <div class="role-line"></div>
+
+    </div>
+
+
+    <!-- =====================================
+         DIALOGUE 1
+    ====================================== -->
+
+    <div
+      id="dialogue1"
+      data-manual-sequence="1"
+      class="dialogue visitor"
+    >
+
+      <div class="dialogue-name">
+        VISITOR
+      </div>
+
+      <div class="dialogue-box">
+        Now I understand the operational side. How does Quality turn performance into improvement?
+      </div>
+
+    </div>
+
+
+    <!-- =====================================
+         DIALOGUE 2
+    ====================================== -->
+
+    <div
+      id="dialogue2"
+      data-manual-sequence="1"
+      class="dialogue"
+    >
+
+      <div class="dialogue-name">
+        QUALITY MANAGER
+      </div>
+
+      <div class="dialogue-box">
+        We monitor service quality, review performance, and analyze employee mistakes. For the mistakes assigned to Quality, I identify root causes, look for patterns, and define corrective actions or solutions to prevent them from repeating.
+      </div>
+
+    </div>
+
+
+    <!-- =====================================
+         DIALOGUE 3
+    ====================================== -->
+
+    <div
+      id="dialogue3"
+      data-manual-sequence="1"
+      class="dialogue visitor"
+    >
+
+      <div class="dialogue-name">
+        VISITOR
+      </div>
+
+      <div class="dialogue-box">
+        And how do you monitor that in practice?
+      </div>
+
+    </div>
+
+
+    <div
+      id="dialogue4"
+      data-manual-sequence="1"
+      class="dialogue"
+    >
+
+      <div class="dialogue-name">
+        QUALITY MANAGER
+      </div>
+
+      <div class="dialogue-box">
+        We track that work through our quality systems, controls and review tools. Let me show you our Quality Control Wall.
+      </div>
+
+    </div>
+
+
+    <!-- =====================================
+         ENDING DIALOGUES
+    ====================================== -->
+
+    <div
+      id="endDialogue1"
+      data-manual-sequence="1"
+      class="dialogue visitor"
+    >
+
+      <div class="dialogue-name">
+        VISITOR
+      </div>
+
+      <div class="dialogue-box">
+        I can see how the quality process connects monitoring with improvement.
+      </div>
+
+    </div>
+
+
+    <div
+      id="endDialogue2"
+      data-manual-sequence="1"
+      class="dialogue"
+    >
+
+      <div class="dialogue-name">
+        QUALITY MANAGER
+      </div>
+
+      <div class="dialogue-box">
+        Exactly. We use these insights to identify gaps, coach the team, and continuously improve the customer experience.
+      </div>
+
+    </div>
+
+
+    <div
+      id="endDialogue3"
+      data-manual-sequence="1"
+      class="dialogue"
+    >
+
+      <div class="dialogue-name">
+        QUALITY MANAGER
+      </div>
+
+      <div class="dialogue-box">
+        You can continue the tour to the next part of the support center.
+      </div>
+
+    </div>
+
+
+    <!-- =====================================
+         QUALITY CONTROL WALL
+    ====================================== -->
+
+    <section
+      id="qualityWall"
+      class="quality-wall"
+    >
+
+      <div class="wall-background"></div>
+
+      <div class="wall-grid"></div>
+
+
+      <!-- HEADER -->
+
+      <header class="wall-header">
+
+        <div>
+
+          <div class="wall-heading-small">
+            QUALITY OPERATIONS CENTER
+          </div>
+
+          <div class="wall-heading">
+            Quality Control Wall
+          </div>
+
+          <div class="wall-subtitle">
+            MONITOR · REVIEW · IMPROVE
+          </div>
+
+        </div>
+
+
+        <div class="wall-stats">
+
+          <div class="wall-stat">
+
+            <div class="wall-stat-value green">
+              LIVE
+            </div>
+
+            <div class="wall-stat-label">
+              STATUS
+            </div>
+
+          </div>
+
+
+          <div class="wall-stat">
+
+            <div
+              id="topSystemsCount"
+              class="wall-stat-value"
+            >
+              0
+            </div>
+
+            <div class="wall-stat-label">
+              SYSTEMS
+            </div>
+
+          </div>
+
+
+          <div class="wall-stat">
+
+            <div class="wall-stat-value">
+              ✓
+            </div>
+
+            <div class="wall-stat-label">
+              CONTROL
+            </div>
+
+          </div>
+
+        </div>
+
+      </header>
+
+
+      <!-- BODY -->
+
+      <div class="wall-body">
+
+
+        <!-- SIDEBAR -->
+
+        <aside class="wall-sidebar">
+
+          <div class="sidebar-title">
+            QUALITY VIEW
+          </div>
+
+
+          <div class="sidebar-item active">
+
+            <div class="sidebar-icon">
+              ◉
+            </div>
+
+            <div>
+              Systems Overview
+            </div>
+
+          </div>
+
+
+          <div class="sidebar-item">
+
+            <div class="sidebar-icon">
+              ◎
+            </div>
+
+            <div>
+              Monitoring
+            </div>
+
+          </div>
+
+
+          <div class="sidebar-item">
+
+            <div class="sidebar-icon">
+              ◇
+            </div>
+
+            <div>
+              Audits
+            </div>
+
+          </div>
+
+
+          <div class="sidebar-item">
+
+            <div class="sidebar-icon">
+              △
+            </div>
+
+            <div>
+              Coaching
+            </div>
+
+          </div>
+
+
+          <div class="sidebar-item">
+
+            <div class="sidebar-icon">
+              □
+            </div>
+
+            <div>
+              Reports
+            </div>
+
+          </div>
+
+
+          <div class="sidebar-divider"></div>
+
+
+          <div class="quality-pulse">
+
+            <div class="pulse-title">
+
+              <span class="pulse-dot"></span>
+
+              Quality Pulse
+
+            </div>
+
+            <div class="pulse-text">
+              Systems are connected and ready for review.
+            </div>
+
+          </div>
+
+        </aside>
+
+
+        <!-- SYSTEMS -->
+
+        <section class="systems-area">
+
+
+          <div class="systems-toolbar">
+
+            <div>
+
+              <div class="systems-title">
+                Quality Systems
+              </div>
+
+              <div class="systems-caption">
+                CONTROL · MONITORING · IMPROVEMENT
+              </div>
+
+            </div>
+
+
+            <div
+              id="systemsCount"
+              class="systems-count"
+            >
+              Loading...
+            </div>
+
+          </div>
+
+
+          <div
+            id="qualityShowcaseStrip"
+            class="quality-showcase-strip"
+          >
+
+            <div class="quality-showcase-kicker">
+              AUTO QUALITY REVIEW
+            </div>
+
+            <div>
+
+              <div
+                id="qualityShowcaseName"
+                class="quality-showcase-name"
+              >
+                Preparing quality systems...
+              </div>
+
+              <div
+                id="qualityShowcaseDescription"
+                class="quality-showcase-description"
+              >
+                Every quality system will be reviewed automatically.
+              </div>
+
+            </div>
+
+            <div
+              id="qualityShowcaseStep"
+              class="quality-showcase-step"
+            >
+              —
+            </div>
+
+          </div>
+
+
+          <!-- SCROLLABLE SYSTEMS -->
+
+          <div class="modules-scroll">
+
+            <div class="quality-orbit-stage">
+
+              <div class="quality-lens-core">
+
+                <div class="lens-ring ring-one"></div>
+
+                <div class="lens-ring ring-two"></div>
+
+                <div class="lens-center">
+
+                  <div class="lens-small">
+                    QUALITY LENS
+                  </div>
+
+                  <div class="lens-main">
+                    CONTROL
+                  </div>
+
+                  <div class="lens-sub">
+                    REVIEW · VERIFY · IMPROVE
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              <div
+                id="modulesGrid"
+                class="modules-grid quality-orbit"
+              ></div>
+
+            </div>
+
+
+            <div
+              id="systemsMessage"
+              class="systems-message"
+            >
+              Loading quality systems...
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+
+  <!-- =====================================
+       PRESENTATION CONTROLS
+  ====================================== -->
+
+  <button
+    id="presentationControl"
+    class="presentation-control"
+    type="button"
+    aria-label="Pause presentation"
+  >
+
+    <span
+      id="presentationControlIcon"
+      class="presentation-control-icon"
+    >
+      ⏸
+    </span>
+
+    <span
+      id="presentationControlText"
+      class="presentation-control-text"
+    >
+      PAUSE
+    </span>
+
+  </button>
+
+
+  <!-- Manual transition to the next role / index5 -->
+
+  <button
+    id="continueTour"
+    class="continue-tour"
+    type="button"
+    aria-label="Continue tour"
+  >
+
+    <span class="continue-tour-text">
+      CONTINUE TOUR
+    </span>
+
+    <span class="continue-tour-arrow">
+      →
+    </span>
+
+  </button>
+
+
+  <div
+    id="nextTransitionCover"
+    class="next-transition-cover quality-team-focus"
+  >
+    <div class="focus-caption">
+      QUALITY TEAM · SHARED REVIEW AREA
+    </div>
+  </div>
+
+
+  <!-- =====================================
+       SYSTEM DETAIL PANEL
+  ====================================== -->
+
+  <div
+    id="detailOverlay"
+    class="detail-overlay"
+  >
+
+    <div class="detail-panel">
+
+
+      <button
+        class="detail-close"
+        onclick="closeQualitySystem()"
+      >
+        ✕
+      </button>
+
+
+      <div class="detail-label">
+        QUALITY SYSTEM DETAILS
+      </div>
+
+
+      <div class="detail-heading">
+
+        <div
+          id="detailIcon"
+          class="detail-icon"
+        ></div>
+
+
+        <div
+          id="detailTitle"
+          class="detail-title"
+        >
+          System
+        </div>
+
+      </div>
+
+
+      <div
+        id="detailDescription"
+        class="detail-description"
+      >
+        Description
+      </div>
+
+
+      <div class="detail-image-wrap">
+
+        <img referrerpolicy="no-referrer"
+          id="detailImage"
+          class="detail-image"
+          alt="Quality System Screenshot"
+        >
+
+
+        <div
+          id="detailPlaceholder"
+          class="detail-placeholder"
+        >
+          No screenshot available.
+        </div>
+
+      </div>
+
+
+      <a
+        id="detailLink"
+        class="detail-link"
+        href="#"
+        target="_blank"
+      >
+        Open System ↗
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    /*
+      INDEX4 ISOLATED RUNTIME
+
+      This page is loaded after several other HTML files
+      using document.write(). Keeping all page variables
+      inside this private scope prevents duplicate let/const
+      names from stopping the Quality Manager timeline.
+    */
+
+    (function() {
+
+      'use strict';
+
+
+
+    /* =========================================
+       PRESENTATION TIMER ENGINE
+       Pause / Resume from the same point
+    ========================================== */
+
+    let presentationPaused = false;
+
+    let manualPaused = false;
+    let interactionPaused = false;
+    let sectionEnding = false;
+
+    const presentationTimers =
+      new Set();
+
+
+    function presentationTimer(
+      callback,
+      delay
+    ) {
+
+      const timer = {
+        callback: callback,
+        remaining: delay,
+        startedAt: Date.now(),
+        timeoutId: null
+      };
+
+
+      function runTimer() {
+
+        timer.startedAt =
+          Date.now();
+
+
+        timer.timeoutId =
+          window.setTimeout(
+            function() {
+
+              presentationTimers
+                .delete(timer);
+
+              timer.timeoutId =
+                null;
+
+              timer.callback();
+
+            },
+            timer.remaining
+          );
+
+      }
+
+
+      timer.run =
+        runTimer;
+
+
+      presentationTimers
+        .add(timer);
+
+
+      if (!presentationPaused) {
+
+        runTimer();
+
+      }
+
+
+      return timer;
+
+    }
+
+
+    function pauseAllPresentationTimers() {
+
+      if (presentationPaused) {
+        return;
+      }
+
+      presentationPaused = true;
+
+      document.body
+        .classList
+        .add(
+          'presentation-paused'
+        );
+
+      presentationTimers
+        .forEach(
+          function(timer) {
+
+            if (timer.timeoutId !== null) {
+
+              window.clearTimeout(
+                timer.timeoutId
+              );
+
+              const elapsed =
+                Date.now() -
+                timer.startedAt;
+
+              timer.remaining =
+                Math.max(
+                  0,
+                  timer.remaining - elapsed
+                );
+
+              timer.timeoutId =
+                null;
+            }
+
+          }
+        );
+    }
+
+
+    function resumeAllPresentationTimers() {
+
+      if (!presentationPaused) {
+        return;
+      }
+
+      presentationPaused = false;
+
+      document.body
+        .classList
+        .remove(
+          'presentation-paused'
+        );
+
+      presentationTimers
+        .forEach(
+          function(timer) {
+
+            if (timer.timeoutId === null) {
+
+              timer.run();
+
+            }
+
+          }
+        );
+    }
+
+
+    function syncPresentationPauseState() {
+
+      if (
+        manualPaused ||
+        interactionPaused
+      ) {
+
+        pauseAllPresentationTimers();
+
+      }
+      else {
+
+        resumeAllPresentationTimers();
+
+      }
+
+    }
+
+
+    function updatePlayPauseButton() {
+
+      document
+        .getElementById(
+          'presentationControlIcon'
+        )
+        .textContent =
+          manualPaused
+            ? '▶'
+            : '⏸';
+
+      document
+        .getElementById(
+          'presentationControlText'
+        )
+        .textContent =
+          manualPaused
+            ? 'PLAY'
+            : 'PAUSE';
+
+      document
+        .getElementById(
+          'presentationControl'
+        )
+        .setAttribute(
+          'aria-label',
+          manualPaused
+            ? 'Resume presentation'
+            : 'Pause presentation'
+        );
+    }
+
+
+    function pausePresentation() {
+
+      manualPaused = true;
+
+      updatePlayPauseButton();
+
+      syncPresentationPauseState();
+    }
+
+
+    function resumePresentation() {
+
+      manualPaused = false;
+
+      updatePlayPauseButton();
+
+      syncPresentationPauseState();
+    }
+
+
+    function startInteractionPause() {
+
+      interactionPaused = true;
+
+      syncPresentationPauseState();
+    }
+
+
+    function endInteractionPause() {
+
+      interactionPaused = false;
+
+      syncPresentationPauseState();
+    }
+
+
+    document
+      .getElementById(
+        'presentationControl'
+      )
+      .addEventListener(
+        'click',
+        function() {
+
+          if (manualPaused) {
+
+            resumePresentation();
+
+          }
+          else {
+
+            pausePresentation();
+
+          }
+
+        }
+      );
+
+
+    /* =========================================
+       ELEMENTS
+    ========================================== */
+
+    const qualityScene =
+      document.getElementById(
+        'qualityScene'
+      );
+
+
+    const qualityWall =
+      document.getElementById(
+        'qualityWall'
+      );
+
+
+    const dialogue1 =
+      document.getElementById(
+        'dialogue1'
+      );
+
+
+    const dialogue2 =
+      document.getElementById(
+        'dialogue2'
+      );
+
+
+    const dialogue3 =
+      document.getElementById(
+        'dialogue3'
+      );
+
+
+    const dialogue4 =
+      document.getElementById(
+        'dialogue4'
+      );
+
+
+    const detailOverlay =
+      document.getElementById(
+        'detailOverlay'
+      );
+
+
+    let qualitySystems = [];
+
+    let qualityAutoShowcaseStarted =
+      false;
+
+    const qualitySystemDwell =
+      8500;
+
+
+    /* =========================================
+       DIALOGUE TIMELINE — AUDIO-COMPLETE SEQUENCE
+    ========================================== */
+
+    /*
+      The Quality introduction no longer advances on fixed timestamps.
+      Each line remains visible until its own narration finishes.
+    */
+    function playManualQualityDialogue(node, onComplete) {
+      if (!node) {
+        if (typeof onComplete === 'function') onComplete();
+        return;
+      }
+
+      node.classList.remove('hide');
+      node.classList.add('show');
+
+      var finished = false;
+      function finishLine() {
+        if (finished) return;
+        finished = true;
+
+        node.classList.add('hide');
+        presentationTimer(function() {
+          node.classList.remove('show');
+          node.classList.remove('hide');
+          if (typeof onComplete === 'function') onComplete();
+        }, 420);
+      }
+
+      /* The speech engine lives in the global tour runtime below.
+         Call it through its public bridge so this isolated page scope
+         never depends on a private function name. */
+      try {
+        if (typeof window.supportTourSpeakDialogue === 'function') {
+          window.supportTourSpeakDialogue(node, finishLine);
+          return;
+        }
+      }
+      catch (error) {
+        console.warn('Quality dialogue voice bridge failed:', error);
+      }
+
+      /* Last-resort safety fallback: never leave the presentation stuck
+         if speech is unavailable or the voice runtime failed to initialise. */
+      var box = node.querySelector('.dialogue-box');
+      var fallbackText = box ? String(box.textContent || '').trim() : '';
+      var fallbackWords = fallbackText ? fallbackText.split(/\s+/).length : 0;
+      var fallbackMs = Math.max(3200, Math.min(18000, 1400 + fallbackWords * 390));
+      presentationTimer(finishLine, fallbackMs);
+    }
+
+    function openQualityWallAfterIntro() {
+      qualityScene.classList.add('wall-mode');
+
+      presentationTimer(function() {
+        qualityWall.classList.add('show');
+        loadQualitySystems();
+
+        presentationTimer(function() {
+          document
+            .getElementById('continueTour')
+            .classList
+            .add('show');
+        }, 1000);
+      }, 900);
+    }
+
+    function startQualityIntroSequence() {
+      playManualQualityDialogue(dialogue1, function() {
+        playManualQualityDialogue(dialogue2, function() {
+          playManualQualityDialogue(dialogue3, function() {
+            playManualQualityDialogue(dialogue4, openQualityWallAfterIntro);
+          });
+        });
+      });
+    }
+
+    presentationTimer(startQualityIntroSequence, 1500);
+
+
+    /* =========================================
+       GET SYSTEMS FROM GOOGLE SHEET
+    ========================================== */
+
+    function loadQualitySystems() {
+
+      google
+        .script
+        .run
+
+        .withSuccessHandler(
+          function(systems) {
+
+            qualitySystems =
+              systems || [];
+
+
+            renderQualitySystems(
+              qualitySystems
+            );
+
+
+            startQualityAutoShowcase();
+
+          }
+        )
+
+        .withFailureHandler(
+          function(error) {
+
+            console.error(
+              error
+            );
+
+
+            document
+              .getElementById(
+                'systemsMessage'
+              )
+              .textContent =
+                'Unable to load quality systems.';
+
+          }
+        )
+
+        .getQualitySystems();
+
+    }
+
+
+    /* =========================================
+       RENDER SYSTEMS
+    ========================================== */
+
+    function renderQualitySystems(
+      systems
+    ) {
+
+      const orbit =
+        document.getElementById(
+          'modulesGrid'
+        );
+
+
+      const message =
+        document.getElementById(
+          'systemsMessage'
+        );
+
+
+      const systemsCount =
+        document.getElementById(
+          'systemsCount'
+        );
+
+
+      const topSystemsCount =
+        document.getElementById(
+          'topSystemsCount'
+        );
+
+
+      orbit.innerHTML =
+        '';
+
+
+      systemsCount.textContent =
+        systems.length +
+        (
+          systems.length === 1
+            ? ' System'
+            : ' Systems'
+        );
+
+
+      topSystemsCount.textContent =
+        systems.length;
+
+
+      if (
+        !systems.length
+      ) {
+
+        message.style.display =
+          'block';
+
+
+        message.textContent =
+          'No quality systems added yet.';
+
+
+        return;
+
+      }
+
+
+      message.style.display =
+        'none';
+
+
+      const total =
+        systems.length;
+
+
+      systems.forEach(
+        function(
+          system,
+          index
+        ) {
+
+          const node =
+            document.createElement(
+              'button'
+            );
+
+
+          node.type =
+            'button';
+
+
+          node.className =
+            'quality-node';
+
+
+          node.dataset.systemIndex =
+            String(
+              index
+            );
+
+
+          node.style
+            .setProperty(
+              '--module-color',
+              getModuleColor(
+                system.color,
+                index
+              )
+            );
+
+
+          let angle = 0;
+          let radiusX = 0;
+          let radiusY = 0;
+
+
+          /*
+            CLEAN RESPONSIVE ORBIT
+
+            1–8 systems:
+            One evenly spaced ellipse around the Quality Lens.
+            For 3 systems this gives:
+              top
+              bottom-right
+              bottom-left
+            — no overlap.
+
+            9+ systems:
+            Two rings with the inner ring rotated by half a step,
+            so nodes never sit directly on top of each other.
+          */
+          if (
+            total <= 8
+          ) {
+
+            angle =
+              (
+                Math.PI *
+                2 *
+                index /
+                Math.max(
+                  total,
+                  1
+                )
+              ) -
+              (
+                Math.PI /
+                2
+              );
+
+
+            radiusX =
+              total === 1
+                ? 0
+                : 39;
+
+
+            radiusY =
+              total === 1
+                ? 35
+                : 36;
+
+          }
+          else {
+
+            const outerCount =
+              Math.ceil(
+                total /
+                2
+              );
+
+
+            const innerCount =
+              total -
+              outerCount;
+
+
+            const isOuter =
+              index <
+              outerCount;
+
+
+            if (isOuter) {
+
+              angle =
+                (
+                  Math.PI *
+                  2 *
+                  index /
+                  outerCount
+                ) -
+                (
+                  Math.PI /
+                  2
+                );
+
+
+              radiusX = 41;
+              radiusY = 38;
+
+            }
+            else {
+
+              const innerIndex =
+                index -
+                outerCount;
+
+
+              angle =
+                (
+                  Math.PI *
+                  2 *
+                  (
+                    innerIndex +
+                    .5
+                  ) /
+                  Math.max(
+                    innerCount,
+                    1
+                  )
+                ) -
+                (
+                  Math.PI /
+                  2
+                );
+
+
+              radiusX = 27;
+              radiusY = 25;
+
+            }
+
+          }
+
+
+          const x =
+            50 +
+            (
+              Math.cos(
+                angle
+              ) *
+              radiusX
+            );
+
+
+          const y =
+            50 +
+            (
+              Math.sin(
+                angle
+              ) *
+              radiusY
+            );
+
+
+          node.style.left =
+            x.toFixed(
+              2
+            ) +
+            '%';
+
+
+          node.style.top =
+            y.toFixed(
+              2
+            ) +
+            '%';
+
+
+          const title =
+            (
+              system.emoji
+                ? (
+                    system.emoji +
+                    '  '
+                  )
+                : ''
+            ) +
+            (
+              system.system_name ||
+              ''
+            );
+
+
+          node.innerHTML = `
+
+            <div class="quality-node-dot"></div>
+
+            <div class="quality-node-name">
+              ${escapeHtml(
+                title
+              )}
+            </div>
+
+            <div class="quality-node-description">
+              ${escapeHtml(
+                system.description ||
+                ''
+              )}
+            </div>
+
+          `;
+
+
+          node.addEventListener(
+            'click',
+            function() {
+
+              openQualitySystem(
+                system
+              );
+
+            }
+          );
+
+
+          orbit.appendChild(
+            node
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =========================================
+       AUTOMATIC SYSTEM SHOWCASE
+    ========================================== */
+
+    function startQualityAutoShowcase() {
+
+      if (
+        qualityAutoShowcaseStarted
+      ) {
+
+        return;
+
+      }
+
+
+      qualityAutoShowcaseStarted =
+        true;
+
+
+      const total =
+        qualitySystems.length;
+
+
+      if (
+        !total
+      ) {
+
+        presentationTimer(
+          finishQualitySection,
+          6500
+        );
+
+        return;
+
+      }
+
+
+      function playQualitySystem(index) {
+
+        if (
+          sectionEnding
+        ) {
+
+          return;
+
+        }
+
+
+        if (
+          index >= total
+        ) {
+
+          presentationTimer(
+            finishQualitySection,
+            1100
+          );
+
+          return;
+
+        }
+
+
+        focusQualityModule(
+          index,
+          function() {
+
+            if (
+              sectionEnding
+            ) {
+
+              return;
+
+            }
+
+
+            presentationTimer(
+              function() {
+
+                playQualitySystem(
+                  index + 1
+                );
+
+              },
+              650
+            );
+
+          }
+        );
+
+      }
+
+
+      presentationTimer(
+        function() {
+
+          playQualitySystem(0);
+
+        },
+        700
+      );
+
+    }
+
+
+    function focusQualityModule(
+      index,
+      onNarrationComplete
+    ) {
+
+      const nodes =
+        Array.from(
+          document.querySelectorAll(
+            '#modulesGrid .quality-node'
+          )
+        );
+
+
+      nodes.forEach(
+        function(node) {
+
+          node.classList
+            .remove(
+              'auto-focus'
+            );
+
+        }
+      );
+
+
+      const node =
+        nodes[index];
+
+
+      const system =
+        qualitySystems[index];
+
+
+      if (
+        !node ||
+        !system
+      ) {
+
+        if (typeof onNarrationComplete === 'function') {
+          onNarrationComplete();
+        }
+        return;
+
+      }
+
+
+      node.classList
+        .add(
+          'auto-focus'
+        );
+
+
+      document
+        .getElementById(
+          'qualityShowcaseName'
+        )
+        .textContent =
+          (
+            system.emoji
+              ? (
+                  system.emoji +
+                  '  '
+                )
+              : ''
+          ) +
+          (
+            system.system_name ||
+            'Quality System'
+          );
+
+
+      const qualityDescriptionEl =
+        document.getElementById('qualityShowcaseDescription');
+
+      qualityDescriptionEl.classList.remove('is-speaking-description');
+      qualityDescriptionEl.removeAttribute('data-reading-index');
+      qualityDescriptionEl.textContent =
+        system.description ||
+        'Quality monitoring and review system.';
+
+      const qualityNarration = String(system.description || '').trim();
+      let narrationFinished = false;
+
+      function completeNarration() {
+        if (narrationFinished) return;
+        narrationFinished = true;
+        if (qualityDescriptionEl.dataset.readingIndex === String(index)) {
+          qualityDescriptionEl.classList.remove('is-speaking-description');
+          qualityDescriptionEl.removeAttribute('data-reading-index');
+        }
+        if (typeof onNarrationComplete === 'function') {
+          onNarrationComplete();
+        }
+      }
+
+      if (window.supportTourSpeakSystem && qualityNarration) {
+        qualityDescriptionEl.dataset.readingIndex = String(index);
+        qualityDescriptionEl.classList.add('is-speaking-description');
+        window.supportTourSpeakSystem(
+          qualityNarration,
+          'quality_manager',
+          completeNarration
+        );
+      }
+      else {
+        completeNarration();
+      }
+
+
+      document
+        .getElementById(
+          'qualityShowcaseStep'
+        )
+        .textContent =
+          String(
+            index + 1
+          ) +
+          ' / ' +
+          String(
+            qualitySystems.length
+          );
+
+    }
+
+
+    /* =========================================
+       SYSTEM COLOR
+    ========================================== */
+
+    function getModuleColor(
+      color,
+      index
+    ) {
+
+      const colors = {
+
+        /*
+          Muted executive shades.
+          These are intentionally subtle because the
+          main Quality identity remains teal / graphite.
+        */
+
+        blue:
+          '#7896a1',
+
+        green:
+          '#7fa99b',
+
+        purple:
+          '#9189a0',
+
+        orange:
+          '#a88f72',
+
+        red:
+          '#9f7f7f',
+
+        cyan:
+          '#78aaa7',
+
+        gold:
+          '#aa9a75',
+
+        indigo:
+          '#858da2',
+
+        teal:
+          '#73aaa3',
+
+        pink:
+          '#9d858f'
+
+      };
+
+
+      if (
+        color &&
+        colors[
+          String(
+            color
+          ).toLowerCase()
+        ]
+      ) {
+
+        return colors[
+          String(
+            color
+          ).toLowerCase()
+        ];
+
+      }
+
+
+      const fallback = [
+        '#73aaa3',
+        '#7896a1',
+        '#7fa99b',
+        '#9189a0',
+        '#a88f72',
+        '#aa9a75'
+      ];
+
+
+      return fallback[
+        index %
+        fallback.length
+      ];
+
+    }
+
+
+    /* =========================================
+       OPEN SYSTEM DETAILS
+    ========================================== */
+
+    function openQualitySystem(
+      system
+    ) {
+
+      startInteractionPause();
+
+
+      const title =
+        document.getElementById(
+          'detailTitle'
+        );
+
+
+      const description =
+        document.getElementById(
+          'detailDescription'
+        );
+
+
+      const icon =
+        document.getElementById(
+          'detailIcon'
+        );
+
+
+      const image =
+        document.getElementById(
+          'detailImage'
+        );
+
+
+      const placeholder =
+        document.getElementById(
+          'detailPlaceholder'
+        );
+
+
+      const link =
+        document.getElementById(
+          'detailLink'
+        );
+
+
+      title.textContent =
+        system.system_name ||
+        'Quality System';
+
+
+      description.textContent =
+        system.long_description ||
+        'No additional details added yet.';
+
+
+      if (
+        system.emoji
+      ) {
+
+        icon.textContent =
+          system.emoji;
+
+        icon.style.display =
+          'flex';
+
+      }
+      else {
+
+        icon.textContent =
+          '';
+
+        icon.style.display =
+          'none';
+
+      }
+
+
+      /* IMAGE */
+
+      if (
+        system.image_url
+      ) {
+
+        image.src =
+          system.image_url;
+
+
+        image.style.display =
+          'block';
+
+
+        placeholder.style.display =
+          'none';
+
+      }
+      else {
+
+        image.removeAttribute(
+          'src'
+        );
+
+
+        image.style.display =
+          'none';
+
+
+        placeholder.style.display =
+          'block';
+
+      }
+
+
+      /* LINK */
+
+      if (
+        system.link &&
+        system.link !== '#'
+      ) {
+
+        link.href =
+          system.link;
+
+
+        link.classList.remove(
+          'hidden'
+        );
+
+      }
+      else {
+
+        link.removeAttribute(
+          'href'
+        );
+
+
+        link.classList.add(
+          'hidden'
+        );
+
+      }
+
+
+      detailOverlay
+        .classList
+        .add(
+          'show'
+        );
+
+    }
+
+
+    /* =========================================
+       CLOSE SYSTEM
+    ========================================== */
+
+    function closeQualitySystem() {
+
+      const wasOpen =
+        detailOverlay
+          .classList
+          .contains(
+            'show'
+          );
+
+      detailOverlay
+        .classList
+        .remove(
+          'show'
+        );
+
+      if (wasOpen) {
+
+        endInteractionPause();
+
+      }
+
+    }
+
+
+    detailOverlay
+      .addEventListener(
+        'click',
+        function(event) {
+
+          if (
+            event.target ===
+            detailOverlay
+          ) {
+
+            closeQualitySystem();
+
+          }
+
+        }
+      );
+
+
+    /* =========================================
+       ESC KEY
+    ========================================== */
+
+    document
+      .addEventListener(
+        'keydown',
+        function(event) {
+
+          if (
+            event.key ===
+            'Escape'
+          ) {
+
+            closeQualitySystem();
+
+          }
+
+        }
+      );
+
+
+
+
+    /* =========================================
+       END DIALOGUE + INDEX5
+    ========================================== */
+
+    function finishQualitySection() {
+
+      if (sectionEnding) {
+        return;
+      }
+
+      sectionEnding = true;
+
+      const cover =
+        document.getElementById(
+          'nextTransitionCover'
+        );
+
+      const continueButton =
+        document.getElementById(
+          'continueTour'
+        );
+
+      const end1 =
+        document.getElementById(
+          'endDialogue1'
+        );
+
+      const end2 =
+        document.getElementById(
+          'endDialogue2'
+        );
+
+      const end3 =
+        document.getElementById(
+          'endDialogue3'
+        );
+
+      const modulesScroll =
+        document.querySelector(
+          '.modules-scroll'
+        );
+
+
+      continueButton.disabled =
+        true;
+
+      continueButton
+        .classList
+        .remove(
+          'show'
+        );
+
+
+      /*
+        STEP 1
+        Stop any detail interaction and clear
+        the currently highlighted system.
+      */
+
+      detailOverlay
+        .classList
+        .remove(
+          'show'
+        );
+
+      interactionPaused =
+        false;
+
+      syncPresentationPauseState();
+
+
+      document
+        .querySelectorAll(
+          '#modulesGrid .quality-node'
+        )
+        .forEach(
+          function(module) {
+
+            module.classList
+              .remove(
+                'auto-focus'
+              );
+
+          }
+        );
+
+
+      /*
+        STEP 2
+        Reset the internal systems scroll before
+        fading the wall away. This prevents the
+        last focused system from becoming the
+        visual "exit frame".
+      */
+
+      if (modulesScroll) {
+
+        modulesScroll.scrollTo({
+          top: 0,
+          behavior: 'auto'
+        });
+
+      }
+
+
+      /*
+        STEP 3 — CAMERA RETURN
+        Fade the Quality Control Wall OUT and
+        restore the Quality Manager office photo.
+
+        Ending dialogue starts only AFTER this
+        return animation has completed.
+      */
+
+      qualityWall
+        .classList
+        .remove(
+          'show'
+        );
+
+      qualityScene
+        .classList
+        .remove(
+          'wall-mode'
+        );
+
+
+      function loadIndex5AfterQualityDialogue() {
+        try {
+          if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        }
+        catch (error) {}
+
+        google.script.run
+          .withSuccessHandler(function(html) {
+            document.open();
+            document.write(html);
+            document.close();
+          })
+          .withFailureHandler(function(error) {
+            console.error('Index5 load failed:', error);
+
+            cover.classList.remove('active');
+            sectionEnding = false;
+            continueButton.disabled = false;
+
+            /* If loading fails, return to the Quality Wall rather than
+               leaving the presenter on a dead frame. */
+            qualityScene.classList.add('wall-mode');
+            qualityWall.classList.add('show');
+            continueButton.classList.add('show');
+          })
+          .getPage('index5');
+      }
+
+
+      /* Ending dialogue is also audio-complete: no line can be hidden
+         until its own narration callback has finished. */
+      presentationTimer(function() {
+        playManualQualityDialogue(end1, function() {
+          playManualQualityDialogue(end2, function() {
+            playManualQualityDialogue(end3, function() {
+              cover.classList.add('active');
+              presentationTimer(loadIndex5AfterQualityDialogue, 900);
+            });
+          });
+        });
+      }, 1400);
+
+    }
+
+
+    document
+      .getElementById(
+        'continueTour'
+      )
+      .addEventListener(
+        'click',
+        finishQualitySection
+      );
+
+
+    /* =========================================
+       ESCAPE HTML
+    ========================================== */
+
+    function escapeHtml(
+      value
+    ) {
+
+      return String(
+        value ||
+        ''
+      )
+
+      .replaceAll(
+        '&',
+        '&amp;'
+      )
+
+      .replaceAll(
+        '<',
+        '&lt;'
+      )
+
+      .replaceAll(
+        '>',
+        '&gt;'
+      )
+
+      .replaceAll(
+        '"',
+        '&quot;'
+      )
+
+      .replaceAll(
+        "'",
+        '&#039;'
+      );
+
+    }
+
+    /*
+      The close button in the HTML uses onclick,
+      so expose only this one function globally.
+    */
+
+    window.closeQualitySystem =
+      closeQualitySystem;
+
+
+
+
+    })();
+
+  </script>
+
+
+
+  <!-- =========================================================
+       GLOBAL VIEWER SETTINGS · index2 onward
+       AR and VOICE persist across every following page.
+  ========================================================== -->
+  <style id="tourGlobalSettingsStyle">
+    .tour-global-settings {
+      position: fixed;
+      top: 18px;
+      right: 20px;
+      z-index: 60000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      pointer-events: auto;
+    }
+
+    .tour-global-toggle {
+      min-height: 34px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 999px;
+      color: rgba(255,255,255,.86);
+      background: rgba(12,14,13,.72);
+      box-shadow: 0 10px 30px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.05);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      font: 700 10px/1 Arial, Helvetica, sans-serif;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: transform .22s ease, border-color .22s ease, background .22s ease, opacity .22s ease;
+    }
+
+    .tour-global-toggle:hover {
+      transform: translateY(-2px);
+      border-color: rgba(215,181,118,.42);
+      background: rgba(24,22,18,.88);
+    }
+
+    .tour-global-toggle.active {
+      color: #f2dfbf;
+      border-color: rgba(215,181,118,.46);
+      background: rgba(46,37,25,.82);
+    }
+
+    .tour-global-toggle.off {
+      opacity: .62;
+    }
+
+    .tour-ar-subtitle {
+      display: none;
+      margin-top: 10px;
+      padding-top: 9px;
+      border-top: 1px solid rgba(255,255,255,.10);
+      color: rgba(255,255,255,.74);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: .72em;
+      font-weight: 500;
+      line-height: 1.65;
+      letter-spacing: 0;
+      direction: rtl;
+      text-align: center;
+    }
+
+    body.tour-arabic-enabled .tour-ar-subtitle {
+      display: block;
+    }
+
+    @media (max-width: 720px) {
+      .tour-global-settings {
+        top: 12px;
+        right: 12px;
+        gap: 6px;
+      }
+      .tour-global-toggle {
+        min-height: 31px;
+        padding: 7px 9px;
+        font-size: 8px;
+      }
+    }
+  </style>
+
+  <div id="tourGlobalSettings" class="tour-global-settings" aria-label="Presentation settings">
+    <button id="tourArabicToggle" class="tour-global-toggle" type="button">AR OFF · عربي</button>
+    <button id="tourVoiceToggle" class="tour-global-toggle" type="button">VOICE ON</button>
+  </div>
+
+  <script>
+  (function() {
+    'use strict';
+
+    var AR_KEY = 'support_center_ar';
+    var VOICE_KEY = 'support_center_voice';
+    var arabicEnabled = false;
+    var voiceEnabled = true;
+    var voiceProfiles = {};
+    var dialogueRows = [];
+    var dialogueLookup = {};
+    var browserVoices = [];
+    var voiceAssignments = {};
+    var currentDialogueNode = null;
+    var activeVoiceUtterance = null;
+    var voiceSequenceToken = 0;
+    var activeManualCompletion = null;
+    var activeManualText = '';
+
+    var arButton = document.getElementById('tourArabicToggle');
+    var voiceButton = document.getElementById('tourVoiceToggle');
+
+    var fallbackProfiles = {
+      visitor: { title:'VISITOR', gender:'female', lang:'en-US', voice_hint:'', rate:1.00, pitch:1.03 },
+      support_manager: { title:'HEAD OF CUSTOMER SUPPORT CENTER', gender:'male', lang:'en-US', voice_hint:'', rate:.93, pitch:.91 },
+      assistant_head: { title:'ASSISTANT HEAD', gender:'male', lang:'en-US', voice_hint:'', rate:.96, pitch:.97 },
+      quality_manager: { title:'QUALITY MANAGER', gender:'male', lang:'en-US', voice_hint:'', rate:.94, pitch:.92 },
+      quality_team: { title:'QUALITY TEAM', gender:'neutral', lang:'en-US', voice_hint:'', rate:.97, pitch:1.00 },
+      supervisor: { title:'SUPERVISOR', gender:'neutral', lang:'en-US', voice_hint:'', rate:.96, pitch:.98 },
+      team_leaders: { title:'TEAM LEADERS', gender:'female', lang:'en-US', voice_hint:'', rate:.97, pitch:1.00 },
+      system: { title:'SYSTEM', gender:'female', lang:'en-US', voice_hint:'', rate:.98, pitch:.98 }
+    };
+
+    function safeGet(key, fallback) {
+      try {
+        var value = window.localStorage.getItem(key);
+        return value === null ? fallback : value;
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    function safeSet(key, value) {
+      try {
+        window.localStorage.setItem(key, value);
+      } catch (error) {}
+    }
+
+    arabicEnabled = safeGet(AR_KEY, '0') === '1';
+    voiceEnabled = safeGet(VOICE_KEY, '1') !== '0';
+
+    function syncControls() {
+      document.body.classList.toggle('tour-arabic-enabled', arabicEnabled);
+      arButton.textContent = arabicEnabled ? 'AR ON · عربي' : 'AR OFF · عربي';
+      arButton.classList.toggle('active', arabicEnabled);
+
+      if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+        voiceButton.textContent = 'VOICE N/A';
+        voiceButton.disabled = true;
+        voiceButton.classList.add('off');
+        return;
+      }
+
+      voiceButton.disabled = false;
+      voiceButton.textContent = voiceEnabled ? 'VOICE ON' : 'VOICE OFF';
+      voiceButton.classList.toggle('active', voiceEnabled);
+      voiceButton.classList.toggle('off', !voiceEnabled);
+    }
+
+    function normalizeText(value) {
+      return String(value || '')
+        .replace(/[’‘]/g, "'")
+        .replace(/[“”]/g, '"')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
+    }
+
+    function speakerKeyFromNode(node) {
+      var nameNode = node.querySelector('.dialogue-name');
+      var label = normalizeText(nameNode ? nameNode.textContent : '');
+
+      if (label.indexOf('visitor') >= 0) return 'visitor';
+      if (label.indexOf('head of customer support') >= 0 || label.indexOf('support manager') >= 0) return 'support_manager';
+      if (label.indexOf('assistant head') >= 0) return 'assistant_head';
+      if (label.indexOf('quality manager') >= 0) return 'quality_manager';
+      if (label.indexOf('quality team') >= 0 || label.indexOf('quality operations team') >= 0) return 'quality_team';
+      if (label.indexOf('supervisor') >= 0) return 'supervisor';
+      if (label.indexOf('team leaders') >= 0) return 'team_leaders';
+      return 'system';
+    }
+
+    function englishTextFromNode(node) {
+      var box = node.querySelector('.dialogue-box');
+      if (!box) return '';
+      var clone = box.cloneNode(true);
+      var ar = clone.querySelector('.tour-ar-subtitle');
+      if (ar && ar.parentNode) ar.parentNode.removeChild(ar);
+      return String(clone.textContent || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function buildDialogueLookup(rows) {
+      dialogueLookup = {};
+      (rows || []).forEach(function(row) {
+        var key = normalizeText(row.text_en || '');
+        if (key) dialogueLookup[key] = row;
+      });
+      hydrateArabicSubtitles();
+    }
+
+    /* Complete standalone fallback; sheet data still takes precedence. */
+    var qualityManagerArabicFallback = {};
+    qualityManagerArabicFallback[normalizeText('Now I understand the operational side. How does Quality turn performance into improvement?')] = 'الآن فهمت الجانب التشغيلي. كيف تحول الجودة الأداء إلى تحسين فعلي؟';
+    qualityManagerArabicFallback[normalizeText('We monitor service quality, review performance, and analyze employee mistakes. For the mistakes assigned to Quality, I identify root causes, look for patterns, and define corrective actions or solutions to prevent them from repeating.')] = 'نحن نراقب جودة الخدمة، ونراجع الأداء، ونحلل أخطاء الموظفين. بالنسبة للأخطاء المحالة إلى قسم الجودة، أحدد الأسباب الجذرية، وأبحث عن الأنماط، وأحدد الإجراءات التصحيحية أو الحلول لمنع تكرارها.';
+    qualityManagerArabicFallback[normalizeText('And how do you monitor that in practice?')] = 'وكيف تتابعون ذلك عمليًا؟';
+    qualityManagerArabicFallback[normalizeText('We track that work through our quality systems, controls and review tools. Let me show you our Quality Control Wall.')] = 'نتابع هذا العمل من خلال أنظمة الجودة والضوابط وأدوات المراجعة لدينا. دعني أريك لوحة مراقبة الجودة.';
+    qualityManagerArabicFallback[normalizeText('I can see how the quality process connects monitoring with improvement.')] = 'أستطيع أن أرى كيف تربط عملية الجودة بين المتابعة والتحسين.';
+    qualityManagerArabicFallback[normalizeText('Exactly. We use these insights to identify gaps, coach the team, and continuously improve the customer experience.')] = 'بالضبط. نستخدم هذه النتائج لتحديد الفجوات، وتوجيه الفريق، وتحسين تجربة العميل بشكل مستمر.';
+    qualityManagerArabicFallback[normalizeText('You can continue the tour to the next part of the support center.')] = 'يمكنك الآن متابعة الجولة إلى الجزء التالي من مركز الدعم.';
+
+    function hydrateArabicSubtitles() {
+      var nodes = document.querySelectorAll('.dialogue, .end-dialogue');
+      Array.prototype.forEach.call(nodes, function(node) {
+        var box = node.querySelector('.dialogue-box');
+        if (!box) return;
+        var englishKey = normalizeText(englishTextFromNode(node));
+        var row = dialogueLookup[englishKey] || null;
+        var fallbackArabic = qualityManagerArabicFallback[englishKey] || '';
+        var arabicText = row && row.text_ar ? row.text_ar : fallbackArabic;
+        var arNode = box.querySelector('.tour-ar-subtitle');
+        if (!arNode) {
+          arNode = document.createElement('div');
+          arNode.className = 'tour-ar-subtitle';
+          box.appendChild(arNode);
+        }
+        arNode.textContent = arabicText;
+        arNode.style.display = arabicText ? '' : 'none';
+      });
+    }
+
+    function normalizeGender(value) {
+      var clean = normalizeText(value);
+      if (clean === 'm' || clean === 'male' || clean === 'ذكر') return 'male';
+      if (clean === 'f' || clean === 'female' || clean === 'أنثى' || clean === 'انثى') return 'female';
+      return clean || 'neutral';
+    }
+
+    function getProfile(key) {
+      var base = fallbackProfiles[key] || fallbackProfiles.system;
+      var sheet = voiceProfiles[key] || {};
+      return {
+        title: sheet.title || base.title || key,
+        gender: normalizeGender(sheet.gender || base.gender),
+        lang: sheet.lang || base.lang || 'en-US',
+        voice_hint: sheet.voice_hint || base.voice_hint || '',
+        rate: Number(sheet.rate || base.rate || 1),
+        pitch: Number(sheet.pitch || base.pitch || 1)
+      };
+    }
+
+    function loadBrowserVoices() {
+      if (!('speechSynthesis' in window)) return;
+      browserVoices = window.speechSynthesis.getVoices() || [];
+      voiceAssignments = {};
+    }
+
+    function femaleName(name) {
+      return /samantha|victoria|karen|moira|tessa|zira|aria|jenny|sara|ava|susan|hazel|female/i.test(name || '');
+    }
+
+    function maleName(name) {
+      return /daniel|alex|fred|tom|arthur|george|guy|david|mark|ryan|christopher|male/i.test(name || '');
+    }
+
+    function pickVoice(key) {
+      if (voiceAssignments[key]) return voiceAssignments[key];
+      var profile = getProfile(key);
+      var all = browserVoices.length ? browserVoices : (window.speechSynthesis.getVoices() || []);
+      if (!all.length) return null;
+
+      var langBase = String(profile.lang || 'en-US').toLowerCase().split('-')[0];
+      var pool = all.filter(function(v) {
+        return String(v.lang || '').toLowerCase().indexOf(langBase) === 0;
+      });
+      if (!pool.length) pool = all.slice();
+
+      if (profile.voice_hint) {
+        var hint = String(profile.voice_hint).toLowerCase();
+        var hinted = pool.find(function(v) {
+          return String(v.name || '').toLowerCase().indexOf(hint) >= 0;
+        });
+        if (hinted) {
+          voiceAssignments[key] = hinted;
+          return hinted;
+        }
+      }
+
+
+      var genderPool = pool.filter(function(v) {
+        if (profile.gender === 'female') return femaleName(v.name);
+        if (profile.gender === 'male') return maleName(v.name);
+        return true;
+      });
+      if (genderPool.length) pool = genderPool;
+
+      /*
+        Keep management roles distinct whenever the browser offers more than
+        one suitable voice in the current language.
+      */
+      var blockedVoiceKeys = [];
+      if (key === 'assistant_head') blockedVoiceKeys = ['support_manager'];
+      else if (key === 'quality_manager') blockedVoiceKeys = ['support_manager', 'assistant_head'];
+      else if (key === 'quality_team') blockedVoiceKeys = ['support_manager', 'assistant_head', 'quality_manager'];
+
+      if (blockedVoiceKeys.length && pool.length > 1) {
+        var blockedNames = blockedVoiceKeys
+          .map(function(roleKey) {
+            var assigned = voiceAssignments[roleKey];
+            return assigned ? String(assigned.name || '') + '|' + String(assigned.lang || '') : '';
+          })
+          .filter(Boolean);
+
+        var uniquePool = pool.filter(function(v) {
+          var token = String(v.name || '') + '|' + String(v.lang || '');
+          return blockedNames.indexOf(token) === -1;
+        });
+
+        if (uniquePool.length) pool = uniquePool;
+      }
+
+      var order = ['visitor','support_manager','assistant_head','quality_manager','quality_team','supervisor','team_leaders','system'];
+      var idx = order.indexOf(key);
+      if (idx < 0) {
+        idx = String(key || '')
+          .split('')
+          .reduce(function(total, char) {
+            return total + char.charCodeAt(0);
+          }, 0);
+      }
+      var selected = pool[idx % pool.length];
+      voiceAssignments[key] = selected;
+      return selected;
+    }
+
+    function splitTourSpeech(
+      text,
+      maxLength
+    ) {
+      var source =
+        String(text || '')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+      var limit =
+        Number(maxLength || 100);
+
+      if (!source) return [];
+      if (window.supportTourFixedAudio && window.supportTourFixedAudio.usingFixedAudio) return [source]; /* FIXED_AUDIO_NO_SPLIT */
+
+      var parts =
+        source.match(
+          /[^.!?;:]+[.!?;:]?|[^.!?;:]+$/g
+        ) || [source];
+
+      var chunks = [];
+
+      parts.forEach(
+        function(part) {
+
+          var rest =
+            String(part || '').trim();
+
+          while (
+            rest.length > limit
+          ) {
+
+            var cut =
+              rest.lastIndexOf(
+                ',',
+                limit
+              );
+
+            if (cut < 42) {
+              cut =
+                rest.lastIndexOf(
+                  ' ',
+                  limit
+                );
+            }
+
+            if (cut < 42) {
+              cut = limit;
+            }
+
+            var piece =
+              rest
+                .slice(
+                  0,
+                  cut + (
+                    rest.charAt(cut) === ','
+                      ? 1
+                      : 0
+                  )
+                )
+                .trim();
+
+            if (piece) {
+              chunks.push(piece);
+            }
+
+            rest =
+              rest
+                .slice(
+                  cut + (
+                    rest.charAt(cut) === ','
+                      ? 1
+                      : 0
+                  )
+                )
+                .trim();
+
+          }
+
+          if (rest) {
+            chunks.push(rest);
+          }
+        }
+      );
+
+      return chunks;
+    }
+
+
+    function estimateDialogueVoiceMs(text) {
+      var clean = String(text || '').trim();
+      var words = clean ? clean.split(/\s+/).length : 0;
+      var punctuation = (clean.match(/[,.!?;:]/g) || []).length;
+      return Math.max(4200, Math.min(18000, 1500 + words * 390 + punctuation * 120));
+    }
+
+
+    function stopVoice() {
+      var manualDone = activeManualCompletion;
+      var manualText = activeManualText;
+
+      activeManualCompletion = null;
+      activeManualText = '';
+      voiceSequenceToken += 1;
+      activeVoiceUtterance = null;
+
+      if ('speechSynthesis' in window) {
+        try {
+          window.speechSynthesis.cancel();
+        }
+        catch (error) {}
+      }
+
+      /* If VOICE is switched off during a manually sequenced Quality line,
+         continue through a calculated silent fallback instead of freezing. */
+      if (typeof manualDone === 'function') {
+        presentationTimer(manualDone, estimateDialogueVoiceMs(manualText));
+      }
+    }
+
+
+    function speakNode(node, onComplete) {
+
+      var completionCalled = false;
+      function completeManual() {
+        if (completionCalled) return;
+        completionCalled = true;
+        if (activeManualCompletion === completeManual) {
+          activeManualCompletion = null;
+          activeManualText = '';
+        }
+        if (typeof onComplete === 'function') onComplete();
+      }
+
+      if (!node) {
+        completeManual();
+        return;
+      }
+
+      var text = englishTextFromNode(node);
+
+      if (!text) {
+        completeManual();
+        return;
+      }
+
+      if (typeof onComplete === 'function') {
+        activeManualCompletion = completeManual;
+        activeManualText = text;
+      }
+
+      if (
+        !voiceEnabled ||
+        !('speechSynthesis' in window) ||
+        !('SpeechSynthesisUtterance' in window)
+      ) {
+        if (typeof onComplete === 'function') {
+          presentationTimer(completeManual, estimateDialogueVoiceMs(text));
+        }
+        return;
+      }
+
+
+      var key = speakerKeyFromNode(node);
+      var profile = getProfile(key);
+      var selected = pickVoice(key);
+      var chunks = splitTourSpeech(text, 100);
+
+
+      voiceSequenceToken += 1;
+      var myToken = voiceSequenceToken;
+      var chunkIndex = 0;
+
+
+      try {
+        window.speechSynthesis.cancel();
+      }
+      catch (error) {}
+
+
+      function nextChunk() {
+
+        if (myToken !== voiceSequenceToken) {
+          return;
+        }
+
+        if (chunkIndex >= chunks.length) {
+          activeVoiceUtterance = null;
+          completeManual();
+          return;
+        }
+
+
+        var utterance = new SpeechSynthesisUtterance(chunks[chunkIndex]);
+        chunkIndex += 1;
+
+
+        if (selected) {
+          utterance.voice = selected;
+          utterance.lang = selected.lang || profile.lang;
+        }
+        else {
+          utterance.lang = profile.lang || 'en-US';
+        }
+
+
+        utterance.rate = Math.max(.75, Math.min(1.10, Number(profile.rate || 1)));
+        utterance.pitch = Math.max(.72, Math.min(1.18, Number(profile.pitch || 1)));
+        utterance.volume = 1;
+
+
+        var finished = false;
+        var seen = false;
+        var idleSince = 0;
+        var startedAt = Date.now();
+
+
+        var monitor = window.setInterval(function() {
+
+          if (finished || myToken !== voiceSequenceToken) {
+            window.clearInterval(monitor);
+            return;
+          }
+
+          var synth = window.speechSynthesis;
+          if (window.supportTourFixedAudio && window.supportTourFixedAudio.usingFixedAudio) { return; } /* FIXED_AUDIO_MONITOR_GUARD */
+
+          if (synth.speaking || synth.pending) {
+            seen = true;
+            idleSince = 0;
+            return;
+          }
+
+          if (synth.paused) {
+            idleSince = 0;
+            return;
+          }
+
+          if (!seen && Date.now() - startedAt < 1300) {
+            return;
+          }
+
+          if (!idleSince) {
+            idleSince = Date.now();
+            return;
+          }
+
+          if (Date.now() - idleSince >= 500) {
+            finishChunk();
+          }
+
+        }, 180);
+
+
+        function finishChunk() {
+
+          if (finished || myToken !== voiceSequenceToken) {
+            return;
+          }
+
+          finished = true;
+          window.clearInterval(monitor);
+
+          if (activeVoiceUtterance === utterance) {
+            activeVoiceUtterance = null;
+          }
+
+          window.setTimeout(nextChunk, 90);
+        }
+
+
+        utterance.onstart = function() {
+          seen = true;
+        };
+
+        utterance.onend = finishChunk;
+        utterance.onerror = finishChunk;
+        activeVoiceUtterance = utterance;
+
+
+        try {
+          window.speechSynthesis.speak(utterance);
+        }
+        catch (error) {
+          finishChunk();
+        }
+
+      }
+
+
+      nextChunk();
+    }
+
+
+    /* Public bridge used by the isolated Quality timeline above. */
+    window.supportTourSpeakDialogue = function(node, onComplete) {
+      speakNode(node, onComplete);
+      return true;
+    };
+
+    function isDialogueVisible(node) {
+      if (!node) return false;
+      if (node.classList.contains('show')) return true;
+      var style = window.getComputedStyle(node);
+      return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 0) > .65;
+    }
+
+    function refreshDialogueVoice(node) {
+      if (node && node.getAttribute('data-manual-sequence') === '1') return;
+      var visible = isDialogueVisible(node);
+      if (!visible) {
+        node.setAttribute('data-tour-spoken', '0');
+        if (currentDialogueNode === node) currentDialogueNode = null;
+        return;
+      }
+
+      currentDialogueNode = node;
+      if (node.getAttribute('data-tour-spoken') === '1') return;
+      node.setAttribute('data-tour-spoken', '1');
+      speakNode(node);
+    }
+
+    function wireDialogueObservers() {
+      var nodes = document.querySelectorAll('.dialogue, .end-dialogue');
+      Array.prototype.forEach.call(nodes, function(node) {
+        node.setAttribute('data-tour-spoken', '0');
+        var observer = new MutationObserver(function() {
+          window.setTimeout(function() { refreshDialogueVoice(node); }, 40);
+        });
+        observer.observe(node, { attributes:true, attributeFilter:['class','style'] });
+        window.setTimeout(function() { refreshDialogueVoice(node); }, 80);
+      });
+    }
+
+    arButton.addEventListener('click', function() {
+      arabicEnabled = !arabicEnabled;
+      safeSet(AR_KEY, arabicEnabled ? '1' : '0');
+      syncControls();
+    });
+
+    voiceButton.addEventListener('click', function() {
+      voiceEnabled = !voiceEnabled;
+      safeSet(VOICE_KEY, voiceEnabled ? '1' : '0');
+      if (!voiceEnabled) stopVoice();
+      syncControls();
+      if (voiceEnabled && currentDialogueNode) speakNode(currentDialogueNode);
+    });
+
+    if ('speechSynthesis' in window) {
+      loadBrowserVoices();
+      if ('onvoiceschanged' in window.speechSynthesis) {
+        window.speechSynthesis.onvoiceschanged = loadBrowserVoices;
+      }
+    }
+
+    var bodyObserver = new MutationObserver(function() {
+      if (!voiceEnabled || !('speechSynthesis' in window)) return;
+      try {
+        if (document.body.classList.contains('presentation-paused')) window.speechSynthesis.pause();
+        else window.speechSynthesis.resume();
+      } catch (error) {}
+    });
+    bodyObserver.observe(document.body, { attributes:true, attributeFilter:['class'] });
+
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler(function(rows) {
+          dialogueRows = rows || [];
+          buildDialogueLookup(dialogueRows);
+        })
+        .withFailureHandler(function() { hydrateArabicSubtitles(); })
+        .getPresentationDialogue();
+
+      google.script.run
+        .withSuccessHandler(function(rows) {
+          voiceProfiles = {};
+          (rows || []).forEach(function(row) {
+            if (row && row.speaker_key) voiceProfiles[row.speaker_key] = row;
+          });
+          voiceAssignments = {};
+        })
+        .withFailureHandler(function() {})
+        .getVoiceProfiles();
+    }
+
+    syncControls();
+    hydrateArabicSubtitles();
+    wireDialogueObservers();
+
+    document.addEventListener('pointerdown', function() {
+      if (voiceEnabled && currentDialogueNode && currentDialogueNode.getAttribute('data-tour-spoken') !== '1') {
+        currentDialogueNode.setAttribute('data-tour-spoken', '1');
+        speakNode(currentDialogueNode);
+      }
+    }, { once:true, capture:true });
+  })();
+  </script>
+
+
+<script>
+(function(){
+  var systemVoiceUtterance = null;
+  var systemVoiceSequence = 0;
+  function voiceEnabled(){
+    try { return window.localStorage.getItem('support_center_voice') !== '0'; }
+    catch (e) { return true; }
+  }
+  function isFemaleRole(role){
+    return role === 'quality_team' || role === 'team_leaders';
+  }
+  function pickSystemVoice(role){
+    if (!('speechSynthesis' in window)) return null;
+    var voices = window.speechSynthesis.getVoices() || [];
+    if (!voices.length) return null;
+    var english = voices.filter(function(v){ return String(v.lang || '').toLowerCase().indexOf('en') === 0; });
+    if (english.length) voices = english;
+    var female = /samantha|victoria|karen|moira|tessa|zira|aria|jenny|sara|ava|susan|hazel|emma|jane|sonia|libby|female/i;
+    var male = /daniel|alex|fred|tom|arthur|george|guy|david|mark|ryan|christopher|andrew|brian|eric|roger|stefan|male/i;
+    var filtered = voices.filter(function(v){
+      return isFemaleRole(role) ? female.test(v.name || '') : male.test(v.name || '');
+    });
+    if (filtered.length) voices = filtered;
+    var index = {assistant_head:1,quality_manager:2,quality_team:1,supervisor:0,team_leaders:2}[role] || 0;
+    return voices[index % voices.length] || voices[0] || null;
+  }
+  window.supportTourSpeakSystem = function(text, role, onComplete){
+    systemVoiceSequence += 1;
+    var mySequence = systemVoiceSequence;
+    var doneCalled = false;
+    function done(){
+      if (doneCalled || mySequence !== systemVoiceSequence) return;
+      doneCalled = true;
+      if (typeof onComplete === 'function') onComplete();
+    }
+
+    text = String(text || '').trim();
+    if (!text) { done(); return false; }
+
+    if (!voiceEnabled() || !('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+      var fallbackMs = Math.max(4200, Math.min(13000, text.length * 55 + 1800));
+      window.setTimeout(done, fallbackMs);
+      return false;
+    }
+
+    if (document.body.classList.contains('presentation-paused')) {
+      done();
+      return false;
+    }
+
+    var v = pickSystemVoice(role);
+    var words = text.replace(/\s+/g, ' ').split(' ');
+    var chunks = [];
+    var current = '';
+    words.forEach(function(word){
+      var candidate = current ? current + ' ' + word : word;
+      if (candidate.length > 96 && current) {
+        chunks.push(current);
+        current = word;
+      } else {
+        current = candidate;
+      }
+    });
+    if (current) chunks.push(current);
+    if (window.supportTourFixedAudio && window.supportTourFixedAudio.usingFixedAudio && typeof text !== 'undefined') { var __fat=String(text||'').replace(/\s+/g,' ').trim(); if(__fat){ chunks.length=0; chunks.push(__fat); } } /* FIXED_AUDIO_NO_SPLIT */
+
+    var chunkIndex = 0;
+    try { window.speechSynthesis.cancel(); } catch (e) {}
+
+    function speakNextChunk(){
+      if (mySequence !== systemVoiceSequence) return;
+      if (chunkIndex >= chunks.length) {
+        systemVoiceUtterance = null;
+        done();
+        return;
+      }
+
+      var u = new SpeechSynthesisUtterance(chunks[chunkIndex++]);
+      if (v) { u.voice = v; u.lang = v.lang || 'en-US'; } else { u.lang = 'en-US'; }
+      u.rate = 0.88;
+      u.pitch = isFemaleRole(role) ? 1.0 : 0.94;
+      u.volume = 1;
+      systemVoiceUtterance = u;
+
+      var settled = false;
+      function finishChunk(){
+        if (settled || mySequence !== systemVoiceSequence) return;
+        settled = true;
+        if (systemVoiceUtterance === u) systemVoiceUtterance = null;
+        window.setTimeout(speakNextChunk, 90);
+      }
+      u.onend = finishChunk;
+      u.onerror = finishChunk;
+
+      try { window.speechSynthesis.speak(u); }
+      catch (e) { finishChunk(); }
+    }
+
+    speakNextChunk();
+    return true;
+  };
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,5496 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <link rel="stylesheet" href="tour-runtime.css">
+  <script src="tour-data.js"></script>
+  <script src="tour-runtime.js"></script>
+  
+  <!-- FIXED_TOUR_AUDIO -->
+  <script src="tour-audio-map.js"></script>
+  <script src="tour-audio.js"></script>
+<meta name="referrer" content="no-referrer">
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <link rel="preconnect" href="https://i.imgur.com" crossorigin>
+  <link rel="preload" as="image" href="assets/images/Plx31qq.png" referrerpolicy="no-referrer">
+  <link rel="preload" as="image" href="assets/images/DFyM2QR.png" referrerpolicy="no-referrer">
+  <link rel="preload" as="image" href="assets/images/Avgdgsi.png" referrerpolicy="no-referrer">
+  <link rel="preload" as="image" href="assets/images/XPNz0AC.png" referrerpolicy="no-referrer">
+  <link rel="preload" as="image" href="assets/images/ItvBabH.png" referrerpolicy="no-referrer">
+
+  <title>Supervisor - Live Operations</title>
+
+
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+    html,
+    body {
+      margin: 0;
+
+      width: 100%;
+      height: 100%;
+    }
+
+
+    body {
+      overflow: hidden;
+
+      background:
+        #17120d;
+
+      color: white;
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+    }
+
+
+    /* =========================================
+       SUPERVISOR SCENE
+    ========================================== */
+
+    .supervisor-scene {
+      position: relative;
+
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+
+      overflow: hidden;
+
+      background:
+        #17120d;
+    }
+
+
+    .scene-blur {
+      position: absolute;
+
+      inset: -42px;
+
+      background-image:
+        linear-gradient(
+          rgba(0,0,0,.18),
+          rgba(0,0,0,.24)
+        ),
+        url('assets/images/f9zdsGu.png');
+
+      background-size: cover;
+      background-position: center;
+
+      transform:
+        scale(1.11);
+
+      filter:
+        blur(30px)
+        brightness(.34);
+
+      transition:
+        transform 2.4s ease,
+        filter 2.4s ease,
+        opacity 1.9s ease;
+    }
+
+
+    .photo-wrap {
+      position: absolute;
+
+      inset: 0;
+
+      z-index: 2;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      padding:
+        10px 18px;
+
+      opacity: 0;
+
+      animation:
+        photoIn 1.15s ease forwards;
+
+      transition:
+        opacity 1.8s ease,
+        filter 2s ease,
+        transform 2.4s
+        cubic-bezier(.18,.76,.2,1);
+    }
+
+
+    .supervisor-photo {
+      display: block;
+
+      width: auto;
+      height: 100%;
+
+      max-width: 100%;
+      max-height: 100%;
+
+      object-fit: contain;
+
+      border-radius: 5px;
+
+      box-shadow:
+        0 36px 100px
+        rgba(0,0,0,.54);
+    }
+
+
+    .scene-shade {
+      position: absolute;
+
+      inset: 0;
+
+      z-index: 3;
+
+      pointer-events: none;
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(0,0,0,.56),
+          transparent 28%
+        ),
+        linear-gradient(
+          to top,
+          rgba(0,0,0,.76),
+          transparent 47%
+        ),
+        radial-gradient(
+          circle at center,
+          transparent 42%,
+          rgba(0,0,0,.28)
+        );
+    }
+
+
+    /* =========================================
+       ROLE LABEL
+    ========================================== */
+
+    .role-indicator {
+      position: absolute;
+
+      z-index: 7;
+
+      top: 5%;
+      left: 4%;
+
+      opacity: 0;
+
+      transform:
+        translateY(-12px);
+
+      animation:
+        roleIn .9s ease .75s forwards;
+
+      transition:
+        opacity .8s ease;
+    }
+
+
+    .role-small {
+      margin-bottom: 8px;
+
+      color:
+        rgba(223,191,136,.74);
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing: 4px;
+    }
+
+
+    .role-name {
+      color: white;
+
+      font-size:
+        clamp(
+          25px,
+          2.25vw,
+          35px
+        );
+
+      font-weight: 650;
+    }
+
+
+    .role-line {
+      width: 72px;
+      height: 2px;
+
+      margin-top: 13px;
+
+      background:
+        linear-gradient(
+          to right,
+          #d1aa68,
+          transparent
+        );
+    }
+
+
+    /* =========================================
+       DIALOGUE
+    ========================================== */
+
+    .dialogue {
+      position: absolute;
+
+      z-index: 10;
+
+      left: 50%;
+      bottom: 5%;
+
+      width:
+        min(
+          850px,
+          80vw
+        );
+
+      opacity: 0;
+
+      transform:
+        translateX(-50%)
+        translateY(22px);
+
+      transition:
+        opacity .68s ease,
+        transform .68s ease;
+    }
+
+
+    .dialogue.show {
+      opacity: 1;
+
+      transform:
+        translateX(-50%)
+        translateY(0);
+    }
+
+
+    .dialogue.hide {
+      opacity: 0;
+
+      transform:
+        translateX(-50%)
+        translateY(-12px);
+    }
+
+
+    .dialogue-name {
+      margin-bottom: 8px;
+
+      text-align: center;
+
+      color:
+        rgba(222,183,114,.93);
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing: 3px;
+    }
+
+
+    .dialogue.visitor
+    .dialogue-name {
+      color:
+        rgba(255,255,255,.52);
+    }
+
+
+    .dialogue-box {
+      position: relative;
+
+      padding:
+        20px 30px;
+
+      text-align: center;
+
+      color: white;
+
+      font-size:
+        clamp(
+          18px,
+          1.45vw,
+          24px
+        );
+
+      line-height: 1.48;
+
+      border-radius: 15px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(18,15,12,.92),
+          rgba(42,33,24,.84)
+        );
+
+      border:
+        1px solid
+        rgba(232,196,133,.15);
+
+      box-shadow:
+        0 24px 58px
+        rgba(0,0,0,.50);
+
+      backdrop-filter:
+        blur(16px);
+
+      -webkit-backdrop-filter:
+        blur(16px);
+    }
+
+
+    .dialogue-box::after {
+      content: "";
+
+      position: absolute;
+
+      left: 50%;
+      bottom: -1px;
+
+      transform:
+        translateX(-50%);
+
+      width: 112px;
+      height: 2px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          #d3ad6c,
+          transparent
+        );
+    }
+
+
+    /* =========================================
+       HANDOFF
+    ========================================== */
+
+    .supervisor-scene.live-mode
+    .photo-wrap {
+      transform:
+        scale(1.03);
+
+      opacity: .08;
+
+      filter:
+        blur(5px)
+        brightness(.34);
+    }
+
+
+    .supervisor-scene.live-mode
+    .scene-blur {
+      transform:
+        scale(1.18);
+
+      opacity: .36;
+
+      filter:
+        blur(43px)
+        brightness(.15);
+    }
+
+
+    .supervisor-scene.live-mode
+    .role-indicator {
+      opacity: 0;
+    }
+
+
+    /* =========================================
+       LIVE OPERATIONS BOARD
+    ========================================== */
+
+    .live-board {
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 35;
+
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      transform:
+        scale(1.018);
+
+      transition:
+        opacity 1s ease,
+        transform 1.25s
+        cubic-bezier(.18,.76,.2,1);
+
+      background:
+        radial-gradient(
+          circle at 18% 16%,
+          rgba(218,174,96,.11),
+          transparent 31%
+        ),
+        radial-gradient(
+          circle at 84% 78%,
+          rgba(121,155,141,.07),
+          transparent 34%
+        ),
+        linear-gradient(
+          135deg,
+          #1f1b17 0%,
+          #29231c 50%,
+          #171513 100%
+        );
+    }
+
+
+    .live-board.show {
+      opacity: 1;
+
+      pointer-events: auto;
+
+      transform:
+        scale(1);
+    }
+
+
+    .board-grid-bg {
+      position: absolute;
+
+      inset: 0;
+
+      opacity: .065;
+
+      pointer-events: none;
+
+      background-image:
+        linear-gradient(
+          rgba(255,255,255,.10) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,.10) 1px,
+          transparent 1px
+        );
+
+      background-size:
+        54px 54px;
+
+      mask-image:
+        linear-gradient(
+          to bottom,
+          transparent,
+          black 14%,
+          black 86%,
+          transparent
+        );
+    }
+
+
+    /* =========================================
+       BOARD HEADER
+    ========================================== */
+
+    .board-header {
+      position: relative;
+
+      z-index: 3;
+
+      height: 104px;
+
+      padding:
+        20px 32px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      background:
+        rgba(28,24,20,.84);
+
+      border-bottom:
+        1px solid
+        rgba(232,203,150,.09);
+
+      backdrop-filter:
+        blur(18px);
+
+      -webkit-backdrop-filter:
+        blur(18px);
+    }
+
+
+    .board-heading-small {
+      margin-bottom: 6px;
+
+      color:
+        rgba(222,182,112,.70);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing: 4px;
+    }
+
+
+    .board-heading {
+      font-size:
+        clamp(
+          25px,
+          2.15vw,
+          36px
+        );
+
+      font-weight: 650;
+    }
+
+
+    .board-subtitle {
+      margin-top: 5px;
+
+      color:
+        rgba(255,255,255,.32);
+
+      font-size: 9px;
+
+      letter-spacing: 2px;
+    }
+
+
+    .board-status {
+      display: flex;
+
+      gap: 9px;
+    }
+
+
+    .status-tile {
+      min-width: 102px;
+
+      padding:
+        10px 12px;
+
+      text-align: center;
+
+      border-radius: 11px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(61,50,38,.78),
+          rgba(38,33,28,.82)
+        );
+
+      border:
+        1px solid
+        rgba(231,199,141,.10);
+    }
+
+
+    .status-value {
+      margin-bottom: 3px;
+
+      color: white;
+
+      font-size: 16px;
+
+      font-weight: 700;
+    }
+
+
+    .status-value.live {
+      color:
+        #d8b16e;
+    }
+
+
+    .status-label {
+      color:
+        rgba(255,255,255,.30);
+
+      font-size: 7px;
+
+      letter-spacing: 1px;
+    }
+
+
+    /* =========================================
+       BOARD BODY
+    ========================================== */
+
+    .board-body {
+      position: relative;
+
+      z-index: 3;
+
+      height:
+        calc(100vh - 104px);
+
+      height:
+        calc(100dvh - 104px);
+
+      display: grid;
+
+      grid-template-columns:
+        235px 1fr;
+    }
+
+
+    /* =========================================
+       SUPERVISOR RAIL
+    ========================================== */
+
+    .supervisor-rail {
+      padding:
+        21px 16px;
+
+      border-right:
+        1px solid
+        rgba(232,203,150,.07);
+
+      background:
+        rgba(23,20,17,.72);
+    }
+
+
+    .rail-title {
+      margin:
+        0 10px 14px;
+
+      color:
+        rgba(255,255,255,.25);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing: 3px;
+    }
+
+
+    .rail-item {
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+      margin-bottom: 6px;
+
+      padding:
+        11px 12px;
+
+      border-radius: 10px;
+
+      color:
+        rgba(255,255,255,.52);
+
+      font-size: 12px;
+    }
+
+
+    .rail-item.active {
+      color: white;
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(213,169,91,.13),
+          rgba(255,255,255,.022)
+        );
+
+      border:
+        1px solid
+        rgba(213,169,91,.14);
+    }
+
+
+    .rail-icon {
+      width: 21px;
+
+      text-align: center;
+    }
+
+
+    .rail-divider {
+      height: 1px;
+
+      margin:
+        18px 0;
+
+      background:
+        rgba(255,255,255,.06);
+    }
+
+
+    .floor-note {
+      padding: 13px;
+
+      border-radius: 12px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(82,66,45,.38),
+          rgba(41,36,29,.45)
+        );
+
+      border:
+        1px solid
+        rgba(219,185,124,.10);
+    }
+
+
+    .floor-note-title {
+      margin-bottom: 7px;
+
+      color:
+        rgba(255,255,255,.76);
+
+      font-size: 11px;
+
+      font-weight: 650;
+    }
+
+
+    .floor-note-text {
+      color:
+        rgba(255,255,255,.34);
+
+      font-size: 9px;
+
+      line-height: 1.55;
+    }
+
+
+    /* =========================================
+       OPERATIONS VIEW
+    ========================================== */
+
+    .operations-main {
+      min-width: 0;
+
+      display: flex;
+
+      flex-direction: column;
+
+      overflow: hidden;
+    }
+
+
+    .live-metrics {
+      flex-shrink: 0;
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          4,
+          minmax(0,1fr)
+        );
+
+      gap: 10px;
+
+      padding:
+        16px 24px 10px;
+    }
+
+
+    .metric-card {
+      min-height: 82px;
+
+      padding:
+        13px;
+
+      border-radius: 13px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(62,52,41,.84),
+          rgba(39,34,29,.88)
+        );
+
+      border:
+        1px solid
+        rgba(230,198,140,.095);
+
+      box-shadow:
+        0 16px 34px
+        rgba(0,0,0,.19);
+    }
+
+
+    .metric-top {
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      margin-bottom: 9px;
+    }
+
+
+    .metric-label {
+      color:
+        rgba(255,255,255,.38);
+
+      font-size: 8px;
+
+      font-weight: 700;
+
+      letter-spacing: 1.6px;
+    }
+
+
+    .metric-icon {
+      width: 29px;
+      height: 29px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 9px;
+
+      background:
+        rgba(255,255,255,.045);
+
+      border:
+        1px solid
+        rgba(255,255,255,.07);
+
+      font-size: 14px;
+    }
+
+
+    .metric-value {
+      color: white;
+
+      font-size: 19px;
+
+      font-weight: 700;
+    }
+
+
+    .metric-value.gold {
+      color:
+        #d5ad69;
+    }
+
+
+    .metric-caption {
+      margin-top: 3px;
+
+      color:
+        rgba(255,255,255,.27);
+
+      font-size: 8px;
+    }
+
+
+    /* =========================================
+       AUTO SYSTEM FOCUS STRIP
+    ========================================== */
+
+    .auto-strip {
+      flex-shrink: 0;
+
+      margin:
+        0 24px 10px;
+
+      padding:
+        11px 13px;
+
+      display: grid;
+
+      grid-template-columns:
+        auto 1fr auto;
+
+      gap: 14px;
+
+      align-items: center;
+
+      border-radius: 12px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(89,69,44,.62),
+          rgba(51,43,34,.62)
+        );
+
+      border:
+        1px solid
+        rgba(228,197,140,.11);
+    }
+
+
+    .auto-kicker {
+      color:
+        rgba(218,176,101,.82);
+
+      font-size: 8px;
+
+      font-weight: 700;
+
+      letter-spacing: 2.4px;
+    }
+
+
+    .auto-name {
+      color: white;
+
+      font-size: 14px;
+
+      font-weight: 700;
+    }
+
+
+    .auto-desc {
+      margin-top: 2px;
+
+      color:
+        rgba(255,255,255,.46);
+
+      font-size: 10px;
+
+      line-height: 1.4;
+    }
+
+
+    .auto-step {
+      color:
+        rgba(255,255,255,.42);
+
+      font-size: 9px;
+
+      letter-spacing: 1px;
+    }
+
+
+    /* =========================================
+       SYSTEMS FEED
+    ========================================== */
+
+    .systems-scroll {
+      flex: 1;
+
+      min-height: 0;
+
+      overflow-y: auto;
+
+      padding:
+        0 24px 28px;
+
+      scrollbar-width: thin;
+
+      scrollbar-color:
+        #7e6a4d #201c18;
+    }
+
+
+    .systems-scroll::-webkit-scrollbar {
+      width: 9px;
+    }
+
+
+    .systems-scroll::-webkit-scrollbar-track {
+      background:
+        #201c18;
+    }
+
+
+    .systems-scroll::-webkit-scrollbar-thumb {
+      background:
+        #7e6a4d;
+
+      border-radius: 20px;
+
+      border:
+        2px solid
+        #201c18;
+    }
+
+
+    .systems-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          3,
+          minmax(0,1fr)
+        );
+
+      gap: 14px;
+
+      padding-bottom: 18px;
+    }
+
+
+    .system-card {
+      --accent:
+        #d1aa67;
+
+      position: relative;
+
+      min-height: 174px;
+
+      padding:
+        16px;
+
+      overflow: hidden;
+
+      cursor: pointer;
+
+      border-radius: 15px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(61,52,42,.96),
+          rgba(40,35,29,.98)
+        );
+
+      border:
+        1px solid
+        rgba(231,200,143,.09);
+
+      box-shadow:
+        0 18px 38px
+        rgba(0,0,0,.22),
+        inset 0 1px 0
+        rgba(255,255,255,.022);
+
+      transition:
+        transform .26s ease,
+        border-color .26s ease,
+        background .26s ease,
+        box-shadow .26s ease;
+    }
+
+
+    .system-card::before {
+      content: "";
+
+      position: absolute;
+
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 2px;
+
+      background:
+        linear-gradient(
+          90deg,
+          var(--accent),
+          rgba(255,255,255,.08),
+          transparent 88%
+        );
+    }
+
+
+    .system-card:hover,
+    .system-card.auto-focus {
+      transform:
+        translateY(-4px)
+        scale(1.012);
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(72,61,49,.98),
+          rgba(46,40,33,.99)
+        );
+
+      border-color:
+        rgba(216,177,108,.34);
+
+      box-shadow:
+        0 24px 50px
+        rgba(0,0,0,.31),
+        0 0 0 1px
+        rgba(216,177,108,.045),
+        0 0 30px
+        rgba(149,118,70,.08);
+    }
+
+
+    .system-name {
+      position: relative;
+
+      z-index: 2;
+
+      padding-right: 74px;
+
+      margin:
+        18px 0 9px;
+
+      color: white;
+
+      font-size: 18px;
+
+      font-weight: 650;
+
+      line-height: 1.22;
+    }
+
+
+    .system-description {
+      position: relative;
+
+      z-index: 2;
+
+      max-width: 92%;
+
+      color:
+        rgba(255,255,255,.48);
+
+      font-size: 11px;
+
+      line-height: 1.52;
+    }
+
+
+    .system-number {
+      position: absolute;
+
+      top: 15px;
+      right: 15px;
+
+      color:
+        rgba(223,188,124,.45);
+
+      font-size: 8px;
+
+      font-weight: 700;
+
+      letter-spacing: 1.8px;
+    }
+
+
+    .system-arrow {
+      position: absolute;
+
+      right: 16px;
+      bottom: 13px;
+
+      color:
+        #d2aa65;
+
+      font-size: 19px;
+    }
+
+
+    .systems-message {
+      padding: 48px;
+
+      text-align: center;
+
+      color:
+        rgba(255,255,255,.30);
+
+      font-size: 12px;
+    }
+
+
+    /* =========================================
+       DETAIL OVERLAY
+    ========================================== */
+
+    .detail-overlay {
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 150;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 28px;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      background:
+        rgba(18,15,12,.82);
+
+      backdrop-filter:
+        blur(18px);
+
+      -webkit-backdrop-filter:
+        blur(18px);
+
+      transition:
+        opacity .35s ease;
+    }
+
+
+    .detail-overlay.show {
+      opacity: 1;
+
+      pointer-events: auto;
+    }
+
+
+    .detail-panel {
+      position: relative;
+
+      width:
+        min(
+          1040px,
+          93vw
+        );
+
+      max-height:
+        88vh;
+
+      overflow-y: auto;
+
+      padding: 33px;
+
+      border-radius: 20px;
+
+      background:
+        linear-gradient(
+          145deg,
+          #332b22,
+          #211d18
+        );
+
+      border:
+        1px solid
+        rgba(231,199,141,.13);
+
+      box-shadow:
+        0 45px 120px
+        rgba(0,0,0,.67);
+
+      transform:
+        translateY(18px)
+        scale(.98);
+
+      transition:
+        transform .35s ease;
+    }
+
+
+    .detail-overlay.show
+    .detail-panel {
+      transform:
+        translateY(0)
+        scale(1);
+    }
+
+
+    .detail-close {
+      position: absolute;
+
+      top: 18px;
+      right: 18px;
+
+      width: 40px;
+      height: 40px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      cursor: pointer;
+
+      border-radius: 50%;
+
+      color:
+        rgba(255,255,255,.68);
+
+      background:
+        rgba(255,255,255,.045);
+
+      border:
+        1px solid
+        rgba(255,255,255,.075);
+    }
+
+
+    .detail-label {
+      margin-bottom: 12px;
+
+      color:
+        rgba(220,179,104,.72);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing: 3px;
+    }
+
+
+    .detail-title {
+      margin-bottom: 13px;
+
+      color: white;
+
+      font-size:
+        clamp(
+          28px,
+          3vw,
+          42px
+        );
+
+      font-weight: 650;
+    }
+
+
+    .detail-description {
+      max-width: 780px;
+
+      margin-bottom: 24px;
+
+      color:
+        rgba(255,255,255,.56);
+
+      font-size: 14px;
+
+      line-height: 1.7;
+    }
+
+
+    .detail-image-wrap {
+      width: 100%;
+
+      min-height: 275px;
+
+      margin-bottom: 21px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      overflow: hidden;
+
+      border-radius: 15px;
+
+      background:
+        rgba(255,255,255,.025);
+
+      border:
+        1px solid
+        rgba(255,255,255,.06);
+    }
+
+
+    .detail-image {
+      display: none;
+
+      width: 100%;
+
+      max-height: 475px;
+
+      object-fit: contain;
+    }
+
+
+    .detail-placeholder {
+      padding: 44px;
+
+      text-align: center;
+
+      color:
+        rgba(255,255,255,.24);
+
+      font-size: 12px;
+    }
+
+
+    .detail-link {
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 9px;
+
+      padding:
+        12px 18px;
+
+      border-radius: 9px;
+
+      color:
+        #17120d;
+
+      text-decoration: none;
+
+      font-size: 12px;
+
+      font-weight: 700;
+
+      background:
+        linear-gradient(
+          135deg,
+          #d9b779,
+          #b78d4e
+        );
+    }
+
+
+    .detail-link.hidden {
+      display: none;
+    }
+
+
+    /* =========================================
+       PLAY / PAUSE
+    ========================================== */
+
+    .presentation-control {
+      position: fixed;
+
+      right: 24px;
+      bottom: 24px;
+
+      z-index: 20000;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+      padding:
+        10px 14px;
+
+      border-radius: 999px;
+
+      color: white;
+
+      background:
+        rgba(20,17,14,.84);
+
+      border:
+        1px solid
+        rgba(221,183,116,.21);
+
+      box-shadow:
+        0 12px 30px
+        rgba(0,0,0,.35);
+
+      backdrop-filter:
+        blur(14px);
+
+      -webkit-backdrop-filter:
+        blur(14px);
+
+      cursor: pointer;
+
+      user-select: none;
+    }
+
+
+    .presentation-control-icon {
+      width: 20px;
+
+      text-align: center;
+
+      font-size: 15px;
+    }
+
+
+    .presentation-control-text {
+      font-size: 11px;
+
+      font-weight: 700;
+
+      letter-spacing: 1.5px;
+    }
+
+
+    body.presentation-paused * {
+      animation-play-state:
+        paused !important;
+    }
+
+
+    /* =========================================
+       CONTINUE
+    ========================================== */
+
+    .continue-tour {
+      position: fixed;
+
+      right: 24px;
+      bottom: 78px;
+
+      z-index: 19000;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+      padding:
+        11px 16px;
+
+      border-radius: 999px;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      color:
+        rgba(255,255,255,.90);
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(211,168,91,.15),
+          rgba(255,255,255,.03)
+        );
+
+      border:
+        1px solid
+        rgba(211,168,91,.20);
+
+      box-shadow:
+        0 14px 34px
+        rgba(0,0,0,.28);
+
+      backdrop-filter:
+        blur(14px);
+
+      cursor: pointer;
+
+      transition:
+        opacity .45s ease,
+        transform .25s ease;
+    }
+
+
+    .continue-tour.show {
+      opacity: 1;
+
+      pointer-events: auto;
+    }
+
+
+    .continue-tour:hover {
+      transform:
+        translateY(-2px);
+    }
+
+
+    .continue-tour-text {
+      font-size: 11px;
+
+      font-weight: 700;
+
+      letter-spacing: 1.3px;
+    }
+
+
+    /* =========================================
+       TRANSITION
+    ========================================== */
+
+    .next-transition-cover {
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 30000;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      background:
+        radial-gradient(
+          circle at 52% 46%,
+          rgba(216,176,104,.12),
+          rgba(12,10,8,.98) 61%,
+          #070605 100%
+        );
+
+      transition:
+        opacity .8s ease;
+    }
+
+
+    .next-transition-cover.active {
+      opacity: 1;
+    }
+
+
+    /* =========================================
+       ANIMATIONS
+    ========================================== */
+
+    @keyframes photoIn {
+
+      from {
+        opacity: 0;
+
+        transform:
+          scale(1.02);
+      }
+
+      to {
+        opacity: 1;
+
+        transform:
+          scale(1);
+      }
+
+    }
+
+
+    @keyframes roleIn {
+
+      from {
+        opacity: 0;
+
+        transform:
+          translateY(-12px);
+      }
+
+      to {
+        opacity: 1;
+
+        transform:
+          translateY(0);
+      }
+
+    }
+
+
+    /* =========================================
+       SHORT VIEWPORT
+    ========================================== */
+
+    @media (max-height: 760px) {
+
+      .board-header {
+        height: 82px;
+
+        padding:
+          13px 24px;
+      }
+
+      .board-heading-small {
+        margin-bottom: 3px;
+
+        font-size: 8px;
+      }
+
+      .board-heading {
+        font-size: 24px;
+      }
+
+      .board-subtitle {
+        margin-top: 3px;
+
+        font-size: 8px;
+      }
+
+      .status-tile {
+        min-width: 83px;
+
+        padding:
+          7px 9px;
+      }
+
+      .status-value {
+        font-size: 14px;
+      }
+
+      .status-label {
+        font-size: 7px;
+      }
+
+      .board-body {
+        height:
+          calc(100vh - 82px);
+
+        height:
+          calc(100dvh - 82px);
+
+        grid-template-columns:
+          195px 1fr;
+      }
+
+      .supervisor-rail {
+        padding:
+          13px 12px;
+      }
+
+      .rail-title {
+        margin:
+          0 8px 8px;
+      }
+
+      .rail-item {
+        margin-bottom: 3px;
+
+        padding:
+          8px 9px;
+
+        font-size: 10.5px;
+      }
+
+      .rail-divider {
+        margin:
+          11px 0;
+      }
+
+      .floor-note {
+        padding: 9px;
+      }
+
+      .floor-note-title {
+        margin-bottom: 4px;
+
+        font-size: 9.5px;
+      }
+
+      .floor-note-text {
+        font-size: 8.3px;
+      }
+
+      .live-metrics {
+        gap: 8px;
+
+        padding:
+          10px 20px 7px;
+      }
+
+      .metric-card {
+        min-height: 62px;
+
+        padding:
+          8px 10px;
+      }
+
+      .metric-top {
+        margin-bottom: 4px;
+      }
+
+      .metric-icon {
+        width: 24px;
+        height: 24px;
+
+        font-size: 12px;
+      }
+
+      .metric-label {
+        font-size: 7px;
+      }
+
+      .metric-value {
+        font-size: 16px;
+      }
+
+      .metric-caption {
+        display: none;
+      }
+
+      .auto-strip {
+        margin:
+          0 20px 7px;
+
+        padding:
+          7px 10px;
+      }
+
+      .auto-name {
+        font-size: 12.5px;
+      }
+
+      .auto-desc {
+        font-size: 9.5px;
+      }
+
+      .systems-scroll {
+        padding:
+          0 20px 12px;
+      }
+
+      .systems-grid {
+        gap: 11px;
+      }
+
+      .system-card {
+        min-height: 132px;
+
+        padding: 12px 14px;
+      }
+
+      .system-name {
+        margin:
+          12px 0 7px;
+
+        font-size: 16.5px;
+      }
+
+      .system-description {
+        font-size: 10.3px;
+
+        line-height: 1.4;
+      }
+
+    }
+
+
+    /* =========================================
+       RESPONSIVE
+    ========================================== */
+
+    @media (max-width: 1080px) {
+
+      .systems-grid {
+        grid-template-columns:
+          repeat(
+            2,
+            minmax(0,1fr)
+          );
+      }
+
+      .board-status {
+        display: none;
+      }
+
+    }
+
+
+    @media (max-width: 760px) {
+
+      .supervisor-rail {
+        display: none;
+      }
+
+      .board-body {
+        grid-template-columns: 1fr;
+      }
+
+      .live-metrics {
+        grid-template-columns:
+          repeat(
+            2,
+            minmax(0,1fr)
+          );
+      }
+
+      .systems-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .presentation-control {
+        right: 14px;
+        bottom: 14px;
+      }
+
+      .presentation-control-text {
+        display: none;
+      }
+
+      .continue-tour {
+        right: 14px;
+        bottom: 66px;
+      }
+
+      .continue-tour-text {
+        display: none;
+      }
+
+    }
+
+
+    /* =========================================
+       SUPERVISOR CINEMATIC RETURN BRIDGE
+       Live Board -> Supervisor Photo -> index7
+    ========================================== */
+
+    .supervisor-scene:not(.live-mode)
+    .photo-wrap {
+      transition:
+        opacity 1.20s ease,
+        filter 1.20s ease,
+        transform 1.45s
+        cubic-bezier(.18,.75,.2,1);
+    }
+
+
+    .supervisor-scene:not(.live-mode)
+    .scene-blur {
+      transition:
+        transform 1.45s ease,
+        filter 1.20s ease,
+        opacity 1.20s ease;
+    }
+
+
+    .live-board {
+      transition:
+        opacity 1.05s ease,
+        transform 1.25s
+        cubic-bezier(.18,.75,.2,1) !important;
+    }
+
+
+    /* =========================================
+       SUPERVISOR -> TEAM LEADERS AREA
+    ========================================== */
+
+    .next-transition-cover.leaders-area-route {
+      overflow: hidden;
+
+      background:
+        linear-gradient(
+          to top,
+          rgba(13,16,16,.66),
+          transparent 52%
+        ),
+        url('assets/images/AGMoyL0.png')
+        center / cover no-repeat;
+
+      transform:
+        scale(1.11)
+        translateX(2%);
+
+      filter:
+        blur(7px)
+        brightness(.56)
+        saturate(.86);
+
+      transition:
+        opacity .5s ease,
+        transform 1.55s
+        cubic-bezier(.18,.76,.18,1),
+        filter 1.25s ease;
+    }
+
+    .leaders-area-route.active {
+      opacity: 1;
+
+      transform:
+        scale(1)
+        translateX(0);
+
+      filter:
+        blur(0)
+        brightness(.86)
+        saturate(.96);
+    }
+
+    .leaders-area-route::before {
+      content: "";
+
+      position: absolute;
+
+      inset: 7% 6%;
+
+      border:
+        1px solid
+        rgba(207,181,134,.14);
+
+      border-radius: 20px;
+
+      box-shadow:
+        inset 0 0 0 1px
+        rgba(255,255,255,.025),
+        0 0 60px
+        rgba(0,0,0,.18);
+
+      transform:
+        scale(.90);
+
+      opacity: 0;
+
+      transition:
+        transform 1.25s ease .25s,
+        opacity .5s ease .25s;
+    }
+
+    .leaders-area-route.active::before {
+      transform:
+        scale(1);
+
+      opacity: 1;
+    }
+
+    .leaders-area-route::after {
+      content: "";
+
+      position: absolute;
+
+      left: 7%;
+      right: 7%;
+      top: 50%;
+
+      height: 1px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(205,176,122,.32),
+          transparent
+        );
+
+      transform:
+        scaleX(.15);
+
+      opacity: 0;
+
+      transition:
+        transform 1.05s ease .45s,
+        opacity .45s ease .45s;
+    }
+
+    .leaders-area-route.active::after {
+      transform:
+        scaleX(1);
+
+      opacity: 1;
+    }
+
+    .leaders-route-label {
+      position: absolute;
+
+      z-index: 4;
+
+      left: 50%;
+      bottom: 8.5%;
+
+      transform:
+        translateX(-50%)
+        translateY(12px);
+
+      opacity: 0;
+
+      padding:
+        9px 14px;
+
+      border-radius: 999px;
+
+      color:
+        rgba(255,255,255,.86);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing: 2.2px;
+
+      background:
+        rgba(25,31,31,.58);
+
+      border:
+        1px solid
+        rgba(207,181,134,.18);
+
+      backdrop-filter:
+        blur(12px);
+
+      transition:
+        opacity .50s ease .55s,
+        transform .70s ease .55s;
+    }
+
+    .leaders-area-route.active
+    .leaders-route-label {
+      opacity: 1;
+
+      transform:
+        translateX(-50%)
+        translateY(0);
+    }
+
+
+    /* 2050 V2 — stable single image reveal */
+    .photo-wrap {
+      opacity: 1 !important;
+      animation: none !important;
+    }
+    
+
+    /* =========================================
+       V2 — TEAM LEADERS AREA ROUTE
+       Destination photo is preload only.
+    ========================================== */
+    .next-transition-cover.leaders-area-route {
+      background:
+        radial-gradient(
+          circle at 50% 45%,
+          rgba(196,166,108,.10),
+          transparent 27%
+        ),
+        linear-gradient(
+          135deg,
+          #1a2223,
+          #324042 50%,
+          #171d1f
+        ) !important;
+
+      filter: none !important;
+    }
+
+    .leaders-area-route::before {
+      inset: 11% 15% !important;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(255,255,255,.025),
+          rgba(111,143,140,.08)
+        );
+    }
+    
+
+    /* =========================================
+       V2 — SUPERVISOR LIVE OPERATIONS STREAM
+       Deliberately NOT a card grid.
+    ========================================== */
+
+    .operations-stream {
+      position: relative;
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 0;
+
+      padding:
+        4px 0 20px;
+    }
+
+
+    .operation-row {
+      --accent:
+        #c0a064;
+
+      position: relative;
+
+      min-height: 100px;
+
+      display: grid;
+
+      grid-template-columns:
+        36px 72px 1fr 108px;
+
+      align-items: center;
+
+      gap: 12px;
+
+      padding:
+        12px 14px 12px 7px;
+
+      cursor: pointer;
+
+      border-bottom:
+        1px solid
+        rgba(231,200,143,.065);
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(255,255,255,.010),
+          transparent
+        );
+
+      transition:
+        background .28s ease,
+        transform .28s ease,
+        border-color .28s ease;
+    }
+
+
+    .operation-row:first-child {
+      border-top:
+        1px solid
+        rgba(231,200,143,.065);
+    }
+
+
+    .operation-row:hover,
+    .operation-row.auto-focus {
+      transform:
+        translateX(5px);
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(196,160,100,.08),
+          rgba(255,255,255,.022) 48%,
+          transparent
+        );
+
+      border-color:
+        rgba(207,176,120,.20);
+    }
+
+
+    .stream-rail {
+      position: relative;
+
+      align-self: stretch;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+    }
+
+
+    .stream-dot {
+      position: relative;
+
+      z-index: 2;
+
+      width: 11px;
+      height: 11px;
+
+      border-radius: 50%;
+
+      background:
+        #263034;
+
+      border:
+        2px solid
+        var(--accent);
+
+      box-shadow:
+        0 0 0 5px
+        rgba(255,255,255,.015);
+
+      transition:
+        transform .28s ease,
+        box-shadow .28s ease,
+        background .28s ease;
+    }
+
+
+    .operation-row.auto-focus
+    .stream-dot {
+      transform:
+        scale(1.25);
+
+      background:
+        var(--accent);
+
+      box-shadow:
+        0 0 0 7px
+        rgba(196,160,100,.07),
+        0 0 24px
+        rgba(196,160,100,.14);
+    }
+
+
+    .stream-line {
+      position: absolute;
+
+      left: 50%;
+      top: 0;
+      bottom: 0;
+
+      width: 1px;
+
+      transform:
+        translateX(-50%);
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(255,255,255,.02),
+          rgba(198,164,103,.18),
+          rgba(255,255,255,.02)
+        );
+    }
+
+
+    .stream-sequence-small {
+      margin-bottom: 3px;
+
+      color:
+        rgba(213,174,103,.46);
+
+      font-size: 7px;
+
+      font-weight: 700;
+
+      letter-spacing: 1.8px;
+    }
+
+
+    .stream-sequence-number {
+      color:
+        rgba(255,255,255,.72);
+
+      font-size: 19px;
+
+      font-weight: 650;
+    }
+
+
+    .stream-name {
+      margin-bottom: 6px;
+
+      color: white;
+
+      font-size: 16px;
+
+      font-weight: 650;
+    }
+
+
+    .stream-description {
+      max-width: 720px;
+
+      color:
+        rgba(255,255,255,.42);
+
+      font-size: 10.5px;
+
+      line-height: 1.5;
+    }
+
+
+    .stream-state {
+      display: flex;
+
+      align-items: center;
+      justify-content: flex-end;
+
+      gap: 11px;
+    }
+
+
+    .stream-state-pill {
+      padding:
+        5px 8px;
+
+      border-radius: 999px;
+
+      color:
+        rgba(218,181,113,.66);
+
+      font-size: 7px;
+
+      font-weight: 700;
+
+      letter-spacing: 1px;
+
+      border:
+        1px solid
+        rgba(210,175,110,.12);
+
+      background:
+        rgba(210,175,110,.045);
+    }
+
+
+    .stream-arrow {
+      color:
+        #d0a966;
+
+      font-size: 17px;
+    }
+
+
+    @media (max-height: 760px) {
+
+      .operation-row {
+        min-height: 72px;
+
+        grid-template-columns:
+          30px 58px 1fr 92px;
+
+        padding:
+          8px 10px 8px 5px;
+      }
+
+      .stream-name {
+        margin-bottom: 3px;
+
+        font-size: 14px;
+      }
+
+      .stream-description {
+        font-size: 9px;
+      }
+
+      .stream-sequence-number {
+        font-size: 16px;
+      }
+
+    }
+
+
+    @media (max-width: 760px) {
+
+      .operation-row {
+        grid-template-columns:
+          28px 48px 1fr;
+      }
+
+      .stream-state {
+        display: none;
+      }
+
+    }
+
+
+    /* =========================================
+       CREATIVE V3 — SINGLE VISIBLE PHOTO
+    ========================================== */
+
+    .scene-blur {
+      background-image: none !important;
+      background:
+        radial-gradient(
+          circle at 50% 42%,
+          rgba(195,167,111,.10),
+          transparent 31%
+        ),
+        linear-gradient(
+          135deg,
+          #22292a,
+          #111617
+        ) !important;
+    }
+
+    .supervisor-photo {
+      animation: none !important;
+      transform: none !important;
+    }
+
+
+    /* =========================================
+       CREATIVE V3 — SUPERVISOR
+       LIVE FLOOR PULSE
+    ========================================== */
+
+    .operations-main {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.008),
+          transparent 28%
+        );
+    }
+
+    .operations-stream::before {
+      content: "REAL-TIME OPERATIONAL EVENTS";
+      display: block;
+      padding:
+        5px 14px 10px 68px;
+      color:
+        rgba(214,178,108,.30);
+      font-size: 7px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .operation-row.auto-focus
+    .stream-state-pill {
+      color: #e0bd7c;
+      border-color:
+        rgba(215,176,105,.24);
+      background:
+        rgba(215,176,105,.08);
+    }
+
+    .operation-row.auto-focus
+    .stream-sequence-number {
+      color: #e7d1a8;
+    }
+
+  
+
+    /* V30 readability pass — keep the photo visible and remove heavy black dialogue cards. */
+    .dialogue{width:min(940px,78vw) !important;bottom:3.2% !important;}
+    .dialogue-box{
+      padding:9px 16px !important;
+      border:none !important;
+      border-radius:10px !important;
+      background:rgba(8,14,18,.16) !important;
+      box-shadow:none !important;
+      backdrop-filter:none !important;
+      -webkit-backdrop-filter:none !important;
+      color:#fff !important;
+      text-shadow:0 2px 9px rgba(0,0,0,.95),0 1px 2px rgba(0,0,0,.9) !important;
+    }
+    .dialogue-box::after{display:none !important;}
+    .tour-ar-subtitle{
+      margin-top:4px !important;
+      padding-top:4px !important;
+      border-top:none !important;
+      color:#fff !important;
+      line-height:1.45 !important;
+      text-shadow:0 2px 9px rgba(0,0,0,.98) !important;
+    }
+    .role-indicator{top:3.2% !important;left:3.2% !important;max-width:36vw !important;}
+    .role-name{max-width:410px !important;font-size:clamp(17px,1.55vw,25px) !important;line-height:1.14 !important;}
+    @media(max-width:820px){.dialogue{width:94vw !important;}}
+
+  </style>
+
+<style id="supervisorShiftStoryStyle">
+  .supervisor-scene.story-intro .scene-blur{
+    background-image:
+      linear-gradient(rgba(12,10,8,.34),rgba(12,10,8,.54)),
+      var(--story-image) !important;
+    background-size:cover !important;
+    background-position:center !important;
+    filter:blur(34px) brightness(.34) saturate(.76) !important;
+    opacity:.94 !important;
+  }
+  .supervisor-scene.story-intro .photo-wrap{
+    inset:0;
+    padding:clamp(18px,3.2vw,48px) clamp(18px,5vw,86px) clamp(120px,20vh,196px);
+    opacity:1;
+    transform:scale(1);
+    filter:none;
+  }
+  .supervisor-scene.story-intro .supervisor-photo{
+    width:100%;
+    height:100%;
+    max-width:min(1380px,94vw);
+    max-height:calc(100dvh - 142px);
+    object-fit:contain;
+    object-position:center;
+    border-radius:12px;
+    background:#0d0b09;
+    box-shadow:0 38px 110px rgba(0,0,0,.62),0 0 0 1px rgba(218,181,111,.10);
+    transition:opacity .72s ease,transform 7.5s cubic-bezier(.2,.65,.2,1),filter .72s ease;
+  }
+  .supervisor-scene.story-intro .supervisor-photo.story-cover{
+    object-fit:cover;
+    object-position:center 43%;
+  }
+  .supervisor-scene.story-intro .supervisor-photo.story-contain{
+    object-fit:contain;
+    object-position:center;
+  }
+  .supervisor-scene.story-intro .supervisor-photo.story-zoom{
+    transform:scale(1.045);
+  }
+  .supervisor-scene.story-intro .supervisor-photo.story-screen-zoom{
+    transform:scale(1.12) translate(-3.2%,1.5%);
+    filter:brightness(.88);
+  }
+  .supervisor-scene.story-intro .photo-wrap.story-transitioning{
+    opacity:.08;
+    transform:scale(1.015);
+    filter:blur(4px);
+  }
+  .supervisor-scene.story-intro .role-indicator{
+    opacity:1 !important;
+    transform:none !important;
+    animation:none !important;
+  }
+  .supervisor-scene.story-intro .role-small{
+    color:#d7b26f;
+    letter-spacing:3px;
+  }
+  .supervisor-scene.story-intro .role-name{
+    font-size:clamp(15px,1.4vw,22px) !important;
+    color:rgba(255,255,255,.78);
+  }
+  .supervisor-scene.story-intro .scene-shade{
+    background:linear-gradient(to bottom,rgba(0,0,0,.52),transparent 26%),linear-gradient(to top,rgba(0,0,0,.90),transparent 48%),radial-gradient(circle at center,transparent 48%,rgba(0,0,0,.28));
+  }
+  .supervisor-scene.story-intro.story-exit .photo-wrap,
+  .supervisor-scene.story-intro.story-exit .scene-blur,
+  .supervisor-scene.story-intro.story-exit .role-indicator,
+  .supervisor-scene.story-intro.story-exit .scene-shade{
+    opacity:0 !important;
+    transition:opacity .9s ease !important;
+  }
+  .dialogue[data-story-dialogue="1"]{bottom:3.4% !important;width:min(980px,88vw) !important;}
+  .dialogue[data-story-dialogue="1"] .dialogue-name{color:#d9b46f;letter-spacing:3px;}
+  .dialogue[data-story-dialogue="1"] .dialogue-box{background:rgba(10,8,6,.50) !important;backdrop-filter:blur(9px) !important;-webkit-backdrop-filter:blur(9px) !important;border:1px solid rgba(218,181,111,.10) !important;padding:12px 18px !important;}
+  @media(max-width:760px){
+    .supervisor-scene.story-intro .photo-wrap{padding:72px 10px 155px;}
+    .supervisor-scene.story-intro .supervisor-photo{max-width:100%;max-height:calc(100dvh - 210px);border-radius:8px;}
+    .supervisor-scene.story-intro .supervisor-photo.story-cover{object-position:center center;}
+    .supervisor-scene.story-intro .supervisor-photo.story-screen-zoom{transform:scale(1.08);}
+    .supervisor-scene.story-intro .role-indicator{top:18px !important;left:18px !important;max-width:78vw !important;}
+    .dialogue[data-story-dialogue="1"]{width:94vw !important;bottom:2.8% !important;}
+  }
+</style>
+
+<style id="systemDescriptionReadingStyle">
+.auto-desc.is-speaking-description{
+  color:#0b0d0f !important;
+  background:rgba(255,255,255,.94) !important;
+  border-radius:10px !important;
+  padding:8px 10px !important;
+  font-weight:800 !important;
+  box-shadow:0 8px 22px rgba(0,0,0,.16) !important;
+}
+</style>
+  <script>/* FIXED_AUDIO_NO_CUTOFF */</script>
+</head>
+
+
+<body>
+
+  <main
+    id="supervisorScene"
+    class="supervisor-scene"
+  >
+
+    <div id="storyBlur" class="scene-blur"></div>
+
+
+    <div class="photo-wrap">
+
+      <img referrerpolicy="no-referrer"
+        id="storyImage"
+        class="supervisor-photo story-cover"
+        src="assets/images/Plx31qq.png"
+        alt="Supervisor"
+        loading="eager"
+        fetchpriority="high"
+      >
+
+    </div>
+
+
+    <div class="scene-shade"></div>
+
+
+    <div class="role-indicator">
+
+      <div id="storyStepLabel" class="role-small">
+        01 · SHIFT START
+      </div>
+
+      <div class="role-name">
+        SUPERVISOR · SHIFT OPERATIONS
+      </div>
+
+      <div class="role-line"></div>
+
+    </div>
+
+
+    <!-- =====================================
+         SHIFT STORY OPENING DIALOGUE
+    ====================================== -->
+
+    <div id="dialogue1" class="dialogue" data-story-dialogue="1" data-story-label="01 · SHIFT START" data-tour-manual-speech="1" data-ar="نعمل على ثلاث شفتات، ولكل شفت مشرف مسؤول عنه. أبدأ دوامي بفتح جدول الشفت ومراجعة الموظفين الموجودين معي اليوم.">
+      <div class="dialogue-name">SUPERVISOR</div>
+      <div class="dialogue-box">We operate three shifts, and each shift has its own Supervisor. I start my shift by opening the schedule and reviewing which employees are working with me today.</div>
+    </div>
+
+    <div id="dialogue2" class="dialogue" data-story-dialogue="1" data-story-label="02 · REVIEW THE SCHEDULE" data-tour-manual-speech="1" data-ar="أراجع مهمة كل موظف، وأتأكد أن تغطية الشفت موزعة حسب احتياجات العمل.">
+      <div class="dialogue-name">SUPERVISOR</div>
+      <div class="dialogue-box">I review each employee's assigned task and make sure the shift coverage matches the operational needs.</div>
+    </div>
+
+    <div id="dialogueShiftAssign" class="dialogue" data-story-dialogue="1" data-story-label="03 · ASSIGN SHIFT COVERAGE" data-tour-manual-speech="1" data-ar="بعد مراجعة الجدول، أوزّع الموظفين على تغطية الشفت وأتأكد أن كل شخص موجود في المكان الذي يحتاجه العمل قبل بدء المتابعة التشغيلية.">
+      <div class="dialogue-name">SUPERVISOR</div>
+      <div class="dialogue-box">After reviewing the schedule, I assign employees across the shift and make sure the coverage is balanced before the operational work begins.</div>
+    </div>
+
+    <div id="dialogue3" class="dialogue" data-story-dialogue="1" data-story-label="04 · DISTRIBUTE TASKS" data-tour-manual-speech="1" data-ar="بعدها أوزّع روابط العمل والتاسكات على الموظفين من خلال تيمز، حسب مسؤولية كل موظف.">
+      <div class="dialogue-name">SUPERVISOR</div>
+      <div class="dialogue-box">Then I distribute the work links and tasks through Teams, based on each employee's responsibility.</div>
+    </div>
+
+    <div id="dialogue4" class="dialogue" data-story-dialogue="1" data-story-label="05 · HOURLY PERFORMANCE CHECK" data-tour-manual-speech="1" data-ar="في بداية كل ساعة، أسجّل حجم التاسكات الموجودة وأراجع ما أنجزه كل موظف خلال الساعة الماضية. بهذه المتابعة أبقى قريبًا من سير العمل المباشر، وأراقب الأداء، وأدعم الفريق، وأتابع حالات التصعيد، وأعيد توزيع العمل عند الحاجة.">
+      <div class="dialogue-name">SUPERVISOR</div>
+      <div class="dialogue-box">At the start of every hour, I record the current task volume and review what each employee completed during the previous hour. This keeps me close to the live operation, helps me monitor performance, support the team, follow escalations, and redistribute the work when needed.</div>
+    </div>
+
+    <div id="dialogue5" class="dialogue" data-story-dialogue="1" data-story-label="06 · END-OF-SHIFT REPORT" data-tour-manual-speech="1" data-ar="وفي نهاية الشفت، أجهز تقريرًا إجماليًا يوضح إنتاجية كل موظف وأنواع التاسكات التي تم إنجازها.">
+      <div class="dialogue-name">SUPERVISOR</div>
+      <div class="dialogue-box">At the end of the shift, I prepare a total report showing each employee's output and the types of tasks completed.</div>
+    </div>
+
+    <div id="dialogue6" class="dialogue" data-story-dialogue="1" data-story-label="07 · HANDOVER" data-tour-manual-speech="1" data-ar="في النهاية، تضمن هذه المتابعة أن يكون الشفت واضحًا ومنظمًا وجاهزًا للتسليم الكامل للمشرف التالي. وخلال الشفت أبقى على اتصال مستمر بالفريق وبأي مشكلة تحتاج متابعة فورية. الآن سأعرض لكم شاشة التشغيل المباشر والأنظمة التي أستخدمها لإدارة العمل.">
+      <div class="dialogue-name">SUPERVISOR</div>
+      <div class="dialogue-box">In the end, this keeps the shift clear, controlled, and ready for a complete handover to the next Supervisor. Throughout the shift, I stay connected to the team and any issue that needs immediate follow-up. Now let me show you the live operation view and the systems I use to manage it.</div>
+    </div>
+
+    <!-- =====================================
+         ENDING DIALOGUE
+    ====================================== -->
+
+    <div
+      id="endDialogue1"
+      class="dialogue visitor" data-tour-manual-speech="1"
+      data-ar="الآن أصبحت الصورة واضحة؛ الجدول، والمتابعة كل ساعة، والأنظمة المباشرة كلها تعمل معًا ضمن نفس الشفت."
+    >
+
+      <div class="dialogue-name">
+        VISITOR
+      </div>
+
+      <div class="dialogue-box">
+        Now I can see how the schedule, hourly follow-up, and live systems all work together during the shift.
+      </div>
+
+    </div>
+
+
+    <div
+      id="endDialogue2"
+      class="dialogue" data-tour-manual-speech="1"
+      data-ar="بالضبط. شاشة التشغيل المباشر تساعدني على الاستجابة بسرعة، ودعم الفريق، والمحافظة على سير العمل دون توقف."
+    >
+
+      <div class="dialogue-name">
+        SUPERVISOR
+      </div>
+
+      <div class="dialogue-box">
+        Exactly. The live view helps me react quickly, support the team, and keep the operation moving.
+      </div>
+
+    </div>
+
+
+    <div
+      id="endDialogue3"
+      class="dialogue" data-tour-manual-speech="1"
+      data-ar="لننتقل الآن إلى منطقة قادة الفرق."
+    >
+
+      <div class="dialogue-name">
+        SUPERVISOR
+      </div>
+
+      <div class="dialogue-box">
+        Let’s continue to the Team Leaders area.
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- =====================================
+       LIVE OPERATIONS BOARD
+  ====================================== -->
+
+  <section
+    id="liveBoard"
+    class="live-board"
+  >
+
+    <div class="board-grid-bg"></div>
+
+
+    <header class="board-header">
+
+      <div>
+
+        <div class="board-heading-small">
+          SUPERVISOR FLOOR VIEW
+        </div>
+
+        <div class="board-heading">
+          Live Operations Board
+        </div>
+
+        <div class="board-subtitle">
+          MONITOR · SUPPORT · RESPOND
+        </div>
+
+      </div>
+
+
+      <div class="board-status">
+
+        <div class="status-tile">
+
+          <div class="status-value live">
+            LIVE
+          </div>
+
+          <div class="status-label">
+            FLOOR STATUS
+          </div>
+
+        </div>
+
+
+        <div class="status-tile">
+
+          <div
+            id="topSystemsCount"
+            class="status-value"
+          >
+            0
+          </div>
+
+          <div class="status-label">
+            TOOLS
+          </div>
+
+        </div>
+
+
+        <div class="status-tile">
+
+          <div class="status-value">
+            READY
+          </div>
+
+          <div class="status-label">
+            FOLLOW-UP
+          </div>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <div class="board-body">
+
+      <aside class="supervisor-rail">
+
+        <div class="rail-title">
+          LIVE FLOOR
+        </div>
+
+
+        <div class="rail-item active">
+
+          <div class="rail-icon">
+            ◉
+          </div>
+
+          <div>
+            Operations View
+          </div>
+
+        </div>
+
+
+        <div class="rail-item">
+
+          <div class="rail-icon">
+            ◌
+          </div>
+
+          <div>
+            Team Status
+          </div>
+
+        </div>
+
+
+        <div class="rail-item">
+
+          <div class="rail-icon">
+            ⇅
+          </div>
+
+          <div>
+            Queue
+          </div>
+
+        </div>
+
+
+        <div class="rail-item">
+
+          <div class="rail-icon">
+            ✓
+          </div>
+
+          <div>
+            Attendance
+          </div>
+
+        </div>
+
+
+        <div class="rail-item">
+
+          <div class="rail-icon">
+            !
+          </div>
+
+          <div>
+            Escalations
+          </div>
+
+        </div>
+
+
+        <div class="rail-divider"></div>
+
+
+        <div class="floor-note">
+
+          <div class="floor-note-title">
+            Real-Time Follow-Up
+          </div>
+
+          <div class="floor-note-text">
+            Supervisor tools support immediate floor follow-up, coordination and escalation handling.
+          </div>
+
+        </div>
+
+      </aside>
+
+
+      <section class="operations-main">
+
+        <div class="live-metrics">
+
+          <div class="metric-card">
+
+            <div class="metric-top">
+
+              <div class="metric-label">
+                TEAM STATUS
+              </div>
+
+              <div class="metric-icon">
+                👥
+              </div>
+
+            </div>
+
+            <div class="metric-value gold">
+              ACTIVE
+            </div>
+
+            <div class="metric-caption">
+              Live floor follow-up
+            </div>
+
+          </div>
+
+
+          <div class="metric-card">
+
+            <div class="metric-top">
+
+              <div class="metric-label">
+                QUEUE
+              </div>
+
+              <div class="metric-icon">
+                ⇅
+              </div>
+
+            </div>
+
+            <div class="metric-value">
+              MONITORING
+            </div>
+
+            <div class="metric-caption">
+              Workload visibility
+            </div>
+
+          </div>
+
+
+          <div class="metric-card">
+
+            <div class="metric-top">
+
+              <div class="metric-label">
+                ATTENDANCE
+              </div>
+
+              <div class="metric-icon">
+                ✓
+              </div>
+
+            </div>
+
+            <div class="metric-value">
+              TRACKED
+            </div>
+
+            <div class="metric-caption">
+              Team availability
+            </div>
+
+          </div>
+
+
+          <div class="metric-card">
+
+            <div class="metric-top">
+
+              <div class="metric-label">
+                ESCALATIONS
+              </div>
+
+              <div class="metric-icon">
+                !
+              </div>
+
+            </div>
+
+            <div class="metric-value">
+              READY
+            </div>
+
+            <div class="metric-caption">
+              Immediate follow-up
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="autoStrip"
+          class="auto-strip"
+        >
+
+          <div class="auto-kicker">
+            LIVE OPERATIONS STREAM
+          </div>
+
+          <div>
+
+            <div
+              id="autoName"
+              class="auto-name"
+            >
+              Preparing supervisor systems...
+            </div>
+
+            <div
+              id="autoDescription"
+              class="auto-desc"
+            >
+              The presentation will move through every supervisor tool automatically.
+            </div>
+
+          </div>
+
+          <div
+            id="autoStep"
+            class="auto-step"
+          >
+            —
+          </div>
+
+        </div>
+
+
+        <div class="systems-scroll">
+
+          <div
+            id="systemsGrid"
+            class="operations-stream"
+          ></div>
+
+
+          <div
+            id="systemsMessage"
+            class="systems-message"
+          >
+            Loading supervisor systems...
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================
+       DETAIL OVERLAY
+  ====================================== -->
+
+  <div
+    id="detailOverlay"
+    class="detail-overlay"
+  >
+
+    <div class="detail-panel">
+
+      <button
+        id="detailClose"
+        class="detail-close"
+        type="button"
+      >
+        ✕
+      </button>
+
+
+      <div class="detail-label">
+        SUPERVISOR TOOL
+      </div>
+
+
+      <div
+        id="detailTitle"
+        class="detail-title"
+      >
+        System
+      </div>
+
+
+      <div
+        id="detailDescription"
+        class="detail-description"
+      >
+        Description
+      </div>
+
+
+      <div class="detail-image-wrap">
+
+        <img referrerpolicy="no-referrer"
+          id="detailImage"
+          class="detail-image"
+          alt="System Screenshot"
+        >
+
+        <div
+          id="detailPlaceholder"
+          class="detail-placeholder"
+        >
+          No screenshot available.
+        </div>
+
+      </div>
+
+
+      <a
+        id="detailLink"
+        class="detail-link"
+        href="#"
+        target="_blank"
+      >
+        Open System ↗
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================
+       PLAY / PAUSE
+  ====================================== -->
+
+  <button
+    id="presentationControl"
+    class="presentation-control"
+    type="button"
+    aria-label="Pause presentation"
+  >
+
+    <span
+      id="presentationControlIcon"
+      class="presentation-control-icon"
+    >
+      ⏸
+    </span>
+
+    <span
+      id="presentationControlText"
+      class="presentation-control-text"
+    >
+      PAUSE
+    </span>
+
+  </button>
+
+
+  <!-- =====================================
+       CONTINUE
+  ====================================== -->
+
+  <button
+    id="continueTour"
+    class="continue-tour"
+    type="button"
+  >
+
+    <span class="continue-tour-text">
+      CONTINUE TOUR
+    </span>
+
+    <span>
+      →
+    </span>
+
+  </button>
+
+
+  <div
+    id="nextTransitionCover"
+    class="next-transition-cover leaders-area-route"
+  >
+    <div class="leaders-route-label">
+      TEAM LEADERS AREA · COMMAND HUB
+    </div>
+  </div>
+
+
+  <script>
+
+    (function() {
+
+      'use strict';
+
+
+      /* =========================================
+         ELEMENTS
+      ========================================== */
+
+      const scene =
+        document.getElementById(
+          'supervisorScene'
+        );
+
+      const liveBoard =
+        document.getElementById(
+          'liveBoard'
+        );
+
+      const detailOverlay =
+        document.getElementById(
+          'detailOverlay'
+        );
+
+      const detailClose =
+        document.getElementById(
+          'detailClose'
+        );
+
+      const continueTour =
+        document.getElementById(
+          'continueTour'
+        );
+
+      const transitionCover =
+        document.getElementById(
+          'nextTransitionCover'
+        );
+
+      const presentationControl =
+        document.getElementById(
+          'presentationControl'
+        );
+
+      const presentationControlIcon =
+        document.getElementById(
+          'presentationControlIcon'
+        );
+
+      const presentationControlText =
+        document.getElementById(
+          'presentationControlText'
+        );
+
+
+      const d1 =
+        document.getElementById(
+          'dialogue1'
+        );
+
+      const d2 =
+        document.getElementById(
+          'dialogue2'
+        );
+
+      const dShiftAssign =
+        document.getElementById(
+          'dialogueShiftAssign'
+        );
+
+
+      const d3 =
+        document.getElementById(
+          'dialogue3'
+        );
+
+      const d4 =
+        document.getElementById(
+          'dialogue4'
+        );
+
+      const d5 =
+        document.getElementById(
+          'dialogue5'
+        );
+
+      const d6 =
+        document.getElementById(
+          'dialogue6'
+        );
+
+
+      const end1 =
+        document.getElementById(
+          'endDialogue1'
+        );
+
+      const end2 =
+        document.getElementById(
+          'endDialogue2'
+        );
+
+      const end3 =
+        document.getElementById(
+          'endDialogue3'
+        );
+
+
+      const storyImage = document.getElementById('storyImage');
+      const storyStepLabel = document.getElementById('storyStepLabel');
+      const photoWrap = scene.querySelector('.photo-wrap');
+
+      /* =========================================
+         STATE
+      ========================================== */
+
+      let supervisorSystems =
+        [];
+
+      let manualPaused =
+        false;
+
+      let interactionPaused =
+        false;
+
+      let phase =
+        'intro';
+
+      let phaseElapsed =
+        0;
+
+      let lastTick =
+        performance.now();
+
+      let firedEvents =
+        new Set();
+
+      let systemsLoaded =
+        false;
+
+      let systemsReady =
+        false;
+
+      let showcaseLastIndex =
+        -1;
+
+      let showcaseSequenceStarted =
+        false;
+
+      let showcaseSequenceIndex =
+        -1;
+
+      let showcaseWaitingForNarration =
+        false;
+
+      let showcaseAdvanceAt =
+        null;
+
+      let showcaseFinishAt =
+        null;
+
+      let transitionStarted =
+        false;
+
+      let introSequenceStarted = false;
+      let endingSequenceStarted = false;
+      let sequenceToken = 0;
+
+      /* =========================================
+         PAUSE
+      ========================================== */
+
+      function isPaused() {
+
+        return (
+          manualPaused ||
+          interactionPaused
+        );
+
+      }
+
+
+      function syncPauseState() {
+
+        document.body
+          .classList
+          .toggle(
+            'presentation-paused',
+            isPaused()
+          );
+
+
+        presentationControlIcon
+          .textContent =
+            manualPaused
+              ? '▶'
+              : '⏸';
+
+
+        presentationControlText
+          .textContent =
+            manualPaused
+              ? 'PLAY'
+              : 'PAUSE';
+
+
+        presentationControl
+          .setAttribute(
+            'aria-label',
+            manualPaused
+              ? 'Resume presentation'
+              : 'Pause presentation'
+          );
+
+        if ('speechSynthesis' in window) {
+          try {
+            if (isPaused()) window.speechSynthesis.pause();
+            else window.speechSynthesis.resume();
+          } catch (speechPauseError) {}
+        }
+
+      }
+
+
+      presentationControl
+        .addEventListener(
+          'click',
+          function() {
+
+            manualPaused =
+              !manualPaused;
+
+            syncPauseState();
+
+          }
+        );
+
+
+      function startInteractionPause() {
+
+        interactionPaused =
+          true;
+
+        syncPauseState();
+
+      }
+
+
+      function endInteractionPause() {
+
+        interactionPaused =
+          false;
+
+        syncPauseState();
+
+      }
+
+
+      /* =========================================
+         MASTER CLOCK
+      ========================================== */
+
+      function fireOnce(
+        key,
+        time,
+        callback
+      ) {
+
+        if (
+          firedEvents.has(
+            key
+          ) ||
+          phaseElapsed < time
+        ) {
+
+          return;
+
+        }
+
+
+        firedEvents.add(
+          key
+        );
+
+        callback();
+
+      }
+
+
+      function switchPhase(
+        nextPhase
+      ) {
+
+        phase =
+          nextPhase;
+
+        phaseElapsed =
+          0;
+
+        firedEvents
+          .clear();
+
+        lastTick =
+          performance.now();
+
+      }
+
+
+      function fallbackSpeechDelay(text) {
+        const words = String(text || '').trim().split(/\s+/).filter(Boolean).length;
+        return Math.max(2800, Math.min(17000, 1200 + words * 410));
+      }
+
+      function afterUnpaused(callback) {
+        if (!isPaused()) { callback(); return; }
+        const waiter = window.setInterval(function() {
+          if (!isPaused()) {
+            window.clearInterval(waiter);
+            callback();
+          }
+        }, 120);
+      }
+
+      function storySpeak(text, callback) {
+        let completed = false;
+        function done() {
+          if (completed) return;
+          completed = true;
+          callback();
+        }
+        afterUnpaused(function() {
+          if (window.supportTourSpeakSystem) {
+            window.supportTourSpeakSystem(text, 'supervisor', done);
+            return;
+          }
+          window.setTimeout(done, fallbackSpeechDelay(text));
+        });
+      }
+
+      const storyScenes = [
+        { node:d1, label:'01 · SHIFT START', image:'assets/images/Plx31qq.png', mode:'cover', zoom:'normal' },
+        { node:d2, label:'02 · REVIEW THE SCHEDULE', image:'assets/images/DFyM2QR.png', mode:'contain', zoom:'slow' },
+        { node:dShiftAssign, label:'03 · ASSIGN SHIFT COVERAGE', image:'assets/images/Avgdgsi.png', mode:'contain', zoom:'slow' },
+        { node:d3, label:'04 · DISTRIBUTE TASKS', image:'assets/images/XPNz0AC.png', mode:'contain', zoom:'slow' },
+        { node:d4, label:'05 · HOURLY PERFORMANCE CHECK', image:'assets/images/XPNz0AC.png', mode:'contain', zoom:'slow' },
+        { node:d5, label:'06 · END-OF-SHIFT REPORT', image:'assets/images/ItvBabH.png', mode:'contain', zoom:'slow' },
+        { node:d6, label:'07 · HANDOVER', image:'assets/images/ItvBabH.png', mode:'contain', zoom:'slow' }
+      ];
+
+      function setStoryImage(item, index, callback) {
+        storyStepLabel.textContent = item.label;
+        scene.style.setProperty('--story-image', 'url("' + item.image + '")');
+        storyImage.classList.remove('story-cover','story-contain','story-zoom','story-screen-zoom');
+        storyImage.classList.add(item.mode === 'cover' ? 'story-cover' : 'story-contain');
+        if (item.zoom === 'slow') {
+          window.requestAnimationFrame(function() {
+            window.requestAnimationFrame(function() { storyImage.classList.add('story-zoom'); });
+          });
+        }
+
+        if (storyImage.getAttribute('src') === item.image && storyImage.complete) {
+          callback();
+          return;
+        }
+        let settled = false;
+        function ready() {
+          if (settled) return;
+          settled = true;
+          storyImage.removeEventListener('load', ready);
+          storyImage.removeEventListener('error', ready);
+          callback();
+        }
+        storyImage.addEventListener('load', ready);
+        storyImage.addEventListener('error', ready);
+        storyImage.src = item.image;
+        window.setTimeout(ready, 2600);
+      }
+
+      function hideStoryDialogue(node, callback) {
+        node.classList.remove('show');
+        node.classList.add('hide');
+        window.setTimeout(function() {
+          node.classList.remove('hide');
+          callback();
+        }, 520);
+      }
+
+      function runStoryScene(index, token) {
+        if (token !== sequenceToken) return;
+        if (index >= storyScenes.length) {
+          scene.classList.add('story-exit');
+          window.setTimeout(function() {
+            if (token !== sequenceToken) return;
+            scene.classList.add('live-mode');
+            liveBoard.classList.add('show');
+            if (!systemsLoaded) { systemsLoaded = true; loadSystems(); }
+            switchPhase('showcase');
+          }, 920);
+          return;
+        }
+
+        const item = storyScenes[index];
+        const previous = index > 0 ? storyScenes[index - 1].node : null;
+        if (previous) previous.classList.remove('show','hide');
+
+        photoWrap.classList.add('story-transitioning');
+        if (index === 1) storyImage.classList.add('story-screen-zoom');
+        window.setTimeout(function() {
+          if (token !== sequenceToken) return;
+          setStoryImage(item, index, function() {
+            if (token !== sequenceToken) return;
+            photoWrap.classList.remove('story-transitioning');
+            window.setTimeout(function() {
+              if (token !== sequenceToken) return;
+              item.node.classList.add('show');
+              const text = englishTextFromStoryNode(item.node);
+              storySpeak(text, function() {
+                if (token !== sequenceToken) return;
+                hideStoryDialogue(item.node, function() {
+                  afterUnpaused(function() {
+                    window.setTimeout(function() { runStoryScene(index + 1, token); }, 260);
+                  });
+                });
+              });
+            }, 320);
+          });
+        }, index === 1 ? 760 : 470);
+      }
+
+      function englishTextFromStoryNode(node) {
+        const box = node && node.querySelector('.dialogue-box');
+        if (!box) return '';
+        const clone = box.cloneNode(true);
+        const ar = clone.querySelector('.tour-ar-subtitle');
+        if (ar && ar.parentNode) ar.parentNode.removeChild(ar);
+        return String(clone.textContent || '').replace(/\s+/g,' ').trim();
+      }
+
+      function runIntro() {
+        if (introSequenceStarted) return;
+        introSequenceStarted = true;
+        sequenceToken += 1;
+        const token = sequenceToken;
+        scene.classList.add('story-intro');
+        scene.style.setProperty('--story-image','url("assets/images/Plx31qq.png")');
+        window.setTimeout(function() { runStoryScene(0, token); }, 650);
+      }
+
+
+      function runShowcase() {
+
+        if (
+          !systemsReady ||
+          isPaused()
+        ) {
+
+          return;
+
+        }
+
+
+        fireOnce(
+          'continue-show',
+          700,
+          function() {
+
+            continueTour.classList
+              .add('show');
+
+          }
+        );
+
+
+        const total =
+          supervisorSystems.length;
+
+
+        if (total <= 0) {
+          fireOnce('auto-finish-empty', 6500, finishSection);
+          return;
+        }
+
+        function startSystemNarration(index) {
+          if (
+            index < 0 ||
+            index >= total ||
+            showcaseWaitingForNarration
+          ) return;
+
+          showcaseSequenceIndex = index;
+          showcaseWaitingForNarration = true;
+          showcaseAdvanceAt = null;
+
+          focusSystem(index, function() {
+            showcaseWaitingForNarration = false;
+            if (showcaseSequenceIndex >= total - 1) {
+              showcaseFinishAt = phaseElapsed + 1100;
+            } else {
+              showcaseAdvanceAt = phaseElapsed + 650;
+            }
+          });
+        }
+
+        if (!showcaseSequenceStarted) {
+          showcaseSequenceStarted = true;
+          startSystemNarration(0);
+          return;
+        }
+
+        if (showcaseFinishAt !== null && phaseElapsed >= showcaseFinishAt) {
+          showcaseFinishAt = null;
+          finishSection();
+          return;
+        }
+
+        if (
+          !showcaseWaitingForNarration &&
+          showcaseAdvanceAt !== null &&
+          phaseElapsed >= showcaseAdvanceAt
+        ) {
+          showcaseAdvanceAt = null;
+          startSystemNarration(showcaseSequenceIndex + 1);
+        }
+
+      }
+
+
+      function runEndingDialogue(index, token) {
+        const nodes = [end1, end2, end3];
+        if (token !== sequenceToken) return;
+        if (index >= nodes.length) {
+          transitionCover.classList.add('active');
+          window.setTimeout(function() {
+            if (token === sequenceToken) loadIndex7();
+          }, 1100);
+          return;
+        }
+        const node = nodes[index];
+        node.classList.add('show');
+        storySpeak(englishTextFromStoryNode(node), function() {
+          if (token !== sequenceToken) return;
+          hideStoryDialogue(node, function() {
+            afterUnpaused(function() {
+              window.setTimeout(function() { runEndingDialogue(index + 1, token); }, 260);
+            });
+          });
+        });
+      }
+
+      function runEnding() {
+        if (endingSequenceStarted) return;
+        endingSequenceStarted = true;
+        sequenceToken += 1;
+        const token = sequenceToken;
+        window.setTimeout(function() { runEndingDialogue(0, token); }, 1150);
+      }
+
+
+      function masterTick() {
+
+        const now =
+          performance.now();
+
+        const delta =
+          now -
+          lastTick;
+
+        lastTick =
+          now;
+
+
+        if (
+          !isPaused()
+        ) {
+
+          /* Manager review mode: keep the caption on screen long enough for speech. */
+          phaseElapsed +=
+            delta * .78;
+
+        }
+
+
+        if (
+          phase ===
+          'intro'
+        ) {
+
+          runIntro();
+
+        }
+        else if (
+          phase ===
+          'showcase'
+        ) {
+
+          runShowcase();
+
+        }
+        else if (
+          phase ===
+          'ending'
+        ) {
+
+          runEnding();
+
+        }
+
+      }
+
+
+      window.setInterval(
+        masterTick,
+        50
+      );
+
+
+      /* =========================================
+         LOAD SYSTEMS
+      ========================================== */
+
+      function loadSystems() {
+
+        google.script.run
+
+          .withSuccessHandler(
+            function(systems) {
+
+              supervisorSystems =
+                systems || [];
+
+
+              renderSystems(
+                supervisorSystems
+              );
+
+
+              systemsReady =
+                true;
+
+
+              if (
+                phase ===
+                'showcase'
+              ) {
+
+                phaseElapsed =
+                  0;
+
+                firedEvents
+                  .clear();
+
+                showcaseLastIndex =
+                  -1;
+
+              }
+
+            }
+          )
+
+          .withFailureHandler(
+            function(error) {
+
+              console.error(
+                'Supervisor systems load failed:',
+                error
+              );
+
+
+              document
+                .getElementById(
+                  'systemsMessage'
+                )
+                .textContent =
+                  'Unable to load supervisor systems.';
+
+
+              systemsReady =
+                true;
+
+            }
+          )
+
+          .getSupervisorSystems();
+
+      }
+
+
+      /* =========================================
+         RENDER
+      ========================================== */
+
+      function renderSystems(
+        systems
+      ) {
+
+        const stream =
+          document.getElementById(
+            'systemsGrid'
+          );
+
+        const message =
+          document.getElementById(
+            'systemsMessage'
+          );
+
+        const topCount =
+          document.getElementById(
+            'topSystemsCount'
+          );
+
+
+        stream.innerHTML =
+          '';
+
+
+        topCount.textContent =
+          systems.length;
+
+
+        if (
+          !systems.length
+        ) {
+
+          message.style.display =
+            'block';
+
+          message.textContent =
+            'No supervisor systems added yet.';
+
+          return;
+
+        }
+
+
+        message.style.display =
+          'none';
+
+
+        systems.forEach(
+          function(
+            system,
+            index
+          ) {
+
+            const row =
+              document.createElement(
+                'div'
+              );
+
+
+            row.className =
+              'operation-row';
+
+
+            row.dataset.systemIndex =
+              String(
+                index
+              );
+
+
+            row.style
+              .setProperty(
+                '--accent',
+                getAccent(
+                  system.color,
+                  index
+                )
+              );
+
+
+            const titleWithEmoji =
+              (
+                system.emoji
+                  ? (
+                      system.emoji +
+                      '  '
+                    )
+                  : ''
+              ) +
+              (
+                system.system_name ||
+                ''
+              );
+
+
+            row.innerHTML = `
+
+              <div class="stream-rail">
+
+                <div class="stream-dot"></div>
+
+                <div class="stream-line"></div>
+
+              </div>
+
+
+              <div class="stream-sequence">
+
+                <div class="stream-sequence-small">
+                  LIVE
+                </div>
+
+                <div class="stream-sequence-number">
+                  ${String(
+                    index + 1
+                  ).padStart(
+                    2,
+                    '0'
+                  )}
+                </div>
+
+              </div>
+
+
+              <div class="stream-main">
+
+                <div class="stream-name">
+                  ${escapeHtml(
+                    titleWithEmoji
+                  )}
+                </div>
+
+                <div class="stream-description">
+                  ${escapeHtml(
+                    system.description ||
+                    ''
+                  )}
+                </div>
+
+              </div>
+
+
+              <div class="stream-state">
+
+                <div class="stream-state-pill">
+                  MONITORED
+                </div>
+
+                <div class="stream-arrow">
+                  ↗
+                </div>
+
+              </div>
+
+            `;
+
+
+            row.addEventListener(
+              'click',
+              function() {
+
+                openSystem(
+                  system
+                );
+
+              }
+            );
+
+
+            stream.appendChild(
+              row
+            );
+
+          }
+        );
+
+      }
+
+
+      /* =========================================
+         AUTO FOCUS
+      ========================================== */
+
+      function focusSystem(
+        index,
+        onNarrationComplete
+      ) {
+
+        document
+          .querySelectorAll(
+            '#systemsGrid .operation-row'
+          )
+          .forEach(
+            function(row) {
+
+              row.classList
+                .remove(
+                  'auto-focus'
+                );
+
+            }
+          );
+
+
+        const row =
+          document.querySelector(
+            '#systemsGrid .operation-row[data-system-index="' +
+            String(
+              index
+            ) +
+            '"]'
+          );
+
+        const system =
+          supervisorSystems[index];
+
+
+        if (
+          !row ||
+          !system
+        ) {
+          if (typeof onNarrationComplete === 'function') onNarrationComplete();
+          return;
+
+        }
+
+
+        showcaseLastIndex =
+          index;
+
+
+        row.classList
+          .add(
+            'auto-focus'
+          );
+
+
+        row.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+          inline: 'nearest'
+        });
+
+
+        document
+          .getElementById(
+            'autoName'
+          )
+          .textContent =
+            (
+              system.emoji
+                ? (
+                    system.emoji +
+                    '  '
+                  )
+                : ''
+            ) +
+            (
+              system.system_name ||
+              'Supervisor Tool'
+            );
+
+
+        const autoDescriptionEl =
+          document.getElementById('autoDescription');
+
+        autoDescriptionEl.classList.remove('is-speaking-description');
+        autoDescriptionEl.removeAttribute('data-reading-index');
+        autoDescriptionEl.textContent =
+          system.description ||
+          'Supervisor operational follow-up tool.';
+
+        const supervisorNarration = String(system.description || '').trim();
+        if (window.supportTourSpeakSystem && supervisorNarration) {
+          autoDescriptionEl.dataset.readingIndex = String(index);
+          autoDescriptionEl.classList.add('is-speaking-description');
+          window.supportTourSpeakSystem(
+            supervisorNarration,
+            'supervisor',
+            function() {
+              if (autoDescriptionEl.dataset.readingIndex === String(index)) {
+                autoDescriptionEl.classList.remove('is-speaking-description');
+                autoDescriptionEl.removeAttribute('data-reading-index');
+              }
+              if (typeof onNarrationComplete === 'function') onNarrationComplete();
+            }
+          );
+        }
+        else if (supervisorNarration) {
+          autoDescriptionEl.dataset.readingIndex = String(index);
+          autoDescriptionEl.classList.add('is-speaking-description');
+          window.setTimeout(function() {
+            if (autoDescriptionEl.dataset.readingIndex === String(index)) {
+              autoDescriptionEl.classList.remove('is-speaking-description');
+              autoDescriptionEl.removeAttribute('data-reading-index');
+            }
+            if (typeof onNarrationComplete === 'function') onNarrationComplete();
+          }, fallbackSpeechDelay(supervisorNarration));
+        }
+        else if (typeof onNarrationComplete === 'function') {
+          onNarrationComplete();
+        }
+
+
+        document
+          .getElementById(
+            'autoStep'
+          )
+          .textContent =
+            String(
+              index + 1
+            ) +
+            ' / ' +
+            String(
+              supervisorSystems.length
+            );
+
+      }
+
+
+      /* =========================================
+         COLORS
+      ========================================== */
+
+      function getAccent(
+        color,
+        index
+      ) {
+
+        const colors = {
+
+          blue:
+            '#8198a6',
+
+          green:
+            '#859d8e',
+
+          purple:
+            '#9a8da5',
+
+          orange:
+            '#af8e69',
+
+          red:
+            '#a47d78',
+
+          cyan:
+            '#7f9fa1',
+
+          gold:
+            '#c0a064',
+
+          indigo:
+            '#8993a7',
+
+          teal:
+            '#7b9a91',
+
+          pink:
+            '#a1848e'
+
+        };
+
+
+        const key =
+          String(
+            color ||
+            ''
+          )
+          .toLowerCase();
+
+
+        if (
+          colors[key]
+        ) {
+
+          return colors[key];
+
+        }
+
+
+        const fallback = [
+          '#c0a064',
+          '#8198a6',
+          '#7b9a91',
+          '#8993a7'
+        ];
+
+
+        return fallback[
+          index %
+          fallback.length
+        ];
+
+      }
+
+
+      /* =========================================
+         DETAIL + FREEZE
+      ========================================== */
+
+      function openSystem(
+        system
+      ) {
+
+
+        startInteractionPause();
+
+
+        document
+          .getElementById(
+            'detailTitle'
+          )
+          .textContent =
+            (
+              system.emoji
+                ? (
+                    system.emoji +
+                    '  '
+                  )
+                : ''
+            ) +
+            (
+              system.system_name ||
+              'System'
+            );
+
+
+        document
+          .getElementById(
+            'detailDescription'
+          )
+          .textContent =
+            system.long_description ||
+            'No additional details added yet.';
+
+
+        const image =
+          document.getElementById(
+            'detailImage'
+          );
+
+        const placeholder =
+          document.getElementById(
+            'detailPlaceholder'
+          );
+
+        const link =
+          document.getElementById(
+            'detailLink'
+          );
+
+
+        if (
+          system.image_url
+        ) {
+
+          image.src =
+            system.image_url;
+
+          image.style.display =
+            'block';
+
+          placeholder.style.display =
+            'none';
+
+        }
+        else {
+
+          image.removeAttribute(
+            'src'
+          );
+
+          image.style.display =
+            'none';
+
+          placeholder.style.display =
+            'block';
+
+        }
+
+
+        if (
+          system.link &&
+          system.link !==
+          '#'
+        ) {
+
+          link.href =
+            system.link;
+
+          link.classList
+            .remove(
+              'hidden'
+            );
+
+        }
+        else {
+
+          link.removeAttribute(
+            'href'
+          );
+
+          link.classList
+            .add(
+              'hidden'
+            );
+
+        }
+
+
+        detailOverlay.classList
+          .add('show');
+
+      }
+
+
+      function closeSystem() {
+
+        const wasOpen =
+          detailOverlay.classList
+            .contains(
+              'show'
+            );
+
+
+        detailOverlay.classList
+          .remove('show');
+
+
+        if (
+          wasOpen
+        ) {
+
+          endInteractionPause();
+
+        }
+
+      }
+
+
+      detailClose
+        .addEventListener(
+          'click',
+          closeSystem
+        );
+
+
+      detailOverlay
+        .addEventListener(
+          'click',
+          function(event) {
+
+            if (
+              event.target ===
+              detailOverlay
+            ) {
+
+              closeSystem();
+
+            }
+
+          }
+        );
+
+
+      document
+        .addEventListener(
+          'keydown',
+          function(event) {
+
+            if (
+              event.key ===
+              'Escape'
+            ) {
+
+              closeSystem();
+
+            }
+
+          }
+        );
+
+
+      /* =========================================
+         FINISH
+      ========================================== */
+
+      function finishSection() {
+
+        if (
+          phase ===
+          'ending'
+        ) {
+
+          return;
+
+        }
+
+
+        /*
+          STEP 1
+          Stop detail interaction and remove
+          the currently focused system.
+        */
+
+        detailOverlay.classList
+          .remove('show');
+
+
+        interactionPaused =
+          false;
+
+
+        syncPauseState();
+
+
+        continueTour.classList
+          .remove('show');
+
+
+        document
+          .querySelectorAll(
+            '#systemsGrid .operation-row'
+          )
+          .forEach(
+            function(card) {
+
+              card.classList
+                .remove(
+                  'auto-focus'
+                );
+
+            }
+          );
+
+
+        /*
+          STEP 2
+          Reset the systems scroll so the last
+          focused card cannot remain as the
+          visual exit frame.
+        */
+
+        const systemsScroll =
+          document.querySelector(
+            '.systems-scroll'
+          );
+
+
+        if (
+          systemsScroll
+        ) {
+
+          systemsScroll.scrollTo({
+            top: 0,
+            behavior: 'auto'
+          });
+
+        }
+
+
+        /*
+          STEP 3 — CINEMATIC RETURN
+          Fade the Live Operations Board away
+          and restore the Supervisor photo BEFORE
+          any ending dialogue appears.
+        */
+
+        liveBoard.classList
+          .remove(
+            'show'
+          );
+
+
+        scene.classList
+          .remove(
+            'live-mode'
+          );
+
+        scene.classList.remove('story-exit');
+        storyStepLabel.textContent = 'SUPERVISOR · LIVE OPERATIONS';
+        scene.style.setProperty('--story-image','url("assets/images/Plx31qq.png")');
+        storyImage.src = 'assets/images/Plx31qq.png';
+        storyImage.classList.remove('story-contain','story-zoom','story-screen-zoom');
+        storyImage.classList.add('story-cover');
+
+        switchPhase(
+          'ending'
+        );
+
+      }
+
+
+      continueTour
+        .addEventListener(
+          'click',
+          finishSection
+        );
+
+
+      /* =========================================
+         INDEX7
+      ========================================== */
+
+      function loadIndex7() {
+
+        if (
+          transitionStarted
+        ) {
+
+          return;
+
+        }
+
+
+        transitionStarted =
+          true;
+
+
+        google.script.run
+
+          .withSuccessHandler(
+            function(html) {
+
+              /* Never carry Supervisor speech into Team Leaders. */
+              sequenceToken += 1;
+              if (window.supportTourStopSystemSpeech) window.supportTourStopSystemSpeech();
+              if ('speechSynthesis' in window) {
+                try { window.speechSynthesis.cancel(); } catch (error) {}
+              }
+
+              document.open();
+
+              document.write(
+                html
+              );
+
+              document.close();
+
+            }
+          )
+
+          .withFailureHandler(
+            function(error) {
+
+              console.error(
+                'Index7 load failed:',
+                error
+              );
+
+
+              transitionStarted =
+                false;
+
+
+              transitionCover.classList
+                .remove('active');
+
+
+              /*
+                Restore the Supervisor Live Board
+                if index7 cannot be loaded.
+              */
+
+              scene.classList
+                .add(
+                  'live-mode'
+                );
+
+
+              liveBoard.classList
+                .add(
+                  'show'
+                );
+
+
+              continueTour.classList
+                .add('show');
+
+
+              switchPhase(
+                'showcase'
+              );
+
+            }
+          )
+
+          .getPage(
+            'index8'
+          );
+
+      }
+
+
+      /* =========================================
+         ESCAPE HTML
+      ========================================== */
+
+      function escapeHtml(
+        value
+      ) {
+
+        return String(
+          value ||
+          ''
+        )
+
+        .replaceAll(
+          '&',
+          '&amp;'
+        )
+
+        .replaceAll(
+          '<',
+          '&lt;'
+        )
+
+        .replaceAll(
+          '>',
+          '&gt;'
+        )
+
+        .replaceAll(
+          '"',
+          '&quot;'
+        )
+
+        .replaceAll(
+          "'",
+          '&#039;'
+        );
+
+      }
+
+
+      syncPauseState();
+
+    })();
+
+  </script>
+
+
+
+  <!-- =========================================================
+       GLOBAL VIEWER SETTINGS · index2 onward
+       AR and VOICE persist across every following page.
+  ========================================================== -->
+  <style id="tourGlobalSettingsStyle">
+    .tour-global-settings {
+      position: fixed;
+      top: 18px;
+      right: 20px;
+      z-index: 60000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      pointer-events: auto;
+    }
+
+    .tour-global-toggle {
+      min-height: 34px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 999px;
+      color: rgba(255,255,255,.86);
+      background: rgba(12,14,13,.72);
+      box-shadow: 0 10px 30px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.05);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      font: 700 10px/1 Arial, Helvetica, sans-serif;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: transform .22s ease, border-color .22s ease, background .22s ease, opacity .22s ease;
+    }
+
+    .tour-global-toggle:hover {
+      transform: translateY(-2px);
+      border-color: rgba(215,181,118,.42);
+      background: rgba(24,22,18,.88);
+    }
+
+    .tour-global-toggle.active {
+      color: #f2dfbf;
+      border-color: rgba(215,181,118,.46);
+      background: rgba(46,37,25,.82);
+    }
+
+    .tour-global-toggle.off {
+      opacity: .62;
+    }
+
+    .tour-ar-subtitle {
+      display: none;
+      margin-top: 10px;
+      padding-top: 9px;
+      border-top: 1px solid rgba(255,255,255,.10);
+      color: rgba(255,255,255,.74);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: .72em;
+      font-weight: 500;
+      line-height: 1.65;
+      letter-spacing: 0;
+      direction: rtl;
+      text-align: center;
+    }
+
+    body.tour-arabic-enabled .tour-ar-subtitle {
+      display: block;
+    }
+
+    @media (max-width: 720px) {
+      .tour-global-settings {
+        top: 12px;
+        right: 12px;
+        gap: 6px;
+      }
+      .tour-global-toggle {
+        min-height: 31px;
+        padding: 7px 9px;
+        font-size: 8px;
+      }
+    }
+  </style>
+
+  <div id="tourGlobalSettings" class="tour-global-settings" aria-label="Presentation settings">
+    <button id="tourArabicToggle" class="tour-global-toggle" type="button">AR OFF · عربي</button>
+    <button id="tourVoiceToggle" class="tour-global-toggle" type="button">VOICE ON</button>
+  </div>
+
+  <script>
+  (function() {
+    'use strict';
+
+    /* Supervisor page must always start with a clean audio channel. */
+    if ('speechSynthesis' in window) {
+      try { window.speechSynthesis.cancel(); } catch (entryVoiceError) {}
+      window.setTimeout(function(){
+        try { window.speechSynthesis.cancel(); } catch (entryVoiceError2) {}
+      }, 80);
+    }
+
+    var AR_KEY = 'support_center_ar';
+    var VOICE_KEY = 'support_center_voice';
+    var arabicEnabled = false;
+    var voiceEnabled = true;
+    var voiceProfiles = {};
+    var dialogueRows = [];
+    var dialogueLookup = {};
+    var browserVoices = [];
+    var voiceAssignments = {};
+    var currentDialogueNode = null;
+    var activeVoiceUtterance = null;
+    var voiceSequenceToken = 0;
+    var voiceBusy = false;
+    var pendingDialogueQueue = [];
+    var activeVoiceWatchdog = null;
+
+    var arButton = document.getElementById('tourArabicToggle');
+    var voiceButton = document.getElementById('tourVoiceToggle');
+
+    var fallbackProfiles = {
+      visitor: { title:'VISITOR', gender:'female', lang:'en-US', voice_hint:'', rate:1.00, pitch:1.03 },
+      support_manager: { title:'HEAD OF CUSTOMER SUPPORT CENTER', gender:'male', lang:'en-US', voice_hint:'', rate:.93, pitch:.91 },
+      assistant_head: { title:'ASSISTANT HEAD', gender:'male', lang:'en-US', voice_hint:'', rate:.96, pitch:.97 },
+      quality_manager: { title:'QUALITY MANAGER', gender:'male', lang:'en-US', voice_hint:'', rate:.94, pitch:.92 },
+      quality_team: { title:'QUALITY TEAM', gender:'neutral', lang:'en-US', voice_hint:'', rate:.97, pitch:1.00 },
+      supervisor: { title:'SUPERVISOR', gender:'neutral', lang:'en-US', voice_hint:'', rate:.96, pitch:.98 },
+      team_leaders: { title:'TEAM LEADERS', gender:'female', lang:'en-US', voice_hint:'', rate:.97, pitch:1.00 },
+      system: { title:'SYSTEM', gender:'female', lang:'en-US', voice_hint:'', rate:.98, pitch:.98 }
+    };
+
+    function safeGet(key, fallback) {
+      try {
+        var value = window.localStorage.getItem(key);
+        return value === null ? fallback : value;
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    function safeSet(key, value) {
+      try {
+        window.localStorage.setItem(key, value);
+      } catch (error) {}
+    }
+
+    arabicEnabled = safeGet(AR_KEY, '0') === '1';
+    voiceEnabled = safeGet(VOICE_KEY, '1') !== '0';
+
+    function syncControls() {
+      document.body.classList.toggle('tour-arabic-enabled', arabicEnabled);
+      arButton.textContent = arabicEnabled ? 'AR ON · عربي' : 'AR OFF · عربي';
+      arButton.classList.toggle('active', arabicEnabled);
+
+      if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+        voiceButton.textContent = 'VOICE N/A';
+        voiceButton.disabled = true;
+        voiceButton.classList.add('off');
+        return;
+      }
+
+      voiceButton.disabled = false;
+      voiceButton.textContent = voiceEnabled ? 'VOICE ON' : 'VOICE OFF';
+      voiceButton.classList.toggle('active', voiceEnabled);
+      voiceButton.classList.toggle('off', !voiceEnabled);
+    }
+
+    function normalizeText(value) {
+      return String(value || '')
+        .replace(/[’‘]/g, "'")
+        .replace(/[“”]/g, '"')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
+    }
+
+    function speakerKeyFromNode(node) {
+      var nameNode = node.querySelector('.dialogue-name');
+      var label = normalizeText(nameNode ? nameNode.textContent : '');
+
+      if (label.indexOf('visitor') >= 0) return 'visitor';
+      if (label.indexOf('head of customer support') >= 0 || label.indexOf('support manager') >= 0) return 'support_manager';
+      if (label.indexOf('assistant head') >= 0) return 'assistant_head';
+      if (label.indexOf('quality manager') >= 0) return 'quality_manager';
+      if (label.indexOf('quality team') >= 0 || label.indexOf('quality operations team') >= 0) return 'quality_team';
+      if (label.indexOf('supervisor') >= 0) return 'supervisor';
+      if (label.indexOf('team leaders') >= 0) return 'team_leaders';
+      return 'system';
+    }
+
+    function englishTextFromNode(node) {
+      var box = node.querySelector('.dialogue-box');
+      if (!box) return '';
+      var clone = box.cloneNode(true);
+      var ar = clone.querySelector('.tour-ar-subtitle');
+      if (ar && ar.parentNode) ar.parentNode.removeChild(ar);
+      return String(clone.textContent || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function buildDialogueLookup(rows) {
+      dialogueLookup = {};
+      (rows || []).forEach(function(row) {
+        var key = normalizeText(row.text_en || '');
+        if (key) dialogueLookup[key] = row;
+      });
+      hydrateArabicSubtitles();
+    }
+
+    function hydrateArabicSubtitles() {
+      var nodes = document.querySelectorAll('.dialogue, .end-dialogue');
+      Array.prototype.forEach.call(nodes, function(node) {
+        var box = node.querySelector('.dialogue-box');
+        if (!box) return;
+        var row = dialogueLookup[normalizeText(englishTextFromNode(node))] || null;
+        var arNode = box.querySelector('.tour-ar-subtitle');
+        if (!arNode) {
+          arNode = document.createElement('div');
+          arNode.className = 'tour-ar-subtitle';
+          box.appendChild(arNode);
+        }
+        var fallbackArabic = String(node.getAttribute('data-ar') || '').trim();
+        var arabicText = row && row.text_ar ? row.text_ar : fallbackArabic;
+        arNode.textContent = arabicText;
+        arNode.style.display = arabicText ? '' : 'none';
+      });
+    }
+
+    function normalizeGender(value) {
+      var clean = normalizeText(value);
+      if (clean === 'm' || clean === 'male' || clean === 'ذكر') return 'male';
+      if (clean === 'f' || clean === 'female' || clean === 'أنثى' || clean === 'انثى') return 'female';
+      return clean || 'neutral';
+    }
+
+    function getProfile(key) {
+      var base = fallbackProfiles[key] || fallbackProfiles.system;
+      var sheet = voiceProfiles[key] || {};
+      return {
+        title: sheet.title || base.title || key,
+        gender: normalizeGender(sheet.gender || base.gender),
+        lang: sheet.lang || base.lang || 'en-US',
+        voice_hint: sheet.voice_hint || base.voice_hint || '',
+        rate: Number(sheet.rate || base.rate || 1),
+        pitch: Number(sheet.pitch || base.pitch || 1)
+      };
+    }
+
+    function loadBrowserVoices() {
+      if (!('speechSynthesis' in window)) return;
+      browserVoices = window.speechSynthesis.getVoices() || [];
+      voiceAssignments = {};
+    }
+
+    function femaleName(name) {
+      return /samantha|victoria|karen|moira|tessa|zira|aria|jenny|sara|ava|susan|hazel|female/i.test(name || '');
+    }
+
+    function maleName(name) {
+      return /daniel|alex|fred|tom|arthur|george|guy|david|mark|ryan|christopher|male/i.test(name || '');
+    }
+
+    function pickVoice(key) {
+      if (voiceAssignments[key]) return voiceAssignments[key];
+      var profile = getProfile(key);
+      var all = browserVoices.length ? browserVoices : (window.speechSynthesis.getVoices() || []);
+      if (!all.length) return null;
+
+      var langBase = String(profile.lang || 'en-US').toLowerCase().split('-')[0];
+      var pool = all.filter(function(v) {
+        return String(v.lang || '').toLowerCase().indexOf(langBase) === 0;
+      });
+      if (!pool.length) pool = all.slice();
+
+      if (profile.voice_hint) {
+        var hint = String(profile.voice_hint).toLowerCase();
+        var hinted = pool.find(function(v) {
+          return String(v.name || '').toLowerCase().indexOf(hint) >= 0;
+        });
+        if (hinted) {
+          voiceAssignments[key] = hinted;
+          return hinted;
+        }
+      }
+
+      if (
+        !profile.voice_hint &&
+        (key === 'assistant_head' || key === 'quality_manager')
+      ) {
+        var managementBase =
+          voiceAssignments.support_manager ||
+          pickVoice('support_manager');
+
+        if (managementBase) {
+          voiceAssignments[key] = managementBase;
+          return managementBase;
+        }
+      }
+
+      var genderPool = pool.filter(function(v) {
+        if (profile.gender === 'female') return femaleName(v.name);
+        if (profile.gender === 'male') return maleName(v.name);
+        return true;
+      });
+      if (genderPool.length) pool = genderPool;
+
+      pool.sort(function(a,b) {
+        function score(v) {
+          var n = String(v && v.name || '').toLowerCase(), x = 0;
+          if (/google us english|google uk english/.test(n)) x += 80;
+          if (/microsoft.*(aria|jenny|guy|david|mark)/.test(n)) x += 70;
+          if (/natural|online/.test(n)) x += 35;
+          if (/samantha|daniel|victoria|karen/.test(n)) x += 25;
+          return x;
+        }
+        return score(b) - score(a);
+      });
+
+      var order = ['visitor','support_manager','assistant_head','quality_manager','quality_team','supervisor','team_leaders','system'];
+      var idx = order.indexOf(key);
+      if (idx < 0) {
+        idx = String(key || '')
+          .split('')
+          .reduce(function(total, char) {
+            return total + char.charCodeAt(0);
+          }, 0);
+      }
+      var selected = pool[idx % pool.length];
+      voiceAssignments[key] = selected;
+      return selected;
+    }
+
+    function queueDialogueNode(node) {
+      if (!node || pendingDialogueQueue.indexOf(node) >= 0) return;
+      pendingDialogueQueue.push(node);
+    }
+
+    function removeQueuedDialogueNode(node) {
+      pendingDialogueQueue = pendingDialogueQueue.filter(function(item) {
+        return item !== node;
+      });
+    }
+
+    function dequeueVisibleDialogueNode() {
+      while (pendingDialogueQueue.length) {
+        var node = pendingDialogueQueue.shift();
+        if (node && isDialogueVisible(node)) return node;
+      }
+      return null;
+    }
+
+    function stopVoice(clearQueue) {
+      voiceSequenceToken += 1;
+      voiceBusy = false;
+      activeVoiceUtterance = null;
+      if (clearQueue !== false) pendingDialogueQueue = [];
+      if (activeVoiceWatchdog) {
+        window.clearTimeout(activeVoiceWatchdog);
+        activeVoiceWatchdog = null;
+      }
+      if (!('speechSynthesis' in window)) return;
+      try { window.speechSynthesis.cancel(); } catch (error) {}
+    }
+
+    function speakNode(node) {
+      if (!voiceEnabled || !node) return;
+      if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) return;
+
+      /* Never start audio while the presentation is paused. */
+      if (document.body.classList.contains('presentation-paused')) {
+        node.setAttribute('data-tour-spoken', '0');
+        return;
+      }
+
+      if (voiceBusy && activeVoiceUtterance) {
+        queueDialogueNode(node);
+        return;
+      }
+
+      var text = englishTextFromNode(node);
+      if (!text) return;
+      var key = speakerKeyFromNode(node);
+      var profile = getProfile(key);
+      var selected = pickVoice(key);
+      var utterance = new SpeechSynthesisUtterance(text);
+
+      if (selected) {
+        utterance.voice = selected;
+        utterance.lang = selected.lang || profile.lang;
+      } else {
+        utterance.lang = profile.lang || 'en-US';
+      }
+
+      utterance.rate = Math.max(.84, Math.min(.96, Number(profile.rate || 1) * .92));
+      utterance.pitch = Math.max(.72, Math.min(1.18, Number(profile.pitch || 1)));
+      utterance.volume = 1;
+
+      voiceSequenceToken += 1;
+      var myToken = voiceSequenceToken;
+      var finished = false;
+      voiceBusy = true;
+      activeVoiceUtterance = utterance;
+
+      function finishVoiceLine() {
+        if (finished || myToken !== voiceSequenceToken) return;
+        finished = true;
+        if (activeVoiceWatchdog) {
+          window.clearTimeout(activeVoiceWatchdog);
+          activeVoiceWatchdog = null;
+        }
+        if (activeVoiceUtterance === utterance) activeVoiceUtterance = null;
+        voiceBusy = false;
+
+        if (document.body.classList.contains('presentation-paused')) return;
+
+        var nextNode = dequeueVisibleDialogueNode();
+        if (voiceEnabled && nextNode) {
+          window.setTimeout(function() { speakNode(nextNode); }, 160);
+        }
+      }
+
+      utterance.onend = finishVoiceLine;
+      utterance.onerror = finishVoiceLine;
+
+      /* Recovery only; never use a short timeout that chops a valid sentence. */
+      var words = text.split(/\s+/).filter(Boolean).length;
+      var maxVoiceMs = (window.supportTourFixedAudio && window.supportTourFixedAudio.usingFixedAudio) ? 120000 : Math.max(15000, Math.min(32000, 6500 + words * 850)); /* FIXED_AUDIO_WATCHDOG */
+      activeVoiceWatchdog = window.setTimeout(function() {
+        if (finished || myToken !== voiceSequenceToken) return;
+        try { window.speechSynthesis.cancel(); } catch (error) {}
+        finishVoiceLine();
+      }, maxVoiceMs);
+
+      try {
+        window.speechSynthesis.speak(utterance);
+      } catch (error) {
+        finishVoiceLine();
+      }
+    }
+
+    function isDialogueVisible(node) {
+      if (!node) return false;
+      if (node.classList.contains('show')) return true;
+      var style = window.getComputedStyle(node);
+      return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 0) > .65;
+    }
+
+    function refreshDialogueVoice(node) {
+      if (node && node.getAttribute('data-tour-manual-speech') === '1') return;
+      var visible = isDialogueVisible(node);
+      if (!visible) {
+        node.setAttribute('data-tour-spoken', '0');
+        if (currentDialogueNode === node) currentDialogueNode = null;
+        removeQueuedDialogueNode(node);
+        return;
+      }
+
+      currentDialogueNode = node;
+
+      if (document.body.classList.contains('presentation-paused')) {
+        node.setAttribute('data-tour-spoken', '0');
+        return;
+      }
+
+      if (node.getAttribute('data-tour-spoken') === '1') return;
+      node.setAttribute('data-tour-spoken', '1');
+      speakNode(node);
+    }
+
+    function wireDialogueObservers() {
+      var nodes = document.querySelectorAll('.dialogue, .end-dialogue');
+      Array.prototype.forEach.call(nodes, function(node) {
+        node.setAttribute('data-tour-spoken', '0');
+        var observer = new MutationObserver(function() {
+          window.setTimeout(function() { refreshDialogueVoice(node); }, 40);
+        });
+        observer.observe(node, { attributes:true, attributeFilter:['class','style'] });
+        window.setTimeout(function() { refreshDialogueVoice(node); }, 80);
+      });
+    }
+
+    arButton.addEventListener('click', function() {
+      arabicEnabled = !arabicEnabled;
+      safeSet(AR_KEY, arabicEnabled ? '1' : '0');
+      syncControls();
+    });
+
+    voiceButton.addEventListener('click', function() {
+      voiceEnabled = !voiceEnabled;
+      safeSet(VOICE_KEY, voiceEnabled ? '1' : '0');
+      if (!voiceEnabled) stopVoice(true);
+      syncControls();
+      if (
+        voiceEnabled &&
+        currentDialogueNode &&
+        isDialogueVisible(currentDialogueNode) &&
+        !document.body.classList.contains('presentation-paused')
+      ) {
+        currentDialogueNode.setAttribute('data-tour-spoken', '1');
+        speakNode(currentDialogueNode);
+      }
+    });
+
+    if ('speechSynthesis' in window) {
+      loadBrowserVoices();
+      if ('onvoiceschanged' in window.speechSynthesis) {
+        window.speechSynthesis.onvoiceschanged = loadBrowserVoices;
+      }
+    }
+
+    var bodyObserver = new MutationObserver(function() {
+      if (!voiceEnabled || !('speechSynthesis' in window)) return;
+
+      if (document.body.classList.contains('presentation-paused')) {
+        if (currentDialogueNode) currentDialogueNode.setAttribute('data-tour-spoken', '0');
+        stopVoice(true);
+        return;
+      }
+
+      if (currentDialogueNode && isDialogueVisible(currentDialogueNode)) {
+        currentDialogueNode.setAttribute('data-tour-spoken', '1');
+        window.setTimeout(function() { speakNode(currentDialogueNode); }, 120);
+      }
+    });
+    bodyObserver.observe(document.body, { attributes:true, attributeFilter:['class'] });
+
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler(function(rows) {
+          dialogueRows = rows || [];
+          buildDialogueLookup(dialogueRows);
+        })
+        .withFailureHandler(function() { hydrateArabicSubtitles(); })
+        .getPresentationDialogue();
+
+      google.script.run
+        .withSuccessHandler(function(rows) {
+          voiceProfiles = {};
+          (rows || []).forEach(function(row) {
+            if (row && row.speaker_key) voiceProfiles[row.speaker_key] = row;
+          });
+          voiceAssignments = {};
+        })
+        .withFailureHandler(function() {})
+        .getVoiceProfiles();
+    }
+
+    syncControls();
+    hydrateArabicSubtitles();
+    wireDialogueObservers();
+
+    document.addEventListener('pointerdown', function() {
+      if (
+        voiceEnabled &&
+        currentDialogueNode &&
+        isDialogueVisible(currentDialogueNode) &&
+        !document.body.classList.contains('presentation-paused') &&
+        currentDialogueNode.getAttribute('data-tour-spoken') !== '1'
+      ) {
+        currentDialogueNode.setAttribute('data-tour-spoken', '1');
+        speakNode(currentDialogueNode);
+      }
+    }, { once:true, capture:true });
+
+    window.addEventListener('pagehide', function() { stopVoice(true); });
+  })();
+  </script>
+
+
+<script>
+(function(){
+  var systemVoiceUtterance = null;
+  var systemVoiceSequence = 0;
+  function voiceEnabled(){
+    try { return window.localStorage.getItem('support_center_voice') !== '0'; }
+    catch (e) { return true; }
+  }
+  function isFemaleRole(role){
+    return role === 'quality_team' || role === 'team_leaders';
+  }
+  function pickSystemVoice(role){
+    if (!('speechSynthesis' in window)) return null;
+    var voices = window.speechSynthesis.getVoices() || [];
+    if (!voices.length) return null;
+    var english = voices.filter(function(v){ return String(v.lang || '').toLowerCase().indexOf('en') === 0; });
+    if (english.length) voices = english;
+    var female = /samantha|victoria|karen|moira|tessa|zira|aria|jenny|sara|ava|susan|hazel|emma|jane|sonia|libby|female/i;
+    var male = /daniel|alex|fred|tom|arthur|george|guy|david|mark|ryan|christopher|andrew|brian|eric|roger|stefan|male/i;
+    var filtered = voices.filter(function(v){
+      return isFemaleRole(role) ? female.test(v.name || '') : male.test(v.name || '');
+    });
+    if (filtered.length) voices = filtered;
+    var index = {assistant_head:1,quality_manager:2,quality_team:1,supervisor:0,team_leaders:2}[role] || 0;
+    return voices[index % voices.length] || voices[0] || null;
+  }
+  window.supportTourStopSystemSpeech = function(){
+    systemVoiceSequence += 1;
+    systemVoiceUtterance = null;
+    if ('speechSynthesis' in window) {
+      try { window.speechSynthesis.cancel(); } catch (e) {}
+    }
+  };
+  window.supportTourSpeakSystem = function(text, role, onComplete){
+    systemVoiceSequence += 1;
+    var mySequence = systemVoiceSequence;
+    var doneCalled = false;
+    function done(){
+      if (doneCalled || mySequence !== systemVoiceSequence) return;
+      doneCalled = true;
+      if (typeof onComplete === 'function') onComplete();
+    }
+
+    text = String(text || '').trim();
+    if (!text) { done(); return false; }
+
+    if (!voiceEnabled() || !('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+      var fallbackMs = Math.max(4200, Math.min(13000, text.length * 55 + 1800));
+      window.setTimeout(done, fallbackMs);
+      return false;
+    }
+
+    if (document.body.classList.contains('presentation-paused')) {
+      done();
+      return false;
+    }
+
+    var v = pickSystemVoice(role);
+    var words = text.replace(/\s+/g, ' ').split(' ');
+    var chunks = [];
+    var current = '';
+    words.forEach(function(word){
+      var candidate = current ? current + ' ' + word : word;
+      if (candidate.length > 96 && current) {
+        chunks.push(current);
+        current = word;
+      } else {
+        current = candidate;
+      }
+    });
+    if (current) chunks.push(current);
+    if (window.supportTourFixedAudio && window.supportTourFixedAudio.usingFixedAudio && typeof text !== 'undefined') { var __fat=String(text||'').replace(/\s+/g,' ').trim(); if(__fat){ chunks.length=0; chunks.push(__fat); } } /* FIXED_AUDIO_NO_SPLIT */
+
+    var chunkIndex = 0;
+    try { window.speechSynthesis.cancel(); } catch (e) {}
+
+    function speakNextChunk(){
+      if (mySequence !== systemVoiceSequence) return;
+      if (chunkIndex >= chunks.length) {
+        systemVoiceUtterance = null;
+        done();
+        return;
+      }
+
+      var u = new SpeechSynthesisUtterance(chunks[chunkIndex++]);
+      if (v) { u.voice = v; u.lang = v.lang || 'en-US'; } else { u.lang = 'en-US'; }
+      u.rate = 0.88;
+      u.pitch = isFemaleRole(role) ? 1.0 : 0.94;
+      u.volume = 1;
+      systemVoiceUtterance = u;
+
+      var settled = false;
+      function finishChunk(){
+        if (settled || mySequence !== systemVoiceSequence) return;
+        settled = true;
+        if (systemVoiceUtterance === u) systemVoiceUtterance = null;
+        window.setTimeout(speakNextChunk, 90);
+      }
+      u.onend = finishChunk;
+      u.onerror = finishChunk;
+
+      try { window.speechSynthesis.speak(u); }
+      catch (e) { finishChunk(); }
+    }
+
+    speakNextChunk();
+    return true;
+  };
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,5724 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <link rel="stylesheet" href="tour-runtime.css">
+  <script src="tour-data.js"></script>
+  <script src="tour-runtime.js"></script>
+  
+  <!-- FIXED_TOUR_AUDIO -->
+  <script src="tour-audio-map.js"></script>
+  <script src="tour-audio.js"></script>
+<meta name="referrer" content="no-referrer">
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <link rel="preconnect" href="https://i.imgur.com" crossorigin>
+  <link rel="preload" as="image" href="assets/images/f9zdsGu.png">
+  <link rel="preload" as="image" href="assets/images/iS2X23C.png">
+
+  <title>Quality Operations Team</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      overflow: hidden;
+
+      background:
+        #302f2b;
+
+      color: white;
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+    }
+
+
+    /* =========================================
+       TEAM SCENE
+    ========================================== */
+
+    .team-scene {
+      position: relative;
+
+      width: 100%;
+      height: 100vh;
+
+      overflow: hidden;
+
+      background:
+        #302f2b;
+    }
+
+
+    .team-blur {
+      position: absolute;
+
+      inset: -45px;
+
+      background-image:
+        url('assets/images/iS2X23C.png');
+
+      background-size: cover;
+      background-position: center;
+
+      filter:
+        blur(28px)
+        brightness(.40);
+
+      transform:
+        scale(1.12);
+
+      transition:
+        transform 2.6s ease,
+        filter 2.6s ease,
+        opacity 2.2s ease;
+    }
+
+
+    .team-blur::after {
+      content: "";
+
+      position: absolute;
+      inset: 0;
+
+      background:
+        radial-gradient(
+          circle at center,
+          transparent 28%,
+          rgba(0,0,0,.64) 100%
+        );
+    }
+
+
+    .team-photo-wrap {
+      position: absolute;
+
+      inset: 0;
+
+      z-index: 2;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      padding:
+        16px 24px;
+
+      opacity: 0;
+
+      animation:
+        photoIn 1.25s ease forwards;
+
+      transition:
+        opacity 2s ease,
+        filter 2s ease,
+        transform 2.6s
+        cubic-bezier(.18,.75,.2,1);
+    }
+
+
+    .team-photo {
+      display: block;
+
+      width: auto;
+      height: 100%;
+
+      max-width: 100%;
+      max-height: 100%;
+
+      object-fit: contain;
+
+      border-radius: 6px;
+
+      box-shadow:
+        0 35px 95px
+        rgba(0,0,0,.56);
+    }
+
+
+    .top-shadow,
+    .bottom-shadow {
+      position: absolute;
+
+      left: 0;
+
+      width: 100%;
+
+      z-index: 3;
+
+      pointer-events: none;
+
+      transition:
+        opacity 1.5s ease;
+    }
+
+
+    .top-shadow {
+      top: 0;
+
+      height: 23%;
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(0,0,0,.64),
+          transparent
+        );
+    }
+
+
+    .bottom-shadow {
+      bottom: 0;
+
+      height: 42%;
+
+      background:
+        linear-gradient(
+          to top,
+          rgba(0,0,0,.84),
+          transparent
+        );
+    }
+
+
+    /* =========================================
+       ROLE
+    ========================================== */
+
+    .role-indicator {
+      position: absolute;
+
+      z-index: 6;
+
+      top: 5%;
+      left: 4%;
+
+      opacity: 0;
+
+      transform:
+        translateY(-12px);
+
+      animation:
+        roleIn .9s ease .8s forwards;
+
+      transition:
+        opacity .8s ease;
+    }
+
+
+    .role-small {
+      margin-bottom: 8px;
+
+      color:
+        rgba(255,255,255,.50);
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing: 4px;
+    }
+
+
+    .role-name {
+      color: white;
+
+      font-size:
+        clamp(
+          22px,
+          2vw,
+          32px
+        );
+
+      font-weight: 600;
+    }
+
+
+    .role-line {
+      width: 65px;
+      height: 2px;
+
+      margin-top: 13px;
+
+      background:
+        linear-gradient(
+          to right,
+          #c7b48c,
+          transparent
+        );
+    }
+
+
+    /* =========================================
+       DIALOGUE
+    ========================================== */
+
+    .dialogue {
+      position: absolute;
+
+      z-index: 10;
+
+      left: 50%;
+      bottom: 5%;
+
+      width:
+        min(
+          820px,
+          78vw
+        );
+
+      opacity: 0;
+
+      transform:
+        translateX(-50%)
+        translateY(22px);
+
+      transition:
+        opacity .72s ease,
+        transform .72s ease;
+    }
+
+
+    .dialogue.show {
+      opacity: 1;
+
+      transform:
+        translateX(-50%)
+        translateY(0);
+    }
+
+
+    .dialogue.hide {
+      opacity: 0;
+
+      transform:
+        translateX(-50%)
+        translateY(-12px);
+    }
+
+
+    .dialogue-name {
+      margin-bottom: 8px;
+
+      text-align: center;
+
+      color:
+        rgba(206,187,145,.92);
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing: 3px;
+    }
+
+
+    .visitor .dialogue-name {
+      color:
+        rgba(255,255,255,.50);
+    }
+
+
+    .dialogue-box {
+      position: relative;
+
+      padding:
+        20px 30px;
+
+      text-align: center;
+
+      color: white;
+
+      font-size:
+        clamp(
+          18px,
+          1.5vw,
+          25px
+        );
+
+      line-height: 1.45;
+
+      border-radius: 15px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(13,13,13,.90),
+          rgba(31,28,23,.82)
+        );
+
+      border:
+        1px solid
+        rgba(255,255,255,.15);
+
+      box-shadow:
+        0 22px 55px
+        rgba(0,0,0,.52);
+
+      backdrop-filter:
+        blur(16px);
+
+      -webkit-backdrop-filter:
+        blur(16px);
+    }
+
+
+    .dialogue-box::after {
+      content: "";
+
+      position: absolute;
+
+      left: 50%;
+      bottom: -1px;
+
+      transform:
+        translateX(-50%);
+
+      width: 110px;
+      height: 2px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          #c8b68f,
+          transparent
+        );
+    }
+
+
+    /* =========================================
+       HANDOFF TO TEAM WORKSPACE
+    ========================================== */
+
+    .team-scene.workspace-mode
+    .role-indicator {
+      opacity: 0;
+    }
+
+
+    .team-scene.workspace-mode
+    .team-photo-wrap {
+      transform:
+        scale(1.04);
+
+      opacity: .08;
+
+      filter:
+        blur(5px)
+        brightness(.38);
+    }
+
+
+    .team-scene.workspace-mode
+    .team-blur {
+      transform:
+        scale(1.20);
+
+      opacity: .30;
+
+      filter:
+        blur(42px)
+        brightness(.16);
+    }
+
+
+    .team-scene.workspace-mode
+    .top-shadow,
+    .team-scene.workspace-mode
+    .bottom-shadow {
+      opacity: .18;
+    }
+
+
+    /* =========================================
+       SHARED REVIEW WORKSPACE
+    ========================================== */
+
+    .review-workspace {
+      position: absolute;
+
+      inset: 0;
+
+      z-index: 30;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      transform:
+        scale(1.025);
+
+      transition:
+        opacity 1.15s ease,
+        transform 1.45s
+        cubic-bezier(.18,.75,.2,1);
+    }
+
+
+    .review-workspace.show {
+      opacity: 1;
+
+      pointer-events: auto;
+
+      transform:
+        scale(1);
+    }
+
+
+    .workspace-background {
+      position: absolute;
+
+      inset: 0;
+
+      background:
+        radial-gradient(
+          circle at 22% 14%,
+          rgba(205,184,144,.14),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 80% 82%,
+          rgba(126,171,164,.12),
+          transparent 32%
+        ),
+        linear-gradient(
+          135deg,
+          #3a3934 0%,
+          #47463f 48%,
+          #32332f 100%
+        );
+    }
+
+
+    .workspace-lines {
+      position: absolute;
+
+      inset: 0;
+
+      opacity: .08;
+
+      background-image:
+        linear-gradient(
+          rgba(255,255,255,.08) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,.08) 1px,
+          transparent 1px
+        );
+
+      background-size:
+        52px 52px;
+
+      mask-image:
+        linear-gradient(
+          to bottom,
+          transparent,
+          black 15%,
+          black 85%,
+          transparent
+        );
+    }
+
+
+    /* =========================================
+       WORKSPACE HEADER
+    ========================================== */
+
+    .workspace-header {
+      position: relative;
+
+      z-index: 3;
+
+      height: 116px;
+
+      padding:
+        24px 36px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      border-bottom:
+        1px solid
+        rgba(255,255,255,.075);
+
+      background:
+        rgba(57,56,51,.86);
+
+      backdrop-filter:
+        blur(18px);
+
+      -webkit-backdrop-filter:
+        blur(18px);
+    }
+
+
+    .workspace-heading-small {
+      margin-bottom: 7px;
+
+      color:
+        rgba(204,184,142,.58);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing: 4px;
+    }
+
+
+    .workspace-heading {
+      font-size:
+        clamp(
+          25px,
+          2.25vw,
+          38px
+        );
+
+      font-weight: 600;
+    }
+
+
+    .workspace-subtitle {
+      margin-top: 5px;
+
+      color:
+        rgba(255,255,255,.30);
+
+      font-size: 10px;
+
+      letter-spacing: 2px;
+    }
+
+
+    .workspace-status {
+      display: flex;
+
+      gap: 10px;
+    }
+
+
+    .status-chip {
+      min-width: 105px;
+
+      padding:
+        10px 13px;
+
+      text-align: center;
+
+      border-radius: 11px;
+
+      background:
+        rgba(255,255,255,.035);
+
+      border:
+        1px solid
+        rgba(255,255,255,.07);
+    }
+
+
+    .status-value {
+      margin-bottom: 3px;
+
+      color: white;
+
+      font-size: 16px;
+
+      font-weight: 700;
+    }
+
+
+    .status-value.live {
+      color:
+        #a7d3c9;
+    }
+
+
+    .status-label {
+      color:
+        rgba(255,255,255,.30);
+
+      font-size: 8px;
+
+      letter-spacing: 1px;
+    }
+
+
+    /* =========================================
+       WORKSPACE BODY
+    ========================================== */
+
+    .workspace-body {
+      position: relative;
+
+      z-index: 3;
+
+      height:
+        calc(100vh - 116px);
+
+      display: flex;
+    }
+
+
+    /* =========================================
+       TEAM RAIL
+    ========================================== */
+
+    .team-rail {
+      width: 225px;
+
+      flex-shrink: 0;
+
+      padding:
+        26px 17px;
+
+      border-right:
+        1px solid
+        rgba(255,255,255,.06);
+
+      background:
+        rgba(52,51,47,.88);
+    }
+
+
+    .rail-title {
+      margin:
+        0 10px 17px;
+
+      color:
+        rgba(255,255,255,.25);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing: 3px;
+    }
+
+
+    .rail-item {
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+      margin-bottom: 7px;
+
+      padding:
+        12px 13px;
+
+      border-radius: 10px;
+
+      color:
+        rgba(255,255,255,.52);
+
+      font-size: 12px;
+    }
+
+
+    .rail-item.active {
+      color: white;
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(202,181,139,.10),
+          rgba(255,255,255,.028)
+        );
+
+      border:
+        1px solid
+        rgba(202,181,139,.12);
+    }
+
+
+    .rail-icon {
+      width: 20px;
+
+      text-align: center;
+    }
+
+
+    .rail-divider {
+      width: 100%;
+      height: 1px;
+
+      margin:
+        22px 0;
+
+      background:
+        rgba(255,255,255,.06);
+    }
+
+
+    .shared-process {
+      padding: 14px;
+
+      border-radius: 12px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(202,181,139,.065),
+          rgba(255,255,255,.018)
+        );
+
+      border:
+        1px solid
+        rgba(202,181,139,.09);
+    }
+
+
+    .shared-process-title {
+      margin-bottom: 8px;
+
+      color:
+        rgba(255,255,255,.72);
+
+      font-size: 11px;
+
+      font-weight: 600;
+    }
+
+
+    .shared-process-text {
+      color:
+        rgba(255,255,255,.31);
+
+      font-size: 10px;
+
+      line-height: 1.55;
+    }
+
+
+    /* =========================================
+       SYSTEMS AREA
+    ========================================== */
+
+    .systems-area {
+      flex: 1;
+
+      min-width: 0;
+
+      display: flex;
+
+      flex-direction: column;
+    }
+
+
+    .systems-toolbar {
+      flex-shrink: 0;
+
+      padding:
+        22px 27px 16px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+    }
+
+
+    .systems-title {
+      font-size: 21px;
+
+      font-weight: 600;
+    }
+
+
+    .systems-caption {
+      margin-top: 5px;
+
+      color:
+        rgba(255,255,255,.30);
+
+      font-size: 9px;
+
+      letter-spacing: 2px;
+    }
+
+
+    .systems-count {
+      padding:
+        8px 12px;
+
+      border-radius: 100px;
+
+      color:
+        rgba(255,255,255,.55);
+
+      font-size: 11px;
+
+      background:
+        rgba(255,255,255,.035);
+
+      border:
+        1px solid
+        rgba(255,255,255,.065);
+    }
+
+
+    .systems-scroll {
+      flex: 1;
+
+      min-height: 0;
+
+      overflow-y: auto;
+
+      padding:
+        0 27px 32px;
+
+      scrollbar-width: thin;
+
+      scrollbar-color:
+        #999183 #3a3934;
+    }
+
+
+    .systems-scroll::-webkit-scrollbar {
+      width: 9px;
+    }
+
+
+    .systems-scroll::-webkit-scrollbar-track {
+      background: #3a3934;
+    }
+
+
+    .systems-scroll::-webkit-scrollbar-thumb {
+      background: #91897c;
+
+      border-radius: 20px;
+
+      border:
+        2px solid #3a3934;
+    }
+
+
+    /* =========================================
+       SYSTEM GRID
+    ========================================== */
+
+    .systems-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          3,
+          minmax(0,1fr)
+        );
+
+      gap: 17px;
+
+      padding-bottom: 25px;
+    }
+
+
+    .system-card {
+      --accent:
+        #bba77e;
+
+      position: relative;
+
+      min-height: 200px;
+
+      padding: 20px;
+
+      overflow: hidden;
+
+      cursor: pointer;
+
+      border-radius: 16px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(86,83,75,.88),
+          rgba(64,63,57,.92)
+        );
+
+      border:
+        1px solid
+        rgba(255,255,255,.075);
+
+      box-shadow:
+        0 18px 38px
+        rgba(0,0,0,.23);
+
+      transition:
+        transform .26s ease,
+        border-color .26s ease,
+        background .26s ease,
+        box-shadow .26s ease;
+    }
+
+
+    .system-card:hover {
+      transform:
+        translateY(-5px);
+
+      border-color:
+        rgba(214,197,160,.32);
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(96,92,83,.95),
+          rgba(72,70,63,.95)
+        );
+
+      box-shadow:
+        0 23px 46px
+        rgba(0,0,0,.28);
+    }
+
+    .system-card.auto-focus {
+      transform:
+        translateY(-4px)
+        scale(1.016);
+
+      border-color:
+        rgba(214,197,160,.72);
+
+      box-shadow:
+        0 0 0 1px
+        rgba(214,197,160,.13),
+        0 24px 52px
+        rgba(31,29,27,.35),
+        0 0 30px
+        rgba(125,168,161,.10);
+    }
+
+
+    .team-showcase-strip {
+      margin:
+        0 27px 15px;
+
+      padding:
+        14px 17px;
+
+      display: grid;
+
+      grid-template-columns:
+        auto 1fr auto;
+
+      gap: 14px;
+
+      align-items: center;
+
+      border-radius: 13px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(202,181,139,.13),
+          rgba(125,168,161,.10)
+        );
+
+      border:
+        1px solid
+        rgba(230,218,196,.13);
+    }
+
+
+    .team-showcase-kicker {
+      color:
+        rgba(220,202,165,.85);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing: 2.4px;
+    }
+
+
+    .team-showcase-name {
+      color: white;
+
+      font-size: 15px;
+
+      font-weight: 700;
+    }
+
+
+    .team-showcase-description {
+      margin-top: 3px;
+
+      color:
+        rgba(255,255,255,.50);
+
+      font-size: 11px;
+
+      line-height: 1.4;
+    }
+
+
+    .team-showcase-step {
+      color:
+        rgba(255,255,255,.43);
+
+      font-size: 10px;
+
+      letter-spacing: 1px;
+    }
+
+
+
+    .system-card::before {
+      content: "";
+
+      position: absolute;
+
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 2px;
+
+      background:
+        linear-gradient(
+          90deg,
+          var(--accent),
+          rgba(255,255,255,.08),
+          transparent
+        );
+    }
+
+
+    .system-icon {
+      position: relative;
+
+      z-index: 2;
+
+      width: 50px;
+      height: 50px;
+
+      margin-bottom: 22px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 13px;
+
+      font-size: 24px;
+
+      background:
+        rgba(255,255,255,.05);
+
+      border:
+        1px solid
+        rgba(255,255,255,.08);
+    }
+
+
+    .system-number {
+      position: absolute;
+
+      top: 18px;
+      right: 18px;
+
+      color:
+        rgba(255,255,255,.24);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing: 2px;
+    }
+
+
+    .system-name {
+      position: relative;
+
+      z-index: 2;
+
+      margin-bottom: 9px;
+
+      color: white;
+
+      font-size: 19px;
+
+      font-weight: 600;
+    }
+
+
+    .system-description {
+      position: relative;
+
+      z-index: 2;
+
+      max-width: 88%;
+
+      color:
+        rgba(255,255,255,.47);
+
+      font-size: 12px;
+
+      line-height: 1.55;
+    }
+
+
+    .system-arrow {
+      position: absolute;
+
+      right: 18px;
+      bottom: 16px;
+
+      color:
+        #c9b58b;
+
+      font-size: 20px;
+    }
+
+
+    .systems-message {
+      display: block;
+
+      padding: 50px;
+
+      text-align: center;
+
+      color:
+        rgba(255,255,255,.30);
+
+      font-size: 13px;
+    }
+
+
+    /* =========================================
+       SYSTEM DETAIL
+    ========================================== */
+
+    .detail-overlay {
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 150;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 28px;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      background:
+        rgba(42,41,38,.78);
+
+      backdrop-filter:
+        blur(18px);
+
+      -webkit-backdrop-filter:
+        blur(18px);
+
+      transition:
+        opacity .36s ease;
+    }
+
+
+    .detail-overlay.show {
+      opacity: 1;
+
+      pointer-events: auto;
+    }
+
+
+    .detail-panel {
+      position: relative;
+
+      width:
+        min(
+          1050px,
+          93vw
+        );
+
+      max-height:
+        88vh;
+
+      overflow-y: auto;
+
+      padding: 34px;
+
+      border-radius: 20px;
+
+      background:
+        linear-gradient(
+          145deg,
+          #41403a,
+          #504f47
+        );
+
+      border:
+        1px solid
+        rgba(255,255,255,.095);
+
+      box-shadow:
+        0 45px 120px
+        rgba(0,0,0,.72);
+
+      transform:
+        translateY(18px)
+        scale(.98);
+
+      transition:
+        transform .36s ease;
+    }
+
+
+    .detail-overlay.show
+    .detail-panel {
+      transform:
+        translateY(0)
+        scale(1);
+    }
+
+
+    .detail-close {
+      position: absolute;
+
+      top: 18px;
+      right: 18px;
+
+      width: 40px;
+      height: 40px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      cursor: pointer;
+
+      border-radius: 50%;
+
+      color:
+        rgba(255,255,255,.68);
+
+      background:
+        rgba(255,255,255,.045);
+
+      border:
+        1px solid
+        rgba(255,255,255,.075);
+    }
+
+
+    .detail-label {
+      margin-bottom: 12px;
+
+      color:
+        rgba(203,183,143,.58);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing: 3px;
+    }
+
+
+    .detail-heading {
+      display: flex;
+
+      align-items: center;
+
+      gap: 15px;
+
+      margin-bottom: 14px;
+    }
+
+
+    .detail-icon {
+      width: 56px;
+      height: 56px;
+
+      flex-shrink: 0;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 14px;
+
+      font-size: 27px;
+
+      background:
+        rgba(255,255,255,.055);
+
+      border:
+        1px solid
+        rgba(255,255,255,.085);
+    }
+
+
+    .detail-title {
+      max-width: 80%;
+
+      color: white;
+
+      font-size:
+        clamp(
+          27px,
+          3vw,
+          42px
+        );
+
+      font-weight: 600;
+    }
+
+
+    .detail-description {
+      max-width: 780px;
+
+      margin:
+        0 0 25px 71px;
+
+      color:
+        rgba(255,255,255,.56);
+
+      font-size: 14px;
+
+      line-height: 1.7;
+    }
+
+
+    .detail-image-wrap {
+      width: 100%;
+
+      min-height: 280px;
+
+      margin-bottom: 22px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      overflow: hidden;
+
+      border-radius: 15px;
+
+      background:
+        rgba(255,255,255,.025);
+
+      border:
+        1px solid
+        rgba(255,255,255,.065);
+    }
+
+
+    .detail-image {
+      display: none;
+
+      width: 100%;
+
+      max-height: 480px;
+
+      object-fit: contain;
+    }
+
+
+    .detail-placeholder {
+      padding: 45px;
+
+      text-align: center;
+
+      color:
+        rgba(255,255,255,.25);
+
+      font-size: 12px;
+    }
+
+
+    .detail-link {
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 9px;
+
+      padding:
+        12px 18px;
+
+      border-radius: 9px;
+
+      color: #111;
+
+      text-decoration: none;
+
+      font-size: 12px;
+
+      font-weight: 700;
+
+      background:
+        linear-gradient(
+          135deg,
+          #d9c7a1,
+          #b9a477
+        );
+    }
+
+
+    .detail-link.hidden {
+      display: none;
+    }
+
+
+    /* =========================================
+       PLAY / PAUSE
+    ========================================== */
+
+    .presentation-control {
+      position: fixed;
+
+      right: 24px;
+      bottom: 24px;
+
+      z-index: 20000;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+      padding:
+        10px 14px;
+
+      border-radius: 999px;
+
+      color: white;
+
+      background:
+        rgba(12,12,12,.82);
+
+      border:
+        1px solid
+        rgba(204,184,142,.20);
+
+      box-shadow:
+        0 12px 30px
+        rgba(0,0,0,.36);
+
+      backdrop-filter:
+        blur(14px);
+
+      -webkit-backdrop-filter:
+        blur(14px);
+
+      cursor: pointer;
+
+      user-select: none;
+    }
+
+
+    .presentation-control-icon {
+      width: 20px;
+
+      text-align: center;
+
+      font-size: 15px;
+    }
+
+
+    .presentation-control-text {
+      font-size: 11px;
+
+      font-weight: 700;
+
+      letter-spacing: 1.5px;
+    }
+
+
+    body.presentation-paused * {
+      animation-play-state:
+        paused !important;
+    }
+
+
+    /* =========================================
+       CONTINUE
+    ========================================== */
+
+    .continue-tour {
+      position: fixed;
+
+      right: 24px;
+      bottom: 78px;
+
+      z-index: 19000;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+      padding:
+        11px 16px;
+
+      border-radius: 999px;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      color:
+        rgba(255,255,255,.90);
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(202,181,139,.14),
+          rgba(255,255,255,.035)
+        );
+
+      border:
+        1px solid
+        rgba(202,181,139,.18);
+
+      box-shadow:
+        0 14px 34px
+        rgba(0,0,0,.30);
+
+      backdrop-filter:
+        blur(14px);
+
+      -webkit-backdrop-filter:
+        blur(14px);
+
+      cursor: pointer;
+
+      transition:
+        opacity .5s ease,
+        transform .25s ease;
+    }
+
+
+    .continue-tour.show {
+      opacity: 1;
+
+      pointer-events: auto;
+    }
+
+
+    .continue-tour:hover {
+      transform:
+        translateY(-2px);
+    }
+
+
+    .continue-tour-text {
+      font-size: 11px;
+
+      font-weight: 700;
+
+      letter-spacing: 1.3px;
+    }
+
+
+    /* =========================================
+       NEXT TRANSITION
+    ========================================== */
+
+    .next-transition-cover {
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 30000;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      background:
+        radial-gradient(
+          circle at 55% 45%,
+          rgba(205,184,142,.12),
+          rgba(4,5,5,.98) 60%,
+          #020202 100%
+        );
+
+      transition:
+        opacity .8s ease;
+    }
+
+
+    .next-transition-cover.active {
+      opacity: 1;
+    }
+
+
+    /* =========================================
+       ANIMATIONS
+    ========================================== */
+
+    @keyframes photoIn {
+
+      from {
+        opacity: 0;
+
+        transform:
+          scale(1.02);
+      }
+
+      to {
+        opacity: 1;
+
+        transform:
+          scale(1);
+      }
+
+    }
+
+
+    @keyframes roleIn {
+
+      from {
+        opacity: 0;
+
+        transform:
+          translateY(-12px);
+      }
+
+      to {
+        opacity: 1;
+
+        transform:
+          translateY(0);
+      }
+
+    }
+
+
+    /* =========================================
+       RESPONSIVE
+    ========================================== */
+
+    @media (max-width: 1100px) {
+
+      .systems-grid {
+        grid-template-columns:
+          repeat(
+            2,
+            minmax(0,1fr)
+          );
+      }
+
+      .workspace-status {
+        display: none;
+      }
+
+    }
+
+
+    @media (max-width: 780px) {
+
+      .team-rail {
+        display: none;
+      }
+
+      .systems-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .workspace-header {
+        padding:
+          22px 24px;
+      }
+
+      .systems-toolbar {
+        padding:
+          20px;
+      }
+
+      .systems-scroll {
+        padding:
+          0 20px 30px;
+      }
+
+      .detail-description {
+        margin-left: 0;
+      }
+
+      .presentation-control {
+        right: 14px;
+        bottom: 14px;
+      }
+
+      .presentation-control-text {
+        display: none;
+      }
+
+      .continue-tour {
+        right: 14px;
+        bottom: 66px;
+      }
+
+      .continue-tour-text {
+        display: none;
+      }
+
+    }
+
+
+    /* =========================================
+       VIEWPORT FIT V2
+    ========================================== */
+
+    .review-workspace {
+      position: fixed;
+
+      inset: 0;
+
+      width: 100vw;
+
+      height: 100vh;
+      height: 100dvh;
+    }
+
+    .workspace-body {
+      height:
+        calc(100vh - 116px);
+
+      height:
+        calc(100dvh - 116px);
+    }
+
+
+    /* =========================================
+       TEAM SYSTEM TITLE + EMOJI
+    ========================================== */
+
+    .team-system-title-row {
+      position: relative;
+
+      z-index: 2;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 11px;
+
+      min-width: 0;
+
+      margin-bottom: 10px;
+    }
+
+    .team-system-icon-inline {
+      width: 39px;
+      height: 39px;
+
+      flex: 0 0 39px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 11px;
+
+      font-size: 21px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(226,215,193,.095),
+          rgba(255,255,255,.035)
+        );
+
+      border:
+        1px solid
+        rgba(226,215,193,.13);
+    }
+
+    .team-system-title-row
+    .system-name {
+      min-width: 0;
+
+      margin-bottom: 0;
+
+      line-height: 1.18;
+    }
+
+    .system-number {
+      display: none !important;
+    }
+
+
+    /* =========================================
+       SHORT VIEWPORT / PROJECTOR MODE
+    ========================================== */
+
+    @media (max-height: 760px) {
+
+      .workspace-header {
+        height: 84px;
+
+        padding:
+          13px 24px;
+      }
+
+      .workspace-heading-small {
+        margin-bottom: 4px;
+
+        font-size: 8px;
+      }
+
+      .workspace-heading {
+        font-size: 26px;
+      }
+
+      .workspace-subtitle {
+        margin-top: 3px;
+
+        font-size: 8px;
+      }
+
+      .workspace-status {
+        gap: 7px;
+      }
+
+      .status-chip {
+        min-width: 83px;
+
+        padding:
+          7px 9px;
+      }
+
+      .status-value {
+        font-size: 14px;
+      }
+
+      .status-label {
+        font-size: 7px;
+      }
+
+      .workspace-body {
+        height:
+          calc(100vh - 84px);
+
+        height:
+          calc(100dvh - 84px);
+      }
+
+      .team-rail {
+        width: 192px;
+
+        padding:
+          14px 12px;
+      }
+
+      .rail-title {
+        margin:
+          0 8px 9px;
+      }
+
+      .rail-item {
+        margin-bottom: 3px;
+
+        padding:
+          9px 10px;
+
+        font-size: 11px;
+      }
+
+      .rail-divider {
+        margin:
+          12px 0;
+      }
+
+      .shared-process {
+        padding: 10px;
+      }
+
+      .shared-process-title {
+        margin-bottom: 5px;
+
+        font-size: 10px;
+      }
+
+      .shared-process-text {
+        font-size: 9px;
+      }
+
+      .systems-toolbar {
+        padding:
+          11px 20px 8px;
+      }
+
+      .systems-title {
+        font-size: 18px;
+      }
+
+      .systems-caption {
+        margin-top: 3px;
+
+        font-size: 8px;
+      }
+
+      .systems-count {
+        padding:
+          6px 9px;
+
+        font-size: 9px;
+      }
+
+      .team-showcase-strip {
+        margin:
+          0 20px 8px;
+
+        padding:
+          8px 11px;
+
+        border-radius: 10px;
+      }
+
+      .team-showcase-name {
+        font-size: 13px;
+      }
+
+      .team-showcase-description {
+        margin-top: 2px;
+
+        font-size: 10px;
+      }
+
+      .systems-scroll {
+        padding:
+          0 20px 18px;
+      }
+
+      .systems-grid {
+        gap: 12px;
+
+        padding-bottom: 14px;
+      }
+
+      .system-card {
+        min-height: 146px;
+
+        padding: 14px;
+
+        border-radius: 13px;
+      }
+
+      .team-system-title-row {
+        gap: 9px;
+
+        margin-bottom: 7px;
+      }
+
+      .team-system-icon-inline {
+        width: 34px;
+        height: 34px;
+
+        flex-basis: 34px;
+
+        border-radius: 9px;
+
+        font-size: 18px;
+      }
+
+      .system-name {
+        font-size: 17px;
+      }
+
+      .system-description {
+        max-width: 95%;
+
+        font-size: 11px;
+
+        line-height: 1.42;
+      }
+
+    }
+
+    /* =========================================
+       QUALITY TEAM LUXURY PALETTE V3
+       Soft Sage Stone + Champagne
+    ========================================== */
+
+    .review-workspace,
+    .workspace-background {
+      background:
+        radial-gradient(
+          circle at 22% 16%,
+          rgba(196,174,128,.13),
+          transparent 31%
+        ),
+        radial-gradient(
+          circle at 82% 78%,
+          rgba(139,174,161,.15),
+          transparent 34%
+        ),
+        linear-gradient(
+          135deg,
+          #30342f 0%,
+          #3c413a 48%,
+          #2b302b 100%
+        ) !important;
+    }
+
+    .workspace-header {
+      background:
+        rgba(45,50,45,.90) !important;
+
+      border-color:
+        rgba(222,211,187,.10) !important;
+    }
+
+    .team-rail {
+      background:
+        rgba(42,47,42,.91) !important;
+
+      border-color:
+        rgba(222,211,187,.08) !important;
+    }
+
+    .rail-item.active,
+    .shared-process {
+      background:
+        linear-gradient(
+          135deg,
+          rgba(133,166,154,.14),
+          rgba(197,177,135,.08)
+        ) !important;
+
+      border-color:
+        rgba(189,177,148,.13) !important;
+    }
+
+    .team-showcase-strip {
+      background:
+        linear-gradient(
+          135deg,
+          rgba(78,91,81,.84),
+          rgba(65,72,63,.82)
+        ) !important;
+
+      border:
+        1px solid
+        rgba(222,211,187,.12) !important;
+    }
+
+    .system-card {
+      background:
+        linear-gradient(
+          145deg,
+          rgba(69,75,67,.97),
+          rgba(52,59,52,.98)
+        ) !important;
+
+      border:
+        1px solid
+        rgba(224,214,191,.105) !important;
+
+      box-shadow:
+        0 18px 38px
+        rgba(19,21,19,.23),
+        inset 0 1px 0
+        rgba(255,255,255,.028) !important;
+    }
+
+    .system-card:hover,
+    .system-card.auto-focus {
+      background:
+        linear-gradient(
+          145deg,
+          rgba(78,85,76,.99),
+          rgba(59,66,58,.99)
+        ) !important;
+
+      border-color:
+        rgba(202,181,138,.38) !important;
+
+      box-shadow:
+        0 24px 49px
+        rgba(18,20,18,.29),
+        0 0 0 1px
+        rgba(202,181,138,.05),
+        0 0 30px
+        rgba(132,168,155,.08) !important;
+    }
+
+    .system-card::before {
+      background:
+        linear-gradient(
+          90deg,
+          #c0aa79,
+          rgba(132,167,155,.50),
+          transparent 88%
+        ) !important;
+    }
+
+    .team-system-icon-inline,
+    .detail-icon {
+      background:
+        linear-gradient(
+          145deg,
+          rgba(207,193,160,.12),
+          rgba(133,166,154,.09)
+        ) !important;
+
+      border:
+        1px solid
+        rgba(219,206,178,.14) !important;
+    }
+
+    .detail-panel {
+      background:
+        linear-gradient(
+          145deg,
+          #3b4039,
+          #2d322d
+        ) !important;
+
+      border:
+        1px solid
+        rgba(221,210,185,.13) !important;
+    }
+
+    .detail-link {
+      background:
+        linear-gradient(
+          135deg,
+          #d2c096,
+          #ad996d
+        ) !important;
+    }
+
+    .status-chip,
+    .systems-count {
+      background:
+        rgba(75,82,73,.66) !important;
+
+      border-color:
+        rgba(222,211,187,.10) !important;
+    }
+
+    /* =========================================
+       CINEMATIC RETURN BRIDGE
+       Systems -> Quality Team -> Supervisor
+    ========================================== */
+
+    .team-scene:not(.workspace-mode)
+    .team-photo-wrap {
+      transition:
+        opacity 1.20s ease,
+        filter 1.20s ease,
+        transform 1.45s
+        cubic-bezier(.18,.75,.2,1);
+    }
+
+    .team-scene:not(.workspace-mode)
+    .team-blur {
+      transition:
+        transform 1.45s ease,
+        filter 1.20s ease,
+        opacity 1.20s ease;
+    }
+
+    .review-workspace {
+      transition:
+        opacity 1.05s ease,
+        transform 1.25s
+        cubic-bezier(.18,.75,.2,1) !important;
+    }
+
+
+    /* =========================================
+       QUALITY TEAM -> OPERATIONS FLOOR
+    ========================================== */
+
+    .next-transition-cover.operations-floor-route {
+      overflow: hidden;
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(12,15,15,.74),
+          rgba(12,15,15,.12) 50%,
+          rgba(12,15,15,.68)
+        ),
+        url('assets/images/f9zdsGu.png')
+        center / cover no-repeat;
+
+      transform:
+        scale(1.12);
+
+      filter:
+        blur(7px)
+        brightness(.54);
+
+      transition:
+        opacity .52s ease,
+        transform 1.55s
+        cubic-bezier(.18,.76,.18,1),
+        filter 1.30s ease;
+    }
+
+    .operations-floor-route.active {
+      opacity: 1;
+
+      transform:
+        scale(1);
+
+      filter:
+        blur(0)
+        brightness(.84);
+    }
+
+    .operations-floor-route::before,
+    .operations-floor-route::after {
+      content: "";
+
+      position: absolute;
+
+      top: -8%;
+      bottom: -8%;
+
+      width: 27%;
+
+      border:
+        1px solid
+        rgba(203,183,144,.12);
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(47,57,55,.46),
+          rgba(255,255,255,.02)
+        );
+
+      backdrop-filter:
+        blur(12px);
+
+      transition:
+        transform 1.35s
+        cubic-bezier(.18,.76,.18,1)
+        .18s;
+    }
+
+    .operations-floor-route::before {
+      left: -5%;
+
+      transform:
+        skewX(-7deg)
+        translateX(12%);
+    }
+
+    .operations-floor-route::after {
+      right: -5%;
+
+      transform:
+        skewX(7deg)
+        translateX(-12%);
+    }
+
+    .operations-floor-route.active::before {
+      transform:
+        skewX(-7deg)
+        translateX(-90%);
+    }
+
+    .operations-floor-route.active::after {
+      transform:
+        skewX(7deg)
+        translateX(90%);
+    }
+
+    .operations-route-label {
+      position: absolute;
+
+      z-index: 4;
+
+      left: 50%;
+      bottom: 8.5%;
+
+      transform:
+        translateX(-50%)
+        translateY(12px);
+
+      opacity: 0;
+
+      padding:
+        9px 14px;
+
+      border-radius: 999px;
+
+      color:
+        rgba(255,255,255,.84);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing: 2.2px;
+
+      background:
+        rgba(23,29,28,.58);
+
+      border:
+        1px solid
+        rgba(204,181,138,.18);
+
+      backdrop-filter:
+        blur(12px);
+
+      transition:
+        opacity .5s ease .55s,
+        transform .7s ease .55s;
+    }
+
+    .operations-floor-route.active
+    .operations-route-label {
+      opacity: 1;
+
+      transform:
+        translateX(-50%)
+        translateY(0);
+    }
+
+
+    /* 2050 V2 — stable single image reveal */
+    .team-photo-wrap {
+      opacity: 1 !important;
+      animation: none !important;
+    }
+    
+
+    /* =========================================
+       V2 — OPERATIONS CORRIDOR
+       No Supervisor photo before index6.
+    ========================================== */
+    .next-transition-cover.operations-floor-route {
+      background:
+        radial-gradient(
+          circle at 50% 42%,
+          rgba(192,167,119,.10),
+          transparent 25%
+        ),
+        linear-gradient(
+          90deg,
+          #182021,
+          #303b3a 50%,
+          #182021
+        ) !important;
+
+      filter: none !important;
+    }
+
+    .operations-floor-route::before,
+    .operations-floor-route::after {
+      background:
+        linear-gradient(
+          90deg,
+          rgba(61,77,75,.72),
+          rgba(255,255,255,.025)
+        ) !important;
+    }
+    
+
+    /* =========================================
+       CREATIVE V3 — SINGLE VISIBLE PHOTO
+    ========================================== */
+
+    .team-blur {
+      background-image: none !important;
+      background:
+        radial-gradient(
+          circle at 50% 42%,
+          rgba(195,167,111,.10),
+          transparent 31%
+        ),
+        linear-gradient(
+          135deg,
+          #22292a,
+          #111617
+        ) !important;
+    }
+
+    .team-photo {
+      animation: none !important;
+      transform: none !important;
+    }
+
+
+    /* =========================================
+       CREATIVE V3 — QUALITY TEAM
+       SHARED REVIEW CANVAS + REVIEW RIBBON
+    ========================================== */
+
+    .team-showcase-strip {
+      position: relative !important;
+      min-height: 190px !important;
+      margin: 10px 20px 12px !important;
+      padding:
+        58px 28px 22px !important;
+      overflow: hidden !important;
+      display: block !important;
+      border-radius: 18px !important;
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(159,173,153,.07) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          rgba(159,173,153,.06) 1px,
+          transparent 1px
+        ),
+        radial-gradient(
+          circle at 50% 48%,
+          rgba(151,169,150,.11),
+          transparent 32%
+        ),
+        linear-gradient(
+          145deg,
+          rgba(66,74,65,.86),
+          rgba(42,49,43,.92)
+        ) !important;
+
+      background-size:
+        42px 42px,
+        42px 42px,
+        auto,
+        auto !important;
+
+      border:
+        1px solid
+        rgba(213,193,153,.10) !important;
+
+      box-shadow:
+        inset 0 0 60px
+        rgba(0,0,0,.12),
+        0 22px 48px
+        rgba(0,0,0,.18) !important;
+    }
+
+    .shared-reviewers {
+      position: absolute;
+      left: 26px;
+      right: 26px;
+      top: 15px;
+
+      display: grid;
+
+      grid-template-columns:
+        auto 1fr auto 1fr auto;
+
+      align-items: center;
+
+      gap: 10px;
+    }
+
+    .reviewer-node {
+      padding:
+        6px 10px;
+
+      border-radius: 999px;
+
+      color:
+        rgba(239,224,194,.68);
+
+      font-size: 7px;
+
+      font-weight: 700;
+
+      letter-spacing: 1.1px;
+
+      background:
+        rgba(255,255,255,.025);
+
+      border:
+        1px solid
+        rgba(215,194,151,.10);
+    }
+
+    .reviewer-connector {
+      height: 1px;
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(215,194,151,.08),
+          rgba(215,194,151,.28),
+          rgba(215,194,151,.08)
+        );
+    }
+
+    .team-showcase-kicker {
+      margin-bottom: 9px !important;
+      color:
+        rgba(214,191,147,.65) !important;
+      font-size: 8px !important;
+      letter-spacing: 2.5px !important;
+    }
+
+    .team-showcase-name {
+      color: white !important;
+
+      font-size:
+        clamp(
+          22px,
+          2.1vw,
+          32px
+        ) !important;
+
+      font-weight: 650 !important;
+    }
+
+    .team-showcase-description {
+      max-width: 820px;
+      margin-top: 10px !important;
+      color:
+        rgba(255,255,255,.46) !important;
+      font-size: 11px !important;
+      line-height: 1.55 !important;
+    }
+
+    .team-showcase-step {
+      position: absolute !important;
+      right: 24px !important;
+      bottom: 18px !important;
+    }
+
+    .systems-scroll {
+      flex: 0 0 auto !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      padding:
+        0 20px 16px !important;
+    }
+
+    .systems-grid {
+      width: max-content !important;
+      display: flex !important;
+      grid-template-columns: none !important;
+      gap: 0 !important;
+      padding: 0 !important;
+
+      border:
+        1px solid
+        rgba(213,193,153,.07);
+
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .review-ribbon-tab {
+      --accent: #899e8d;
+
+      position: relative;
+
+      width: 176px;
+      min-width: 176px;
+      height: 75px;
+
+      padding:
+        10px 12px;
+
+      cursor: pointer;
+      text-align: left;
+      color: white;
+
+      border: 0;
+
+      border-right:
+        1px solid
+        rgba(255,255,255,.055);
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(64,72,63,.76),
+          rgba(42,49,43,.84)
+        );
+
+      transition:
+        background .25s ease,
+        box-shadow .25s ease;
+    }
+
+    .review-ribbon-tab:last-child {
+      border-right: 0;
+    }
+
+    .review-ribbon-tab::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      opacity: .25;
+      background:
+        var(--accent);
+    }
+
+    .review-ribbon-tab:hover,
+    .review-ribbon-tab.auto-focus {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(83,91,79,.94),
+          rgba(52,60,52,.96)
+        );
+
+      box-shadow:
+        inset 0 0 0 1px
+        rgba(215,193,148,.12);
+    }
+
+    .review-ribbon-tab.auto-focus::after {
+      opacity: 1;
+    }
+
+    .review-tab-index {
+      margin-bottom: 6px;
+      color:
+        rgba(214,192,149,.46);
+      font-size: 7px;
+      font-weight: 700;
+    }
+
+    .review-tab-title {
+      overflow: hidden;
+      color:
+        rgba(255,255,255,.84);
+      font-size: 10px;
+      font-weight: 650;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .review-tab-mark {
+      margin-top: 7px;
+      color:
+        rgba(255,255,255,.20);
+      font-size: 6.5px;
+      letter-spacing: 1px;
+    }
+
+    @media (max-height: 760px) {
+
+      .team-showcase-strip {
+        min-height: 135px !important;
+        padding:
+          45px 20px 15px !important;
+      }
+
+      .shared-reviewers {
+        top: 10px;
+        left: 18px;
+        right: 18px;
+      }
+
+      .team-showcase-name {
+        font-size: 19px !important;
+      }
+
+      .team-showcase-description {
+        margin-top: 6px !important;
+        font-size: 9px !important;
+      }
+
+      .review-ribbon-tab {
+        width: 150px;
+        min-width: 150px;
+        height: 62px;
+      }
+
+      .review-tab-mark {
+        display: none;
+      }
+
+    }
+
+
+    /* =========================================
+       FINAL CLOSEOUT — QUALITY TEAM SYSTEMS
+       No numbering. Name + description visible.
+    ========================================== */
+
+    .reviewer-person {
+      width:
+        27px !important;
+
+      height:
+        27px !important;
+
+      padding:
+        0 !important;
+
+      border-radius:
+        50% !important;
+
+      background:
+        radial-gradient(
+          circle at 50% 35%,
+          rgba(240,222,186,.72) 0 18%,
+          transparent 19%
+        ),
+        radial-gradient(
+          ellipse at 50% 78%,
+          rgba(240,222,186,.36) 0 27%,
+          transparent 28%
+        ),
+        rgba(255,255,255,.025) !important;
+    }
+
+
+    .review-ribbon-tab {
+      width:
+        232px !important;
+
+      min-width:
+        232px !important;
+
+      height:
+        108px !important;
+
+      padding:
+        13px 14px !important;
+    }
+
+
+    .review-tab-index {
+      display:
+        none !important;
+    }
+
+
+    .review-tab-title {
+      margin-bottom:
+        7px;
+
+      color:
+        rgba(255,255,255,.91) !important;
+
+      font-size:
+        11px !important;
+
+      font-weight:
+        650 !important;
+
+      line-height:
+        1.25;
+
+      white-space:
+        normal !important;
+
+      text-overflow:
+        clip !important;
+    }
+
+
+    .review-tab-description {
+      display:
+        -webkit-box;
+
+      overflow:
+        hidden;
+
+      color:
+        rgba(255,255,255,.40);
+
+      font-size:
+        8.5px;
+
+      line-height:
+        1.4;
+
+      -webkit-line-clamp:
+        2;
+
+      -webkit-box-orient:
+        vertical;
+    }
+
+
+    .review-tab-mark {
+      position:
+        absolute;
+
+      left:
+        14px;
+
+      bottom:
+        9px;
+
+      margin:
+        0 !important;
+    }
+
+
+    @media (max-height: 760px) {
+
+      .review-ribbon-tab {
+        width:
+          195px !important;
+
+        min-width:
+          195px !important;
+
+        height:
+          88px !important;
+
+        padding:
+          10px 11px !important;
+      }
+
+      .review-tab-title {
+        margin-bottom:
+          4px;
+
+        font-size:
+          9.5px !important;
+      }
+
+      .review-tab-description {
+        font-size:
+          7.5px;
+      }
+
+      .review-tab-mark {
+        display:
+          none !important;
+      }
+
+    }
+
+  
+
+    /* V30 readability pass — keep the photo visible and remove heavy black dialogue cards. */
+    .dialogue{width:min(940px,78vw) !important;bottom:3.2% !important;}
+    .dialogue-box{
+      padding:9px 16px !important;
+      border:none !important;
+      border-radius:10px !important;
+      background:transparent !important;
+      box-shadow:none !important;
+      backdrop-filter:none !important;
+      -webkit-backdrop-filter:none !important;
+      color:#e6c17e !important;
+      text-shadow:0 2px 9px rgba(0,0,0,.98),0 1px 2px rgba(0,0,0,.95) !important;
+    }
+    .dialogue-box::after{display:none !important;}
+    .dialogue-box, .dialogue-box > div{color:#e6c17e !important;}
+    .tour-ar-subtitle{
+      margin-top:4px !important;
+      padding-top:4px !important;
+      border-top:none !important;
+      color:#e6c17e !important;
+      line-height:1.45 !important;
+      text-shadow:0 2px 9px rgba(0,0,0,.98) !important;
+    }
+    .role-indicator{top:3.2% !important;left:3.2% !important;max-width:36vw !important;}
+    .role-name{max-width:410px !important;font-size:clamp(17px,1.55vw,25px) !important;line-height:1.14 !important;}
+    @media(max-width:820px){.dialogue{width:94vw !important;}}
+
+  </style>
+
+<style id="systemDescriptionReadingStyle">
+.team-showcase-description.is-speaking-description{
+  color:#0b0d0f !important;
+  background:rgba(255,255,255,.94) !important;
+  border-radius:10px !important;
+  padding:8px 10px !important;
+  font-weight:800 !important;
+  box-shadow:0 8px 22px rgba(0,0,0,.16) !important;
+}
+</style>
+  <script>/* FIXED_AUDIO_NO_CUTOFF */</script>
+</head>
+
+
+<body>
+
+  <main
+    id="teamScene"
+    class="team-scene"
+  >
+
+    <div class="team-blur"></div>
+
+
+    <div class="team-photo-wrap">
+
+      <img referrerpolicy="no-referrer"
+        class="team-photo"
+        src="assets/images/iS2X23C.png"
+        alt="Quality Operations Team"
+      >
+
+    </div>
+
+
+    <div class="top-shadow"></div>
+    <div class="bottom-shadow"></div>
+
+
+    <div class="role-indicator">
+
+      <div class="role-small">
+        CUSTOMER SUPPORT CENTER
+      </div>
+
+      <div class="role-name">
+        Quality Operations Team
+      </div>
+
+      <div class="role-line"></div>
+
+    </div>
+
+
+    <!-- =====================================
+         OPENING DIALOGUE
+    ====================================== -->
+
+    <div
+      id="dialogue1"
+      class="dialogue visitor"
+    >
+
+      <div class="dialogue-name">
+        VISITOR
+      </div>
+
+      <div class="dialogue-box">
+        Do you all use the same quality systems?
+      </div>
+
+    </div>
+
+
+    <div
+      id="dialogue2"
+      class="dialogue"
+    >
+
+      <div class="dialogue-name">
+        QUALITY TEAM
+      </div>
+
+      <div class="dialogue-box">
+        Yes. We work with the same tools and follow the same quality process.
+      </div>
+
+    </div>
+
+
+    <div
+      id="dialogue3"
+      class="dialogue"
+    >
+
+      <div class="dialogue-name">
+        QUALITY TEAM
+      </div>
+
+      <div class="dialogue-box">
+        We use reports, dashboards, ratings and review tools to monitor performance and support improvement.
+      </div>
+
+    </div>
+
+
+    <div
+      id="dialogue4"
+      class="dialogue"
+    >
+
+      <div class="dialogue-name">
+        QUALITY TEAM
+      </div>
+
+      <div class="dialogue-box">
+        Let us show you the systems we use.
+      </div>
+
+    </div>
+
+
+    <!-- =====================================
+         ENDING DIALOGUE
+    ====================================== -->
+
+    <div
+      id="endDialogue1"
+      class="dialogue visitor"
+    >
+
+      <div class="dialogue-name">
+        VISITOR
+      </div>
+
+      <div class="dialogue-box">
+        So everyone works from the same quality view.
+      </div>
+
+    </div>
+
+
+    <div
+      id="endDialogue2"
+      class="dialogue"
+    >
+
+      <div class="dialogue-name">
+        QUALITY TEAM
+      </div>
+
+      <div class="dialogue-box">
+        Exactly. We review the same systems, compare findings, and keep the quality process consistent.
+      </div>
+
+    </div>
+
+
+    <div
+      id="endDialogue3"
+      class="dialogue"
+    >
+
+      <div class="dialogue-name">
+        QUALITY TEAM
+      </div>
+
+      <div class="dialogue-box">
+        Let’s continue the tour.
+      </div>
+
+    </div>
+
+
+    <!-- =====================================
+         SHARED REVIEW WORKSPACE
+    ====================================== -->
+
+    <section
+      id="reviewWorkspace"
+      class="review-workspace"
+    >
+
+      <div class="workspace-background"></div>
+      <div class="workspace-lines"></div>
+
+
+      <header class="workspace-header">
+
+        <div>
+
+          <div class="workspace-heading-small">
+            QUALITY OPERATIONS
+          </div>
+
+          <div class="workspace-heading">
+            Shared Review Workspace
+          </div>
+
+          <div class="workspace-subtitle">
+            REVIEW · COMPARE · IMPROVE
+          </div>
+
+        </div>
+
+
+        <div class="workspace-status">
+
+          <div class="status-chip">
+
+            <div class="status-value live">
+              ACTIVE
+            </div>
+
+            <div class="status-label">
+              TEAM VIEW
+            </div>
+
+          </div>
+
+
+          <div class="status-chip">
+
+            <div
+              id="topSystemsCount"
+              class="status-value"
+            >
+              0
+            </div>
+
+            <div class="status-label">
+              SYSTEMS
+            </div>
+
+          </div>
+
+
+          <div class="status-chip">
+
+            <div class="status-value">
+              3
+            </div>
+
+            <div class="status-label">
+              TEAM MEMBERS
+            </div>
+
+          </div>
+
+        </div>
+
+      </header>
+
+
+      <div class="workspace-body">
+
+        <aside class="team-rail">
+
+          <div class="rail-title">
+            SHARED PROCESS
+          </div>
+
+
+          <div class="rail-item active">
+
+            <div class="rail-icon">
+              ◉
+            </div>
+
+            <div>
+              Systems Overview
+            </div>
+
+          </div>
+
+
+          <div class="rail-item">
+
+            <div class="rail-icon">
+              ▦
+            </div>
+
+            <div>
+              Reports
+            </div>
+
+          </div>
+
+
+          <div class="rail-item">
+
+            <div class="rail-icon">
+              ◇
+            </div>
+
+            <div>
+              Dashboards
+            </div>
+
+          </div>
+
+
+          <div class="rail-item">
+
+            <div class="rail-icon">
+              ☆
+            </div>
+
+            <div>
+              Ratings
+            </div>
+
+          </div>
+
+
+          <div class="rail-item">
+
+            <div class="rail-icon">
+              ✓
+            </div>
+
+            <div>
+              Reviews
+            </div>
+
+          </div>
+
+
+          <div class="rail-divider"></div>
+
+
+          <div class="shared-process">
+
+            <div class="shared-process-title">
+              One Team · One View
+            </div>
+
+            <div class="shared-process-text">
+              The team works through one shared quality process and the same operational systems.
+            </div>
+
+          </div>
+
+        </aside>
+
+
+        <section class="systems-area">
+
+          <div class="systems-toolbar">
+
+            <div>
+
+              <div class="systems-title">
+                Quality Team Systems
+              </div>
+
+              <div class="systems-caption">
+                SHARED TOOLS · SHARED REVIEW · CONSISTENT QUALITY
+              </div>
+
+            </div>
+
+
+            <div
+              id="systemsCount"
+              class="systems-count"
+            >
+              Loading...
+            </div>
+
+          </div>
+
+
+          <div
+            id="teamShowcaseStrip"
+            class="team-showcase-strip"
+          >
+
+            <div class="shared-reviewers">
+
+              <div
+                class="reviewer-node reviewer-person"
+                aria-label="Quality Team Member"
+              ></div>
+
+              <div class="reviewer-connector"></div>
+
+              <div
+                class="reviewer-node reviewer-person"
+                aria-label="Quality Team Member"
+              ></div>
+
+              <div class="reviewer-connector"></div>
+
+              <div
+                class="reviewer-node reviewer-person"
+                aria-label="Quality Team Member"
+              ></div>
+
+            </div>
+
+
+            <div class="team-showcase-kicker">
+              SHARED REVIEW CANVAS
+            </div>
+
+            <div>
+
+              <div
+                id="teamShowcaseName"
+                class="team-showcase-name"
+              >
+                Preparing team systems...
+              </div>
+
+              <div
+                id="teamShowcaseDescription"
+                class="team-showcase-description"
+              >
+                The presentation will move through every shared system automatically.
+              </div>
+
+            </div>
+
+            <div
+              id="teamShowcaseStep"
+              class="team-showcase-step"
+            >
+              —
+            </div>
+
+          </div>
+
+
+          <div class="systems-scroll">
+
+            <div
+              id="systemsGrid"
+              class="systems-grid"
+            ></div>
+
+
+            <div
+              id="systemsMessage"
+              class="systems-message"
+            >
+              Loading quality team systems...
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =====================================
+       PLAY / PAUSE
+  ====================================== -->
+
+  <button
+    id="presentationControl"
+    class="presentation-control"
+    type="button"
+    aria-label="Pause presentation"
+  >
+
+    <span
+      id="presentationControlIcon"
+      class="presentation-control-icon"
+    >
+      ⏸
+    </span>
+
+    <span
+      id="presentationControlText"
+      class="presentation-control-text"
+    >
+      PAUSE
+    </span>
+
+  </button>
+
+
+  <!-- =====================================
+       CONTINUE
+  ====================================== -->
+
+  <button
+    id="continueTour"
+    class="continue-tour"
+    type="button"
+  >
+
+    <span class="continue-tour-text">
+      CONTINUE TOUR
+    </span>
+
+    <span>
+      →
+    </span>
+
+  </button>
+
+
+  <div
+    id="nextTransitionCover"
+    class="next-transition-cover operations-floor-route"
+  >
+    <div class="operations-route-label">
+      OPERATIONS FLOOR · SUPERVISOR
+    </div>
+  </div>
+
+
+  <!-- =====================================
+       DETAIL OVERLAY
+  ====================================== -->
+
+  <div
+    id="detailOverlay"
+    class="detail-overlay"
+  >
+
+    <div class="detail-panel">
+
+      <button
+        id="detailClose"
+        class="detail-close"
+        type="button"
+      >
+        ✕
+      </button>
+
+
+      <div class="detail-label">
+        QUALITY TEAM SYSTEM
+      </div>
+
+
+      <div class="detail-heading">
+
+        <div
+          id="detailIcon"
+          class="detail-icon"
+        ></div>
+
+        <div
+          id="detailTitle"
+          class="detail-title"
+        >
+          System
+        </div>
+
+      </div>
+
+
+      <div
+        id="detailDescription"
+        class="detail-description"
+      >
+        Description
+      </div>
+
+
+      <div class="detail-image-wrap">
+
+        <img referrerpolicy="no-referrer"
+          id="detailImage"
+          class="detail-image"
+          alt="System Screenshot"
+        >
+
+        <div
+          id="detailPlaceholder"
+          class="detail-placeholder"
+        >
+          No screenshot available.
+        </div>
+
+      </div>
+
+
+      <a
+        id="detailLink"
+        class="detail-link"
+        href="#"
+        target="_blank"
+      >
+        Open System ↗
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    /*
+      INDEX5 MASTER CLOCK
+
+      One clock controls:
+      - dialogue
+      - automatic movement
+      - manual pause
+      - system interaction freeze
+      - end dialogue
+      - transition to index6
+    */
+
+    (function() {
+
+      'use strict';
+
+
+      /* =========================================
+         ELEMENTS
+      ========================================== */
+
+      const teamScene =
+        document.getElementById(
+          'teamScene'
+        );
+
+      const reviewWorkspace =
+        document.getElementById(
+          'reviewWorkspace'
+        );
+
+      const detailOverlay =
+        document.getElementById(
+          'detailOverlay'
+        );
+
+      const detailClose =
+        document.getElementById(
+          'detailClose'
+        );
+
+      const presentationControl =
+        document.getElementById(
+          'presentationControl'
+        );
+
+      const presentationControlIcon =
+        document.getElementById(
+          'presentationControlIcon'
+        );
+
+      const presentationControlText =
+        document.getElementById(
+          'presentationControlText'
+        );
+
+      const continueTour =
+        document.getElementById(
+          'continueTour'
+        );
+
+      const nextTransitionCover =
+        document.getElementById(
+          'nextTransitionCover'
+        );
+
+      const dialogue1 =
+        document.getElementById(
+          'dialogue1'
+        );
+
+      const dialogue2 =
+        document.getElementById(
+          'dialogue2'
+        );
+
+      const dialogue3 =
+        document.getElementById(
+          'dialogue3'
+        );
+
+      const dialogue4 =
+        document.getElementById(
+          'dialogue4'
+        );
+
+      const endDialogue1 =
+        document.getElementById(
+          'endDialogue1'
+        );
+
+      const endDialogue2 =
+        document.getElementById(
+          'endDialogue2'
+        );
+
+      const endDialogue3 =
+        document.getElementById(
+          'endDialogue3'
+        );
+
+
+      /* =========================================
+         STATE
+      ========================================== */
+
+      let teamSystems =
+        [];
+
+      let manualPaused =
+        false;
+
+      let interactionPaused =
+        false;
+
+      let phase =
+        'intro';
+
+      let phaseElapsed =
+        0;
+
+      let lastTick =
+        performance.now();
+
+      let firedEvents =
+        new Set();
+
+      let systemsLoaded =
+        false;
+
+      let systemsReady =
+        false;
+
+      let showcaseLastIndex =
+        -1;
+
+      let showcaseSequenceStarted =
+        false;
+
+      let showcaseSequenceIndex =
+        -1;
+
+      let showcaseWaitingForNarration =
+        false;
+
+      let showcaseAdvanceAt =
+        null;
+
+      let showcaseFinishAt =
+        null;
+
+      let transitionStarted =
+        false;
+
+      /* Final voice-aware sequencing: never advance while a dialogue is still speaking. */
+      let introDialogueStage = 0;
+      let introDialogueStageStartedAt = 0;
+      let endingDialogueStage = 0;
+      let endingDialogueStageStartedAt = 0;
+      let dialogueVoiceCompleted = new Set();
+
+      window.supportIndex5DialogueVoiceFinished = function(node) {
+        if (node && node.id) dialogueVoiceCompleted.add(node.id);
+      };
+
+
+      /* =========================================
+         PAUSE
+      ========================================== */
+
+      function isPaused() {
+
+        return (
+          manualPaused ||
+          interactionPaused
+        );
+
+      }
+
+
+      function syncPauseState() {
+
+        if (
+          isPaused()
+        ) {
+
+          document.body
+            .classList
+            .add(
+              'presentation-paused'
+            );
+
+        }
+        else {
+
+          document.body
+            .classList
+            .remove(
+              'presentation-paused'
+            );
+
+        }
+
+
+        presentationControlIcon
+          .textContent =
+            manualPaused
+              ? '▶'
+              : '⏸';
+
+
+        presentationControlText
+          .textContent =
+            manualPaused
+              ? 'PLAY'
+              : 'PAUSE';
+
+      }
+
+
+      presentationControl
+        .addEventListener(
+          'click',
+          function() {
+
+            manualPaused =
+              !manualPaused;
+
+            syncPauseState();
+
+          }
+        );
+
+
+      function startInteractionPause() {
+
+        interactionPaused =
+          true;
+
+        syncPauseState();
+
+      }
+
+
+      function endInteractionPause() {
+
+        interactionPaused =
+          false;
+
+        syncPauseState();
+
+      }
+
+
+      /* =========================================
+         MASTER CLOCK
+      ========================================== */
+
+      function fireOnce(
+        key,
+        time,
+        callback
+      ) {
+
+        if (
+          firedEvents.has(key)
+        ) {
+
+          return;
+
+        }
+
+
+        if (
+          phaseElapsed >= time
+        ) {
+
+          firedEvents.add(
+            key
+          );
+
+          callback();
+
+        }
+
+      }
+
+
+      function switchPhase(
+        nextPhase
+      ) {
+
+        phase =
+          nextPhase;
+
+        phaseElapsed =
+          0;
+
+        firedEvents
+          .clear();
+
+        if (nextPhase === 'ending') {
+          endingDialogueStage = 0;
+          endingDialogueStageStartedAt = 0;
+          ['endDialogue1','endDialogue2','endDialogue3'].forEach(function(id){ dialogueVoiceCompleted.delete(id); });
+        }
+
+        lastTick =
+          performance.now();
+
+      }
+
+
+      function runIntro() {
+
+        function stageExpired(node, fallbackMs) {
+          if (node && dialogueVoiceCompleted.has(node.id)) return true;
+          return (phaseElapsed - introDialogueStageStartedAt) >= fallbackMs;
+        }
+
+        if (introDialogueStage === 0 && phaseElapsed >= 1200) {
+          dialogue1.classList.add('show');
+          introDialogueStage = 1;
+          introDialogueStageStartedAt = phaseElapsed;
+          return;
+        }
+        if (introDialogueStage === 1 && stageExpired(dialogue1, 16000)) {
+          dialogue1.classList.add('hide');
+          dialogue2.classList.add('show');
+          introDialogueStage = 2;
+          introDialogueStageStartedAt = phaseElapsed;
+          return;
+        }
+        if (introDialogueStage === 2 && stageExpired(dialogue2, 24000)) {
+          dialogue2.classList.add('hide');
+          dialogue3.classList.add('show');
+          introDialogueStage = 3;
+          introDialogueStageStartedAt = phaseElapsed;
+          return;
+        }
+        if (introDialogueStage === 3 && stageExpired(dialogue3, 26000)) {
+          dialogue3.classList.add('hide');
+          dialogue4.classList.add('show');
+          introDialogueStage = 4;
+          introDialogueStageStartedAt = phaseElapsed;
+          return;
+        }
+        if (introDialogueStage === 4 && stageExpired(dialogue4, 20000)) {
+          dialogue4.classList.add('hide');
+          teamScene.classList.add('workspace-mode');
+          introDialogueStage = 5;
+          introDialogueStageStartedAt = phaseElapsed;
+          return;
+        }
+        if (introDialogueStage === 5 && (phaseElapsed - introDialogueStageStartedAt) >= 1200) {
+          reviewWorkspace.classList.add('show');
+          if (!systemsLoaded) { systemsLoaded = true; loadSystems(); }
+          introDialogueStage = 6;
+          switchPhase('showcase');
+        }
+      }
+
+
+      function runShowcase() {
+
+        if (
+          !systemsReady
+        ) {
+
+          return;
+
+        }
+
+
+        fireOnce(
+          'continue-show',
+          700,
+          function() {
+
+            continueTour
+              .classList
+              .add('show');
+
+          }
+        );
+
+
+        const total =
+          teamSystems.length;
+
+
+        if (
+          total <= 0
+        ) {
+
+          fireOnce(
+            'auto-finish-empty',
+            6500,
+            function() {
+
+              finishSection();
+
+            }
+          );
+
+          return;
+
+        }
+
+
+        function startSystemNarration(index) {
+
+          if (
+            index < 0 ||
+            index >= total ||
+            showcaseWaitingForNarration
+          ) {
+
+            return;
+
+          }
+
+
+          showcaseSequenceIndex =
+            index;
+
+          showcaseWaitingForNarration =
+            true;
+
+          showcaseAdvanceAt =
+            null;
+
+
+          focusTeamSystem(
+            index,
+            function() {
+
+              showcaseWaitingForNarration =
+                false;
+
+
+              if (
+                showcaseSequenceIndex >=
+                total - 1
+              ) {
+
+                showcaseFinishAt =
+                  phaseElapsed + 1100;
+
+              }
+              else {
+
+                showcaseAdvanceAt =
+                  phaseElapsed + 650;
+
+              }
+
+            }
+          );
+
+        }
+
+
+        if (
+          !showcaseSequenceStarted
+        ) {
+
+          showcaseSequenceStarted =
+            true;
+
+          startSystemNarration(0);
+
+          return;
+
+        }
+
+
+        if (
+          showcaseFinishAt !== null &&
+          phaseElapsed >= showcaseFinishAt
+        ) {
+
+          showcaseFinishAt =
+            null;
+
+          finishSection();
+
+          return;
+
+        }
+
+
+        if (
+          !showcaseWaitingForNarration &&
+          showcaseAdvanceAt !== null &&
+          phaseElapsed >= showcaseAdvanceAt
+        ) {
+
+          showcaseAdvanceAt =
+            null;
+
+          startSystemNarration(
+            showcaseSequenceIndex + 1
+          );
+
+        }
+
+      }
+
+
+      function focusTeamSystem(
+        index,
+        onNarrationComplete
+      ) {
+
+        const tabs =
+          Array.from(
+            document.querySelectorAll(
+              '#systemsGrid .review-ribbon-tab'
+            )
+          );
+
+
+        tabs.forEach(
+          function(tab) {
+
+            tab.classList
+              .remove(
+                'auto-focus'
+              );
+
+          }
+        );
+
+
+        const tab =
+          tabs[index];
+
+
+        const system =
+          teamSystems[index];
+
+
+        if (
+          !tab ||
+          !system
+        ) {
+
+          if (typeof onNarrationComplete === 'function') {
+            onNarrationComplete();
+          }
+          return;
+
+        }
+
+
+        showcaseLastIndex =
+          index;
+
+
+        tab.classList
+          .add(
+            'auto-focus'
+          );
+
+
+        tab.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center'
+        });
+
+
+        document
+          .getElementById(
+            'teamShowcaseName'
+          )
+          .textContent =
+            (
+              system.emoji
+                ? (
+                    system.emoji +
+                    '  '
+                  )
+                : ''
+            ) +
+            (
+              system.system_name ||
+              'Shared Quality System'
+            );
+
+
+        const teamDescriptionEl =
+          document.getElementById('teamShowcaseDescription');
+
+        teamDescriptionEl.classList.remove('is-speaking-description');
+        teamDescriptionEl.removeAttribute('data-reading-index');
+        teamDescriptionEl.textContent =
+          system.description ||
+          'Shared review system used by the Quality Team.';
+
+        const teamNarration = String(system.description || '').trim();
+        let narrationFinished = false;
+
+        function completeNarration() {
+          if (narrationFinished) return;
+          narrationFinished = true;
+          if (teamDescriptionEl.dataset.readingIndex === String(index)) {
+            teamDescriptionEl.classList.remove('is-speaking-description');
+            teamDescriptionEl.removeAttribute('data-reading-index');
+          }
+          if (typeof onNarrationComplete === 'function') {
+            onNarrationComplete();
+          }
+        }
+
+        if (window.supportTourSpeakSystem && teamNarration) {
+          teamDescriptionEl.dataset.readingIndex = String(index);
+          teamDescriptionEl.classList.add('is-speaking-description');
+          window.supportTourSpeakSystem(
+            teamNarration,
+            'quality_team',
+            completeNarration
+          );
+        }
+        else {
+          completeNarration();
+        }
+
+
+        document
+          .getElementById(
+            'teamShowcaseStep'
+          )
+          .textContent =
+            String(
+              index + 1
+            ) +
+            ' / ' +
+            String(
+              teamSystems.length
+            );
+
+      }
+
+
+      function runEnding() {
+
+        function stageExpired(node, fallbackMs) {
+          if (node && dialogueVoiceCompleted.has(node.id)) return true;
+          return (phaseElapsed - endingDialogueStageStartedAt) >= fallbackMs;
+        }
+
+        if (endingDialogueStage === 0 && phaseElapsed >= 1200) {
+          endDialogue1.classList.add('show');
+          endingDialogueStage = 1;
+          endingDialogueStageStartedAt = phaseElapsed;
+          return;
+        }
+        if (endingDialogueStage === 1 && stageExpired(endDialogue1, 16000)) {
+          endDialogue1.classList.add('hide');
+          endDialogue2.classList.add('show');
+          endingDialogueStage = 2;
+          endingDialogueStageStartedAt = phaseElapsed;
+          return;
+        }
+        if (endingDialogueStage === 2 && stageExpired(endDialogue2, 24000)) {
+          endDialogue2.classList.add('hide');
+          endDialogue3.classList.add('show');
+          endingDialogueStage = 3;
+          endingDialogueStageStartedAt = phaseElapsed;
+          return;
+        }
+        if (endingDialogueStage === 3 && stageExpired(endDialogue3, 18000)) {
+          endDialogue3.classList.add('hide');
+          nextTransitionCover.classList.add('active');
+          endingDialogueStage = 4;
+          endingDialogueStageStartedAt = phaseElapsed;
+          return;
+        }
+        if (endingDialogueStage === 4 && (phaseElapsed - endingDialogueStageStartedAt) >= 1550) {
+          endingDialogueStage = 5;
+          loadIndex6();
+        }
+      }
+
+
+      function masterTick() {
+
+        const now =
+          performance.now();
+
+        const delta =
+          now -
+          lastTick;
+
+        lastTick =
+          now;
+
+
+        if (
+          !isPaused()
+        ) {
+
+          phaseElapsed +=
+            delta;
+
+        }
+
+
+        if (
+          phase ===
+          'intro'
+        ) {
+
+          runIntro();
+
+        }
+        else if (
+          phase ===
+          'showcase'
+        ) {
+
+          runShowcase();
+
+        }
+        else if (
+          phase ===
+          'ending'
+        ) {
+
+          runEnding();
+
+        }
+
+      }
+
+
+      window.setInterval(
+        masterTick,
+        50
+      );
+
+
+      /* =========================================
+         GET SYSTEMS
+      ========================================== */
+
+      function loadSystems() {
+
+        google.script.run
+
+          .withSuccessHandler(
+            function(systems) {
+
+              teamSystems =
+                systems || [];
+
+              renderSystems(
+                teamSystems
+              );
+
+
+              systemsReady =
+                true;
+
+
+              if (
+                phase ===
+                'showcase'
+              ) {
+
+                phaseElapsed =
+                  0;
+
+                firedEvents
+                  .clear();
+
+                showcaseLastIndex =
+                  -1;
+
+                showcaseSequenceStarted =
+                  false;
+
+                showcaseSequenceIndex =
+                  -1;
+
+                showcaseWaitingForNarration =
+                  false;
+
+                showcaseAdvanceAt =
+                  null;
+
+                showcaseFinishAt =
+                  null;
+
+              }
+
+            }
+          )
+
+          .withFailureHandler(
+            function(error) {
+
+              console.error(
+                error
+              );
+
+              document
+                .getElementById(
+                  'systemsMessage'
+                )
+                .textContent =
+                  'Unable to load quality team systems.';
+
+            }
+          )
+
+          .getQualityTeamSystems();
+
+      }
+
+
+      /* =========================================
+         RENDER SYSTEMS
+      ========================================== */
+
+      function renderSystems(
+        systems
+      ) {
+
+        const ribbon =
+          document.getElementById(
+            'systemsGrid'
+          );
+
+        const message =
+          document.getElementById(
+            'systemsMessage'
+          );
+
+        const systemsCount =
+          document.getElementById(
+            'systemsCount'
+          );
+
+        const topSystemsCount =
+          document.getElementById(
+            'topSystemsCount'
+          );
+
+
+        ribbon.innerHTML =
+          '';
+
+
+        systemsCount.textContent =
+          systems.length +
+          (
+            systems.length === 1
+              ? ' System'
+              : ' Systems'
+          );
+
+
+        topSystemsCount.textContent =
+          systems.length;
+
+
+        if (
+          !systems.length
+        ) {
+
+          message.style.display =
+            'block';
+
+          message.textContent =
+            'No quality team systems added yet.';
+
+          return;
+
+        }
+
+
+        message.style.display =
+          'none';
+
+
+        systems.forEach(
+          function(
+            system,
+            index
+          ) {
+
+            const tab =
+              document.createElement(
+                'button'
+              );
+
+
+            tab.type =
+              'button';
+
+
+            tab.className =
+              'review-ribbon-tab';
+
+
+            tab.dataset.systemIndex =
+              String(
+                index
+              );
+
+
+            tab.style
+              .setProperty(
+                '--accent',
+                getAccent(
+                  system.color,
+                  index
+                )
+              );
+
+
+            const title =
+              (
+                system.emoji
+                  ? (
+                      system.emoji +
+                      '  '
+                    )
+                  : ''
+              ) +
+              (
+                system.system_name ||
+                ''
+              );
+
+
+            tab.innerHTML = `
+
+              <div class="review-tab-title">
+                ${escapeHtml(
+                  title
+                )}
+              </div>
+
+              <div class="review-tab-description">
+                ${escapeHtml(
+                  system.description ||
+                  ''
+                )}
+              </div>
+
+              <div class="review-tab-mark">
+                REVIEW
+              </div>
+
+            `;
+
+
+            tab.addEventListener(
+              'click',
+              function() {
+
+                openSystem(
+                  system
+                );
+
+              }
+            );
+
+
+            ribbon.appendChild(
+              tab
+            );
+
+          }
+        );
+
+      }
+
+
+      /* =========================================
+         ACCENT COLORS
+      ========================================== */
+
+      function getAccent(
+        color,
+        index
+      ) {
+
+        const colors = {
+
+          blue:
+            '#8799a3',
+
+          green:
+            '#88a79c',
+
+          purple:
+            '#9a93a3',
+
+          orange:
+            '#aa9277',
+
+          red:
+            '#a18484',
+
+          cyan:
+            '#83aaa7',
+
+          gold:
+            '#baa77d',
+
+          indigo:
+            '#8b93a6',
+
+          teal:
+            '#7da8a2',
+
+          pink:
+            '#a08c94'
+
+        };
+
+
+        const key =
+          String(
+            color ||
+            ''
+          )
+          .toLowerCase();
+
+
+        if (
+          colors[key]
+        ) {
+
+          return colors[key];
+
+        }
+
+
+        const fallback = [
+          '#baa77d',
+          '#7da8a2',
+          '#8799a3',
+          '#88a79c',
+          '#9a93a3'
+        ];
+
+
+        return fallback[
+          index %
+          fallback.length
+        ];
+
+      }
+
+
+      /* =========================================
+         SYSTEM DETAIL + FREEZE
+      ========================================== */
+
+      function openSystem(
+        system
+      ) {
+
+
+        startInteractionPause();
+
+
+        document
+          .getElementById(
+            'detailTitle'
+          )
+          .textContent =
+            system.system_name ||
+            'System';
+
+
+        document
+          .getElementById(
+            'detailDescription'
+          )
+          .textContent =
+            system.long_description ||
+            'No additional details added yet.';
+
+
+        const detailIcon =
+          document.getElementById(
+            'detailIcon'
+          );
+
+
+        if (
+          system.emoji
+        ) {
+
+          detailIcon
+            .textContent =
+              system.emoji;
+
+          detailIcon
+            .style
+            .display =
+              'flex';
+
+        }
+        else {
+
+          detailIcon
+            .textContent =
+              '';
+
+          detailIcon
+            .style
+            .display =
+              'none';
+
+        }
+
+
+        const image =
+          document.getElementById(
+            'detailImage'
+          );
+
+        const placeholder =
+          document.getElementById(
+            'detailPlaceholder'
+          );
+
+        const link =
+          document.getElementById(
+            'detailLink'
+          );
+
+
+        if (
+          system.image_url
+        ) {
+
+          image.src =
+            system.image_url;
+
+          image.style.display =
+            'block';
+
+          placeholder.style.display =
+            'none';
+
+        }
+        else {
+
+          image.removeAttribute(
+            'src'
+          );
+
+          image.style.display =
+            'none';
+
+          placeholder.style.display =
+            'block';
+
+        }
+
+
+        if (
+          system.link &&
+          system.link !==
+          '#'
+        ) {
+
+          link.href =
+            system.link;
+
+          link.classList
+            .remove(
+              'hidden'
+            );
+
+        }
+        else {
+
+          link.removeAttribute(
+            'href'
+          );
+
+          link.classList
+            .add(
+              'hidden'
+            );
+
+        }
+
+
+        detailOverlay
+          .classList
+          .add('show');
+
+      }
+
+
+      function closeSystem() {
+
+        const wasOpen =
+          detailOverlay
+            .classList
+            .contains(
+              'show'
+            );
+
+
+        detailOverlay
+          .classList
+          .remove(
+            'show'
+          );
+
+
+        if (
+          wasOpen
+        ) {
+
+          endInteractionPause();
+
+        }
+
+      }
+
+
+      detailClose
+        .addEventListener(
+          'click',
+          closeSystem
+        );
+
+
+      detailOverlay
+        .addEventListener(
+          'click',
+          function(event) {
+
+            if (
+              event.target ===
+              detailOverlay
+            ) {
+
+              closeSystem();
+
+            }
+
+          }
+        );
+
+
+      document
+        .addEventListener(
+          'keydown',
+          function(event) {
+
+            if (
+              event.key ===
+              'Escape'
+            ) {
+
+              closeSystem();
+
+            }
+
+          }
+        );
+
+
+      /* =========================================
+         FINISH SECTION
+      ========================================== */
+
+      function finishSection() {
+
+        if (
+          phase ===
+          'ending'
+        ) {
+
+          return;
+
+        }
+
+
+        /*
+          STEP 1
+          Stop detail interaction and remove
+          the active auto-focus state.
+        */
+
+        detailOverlay
+          .classList
+          .remove('show');
+
+
+        interactionPaused =
+          false;
+
+
+        syncPauseState();
+
+
+        continueTour
+          .classList
+          .remove('show');
+
+
+        document
+          .querySelectorAll(
+            '#systemsGrid .review-ribbon-tab'
+          )
+          .forEach(
+            function(card) {
+
+              card.classList
+                .remove(
+                  'auto-focus'
+                );
+
+            }
+          );
+
+
+        /*
+          STEP 2
+          Reset the systems scroll so the last
+          focused card cannot remain as the
+          visual exit frame.
+        */
+
+        const systemsScroll =
+          document.querySelector(
+            '.systems-scroll'
+          );
+
+
+        if (
+          systemsScroll
+        ) {
+
+          systemsScroll.scrollTo({
+            top: 0,
+            behavior: 'auto'
+          });
+
+        }
+
+
+        /*
+          STEP 3 — CAMERA RETURN
+          Fade the workspace away and restore
+          the full Quality Team image BEFORE
+          any ending dialogue appears.
+        */
+
+        reviewWorkspace
+          .classList
+          .remove(
+            'show'
+          );
+
+
+        teamScene
+          .classList
+          .remove(
+            'workspace-mode'
+          );
+
+
+        switchPhase(
+          'ending'
+        );
+
+      }
+
+
+      continueTour
+        .addEventListener(
+          'click',
+          finishSection
+        );
+
+
+      /* =========================================
+         INDEX6
+      ========================================== */
+
+      function loadIndex6() {
+
+        if (
+          transitionStarted
+        ) {
+
+          return;
+
+        }
+
+
+        transitionStarted =
+          true;
+
+
+        google.script.run
+
+          .withSuccessHandler(
+            function(html) {
+
+              /* Never carry Quality Team speech into the next page. */
+              if ('speechSynthesis' in window) {
+                try { window.speechSynthesis.cancel(); } catch (error) {}
+              }
+
+              document.open();
+
+              document.write(
+                html
+              );
+
+              document.close();
+
+            }
+          )
+
+          .withFailureHandler(
+            function(error) {
+
+              console.error(
+                'Index6 load failed:',
+                error
+              );
+
+
+              transitionStarted =
+                false;
+
+
+              nextTransitionCover
+                .classList
+                .remove(
+                  'active'
+                );
+
+
+              endDialogue1
+                .classList
+                .remove(
+                  'show',
+                  'hide'
+                );
+
+              endDialogue2
+                .classList
+                .remove(
+                  'show',
+                  'hide'
+                );
+
+              endDialogue3
+                .classList
+                .remove(
+                  'show',
+                  'hide'
+                );
+
+
+              continueTour
+                .classList
+                .add('show');
+
+
+              switchPhase(
+                'showcase'
+              );
+
+            }
+          )
+
+          .getPage(
+            'index6'
+          );
+
+      }
+
+
+      /* =========================================
+         ESCAPE HTML
+      ========================================== */
+
+      function escapeHtml(
+        value
+      ) {
+
+        return String(
+          value ||
+          ''
+        )
+
+        .replaceAll(
+          '&',
+          '&amp;'
+        )
+
+        .replaceAll(
+          '<',
+          '&lt;'
+        )
+
+        .replaceAll(
+          '>',
+          '&gt;'
+        )
+
+        .replaceAll(
+          '"',
+          '&quot;'
+        )
+
+        .replaceAll(
+          "'",
+          '&#039;'
+        );
+
+      }
+
+
+      syncPauseState();
+
+    })();
+
+  </script>
+
+
+
+  <!-- =========================================================
+       GLOBAL VIEWER SETTINGS · index2 onward
+       AR and VOICE persist across every following page.
+  ========================================================== -->
+  <style id="tourGlobalSettingsStyle">
+    .tour-global-settings {
+      position: fixed;
+      top: 18px;
+      right: 20px;
+      z-index: 60000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      pointer-events: auto;
+    }
+
+    .tour-global-toggle {
+      min-height: 34px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 999px;
+      color: rgba(255,255,255,.86);
+      background: rgba(12,14,13,.72);
+      box-shadow: 0 10px 30px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.05);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      font: 700 10px/1 Arial, Helvetica, sans-serif;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: transform .22s ease, border-color .22s ease, background .22s ease, opacity .22s ease;
+    }
+
+    .tour-global-toggle:hover {
+      transform: translateY(-2px);
+      border-color: rgba(215,181,118,.42);
+      background: rgba(24,22,18,.88);
+    }
+
+    .tour-global-toggle.active {
+      color: #f2dfbf;
+      border-color: rgba(215,181,118,.46);
+      background: rgba(46,37,25,.82);
+    }
+
+    .tour-global-toggle.off {
+      opacity: .62;
+    }
+
+    .tour-ar-subtitle {
+      display: none;
+      margin-top: 10px;
+      padding-top: 9px;
+      border-top: 1px solid rgba(255,255,255,.10);
+      color: rgba(255,255,255,.74);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: .72em;
+      font-weight: 500;
+      line-height: 1.65;
+      letter-spacing: 0;
+      direction: rtl;
+      text-align: center;
+    }
+
+    body.tour-arabic-enabled .tour-ar-subtitle {
+      display: block;
+    }
+
+    @media (max-width: 720px) {
+      .tour-global-settings {
+        top: 12px;
+        right: 12px;
+        gap: 6px;
+      }
+      .tour-global-toggle {
+        min-height: 31px;
+        padding: 7px 9px;
+        font-size: 8px;
+      }
+    }
+  </style>
+
+  <div id="tourGlobalSettings" class="tour-global-settings" aria-label="Presentation settings">
+    <button id="tourArabicToggle" class="tour-global-toggle" type="button">AR OFF · عربي</button>
+    <button id="tourVoiceToggle" class="tour-global-toggle" type="button">VOICE ON</button>
+  </div>
+
+  <script>
+  (function() {
+    'use strict';
+
+    var AR_KEY = 'support_center_ar';
+    var VOICE_KEY = 'support_center_voice';
+    var arabicEnabled = false;
+    var voiceEnabled = true;
+    var voiceProfiles = {};
+    var dialogueRows = [];
+    var dialogueLookup = {};
+    var browserVoices = [];
+    var voiceAssignments = {};
+    var currentDialogueNode = null;
+    var dialogueVoiceSerial = 0;
+    var activeDialogueUtterance = null;
+    var dialogueVoiceWatchdog = null;
+
+    var arButton = document.getElementById('tourArabicToggle');
+    var voiceButton = document.getElementById('tourVoiceToggle');
+
+    var fallbackProfiles = {
+      visitor: { title:'VISITOR', gender:'female', lang:'en-US', voice_hint:'', rate:1.00, pitch:1.03 },
+      support_manager: { title:'HEAD OF CUSTOMER SUPPORT CENTER', gender:'male', lang:'en-US', voice_hint:'', rate:.93, pitch:.91 },
+      assistant_head: { title:'ASSISTANT HEAD', gender:'male', lang:'en-US', voice_hint:'', rate:.96, pitch:.97 },
+      quality_manager: { title:'QUALITY MANAGER', gender:'male', lang:'en-US', voice_hint:'', rate:.94, pitch:.92 },
+      quality_team: { title:'QUALITY TEAM', gender:'neutral', lang:'en-US', voice_hint:'', rate:.97, pitch:1.00 },
+      supervisor: { title:'SUPERVISOR', gender:'neutral', lang:'en-US', voice_hint:'', rate:.96, pitch:.98 },
+      team_leaders: { title:'TEAM LEADERS', gender:'female', lang:'en-US', voice_hint:'', rate:.97, pitch:1.00 },
+      system: { title:'SYSTEM', gender:'female', lang:'en-US', voice_hint:'', rate:.98, pitch:.98 }
+    };
+
+    function safeGet(key, fallback) {
+      try {
+        var value = window.localStorage.getItem(key);
+        return value === null ? fallback : value;
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    function safeSet(key, value) {
+      try {
+        window.localStorage.setItem(key, value);
+      } catch (error) {}
+    }
+
+    arabicEnabled = safeGet(AR_KEY, '0') === '1';
+    voiceEnabled = safeGet(VOICE_KEY, '1') !== '0';
+
+    function syncControls() {
+      document.body.classList.toggle('tour-arabic-enabled', arabicEnabled);
+      arButton.textContent = arabicEnabled ? 'AR ON · عربي' : 'AR OFF · عربي';
+      arButton.classList.toggle('active', arabicEnabled);
+
+      if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+        voiceButton.textContent = 'VOICE N/A';
+        voiceButton.disabled = true;
+        voiceButton.classList.add('off');
+        return;
+      }
+
+      voiceButton.disabled = false;
+      voiceButton.textContent = voiceEnabled ? 'VOICE ON' : 'VOICE OFF';
+      voiceButton.classList.toggle('active', voiceEnabled);
+      voiceButton.classList.toggle('off', !voiceEnabled);
+    }
+
+    function normalizeText(value) {
+      return String(value || '')
+        .replace(/[’‘]/g, "'")
+        .replace(/[“”]/g, '"')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
+    }
+
+    function speakerKeyFromNode(node) {
+      var nameNode = node.querySelector('.dialogue-name');
+      var label = normalizeText(nameNode ? nameNode.textContent : '');
+
+      if (label.indexOf('visitor') >= 0) return 'visitor';
+      if (label.indexOf('head of customer support') >= 0 || label.indexOf('support manager') >= 0) return 'support_manager';
+      if (label.indexOf('assistant head') >= 0) return 'assistant_head';
+      if (label.indexOf('quality manager') >= 0) return 'quality_manager';
+      if (label.indexOf('quality team') >= 0 || label.indexOf('quality operations team') >= 0) return 'quality_team';
+      if (label.indexOf('supervisor') >= 0) return 'supervisor';
+      if (label.indexOf('team leaders') >= 0) return 'team_leaders';
+      return 'system';
+    }
+
+    function englishTextFromNode(node) {
+      var box = node.querySelector('.dialogue-box');
+      if (!box) return '';
+      var clone = box.cloneNode(true);
+      var ar = clone.querySelector('.tour-ar-subtitle');
+      if (ar && ar.parentNode) ar.parentNode.removeChild(ar);
+      return String(clone.textContent || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function buildDialogueLookup(rows) {
+      dialogueLookup = {};
+      (rows || []).forEach(function(row) {
+        var key = normalizeText(row.text_en || '');
+        if (key) dialogueLookup[key] = row;
+      });
+      hydrateArabicSubtitles();
+    }
+
+    /* Complete standalone fallback; sheet data still takes precedence. */
+    var qualityTeamArabicFallback = {};
+    qualityTeamArabicFallback[normalizeText('Do you all use the same quality systems?')] = 'هل تستخدمون جميعًا أنظمة الجودة نفسها؟';
+    qualityTeamArabicFallback[normalizeText('Yes. We work with the same tools and follow the same quality process.')] = 'نعم. نعمل على الأدوات نفسها ونتبع عملية الجودة نفسها.';
+    qualityTeamArabicFallback[normalizeText('We use reports, dashboards, ratings and review tools to monitor performance and support improvement.')] = 'نستخدم التقارير ولوحات المتابعة والتقييمات وأدوات المراجعة لمراقبة الأداء ودعم التحسين.';
+    qualityTeamArabicFallback[normalizeText('Let us show you the systems we use.')] = 'دعنا نريك الأنظمة التي نستخدمها.';
+    qualityTeamArabicFallback[normalizeText('So everyone works from the same quality view.')] = 'إذًا الجميع يعمل من نفس منظور الجودة.';
+    qualityTeamArabicFallback[normalizeText('Exactly. We review the same systems, compare findings, and keep the quality process consistent.')] = 'بالضبط. نراجع الأنظمة نفسها ونقارن النتائج ونحافظ على اتساق عملية الجودة.';
+    qualityTeamArabicFallback[normalizeText('Let’s continue the tour.')] = 'لنواصل الجولة.';
+
+    function hydrateArabicSubtitles() {
+      var nodes = document.querySelectorAll('.dialogue, .end-dialogue');
+      Array.prototype.forEach.call(nodes, function(node) {
+        var box = node.querySelector('.dialogue-box');
+        if (!box) return;
+        var englishKey = normalizeText(englishTextFromNode(node));
+        var row = dialogueLookup[englishKey] || null;
+        var arabicText = row && row.text_ar
+          ? row.text_ar
+          : (qualityTeamArabicFallback[englishKey] || '');
+        var arNode = box.querySelector('.tour-ar-subtitle');
+        if (!arNode) {
+          arNode = document.createElement('div');
+          arNode.className = 'tour-ar-subtitle';
+          box.appendChild(arNode);
+        }
+        arNode.textContent = arabicText;
+        arNode.style.display = arabicText ? '' : 'none';
+      });
+    }
+
+    function normalizeGender(value) {
+      var clean = normalizeText(value);
+      if (clean === 'm' || clean === 'male' || clean === 'ذكر') return 'male';
+      if (clean === 'f' || clean === 'female' || clean === 'أنثى' || clean === 'انثى') return 'female';
+      return clean || 'neutral';
+    }
+
+    function getProfile(key) {
+      var base = fallbackProfiles[key] || fallbackProfiles.system;
+      var sheet = voiceProfiles[key] || {};
+      return {
+        title: sheet.title || base.title || key,
+        gender: normalizeGender(sheet.gender || base.gender),
+        lang: sheet.lang || base.lang || 'en-US',
+        voice_hint: sheet.voice_hint || base.voice_hint || '',
+        rate: Number(sheet.rate || base.rate || 1),
+        pitch: Number(sheet.pitch || base.pitch || 1)
+      };
+    }
+
+    function loadBrowserVoices() {
+      if (!('speechSynthesis' in window)) return;
+      browserVoices = window.speechSynthesis.getVoices() || [];
+      voiceAssignments = {};
+    }
+
+    function femaleName(name) {
+      return /samantha|victoria|karen|moira|tessa|zira|aria|jenny|sara|ava|susan|hazel|female/i.test(name || '');
+    }
+
+    function maleName(name) {
+      return /daniel|alex|fred|tom|arthur|george|guy|david|mark|ryan|christopher|male/i.test(name || '');
+    }
+
+    function pickVoice(key) {
+      if (voiceAssignments[key]) return voiceAssignments[key];
+      var profile = getProfile(key);
+      var all = browserVoices.length ? browserVoices : (window.speechSynthesis.getVoices() || []);
+      if (!all.length) return null;
+
+      var langBase = String(profile.lang || 'en-US').toLowerCase().split('-')[0];
+      var pool = all.filter(function(v) {
+        return String(v.lang || '').toLowerCase().indexOf(langBase) === 0;
+      });
+      if (!pool.length) pool = all.slice();
+
+      if (profile.voice_hint) {
+        var hint = String(profile.voice_hint).toLowerCase();
+        var hinted = pool.find(function(v) {
+          return String(v.name || '').toLowerCase().indexOf(hint) >= 0;
+        });
+        if (hinted) {
+          voiceAssignments[key] = hinted;
+          return hinted;
+        }
+      }
+
+
+      var genderPool = pool.filter(function(v) {
+        if (profile.gender === 'female') return femaleName(v.name);
+        if (profile.gender === 'male') return maleName(v.name);
+        return true;
+      });
+      if (genderPool.length) pool = genderPool;
+
+      /*
+        Keep management roles distinct whenever the browser offers more than
+        one suitable voice in the current language.
+      */
+      var blockedVoiceKeys = [];
+      if (key === 'assistant_head') blockedVoiceKeys = ['support_manager'];
+      else if (key === 'quality_manager') blockedVoiceKeys = ['support_manager', 'assistant_head'];
+      else if (key === 'quality_team') blockedVoiceKeys = ['support_manager', 'assistant_head', 'quality_manager'];
+
+      if (blockedVoiceKeys.length && pool.length > 1) {
+        var blockedNames = blockedVoiceKeys
+          .map(function(roleKey) {
+            var assigned = voiceAssignments[roleKey];
+            return assigned ? String(assigned.name || '') + '|' + String(assigned.lang || '') : '';
+          })
+          .filter(Boolean);
+
+        var uniquePool = pool.filter(function(v) {
+          var token = String(v.name || '') + '|' + String(v.lang || '');
+          return blockedNames.indexOf(token) === -1;
+        });
+
+        if (uniquePool.length) pool = uniquePool;
+      }
+
+      var order = ['visitor','support_manager','assistant_head','quality_manager','quality_team','supervisor','team_leaders','system'];
+      var idx = order.indexOf(key);
+      if (idx < 0) {
+        idx = String(key || '')
+          .split('')
+          .reduce(function(total, char) {
+            return total + char.charCodeAt(0);
+          }, 0);
+      }
+      var selected = pool[idx % pool.length];
+      voiceAssignments[key] = selected;
+      return selected;
+    }
+
+    function stopVoice() {
+      dialogueVoiceSerial += 1;
+      if (dialogueVoiceWatchdog) {
+        window.clearTimeout(dialogueVoiceWatchdog);
+        dialogueVoiceWatchdog = null;
+      }
+      activeDialogueUtterance = null;
+      if (!('speechSynthesis' in window)) return;
+      try { window.speechSynthesis.cancel(); } catch (error) {}
+    }
+
+    function speakNode(node) {
+      if (!voiceEnabled || !node) return;
+      if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) return;
+
+      var text = englishTextFromNode(node);
+      if (!text) return;
+      var key = speakerKeyFromNode(node);
+      var profile = getProfile(key);
+      var selected = pickVoice(key);
+
+      stopVoice();
+      var mySerial = dialogueVoiceSerial;
+      var words = text.replace(/\s+/g,' ').trim().split(' ');
+      var chunks = [];
+      var current = '';
+      words.forEach(function(word){
+        var candidate = current ? current + ' ' + word : word;
+        if (candidate.length > 82 && current) { chunks.push(current); current = word; }
+        else current = candidate;
+      });
+      if (current) chunks.push(current);
+    if (window.supportTourFixedAudio && window.supportTourFixedAudio.usingFixedAudio && typeof text !== 'undefined') { var __fat=String(text||'').replace(/\s+/g,' ').trim(); if(__fat){ chunks.length=0; chunks.push(__fat); } } /* FIXED_AUDIO_NO_SPLIT */
+      var index = 0;
+      var lineDone = false;
+
+      function finishLine(){
+        if (lineDone || mySerial !== dialogueVoiceSerial) return;
+        lineDone = true;
+        if (dialogueVoiceWatchdog) { window.clearTimeout(dialogueVoiceWatchdog); dialogueVoiceWatchdog = null; }
+        activeDialogueUtterance = null;
+        if (typeof window.supportIndex5DialogueVoiceFinished === 'function') {
+          try { window.supportIndex5DialogueVoiceFinished(node); } catch (error) {}
+        }
+      }
+
+      function speakNext(){
+        if (lineDone || mySerial !== dialogueVoiceSerial) return;
+        if (index >= chunks.length) { finishLine(); return; }
+        var chunk = chunks[index++];
+        var u = new SpeechSynthesisUtterance(chunk);
+        if (selected) { u.voice = selected; u.lang = selected.lang || profile.lang; }
+        else u.lang = profile.lang || 'en-US';
+        u.rate = Math.max(.82, Math.min(1.02, Number(profile.rate || 1)));
+        u.pitch = Math.max(.76, Math.min(1.16, Number(profile.pitch || 1)));
+        u.volume = 1;
+        activeDialogueUtterance = u;
+        var settled = false;
+        if (dialogueVoiceWatchdog) window.clearTimeout(dialogueVoiceWatchdog);
+        var wc = chunk.trim() ? chunk.trim().split(/\s+/).length : 0;
+        dialogueVoiceWatchdog = window.setTimeout(function(){
+          if (settled || lineDone || mySerial !== dialogueVoiceSerial) return;
+          settled = true;
+          try { window.speechSynthesis.cancel(); } catch (error) {}
+          activeDialogueUtterance = null;
+          window.setTimeout(speakNext,180);
+        }, Math.max(45000,12000+wc*1600));
+
+        function finishChunk(){
+          if (settled || lineDone || mySerial !== dialogueVoiceSerial) return;
+          settled = true;
+          if (dialogueVoiceWatchdog) { window.clearTimeout(dialogueVoiceWatchdog); dialogueVoiceWatchdog = null; }
+          if (activeDialogueUtterance === u) activeDialogueUtterance = null;
+          window.setTimeout(speakNext,110);
+        }
+        u.onend = finishChunk;
+        u.onerror = finishChunk;
+        try {
+          window.speechSynthesis.speak(u);
+          if (document.body.classList.contains('presentation-paused')) window.speechSynthesis.pause();
+        } catch (error) { finishChunk(); }
+      }
+
+      speakNext();
+    }
+
+    function isDialogueVisible(node) {
+      if (!node) return false;
+      if (node.classList.contains('show')) return true;
+      var style = window.getComputedStyle(node);
+      return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 0) > .65;
+    }
+
+    function refreshDialogueVoice(node) {
+      var visible = isDialogueVisible(node);
+      if (!visible) {
+        node.setAttribute('data-tour-spoken', '0');
+        if (currentDialogueNode === node) currentDialogueNode = null;
+        return;
+      }
+
+      currentDialogueNode = node;
+      if (node.getAttribute('data-tour-spoken') === '1') return;
+      node.setAttribute('data-tour-spoken', '1');
+      speakNode(node);
+    }
+
+    function wireDialogueObservers() {
+      var nodes = document.querySelectorAll('.dialogue, .end-dialogue');
+      Array.prototype.forEach.call(nodes, function(node) {
+        node.setAttribute('data-tour-spoken', '0');
+        var observer = new MutationObserver(function() {
+          window.setTimeout(function() { refreshDialogueVoice(node); }, 40);
+        });
+        observer.observe(node, { attributes:true, attributeFilter:['class','style'] });
+        window.setTimeout(function() { refreshDialogueVoice(node); }, 80);
+      });
+    }
+
+    arButton.addEventListener('click', function() {
+      arabicEnabled = !arabicEnabled;
+      safeSet(AR_KEY, arabicEnabled ? '1' : '0');
+      syncControls();
+    });
+
+    voiceButton.addEventListener('click', function() {
+      voiceEnabled = !voiceEnabled;
+      safeSet(VOICE_KEY, voiceEnabled ? '1' : '0');
+      if (!voiceEnabled) stopVoice();
+      syncControls();
+      if (voiceEnabled && currentDialogueNode) speakNode(currentDialogueNode);
+    });
+
+    if ('speechSynthesis' in window) {
+      loadBrowserVoices();
+      if ('onvoiceschanged' in window.speechSynthesis) {
+        window.speechSynthesis.onvoiceschanged = loadBrowserVoices;
+      }
+    }
+
+    var bodyObserver = new MutationObserver(function() {
+      if (!voiceEnabled || !('speechSynthesis' in window)) return;
+      try {
+        if (document.body.classList.contains('presentation-paused')) window.speechSynthesis.pause();
+        else window.speechSynthesis.resume();
+      } catch (error) {}
+    });
+    bodyObserver.observe(document.body, { attributes:true, attributeFilter:['class'] });
+
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler(function(rows) {
+          dialogueRows = rows || [];
+          buildDialogueLookup(dialogueRows);
+        })
+        .withFailureHandler(function() { hydrateArabicSubtitles(); })
+        .getPresentationDialogue();
+
+      google.script.run
+        .withSuccessHandler(function(rows) {
+          voiceProfiles = {};
+          (rows || []).forEach(function(row) {
+            if (row && row.speaker_key) voiceProfiles[row.speaker_key] = row;
+          });
+          voiceAssignments = {};
+        })
+        .withFailureHandler(function() {})
+        .getVoiceProfiles();
+    }
+
+    syncControls();
+    hydrateArabicSubtitles();
+    wireDialogueObservers();
+
+    document.addEventListener('pointerdown', function() {
+      if (voiceEnabled && currentDialogueNode && currentDialogueNode.getAttribute('data-tour-spoken') !== '1') {
+        currentDialogueNode.setAttribute('data-tour-spoken', '1');
+        speakNode(currentDialogueNode);
+      }
+    }, { once:true, capture:true });
+  })();
+  </script>
+
+
+<script>
+(function(){
+  var systemVoiceUtterance = null;
+  var systemVoiceSequence = 0;
+  function voiceEnabled(){
+    try { return window.localStorage.getItem('support_center_voice') !== '0'; }
+    catch (e) { return true; }
+  }
+  function isFemaleRole(role){
+    return role === 'quality_team' || role === 'team_leaders';
+  }
+  function pickSystemVoice(role){
+    if (!('speechSynthesis' in window)) return null;
+    var voices = window.speechSynthesis.getVoices() || [];
+    if (!voices.length) return null;
+    var english = voices.filter(function(v){ return String(v.lang || '').toLowerCase().indexOf('en') === 0; });
+    if (english.length) voices = english;
+    var female = /samantha|victoria|karen|moira|tessa|zira|aria|jenny|sara|ava|susan|hazel|emma|jane|sonia|libby|female/i;
+    var male = /daniel|alex|fred|tom|arthur|george|guy|david|mark|ryan|christopher|andrew|brian|eric|roger|stefan|male/i;
+    var filtered = voices.filter(function(v){
+      return isFemaleRole(role) ? female.test(v.name || '') : male.test(v.name || '');
+    });
+    if (filtered.length) voices = filtered;
+    var index = {assistant_head:1,quality_manager:2,quality_team:1,supervisor:0,team_leaders:2}[role] || 0;
+    return voices[index % voices.length] || voices[0] || null;
+  }
+  window.supportTourSpeakSystem = function(text, role, onComplete){
+    systemVoiceSequence += 1;
+    var mySequence = systemVoiceSequence;
+    var doneCalled = false;
+    function done(){
+      if (doneCalled || mySequence !== systemVoiceSequence) return;
+      doneCalled = true;
+      if (typeof onComplete === 'function') onComplete();
+    }
+
+    text = String(text || '').trim();
+    if (!text) { done(); return false; }
+
+    if (!voiceEnabled() || !('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+      var fallbackMs = Math.max(4200, Math.min(13000, text.length * 55 + 1800));
+      window.setTimeout(done, fallbackMs);
+      return false;
+    }
+
+    if (document.body.classList.contains('presentation-paused')) {
+      done();
+      return false;
+    }
+
+    var v = pickSystemVoice(role);
+    var words = text.replace(/\s+/g, ' ').split(' ');
+    var chunks = [];
+    var current = '';
+    words.forEach(function(word){
+      var candidate = current ? current + ' ' + word : word;
+      if (candidate.length > 96 && current) {
+        chunks.push(current);
+        current = word;
+      } else {
+        current = candidate;
+      }
+    });
+    if (current) chunks.push(current);
+    if (window.supportTourFixedAudio && window.supportTourFixedAudio.usingFixedAudio && typeof text !== 'undefined') { var __fat=String(text||'').replace(/\s+/g,' ').trim(); if(__fat){ chunks.length=0; chunks.push(__fat); } } /* FIXED_AUDIO_NO_SPLIT */
+
+    var chunkIndex = 0;
+    try { window.speechSynthesis.cancel(); } catch (e) {}
+
+    function speakNextChunk(){
+      if (mySequence !== systemVoiceSequence) return;
+      if (chunkIndex >= chunks.length) {
+        systemVoiceUtterance = null;
+        done();
+        return;
+      }
+
+      var u = new SpeechSynthesisUtterance(chunks[chunkIndex++]);
+      if (v) { u.voice = v; u.lang = v.lang || 'en-US'; } else { u.lang = 'en-US'; }
+      u.rate = 0.88;
+      u.pitch = isFemaleRole(role) ? 1.0 : 0.94;
+      u.volume = 1;
+      systemVoiceUtterance = u;
+
+      var settled = false;
+      function finishChunk(){
+        if (settled || mySequence !== systemVoiceSequence) return;
+        settled = true;
+        if (systemVoiceUtterance === u) systemVoiceUtterance = null;
+        window.setTimeout(speakNextChunk, 90);
+      }
+      u.onend = finishChunk;
+      u.onerror = finishChunk;
+
+      try { window.speechSynthesis.speak(u); }
+      catch (e) { finishChunk(); }
+    }
+
+    speakNextChunk();
+    return true;
+  };
+})();
+</script>
+
+</body>
+</html>

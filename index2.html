@@ -1,0 +1,5761 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <link rel="stylesheet" href="tour-runtime.css">
+  <script src="tour-data.js"></script>
+  <script src="tour-runtime.js"></script>
+  
+  <!-- FIXED_TOUR_AUDIO -->
+  <script src="tour-audio-map.js"></script>
+  <script src="tour-audio.js"></script>
+<meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <link rel="preconnect" href="https://i.imgur.com" crossorigin>
+  <link rel="preload" as="image" href="assets/images/I6OtmSK.png">
+  <link rel="preload" as="image" href="assets/images/ft024At.png">
+
+  <title>Head of Customer Support Center</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      overflow: hidden;
+      background: #090807;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+
+    /* =========================
+       MAIN SCENE
+    ========================== */
+
+    .manager-scene {
+      position: relative;
+
+      width: 100%;
+      height: 100vh;
+
+      overflow: hidden;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: #090807;
+    }
+
+
+    /* =========================
+       BLURRED BACKGROUND
+    ========================== */
+
+    .blur-bg {
+      position: absolute;
+      inset: -40px;
+
+      background-image:
+        url('assets/images/I6OtmSK.png');
+
+      background-size: cover;
+      background-position: center;
+
+      filter:
+        blur(28px)
+        brightness(0.48);
+
+      transform: scale(1.10);
+
+      opacity: 0.95;
+    }
+
+    .blur-bg::after {
+      content: "";
+
+      position: absolute;
+      inset: 0;
+
+      background:
+        radial-gradient(
+          circle at center,
+          transparent 25%,
+          rgba(0,0,0,0.56) 100%
+        );
+    }
+
+
+    /* =========================
+       MAIN PHOTO
+    ========================== */
+
+    .photo-wrap {
+      position: relative;
+      z-index: 2;
+
+      width: 100%;
+      height: 100%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 18px 25px;
+
+      opacity: 0;
+
+      transform:
+        scale(1.025);
+
+      animation:
+        photoIn
+        1.3s ease
+        forwards;
+    }
+
+    .manager-photo {
+      display: block;
+
+      width: auto;
+      height: 100%;
+
+      max-width: 100%;
+      max-height: 100%;
+
+      object-fit: contain;
+
+      border-radius: 5px;
+
+      box-shadow:
+        0 35px 90px
+        rgba(0,0,0,0.48);
+
+      animation:
+        slowZoom
+        10s
+        cubic-bezier(.2,.7,.2,1)
+        forwards;
+    }
+
+
+    /* =========================
+       CINEMATIC SHADING
+    ========================== */
+
+    .top-shadow {
+      position: absolute;
+      z-index: 3;
+
+      left: 0;
+      top: 0;
+
+      width: 100%;
+      height: 18%;
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(0,0,0,0.42),
+          transparent
+        );
+
+      pointer-events: none;
+    }
+
+    .bottom-shadow {
+      position: absolute;
+      z-index: 3;
+
+      left: 0;
+      bottom: 0;
+
+      width: 100%;
+      height: 30%;
+
+      background:
+        linear-gradient(
+          to top,
+          rgba(0,0,0,0.70),
+          transparent
+        );
+
+      pointer-events: none;
+    }
+
+
+    /* =========================
+       ROLE INDICATOR
+    ========================== */
+
+    .role-indicator {
+      position: absolute;
+      z-index: 5;
+
+      top: 5%;
+      left: 4%;
+
+      opacity: 0;
+
+      transform:
+        translateY(-10px);
+
+      animation:
+        roleIn
+        0.9s ease
+        0.8s forwards;
+    }
+
+    .role-small {
+      margin-bottom: 7px;
+
+      color:
+        rgba(255,255,255,0.62);
+
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 4px;
+    }
+
+    .role-name {
+      color: #ffffff;
+
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .role-line {
+      width: 44px;
+      height: 2px;
+
+      margin-top: 11px;
+
+      background:
+        linear-gradient(
+          to right,
+          #d6a15f,
+          transparent
+        );
+    }
+
+
+    /* =========================
+       DIALOGUE
+    ========================== */
+
+    .dialogue {
+      position: absolute;
+      z-index: 7;
+
+      left: 50%;
+      bottom: 5%;
+
+      width:
+        min(
+          780px,
+          76vw
+        );
+
+      transform:
+        translateX(-50%)
+        translateY(25px);
+
+      opacity: 0;
+
+      transition:
+        opacity 0.8s ease,
+        transform 0.8s ease;
+    }
+
+    .dialogue.show {
+      opacity: 1;
+
+      transform:
+        translateX(-50%)
+        translateY(0);
+    }
+
+    .dialogue.hide {
+      opacity: 0;
+
+      transform:
+        translateX(-50%)
+        translateY(-10px);
+    }
+
+    .dialogue-name {
+      margin-bottom: 8px;
+
+      text-align: center;
+
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+
+      color:
+        rgba(220,169,101,0.85);
+    }
+
+    .dialogue-box {
+      position: relative;
+
+      padding:
+        20px 30px;
+
+      text-align: center;
+
+      color: white;
+
+      font-size:
+        clamp(
+          18px,
+          1.55vw,
+          26px
+        );
+
+      line-height: 1.45;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(8,8,8,0.84),
+          rgba(28,23,19,0.76)
+        );
+
+      border:
+        1px solid
+        rgba(255,255,255,0.18);
+
+      border-radius: 15px;
+
+      box-shadow:
+        0 22px 50px
+        rgba(0,0,0,0.48);
+
+      backdrop-filter:
+        blur(15px);
+
+      -webkit-backdrop-filter:
+        blur(15px);
+    }
+
+    .dialogue-box::after {
+      content: "";
+
+      position: absolute;
+
+      left: 50%;
+      bottom: -1px;
+
+      transform:
+        translateX(-50%);
+
+      width: 100px;
+      height: 2px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          #d9a15c,
+          transparent
+        );
+
+      box-shadow:
+        0 0 12px
+        rgba(217,161,92,0.32);
+    }
+
+
+    /* =========================
+       VISITOR STYLE
+    ========================== */
+
+    .visitor .dialogue-name {
+      color:
+        rgba(255,255,255,0.58);
+    }
+
+    .visitor .dialogue-box {
+      background:
+        linear-gradient(
+          135deg,
+          rgba(16,16,16,0.88),
+          rgba(24,24,24,0.80)
+        );
+    }
+
+
+    /* =========================
+       TRANSITION TO INDEX3
+    ========================== */
+
+    .transition-cover {
+      position: fixed;
+      inset: 0;
+
+      z-index: 9999;
+
+      pointer-events: none;
+
+      opacity: 0;
+
+      background:
+        radial-gradient(
+          circle at center,
+          rgba(35,28,21,0.95),
+          rgba(5,5,5,1) 75%
+        );
+
+      transition:
+        opacity 0.8s ease;
+    }
+
+    .transition-cover.active {
+      opacity: 1;
+    }
+
+
+    /* =========================
+       PLAY / PAUSE CONTROL
+    ========================== */
+
+    .presentation-control {
+      position: fixed;
+
+      right: 24px;
+      bottom: 22px;
+
+      z-index: 20000;
+
+      display: flex;
+      align-items: center;
+
+      gap: 10px;
+
+      padding:
+        10px 14px;
+
+      border-radius: 999px;
+
+      color: white;
+
+      background:
+        rgba(15,12,10,0.74);
+
+      border:
+        1px solid
+        rgba(255,255,255,0.20);
+
+      box-shadow:
+        0 12px 30px
+        rgba(0,0,0,0.32),
+        inset 0 1px 0
+        rgba(255,255,255,0.08);
+
+      backdrop-filter:
+        blur(14px);
+
+      -webkit-backdrop-filter:
+        blur(14px);
+
+      cursor: pointer;
+
+      user-select: none;
+
+      transition:
+        transform .25s ease,
+        background .25s ease,
+        border-color .25s ease;
+    }
+
+    .presentation-control:hover {
+      transform:
+        translateY(-2px);
+
+      background:
+        rgba(23,18,14,0.90);
+
+      border-color:
+        rgba(224,183,120,0.45);
+    }
+
+    .presentation-control-icon {
+      width: 20px;
+
+      text-align: center;
+
+      font-size: 15px;
+    }
+
+    .presentation-control-text {
+      font-size: 11px;
+
+      font-weight: 700;
+
+      letter-spacing: 1.5px;
+    }
+
+    body.presentation-paused * {
+      animation-play-state:
+        paused !important;
+    }
+
+
+    /* =========================
+       ANIMATIONS
+    ========================== */
+
+    @keyframes photoIn {
+
+      from {
+        opacity: 0;
+        transform: scale(1.025);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes slowZoom {
+
+      from {
+        transform: scale(1);
+      }
+
+      to {
+        transform: scale(1.018);
+      }
+    }
+
+    @keyframes roleIn {
+
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+
+    /* =========================
+       RESPONSIVE
+    ========================== */
+
+    @media (max-width: 700px) {
+
+      .photo-wrap {
+        padding: 10px;
+      }
+
+      .manager-photo {
+        width: 100%;
+        height: auto;
+
+        max-height: 100%;
+      }
+
+      .dialogue {
+        width: 88vw;
+        bottom: 4%;
+      }
+
+      .dialogue-box {
+        padding:
+          17px 18px;
+      }
+
+      .presentation-control {
+        right: 14px;
+        bottom: 14px;
+      }
+
+      .presentation-control-text {
+        display: none;
+      }
+
+    }
+
+
+    /* =========================================
+       HEAD OF CUSTOMER SUPPORT — SINGLE PHOTO FIX
+    ========================================== */
+
+    .blur-bg {
+      background-image:
+        none !important;
+
+      background:
+        radial-gradient(
+          circle at 50% 38%,
+          rgba(179,146,96,.12),
+          transparent 31%
+        ),
+        linear-gradient(
+          135deg,
+          #201b17,
+          #0f0d0b
+        ) !important;
+
+      filter:
+        none !important;
+
+      transform:
+        none !important;
+
+      opacity:
+        1 !important;
+    }
+
+
+    .photo-wrap {
+      opacity:
+        1 !important;
+
+      transform:
+        none !important;
+
+      animation:
+        none !important;
+    }
+
+
+    .manager-photo {
+      animation:
+        none !important;
+
+      transform:
+        none !important;
+    }
+
+
+
+    /* =========================================================
+       MANAGEMENT BRIDGE — INTRODUCTION + ISSUE / DEVELOPMENT FLOW
+       Added before Assistant Head. Keeps the old system pages intact.
+    ========================================================== */
+
+    .sound-control {
+      position: fixed;
+      right: 24px;
+      top: 22px;
+      z-index: 20020;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      color: #fff;
+      background: rgba(15,12,10,.74);
+      border: 1px solid rgba(255,255,255,.20);
+      box-shadow: 0 12px 30px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.08);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.25px;
+      transition: transform .25s ease, background .25s ease, border-color .25s ease;
+    }
+
+    .sound-control:hover {
+      transform: translateY(-2px);
+      background: rgba(23,18,14,.90);
+      border-color: rgba(224,183,120,.45);
+    }
+
+    .sound-control.off { opacity: .62; }
+
+    .language-control {
+      position: fixed;
+      right: 164px;
+      top: 22px;
+      z-index: 20020;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      color: #fff;
+      background: rgba(15,12,10,.74);
+      border: 1px solid rgba(255,255,255,.20);
+      box-shadow: 0 12px 30px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.08);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.15px;
+      transition: transform .25s ease, background .25s ease, border-color .25s ease, opacity .25s ease;
+    }
+
+    .language-control:hover {
+      transform: translateY(-2px);
+      background: rgba(23,18,14,.90);
+      border-color: rgba(224,183,120,.45);
+    }
+
+    .language-control.active {
+      color: #f4e4c7;
+      border-color: rgba(224,183,120,.48);
+      background: rgba(51,38,24,.88);
+    }
+
+    .dialogue-ar,
+    .bridge-dialogue-ar {
+      display: none;
+      direction: rtl;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      color: rgba(255,255,255,.72);
+      font-family: Arial, Tahoma, sans-serif;
+      font-size: .78em;
+      line-height: 1.65;
+      letter-spacing: 0;
+    }
+
+    body.arabic-enabled .dialogue-ar,
+    body.arabic-enabled .bridge-dialogue-ar {
+      display: block;
+    }
+
+    .management-bridge {
+      position: fixed;
+      inset: 0;
+      z-index: 12000;
+      overflow: hidden;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      color: #fff;
+      background:
+        radial-gradient(circle at 78% 16%, rgba(202,173,119,.075), transparent 31%),
+        radial-gradient(circle at 18% 82%, rgba(104,137,128,.065), transparent 34%),
+        linear-gradient(135deg,#15120f 0%,#0b0c0b 55%,#10130f 100%);
+      transition: opacity .8s ease, visibility .8s ease;
+    }
+
+    .management-bridge.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .management-grid-bg {
+      position: absolute;
+      inset: 0;
+      opacity: .032;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.10) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.10) 1px, transparent 1px);
+      background-size: 54px 54px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.7), transparent 96%);
+    }
+
+    .management-group-view,
+    .management-focus-view {
+      position: absolute;
+      inset: 0;
+      transition: opacity .72s ease, transform .9s cubic-bezier(.18,.78,.18,1), visibility .72s ease;
+    }
+
+    .management-group-view {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4.2vh 4vw 12vh;
+      opacity: 1;
+      transform: scale(1);
+      visibility: visible;
+    }
+
+    .management-group-view.hidden {
+      opacity: 0;
+      transform: scale(1.025);
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .management-group-frame {
+      position: relative;
+      width: min(1380px, 92vw);
+      height: min(76vh, 800px);
+      overflow: hidden;
+      border-radius: 27px;
+      border: 1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(circle at center,rgba(80,62,42,.12),transparent 55%),
+        #14130f;
+      box-shadow: 0 38px 110px rgba(0,0,0,.48);
+    }
+
+    .management-group-photo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      background: #14130f;
+      filter: saturate(.93) contrast(1.012) brightness(.96);
+      transform: scale(1.006);
+    }
+
+    .management-group-shade {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background:
+        linear-gradient(to top, rgba(7,7,6,.76), rgba(7,7,6,.04) 38%, transparent 65%),
+        radial-gradient(circle at center, transparent 50%, rgba(6,6,5,.18));
+    }
+
+    .management-group-kicker {
+      position: absolute;
+      z-index: 4;
+      top: 18px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 11px;
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 999px;
+      background: rgba(12,12,10,.58);
+      color: rgba(255,255,255,.58);
+      backdrop-filter: blur(13px);
+      -webkit-backdrop-filter: blur(13px);
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+    }
+
+    .management-group-kicker i,
+    .management-role-chip i,
+    .management-live-dot,
+    .hub-live-dot {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: #c9a86f;
+      box-shadow: 0 0 12px rgba(201,168,111,.42);
+    }
+
+    .management-role-chip {
+      position: absolute;
+      z-index: 5;
+      bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      max-width: 31%;
+      padding: 9px 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 13px;
+      background: rgba(11,12,10,.66);
+      color: rgba(255,255,255,.56);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      font-size: 7.5px;
+      font-weight: 850;
+      line-height: 1.32;
+      letter-spacing: .75px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: transform .35s ease, color .35s ease, border-color .35s ease, background .35s ease, opacity .28s ease, visibility .28s ease;
+    }
+
+    /* FINAL POSITION: Assistant Head is on the RIGHT of the image. Quality Manager is on the LEFT. */
+    .management-role-chip.assistant { right: 18px; justify-content: flex-end; text-align: right; }
+    .management-role-chip.manager { left: 50%; transform: translateX(-50%); text-align: center; }
+    .management-role-chip.quality { left: 18px; }
+
+    .management-role-chip.focus {
+      opacity: 1;
+      visibility: visible;
+      color: #f8f1e6;
+      border-color: rgba(216,173,102,.52);
+      background: rgba(31,28,22,.84);
+      box-shadow: 0 16px 35px rgba(0,0,0,.28), 0 0 0 1px rgba(216,173,102,.05);
+    }
+
+    .management-role-chip.assistant.focus,
+    .management-role-chip.quality.focus { transform: translateY(-8px); }
+    .management-role-chip.manager.focus { transform: translateX(-50%) translateY(-8px); }
+
+    .management-focus-view {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(12px) scale(.993);
+      padding: 3.6vh 3.6vw 12.5vh;
+    }
+
+    .management-focus-view.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    .decision-hub-shell {
+      width: min(1500px, 95vw);
+      height: min(80vh, 850px);
+      margin: 0 auto;
+      display: grid;
+      grid-template-rows: auto auto minmax(0,1fr);
+      gap: 11px;
+    }
+
+    .decision-hub-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .hub-eyebrow {
+      color: rgba(210,176,117,.78);
+      font-size: 8px;
+      font-weight: 850;
+      letter-spacing: 2.8px;
+    }
+
+    .hub-title {
+      margin-top: 7px;
+      color: #f6f0e7;
+      font-size: clamp(31px,4vw,61px);
+      font-weight: 555;
+      line-height: .96;
+      letter-spacing: -2px;
+    }
+
+    .hub-header-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+      padding: 9px 12px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 999px;
+      background: rgba(255,255,255,.018);
+      color: rgba(255,255,255,.43);
+      font-size: 7px;
+      font-weight: 850;
+      letter-spacing: 1.1px;
+      white-space: nowrap;
+    }
+
+    .hub-mode-strip {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 8px;
+    }
+
+    .hub-mode-tab {
+      position: relative;
+      overflow: hidden;
+      padding: 10px 13px;
+      border: 1px solid rgba(255,255,255,.065);
+      border-radius: 13px;
+      background: rgba(255,255,255,.012);
+      color: rgba(255,255,255,.34);
+      text-align: left;
+      transition: border-color .35s ease, background .35s ease, color .35s ease, transform .35s ease;
+    }
+
+    .hub-mode-tab::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg,#d2ae70,transparent);
+      transition: width .48s ease;
+    }
+
+    .hub-mode-tab.active {
+      transform: translateY(-2px);
+      color: #f0e7db;
+      border-color: rgba(210,174,112,.28);
+      background: linear-gradient(145deg,rgba(210,174,112,.06),rgba(255,255,255,.012));
+    }
+
+    .hub-mode-tab.active::after { width: 100%; }
+    .hub-mode-tab strong { display:block; font-size:9px; letter-spacing:.55px; }
+    .hub-mode-tab small { display:block; margin-top:4px; color:rgba(255,255,255,.28); font-size:6.5px; line-height:1.35; }
+
+    .hub-stage {
+      position: relative;
+      min-height: 0;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.075);
+      border-radius: 25px;
+      background:
+        radial-gradient(circle at 50% 46%,rgba(199,164,105,.035),transparent 38%),
+        linear-gradient(145deg,rgba(255,255,255,.028),rgba(255,255,255,.008));
+      box-shadow: 0 34px 92px rgba(0,0,0,.30);
+    }
+
+    .hub-mode-panel {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(18px) scale(.995);
+      transition: opacity .52s ease, transform .62s cubic-bezier(.2,.72,.2,1), visibility .52s ease;
+    }
+
+    .hub-mode-panel.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0) scale(1);
+    }
+
+    .hub-three-column {
+      height: 100%;
+      display: grid;
+      grid-template-columns: minmax(250px,.31fr) minmax(300px,.38fr) minmax(250px,.31fr);
+      gap: 12px;
+      padding: 14px;
+    }
+
+    .hub-card {
+      min-height: 0;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.058);
+      border-radius: 18px;
+      background: rgba(255,255,255,.012);
+    }
+
+    .hub-card-head {
+      padding: 12px 13px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      color: rgba(210,176,117,.66);
+      font-size: 6.7px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+    }
+
+    .hub-flow-list {
+      display: grid;
+      gap: 7px;
+      padding: 11px;
+    }
+
+    .hub-flow-step {
+      display: grid;
+      grid-template-columns: 29px minmax(0,1fr);
+      gap: 9px;
+      align-items: center;
+      padding: 9px 10px;
+      border: 1px solid rgba(255,255,255,.05);
+      border-radius: 12px;
+      background: rgba(255,255,255,.008);
+      opacity: .38;
+      transition: opacity .28s ease, transform .28s ease, border-color .28s ease, background .28s ease;
+    }
+
+    .hub-flow-step.active,
+    .hub-flow-step.complete {
+      opacity: 1;
+    }
+
+    .hub-flow-step.active {
+      transform: translateX(5px);
+      border-color: rgba(210,176,117,.31);
+      background: linear-gradient(90deg,rgba(210,176,117,.075),rgba(255,255,255,.01));
+    }
+
+    .hub-flow-step.complete { opacity: .58; }
+
+    .hub-flow-step > span {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      background: rgba(255,255,255,.025);
+      color: rgba(255,255,255,.42);
+      font-size: 6.7px;
+      font-weight: 900;
+    }
+
+    .hub-flow-step strong { display:block; color:rgba(255,255,255,.70); font-size:8.3px; }
+    .hub-flow-step small { display:block; margin-top:3px; color:rgba(255,255,255,.29); font-size:6.4px; line-height:1.38; }
+
+    .hub-evidence-wrap {
+      height: calc(100% - 35px);
+      display: grid;
+      grid-template-rows: minmax(0,1fr) auto;
+      gap: 9px;
+      padding: 10px;
+    }
+
+    .hub-evidence-grid {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1.22fr .78fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 7px;
+    }
+
+    .hub-evidence-screen {
+      position: relative;
+      min-height: 0;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.055);
+      border-radius: 12px;
+      background:#0c0e0c;
+    }
+
+    .hub-evidence-screen:first-child { grid-row:1/3; }
+    .hub-evidence-screen img { display:none; width:100%; height:100%; object-fit:contain; background:#090a09; }
+    .hub-evidence-screen.has-image img { display:block; }
+    .hub-evidence-screen.has-image .evidence-placeholder { display:none; }
+
+    .evidence-placeholder {
+      position:absolute;
+      inset:0;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+      text-align:center;
+      color:rgba(255,255,255,.28);
+    }
+    .evidence-placeholder b { color:rgba(210,176,117,.42); font-size:25px; }
+    .evidence-placeholder strong { font-size:6.8px; letter-spacing:.6px; }
+    .evidence-placeholder small { color:rgba(255,255,255,.20); font-size:5.5px; }
+
+    .hub-evidence-tags { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+    .hub-evidence-tags div { padding:7px 8px; border:1px solid rgba(255,255,255,.05); border-radius:10px; background:rgba(255,255,255,.008); }
+    .hub-evidence-tags span { display:block; color:rgba(210,176,117,.46); font-size:5.2px; font-weight:900; letter-spacing:.7px; }
+    .hub-evidence-tags strong { display:block; margin-top:3px; color:rgba(255,255,255,.47); font-size:6.2px; }
+
+    .management-tools-stack {
+      height: calc(100% - 35px);
+      display: grid;
+      grid-template-rows: minmax(0,1fr) minmax(0,1fr) minmax(90px,.62fr);
+      gap: 8px;
+      padding: 10px;
+    }
+
+    .management-tool-card {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(130px,.46fr) minmax(0,.54fr);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.058);
+      border-radius: 13px;
+      background: linear-gradient(145deg,rgba(255,255,255,.018),rgba(255,255,255,.007));
+      transition: border-color .3s ease, transform .3s ease, background .3s ease;
+    }
+
+    .management-tool-card.active-tool {
+      transform: translateY(-2px);
+      border-color: rgba(210,176,117,.32);
+      background: linear-gradient(145deg,rgba(210,176,117,.065),rgba(255,255,255,.008));
+    }
+
+    .tracking-tool.active-tool {
+      border-color: rgba(119,171,156,.34);
+      background: linear-gradient(145deg,rgba(103,157,143,.07),rgba(255,255,255,.008));
+    }
+
+    .management-tool-media {
+      position: relative;
+      min-height: 0;
+      overflow: hidden;
+      border-right: 1px solid rgba(255,255,255,.05);
+      background: #0b0d0c;
+    }
+
+    .management-tool-media img {
+      display: none;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #090b0a;
+    }
+
+    .management-tool-media.has-image img { display:block; }
+    .management-tool-media.has-image .management-tool-placeholder { display:none; }
+
+    .management-tool-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 9px;
+      color: rgba(255,255,255,.25);
+      text-align: center;
+    }
+
+    .management-tool-placeholder b { color: rgba(210,176,117,.48); font-size: 24px; }
+    .management-tool-placeholder strong { color:rgba(255,255,255,.45); font-size:6.4px; letter-spacing:.65px; }
+    .management-tool-placeholder small { color:rgba(255,255,255,.19); font-size:5.3px; line-height:1.3; }
+
+    .management-tool-copy {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 10px 11px;
+    }
+
+    .management-tool-kicker { color:rgba(210,176,117,.56); font-size:5.4px; font-weight:900; letter-spacing:.9px; }
+    .management-tool-copy > strong { margin-top:5px; color:#efe7db; font-size:11px; line-height:1.25; }
+    .management-tool-copy > span { margin-top:5px; color:rgba(255,255,255,.31); font-size:6px; line-height:1.38; }
+
+    .management-tool-link {
+      width: fit-content;
+      margin-top: 7px;
+      color: rgba(210,176,117,.73);
+      font-size: 5.6px;
+      font-weight: 900;
+      letter-spacing: .75px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .management-tool-link.disabled {
+      opacity: .26;
+      pointer-events: none;
+    }
+
+    .issue-evidence-strip {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+    }
+
+    .hub-evidence-screen.compact-evidence:first-child { grid-row:auto; }
+
+    .development-tool-stack {
+      height: calc(100% - 35px);
+      display: grid;
+      grid-template-rows: auto minmax(0,1fr) minmax(0,1fr);
+      gap: 8px;
+      padding: 11px;
+    }
+
+    .development-tool-lead {
+      padding: 3px 2px 5px;
+    }
+
+    .management-tool-card.development-copy {
+      grid-template-columns: minmax(125px,.42fr) minmax(0,.58fr);
+    }
+
+    .development-decision-track {
+      align-content: start;
+      min-height: 0;
+    }
+
+    .management-core {
+      height: calc(100% - 35px);
+      display: grid;
+      grid-template-rows: auto auto auto 1fr;
+      gap: 9px;
+      padding: 13px;
+    }
+
+    .core-title { color:#f2eadf; font-size:17px; font-weight:650; }
+    .core-copy { color:rgba(255,255,255,.34); font-size:7.4px; line-height:1.5; }
+
+    .core-roles { display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; }
+    .core-role { padding:9px; border:1px solid rgba(255,255,255,.055); border-radius:11px; background:rgba(255,255,255,.01); text-align:center; }
+    .core-role strong { display:block; color:rgba(255,255,255,.62); font-size:6.8px; }
+    .core-role span { display:block; margin-top:4px; color:rgba(255,255,255,.24); font-size:5.6px; line-height:1.3; }
+    .core-role.assistant { border-color:rgba(210,176,117,.16); }
+
+    .core-decision-track { display:grid; align-content:center; gap:7px; }
+    .core-decision-step { position:relative; padding:10px 11px 10px 26px; border-left:2px solid rgba(210,176,117,.22); background:linear-gradient(90deg,rgba(210,176,117,.04),transparent); color:rgba(255,255,255,.42); font-size:7.5px; opacity:.38; transition:.28s ease; }
+    .core-decision-step::before { content:''; position:absolute; left:8px; top:50%; width:6px; height:6px; margin-top:-3px; border-radius:50%; background:rgba(210,176,117,.32); }
+    .core-decision-step.active { opacity:1; color:#eee4d7; border-left-color:rgba(210,176,117,.66); background:linear-gradient(90deg,rgba(210,176,117,.08),transparent); }
+
+    .hub-output-stack {
+      height: calc(100% - 35px);
+      display:grid;
+      grid-template-rows:auto auto minmax(0,1fr) auto;
+      gap:9px;
+      padding:12px;
+    }
+
+    .output-question { color:#f0e8dd; font-size:15px; font-weight:650; }
+    .output-copy { color:rgba(255,255,255,.31); font-size:7px; line-height:1.46; }
+
+    .ownership-lanes { display:grid; gap:8px; align-content:start; }
+    .ownership-lane { padding:11px; border:1px solid rgba(255,255,255,.055); border-radius:13px; background:rgba(255,255,255,.009); opacity:.38; transition:.3s ease; }
+    .ownership-lane.active { opacity:1; transform:translateX(-4px); border-color:rgba(210,176,117,.27); background:linear-gradient(90deg,rgba(210,176,117,.05),rgba(255,255,255,.01)); }
+    .ownership-lane strong { display:block; color:rgba(255,255,255,.66); font-size:7.5px; }
+    .ownership-lane span { display:block; margin-top:4px; color:rgba(255,255,255,.27); font-size:6px; line-height:1.4; }
+
+    .department-options { display:flex; flex-wrap:wrap; gap:6px; margin-top:7px; }
+    .department-option { padding:6px 8px; border:1px solid rgba(255,255,255,.05); border-radius:999px; color:rgba(255,255,255,.35); background:rgba(255,255,255,.008); font-size:5.8px; font-weight:850; letter-spacing:.55px; }
+
+    .hub-outcome { padding:9px 10px; border-radius:11px; border:1px solid rgba(129,158,145,.14); background:linear-gradient(90deg,rgba(109,150,134,.055),rgba(255,255,255,.008)); color:rgba(176,204,191,.65); font-size:6.5px; font-weight:850; letter-spacing:.7px; text-align:center; }
+
+    .coordination-thread {
+      display:grid;
+      gap:7px;
+      padding:10px;
+    }
+
+    .thread-line {
+      padding:9px 10px;
+      border:1px solid rgba(255,255,255,.048);
+      border-radius:11px;
+      background:rgba(255,255,255,.008);
+      opacity:.28;
+      transform:translateY(4px);
+      transition:opacity .28s ease, transform .28s ease, border-color .28s ease;
+    }
+
+    .thread-line.visible { opacity:.57; transform:translateY(0); }
+    .thread-line.active { opacity:1; border-color:rgba(210,176,117,.22); }
+    .thread-line strong { display:block; color:rgba(210,176,117,.62); font-size:5.8px; letter-spacing:.7px; }
+    .thread-line span { display:block; margin-top:4px; color:rgba(255,255,255,.38); font-size:6.4px; line-height:1.4; }
+
+    .source-grid { display:grid; grid-template-columns:1fr 1fr; gap:7px; padding:11px; }
+    .source-card { padding:10px; border:1px solid rgba(255,255,255,.05); border-radius:11px; background:rgba(255,255,255,.008); color:rgba(255,255,255,.42); font-size:6.7px; line-height:1.4; }
+    .source-card.active { border-color:rgba(210,176,117,.25); color:#e9dfd2; background:rgba(210,176,117,.04); }
+
+    .build-actions { display:grid; gap:7px; padding:11px; }
+    .build-action { padding:11px; border:1px solid rgba(255,255,255,.05); border-radius:11px; background:rgba(255,255,255,.008); color:rgba(255,255,255,.34); font-size:7px; opacity:.42; transition:.3s ease; }
+    .build-action.active { opacity:1; transform:translateX(4px); color:#eee5d8; border-color:rgba(210,176,117,.28); background:linear-gradient(90deg,rgba(210,176,117,.055),rgba(255,255,255,.008)); }
+
+    .bridge-dialogue {
+      position: absolute;
+      z-index: 20;
+      left: 50%;
+      bottom: 4.3%;
+      width: min(900px, 82vw);
+      transform: translateX(-50%) translateY(20px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .52s ease, transform .52s ease, visibility .52s ease;
+    }
+
+    .bridge-dialogue.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .bridge-dialogue.hide {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-10px);
+    }
+
+    .bridge-dialogue-name {
+      margin-bottom: 7px;
+      text-align: center;
+      color: rgba(219,176,105,.88);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 2.7px;
+    }
+
+    .bridge-dialogue.visitor .bridge-dialogue-name { color: rgba(255,255,255,.56); }
+
+    .bridge-dialogue-box {
+      padding: 16px 24px;
+      text-align: center;
+      color: #fff;
+      font-size: clamp(15px,1.35vw,21px);
+      line-height: 1.48;
+      border-radius: 15px;
+      background: linear-gradient(135deg,rgba(16,15,13,.88),rgba(33,30,24,.80));
+      border: 1px solid rgba(219,176,105,.16);
+      box-shadow: 0 18px 48px rgba(0,0,0,.34);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+    }
+
+    .manager-scene.bridge-leaving {
+      opacity: 0;
+      transform: scale(1.02);
+      transition: opacity .72s ease, transform .82s ease;
+    }
+
+    @media (max-width: 1100px) {
+      .language-control { right: 164px; }
+      .management-group-frame { height: 70vh; }
+      .hub-three-column { grid-template-columns: 1fr 1fr; overflow:auto; }
+      .hub-three-column > .hub-card:last-child { grid-column:1 / 3; min-height:280px; }
+      .decision-hub-shell { height:min(82vh,900px); }
+    }
+
+    @media (max-width: 720px) {
+      .sound-control { right:14px; top:14px; }
+      .language-control { right:142px; top:14px; }
+      .management-role-chip { font-size:5.8px; padding:7px 8px; }
+      .management-role-chip.assistant { right:8px; }
+      .management-role-chip.quality { left:8px; }
+      .management-focus-view { padding:2.5vh 2.6vw 14vh; }
+      .hub-mode-strip { grid-template-columns:1fr; }
+      .hub-three-column { grid-template-columns:1fr; overflow:auto; }
+      .hub-three-column > .hub-card:last-child { grid-column:auto; }
+      .decision-hub-header { align-items:flex-start; flex-direction:column; gap:8px; }
+      .hub-header-status { display:none; }
+      .hub-evidence-grid { min-height:420px; }
+      .bridge-dialogue { bottom:3.1%; width:92vw; }
+      .bridge-dialogue-box { padding:13px 15px; font-size:14px; }
+    }
+
+  
+
+    /* V5 — keep other-department names visible in the right-side system panel. */
+    .ownership-lane[data-op-owner="external"],
+    .ownership-lane[data-imp-owner="external"]{
+      opacity:.78;
+      border-color:rgba(210,176,117,.14);
+      background:linear-gradient(90deg,rgba(210,176,117,.035),rgba(255,255,255,.012));
+    }
+    .ownership-lane[data-op-owner="external"].active,
+    .ownership-lane[data-imp-owner="external"].active{opacity:1}
+    .department-options{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:5px;
+      margin-top:9px;
+    }
+    .department-options-label{
+      grid-column:1/-1;
+      display:block;
+      margin-bottom:1px;
+      color:rgba(210,176,117,.72);
+      font-size:5.4px;
+      font-weight:900;
+      letter-spacing:1.05px;
+    }
+    .department-option{
+      display:block;
+      padding:7px 8px;
+      border-radius:9px;
+      color:rgba(255,255,255,.66);
+      border-color:rgba(255,255,255,.075);
+      background:rgba(255,255,255,.025);
+      font-size:6.1px;
+      text-align:center;
+    }
+    .department-option:last-child:nth-child(even){grid-column:1/-1}
+
+  
+
+    /* =========================================================
+       ACTION PLAN + MANAGEMENT SYSTEMS SHOWCASE
+       Separate visual language from ClickUp / tracking hub.
+    ========================================================== */
+    .management-systems-view {
+      position:absolute;
+      inset:0;
+      z-index:8;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:3vh 3vw 14vh;
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      transform:translateY(16px);
+      transition:opacity .55s ease, transform .65s ease, visibility .55s ease;
+    }
+    .management-systems-view.visible {
+      opacity:1;
+      visibility:visible;
+      pointer-events:auto;
+      transform:none;
+    }
+    .management-systems-shell {
+      width:min(1450px,96vw);
+      height:min(720px,74vh);
+      display:grid;
+      grid-template-rows:auto auto minmax(0,1fr) auto;
+      gap:12px;
+      padding:18px;
+      border:1px solid rgba(210,176,117,.17);
+      border-radius:24px;
+      background:linear-gradient(145deg,rgba(12,18,17,.97),rgba(8,11,11,.95));
+      box-shadow:0 30px 90px rgba(0,0,0,.55);
+      overflow:hidden;
+    }
+    .management-systems-header {display:flex;align-items:flex-end;justify-content:space-between;gap:20px}
+    .management-systems-kicker {font-size:6.2px;font-weight:900;letter-spacing:1.55px;color:rgba(210,176,117,.68)}
+    .management-systems-title {margin-top:6px;color:#f3eee6;font-size:clamp(20px,2.5vw,37px);font-weight:520;letter-spacing:-1px}
+    .management-systems-status {font-size:6px;font-weight:900;letter-spacing:1.15px;color:rgba(255,255,255,.34);white-space:nowrap}
+    .action-plan-strip {display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+    .action-plan-step {padding:10px 11px;border:1px solid rgba(255,255,255,.065);border-radius:13px;background:rgba(255,255,255,.025)}
+    .action-plan-step span {display:block;color:rgba(210,176,117,.72);font-size:5.6px;font-weight:900;letter-spacing:1px}
+    .action-plan-step strong {display:block;margin-top:5px;color:rgba(255,255,255,.72);font-size:8px;line-height:1.25}
+    .management-system-body {min-height:0;display:grid;grid-template-columns:minmax(0,1.55fr) minmax(260px,.65fr);gap:12px}
+    .management-system-media {position:relative;min-width:0;overflow:hidden;border:1px solid rgba(255,255,255,.075);border-radius:18px;background:#0b1011;display:flex;align-items:center;justify-content:center}
+    .management-system-media img {width:100%;height:100%;object-fit:contain;padding:10px;display:none}
+    .management-system-media.has-image img {display:block}
+    .management-system-placeholder {position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:30px;color:rgba(255,255,255,.27);font-size:8px;letter-spacing:1px}
+    .management-system-media.has-image .management-system-placeholder {display:none}
+    .management-screen-counter {position:absolute;right:12px;bottom:10px;padding:6px 8px;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:rgba(0,0,0,.48);color:rgba(255,255,255,.55);font-size:5.6px;font-weight:900;letter-spacing:.8px}
+    .management-system-info {position:relative;display:flex;flex-direction:column;padding:20px;border:1px solid rgba(255,255,255,.075);border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.018))}
+    .management-system-number {color:rgba(210,176,117,.58);font-size:5.8px;font-weight:900;letter-spacing:1.1px}
+    .management-system-name {margin-top:10px;color:#f2ece3;font-size:clamp(21px,2.2vw,34px);line-height:1;letter-spacing:-1px}
+    .management-system-short {margin-top:13px;color:rgba(255,255,255,.56);font-size:9px;line-height:1.58}
+    .management-system-dots {display:flex;gap:5px;margin-top:auto;padding-top:15px;flex-wrap:wrap}
+    .management-system-dot {width:24px;height:3px;border-radius:10px;background:rgba(255,255,255,.09)}
+    .management-system-dot.active {background:#d2b075;box-shadow:0 0 10px rgba(210,176,117,.28)}
+    .management-system-actions {display:flex;gap:7px;margin-top:12px}
+    .management-system-action {flex:1;min-height:32px;border:1px solid rgba(255,255,255,.09);border-radius:10px;background:rgba(255,255,255,.03);color:rgba(255,255,255,.52);font-size:6px;font-weight:900;letter-spacing:.9px;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center}
+    .management-system-action.disabled {opacity:.28;pointer-events:none}
+    .senior-management-strip {display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:stretch;padding:10px 13px;border:1px solid rgba(210,176,117,.12);border-radius:13px;background:rgba(210,176,117,.035);transition:.45s ease}
+    .senior-management-media{position:relative;min-height:72px;border:1px solid rgba(255,255,255,.07);border-radius:11px;background:linear-gradient(145deg,rgba(210,176,117,.08),rgba(255,255,255,.025));overflow:hidden;display:grid;place-items:center}
+    .senior-management-media img{width:100%;height:100%;object-fit:cover;display:none}
+    .senior-management-media.has-image img{display:block}
+    .senior-management-placeholder{padding:9px;text-align:center;color:rgba(210,176,117,.48);font-size:5.5px;font-weight:900;letter-spacing:1px;line-height:1.45}
+    .senior-management-media.has-image .senior-management-placeholder{display:none}
+    .senior-management-info{display:flex;flex-direction:column;justify-content:center;min-width:0}
+    .senior-management-label {font-size:5.8px;font-weight:900;letter-spacing:1.1px;color:rgba(210,176,117,.72)}
+    .senior-management-title{margin-top:5px;color:#f0e9df;font-size:15px;font-weight:650;letter-spacing:-.2px}
+    .senior-management-copy {margin-top:5px;color:rgba(255,255,255,.42);font-size:6.8px;line-height:1.45}
+    .senior-management-flow{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+    .senior-management-flow span{padding:5px 7px;border:1px solid rgba(255,255,255,.06);border-radius:999px;color:rgba(255,255,255,.36);font-size:5.2px;font-weight:850;letter-spacing:.55px}
+    .management-systems-view.senior-focus .management-systems-shell{grid-template-rows:auto minmax(0,1fr);}
+    .management-systems-view.senior-focus .action-plan-strip,
+    .management-systems-view.senior-focus .management-system-body{display:none}
+    .management-systems-view.senior-focus .senior-management-strip{grid-template-columns:minmax(280px,.85fr) minmax(0,1.15fr);gap:22px;padding:22px;border-radius:20px;background:linear-gradient(145deg,rgba(210,176,117,.085),rgba(255,255,255,.022));}
+    .management-systems-view.senior-focus .senior-management-media{min-height:0;height:100%;border-radius:16px}
+    .management-systems-view.senior-focus .senior-management-label{font-size:7px;letter-spacing:1.4px}
+    .management-systems-view.senior-focus .senior-management-title{font-size:clamp(27px,3.2vw,48px);margin-top:11px}
+    .management-systems-view.senior-focus .senior-management-copy{font-size:10px;line-height:1.65;max-width:760px;margin-top:13px}
+    .management-systems-view.senior-focus .senior-management-flow{gap:8px;margin-top:17px}
+    .management-systems-view.senior-focus .senior-management-flow span{padding:8px 10px;font-size:6px}
+    /* V47 — visual-only systems landscape: logo + name, no description and no click. */
+    .management-landscape-view {
+      --landscape-accent:#456aa3;
+      position:absolute;
+      inset:0;
+      z-index:34;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:5.5vh 5vw;
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 50% 42%, var(--landscape-glow, rgba(69,111,168,.38)) 0%, transparent 58%),
+        linear-gradient(145deg, var(--landscape-bg, #172535) 0%, #081010 72%);
+      transition:opacity .45s ease, visibility .45s ease, background .55s ease;
+    }
+    .management-landscape-view.visible {opacity:1;visibility:visible;}
+    .management-landscape-shell {
+      width:min(1380px,96vw);
+      height:min(790px,88vh);
+      display:grid;
+      grid-template-rows:auto minmax(0,1fr);
+      gap:18px;
+      padding:22px;
+      border:1px solid rgba(255,255,255,.11);
+      border-radius:26px;
+      background:rgba(8,13,15,.72);
+      box-shadow:0 34px 100px rgba(0,0,0,.48);
+      backdrop-filter:blur(16px);
+    }
+    .management-landscape-header {display:flex;align-items:end;justify-content:space-between;gap:18px;padding:2px 4px 0;}
+    .management-landscape-kicker {font-size:6.4px;font-weight:900;letter-spacing:1.55px;color:rgba(255,255,255,.58);}
+    .management-landscape-title {margin-top:5px;font-size:clamp(25px,3vw,43px);font-weight:650;letter-spacing:-1.1px;color:#f7f7f3;}
+    .management-landscape-status {font-size:6.2px;font-weight:900;letter-spacing:1.25px;color:rgba(255,255,255,.42);white-space:nowrap;}
+    .management-landscape-grid {
+      min-height:0;
+      overflow:auto;
+      display:grid;
+      grid-template-columns:repeat(5,minmax(150px,1fr));
+      align-content:start;
+      gap:13px;
+      padding:3px;
+      scrollbar-width:thin;
+    }
+    .management-landscape-card {
+      --card-accent:#456aa3;
+      min-height:132px;
+      border:1px solid color-mix(in srgb, var(--card-accent) 52%, rgba(255,255,255,.14));
+      border-radius:18px;
+      padding:16px 12px 14px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      text-align:center;
+      background:linear-gradient(145deg,color-mix(in srgb,var(--card-accent) 46%, #1b2024),color-mix(in srgb,var(--card-accent) 25%, #171b1f));
+      opacity:.58;
+      transform:scale(.985);
+      transition:opacity .35s ease, transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+    }
+    .management-landscape-card.active {
+      opacity:1;
+      transform:translateY(-5px) scale(1.035);
+      border-color:color-mix(in srgb,var(--card-accent) 72%, white 18%);
+      box-shadow:0 16px 38px color-mix(in srgb,var(--card-accent) 34%, transparent),0 0 0 2px color-mix(in srgb,var(--card-accent) 24%, transparent);
+    }
+    .management-landscape-logo {
+      width:58px;height:58px;display:grid;place-items:center;
+      border-radius:16px;
+      background:rgba(255,255,255,.09);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
+      overflow:hidden;
+      font-size:34px;
+      line-height:1;
+    }
+    .management-landscape-logo img {width:100%;height:100%;object-fit:contain;padding:7px;}
+    .management-landscape-name {font-size:10px;line-height:1.32;font-weight:850;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.42);}
+    .management-landscape-empty {grid-column:1/-1;min-height:240px;display:grid;place-items:center;text-align:center;color:rgba(255,255,255,.38);font-size:9px;letter-spacing:.7px;}
+    @media (max-width:1100px){.management-landscape-grid{grid-template-columns:repeat(4,minmax(145px,1fr));}}
+    @media (max-width:760px){.management-landscape-view{padding:4vh 3vw}.management-landscape-shell{padding:14px}.management-landscape-grid{grid-template-columns:repeat(2,minmax(130px,1fr));}.management-landscape-card{min-height:118px}.management-landscape-status{display:none;}}
+
+    .management-system-modal {position:fixed;z-index:150000;inset:0;display:flex;align-items:center;justify-content:center;padding:26px;background:rgba(3,6,6,.92);opacity:0;visibility:hidden;pointer-events:none;transition:.25s ease}
+    .management-system-modal.open {opacity:1;visibility:visible;pointer-events:auto}
+    .management-system-modal-card {position:relative;width:min(1100px,95vw);max-height:88vh;overflow:auto;border:1px solid rgba(255,255,255,.1);border-radius:22px;background:#101615;padding:24px;box-shadow:0 35px 100px rgba(0,0,0,.65)}
+    .management-system-modal-close {position:absolute;right:14px;top:14px;border:1px solid rgba(255,255,255,.1);border-radius:999px;background:rgba(255,255,255,.04);color:#fff;padding:8px 11px;cursor:pointer;font-size:6px;font-weight:900;letter-spacing:.8px}
+    .management-system-modal-title {padding-right:80px;color:#f2ece3;font-size:27px;line-height:1.1}
+    .management-system-modal-description {margin-top:14px;color:rgba(255,255,255,.58);font-size:10px;line-height:1.7;white-space:pre-wrap}
+    .management-system-modal-image {margin-top:17px;width:100%;max-height:52vh;object-fit:contain;border:1px solid rgba(255,255,255,.07);border-radius:14px;background:#090d0e;display:none}
+    .management-system-modal-image.visible {display:block}
+    .management-system-modal-link{margin-top:14px;display:none;align-items:center;justify-content:center;min-height:38px;border:1px solid rgba(210,176,117,.22);border-radius:11px;color:#e4c78d;background:rgba(210,176,117,.055);text-decoration:none;font-size:6.5px;font-weight:900;letter-spacing:1px}
+    .management-system-modal-link.visible{display:flex}
+    @media(max-width:850px){
+      .management-systems-shell{height:78vh;padding:12px}
+      .action-plan-strip{grid-template-columns:1fr 1fr}
+      .management-system-body{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto}
+      .management-system-info{padding:12px}
+      .senior-management-strip,.management-systems-view.senior-focus .senior-management-strip{grid-template-columns:1fr}
+      .management-systems-view.senior-focus .senior-management-media{min-height:180px;height:auto}
+    }
+
+      /* V20 — readability + larger management systems media. */
+    /* Senior Management now has its own index2_1 page, so do not consume space here. */
+    #managementSystemsView .senior-management-strip{display:none !important;}
+    #managementSystemsView .management-systems-shell{
+      height:min(820px,82vh);
+      grid-template-rows:auto auto minmax(0,1fr);
+      gap:11px;
+    }
+    #managementSystemsView .management-system-body{
+      grid-template-columns:minmax(0,1.72fr) minmax(280px,.58fr);
+      min-height:0;
+    }
+    #managementSystemsView .management-system-media img{
+      padding:6px;
+    }
+
+    /* Make the coordination / ownership content readable on a shared screen. */
+    .hub-card-head{font-size:8px;color:rgba(224,191,132,.88);}
+    .hub-mode-tab small{font-size:7.4px;color:rgba(255,255,255,.50);}
+    .hub-flow-step strong{font-size:9.2px;color:rgba(255,255,255,.86);}
+    .hub-flow-step small{font-size:7.3px;color:rgba(255,255,255,.50);line-height:1.45;}
+    .management-tool-kicker{font-size:6.4px;color:rgba(224,191,132,.80);}
+    .management-tool-copy > strong{font-size:12px;}
+    .management-tool-copy > span{font-size:7.4px;color:rgba(255,255,255,.55);line-height:1.48;}
+    .core-copy{font-size:8.5px;color:rgba(255,255,255,.55);}
+    .core-role strong{font-size:7.8px;color:rgba(255,255,255,.82);}
+    .core-role span{font-size:6.6px;color:rgba(255,255,255,.47);}
+    .core-decision-step{font-size:8.4px;color:rgba(255,255,255,.58);}
+    .output-copy{font-size:8.2px;color:rgba(255,255,255,.55);}
+    .ownership-lane{opacity:.62;}
+    .ownership-lane strong{font-size:9px;color:rgba(255,255,255,.88);}
+    .ownership-lane span{font-size:7.4px;color:rgba(255,255,255,.56);line-height:1.48;}
+    .department-options{gap:7px;margin-top:11px;}
+    .department-options-label{
+      color:#dfbd80;
+      font-size:7.2px;
+      letter-spacing:1.2px;
+      margin-bottom:2px;
+    }
+    .department-option{
+      min-height:32px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:8px 10px;
+      border:1px solid rgba(210,176,117,.20);
+      border-radius:10px;
+      color:#f3eee6;
+      background:rgba(210,176,117,.075);
+      font-size:8.4px;
+      font-weight:900;
+      letter-spacing:.65px;
+      text-shadow:0 1px 2px rgba(0,0,0,.5);
+    }
+    .hub-outcome{font-size:7.4px;color:rgba(196,222,210,.82);}
+    .thread-line strong{font-size:6.8px;}
+    .thread-line span{font-size:7.3px;color:rgba(255,255,255,.55);}
+    .source-card{font-size:7.6px;color:rgba(255,255,255,.58);}
+    .build-action{font-size:8px;color:rgba(255,255,255,.52);}
+
+    #managementSystemsView .management-systems-kicker{font-size:7px;color:rgba(224,191,132,.86);}
+    #managementSystemsView .management-systems-status{font-size:6.8px;color:rgba(255,255,255,.50);}
+    #managementSystemsView .action-plan-step span{font-size:6.4px;color:rgba(224,191,132,.88);}
+    #managementSystemsView .action-plan-step strong{font-size:9px;color:rgba(255,255,255,.86);line-height:1.35;}
+    #managementSystemsView .management-system-number{font-size:6.6px;color:rgba(224,191,132,.82);}
+    #managementSystemsView .management-system-short{
+      margin-top:16px;
+      min-height:84px;
+      padding:14px 15px;
+      border-left:3px solid rgba(224,191,132,.72);
+      border-radius:0 12px 12px 0;
+      background:rgba(255,255,255,.045);
+      font-size:clamp(15px,1.18vw,19px);
+      font-weight:650;
+      color:rgba(255,255,255,.94);
+      line-height:1.55;
+      white-space:pre-wrap;
+      opacity:1;
+      transition:background .25s ease,border-color .25s ease,box-shadow .25s ease,color .25s ease;
+    }
+    #managementSystemsView .management-system-short.is-speaking{
+      color:#fff;
+      border-left-color:#e0bf84;
+      background:rgba(224,191,132,.09);
+      box-shadow:0 0 0 1px rgba(224,191,132,.08),0 10px 28px rgba(0,0,0,.16);
+    }
+    #managementSystemsView .management-system-action{font-size:6.8px;color:rgba(255,255,255,.70);}
+
+    @media(max-width:850px){
+      #managementSystemsView .management-systems-shell{height:82vh;}
+      #managementSystemsView .management-system-body{grid-template-columns:1fr;grid-template-rows:minmax(280px,1fr) auto;}
+    }
+
+
+    /* V30 — make cross-department ownership readable on projector / shared screen. */
+    .department-options{
+      grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+      gap:8px !important;
+      margin-top:12px !important;
+    }
+    .department-options-label{
+      grid-column:1/-1 !important;
+      color:#f0c981 !important;
+      font-size:8.4px !important;
+      letter-spacing:1.35px !important;
+      margin-bottom:2px !important;
+    }
+    .department-option{
+      min-height:36px !important;
+      padding:9px 10px !important;
+      border:1px solid rgba(226,190,126,.36) !important;
+      border-radius:10px !important;
+      background:rgba(213,174,106,.13) !important;
+      color:#fff !important;
+      font-size:9px !important;
+      font-weight:900 !important;
+      letter-spacing:.7px !important;
+      text-shadow:0 1px 3px rgba(0,0,0,.8) !important;
+    }
+
+  
+
+    /* V31 — photo dialogue stays readable without covering the image. */
+    .manager-scene .dialogue-box{
+      background:transparent !important;
+      border:none !important;
+      box-shadow:none !important;
+      backdrop-filter:none !important;
+      -webkit-backdrop-filter:none !important;
+      color:#e4bd78 !important;
+      text-shadow:0 2px 8px rgba(0,0,0,.98),0 1px 2px rgba(0,0,0,.95) !important;
+    }
+    .manager-scene .dialogue-box > div,
+    .manager-scene .dialogue-box .dialogue-ar{color:#e4bd78 !important;}
+    .manager-scene .dialogue-name{color:#f0ce91 !important;}
+
+  </style>
+
+<style id="systemDescriptionReadingStyle">
+#managementSystemsView .management-system-short.is-speaking{
+  color:#0b0d0f !important;
+  background:rgba(255,255,255,.95) !important;
+  border-left-color:#111 !important;
+  box-shadow:0 10px 28px rgba(0,0,0,.20) !important;
+  font-weight:800 !important;
+}
+</style>
+  <script>/* FIXED_AUDIO_NO_CUTOFF */</script>
+</head>
+
+
+<body>
+
+  <main class="manager-scene">
+
+    <div class="blur-bg"></div>
+
+
+    <div class="photo-wrap">
+
+      <img
+        class="manager-photo"
+        src="assets/images/I6OtmSK.png"
+        alt="Head of Customer Support Center"
+        loading="eager"
+        fetchpriority="high"
+        decoding="sync"
+      >
+
+    </div>
+
+
+    <div class="top-shadow"></div>
+
+    <div class="bottom-shadow"></div>
+
+
+    <div class="role-indicator">
+
+      <div class="role-small">
+        SUPPORT OPERATIONS
+      </div>
+
+      <div class="role-name">
+        Head of Customer Support Center
+      </div>
+
+      <div class="role-line"></div>
+
+    </div>
+
+
+    <!-- =========================
+         EXPANDED MANAGER DIALOGUE
+    ========================== -->
+
+    <div id="dialogue1" class="dialogue visitor">
+      <div class="dialogue-name">VISITOR</div>
+      <div class="dialogue-box">
+        Hello. What is your role in the support center?
+      </div>
+    </div>
+
+    <div id="dialogue2" class="dialogue manager">
+      <div class="dialogue-name">HEAD OF CUSTOMER SUPPORT CENTER</div>
+      <div class="dialogue-box">
+        I lead the support center and oversee the overall operation, team structure, and service performance.
+      </div>
+    </div>
+
+    <div id="dialogue3" class="dialogue visitor">
+      <div class="dialogue-name">VISITOR</div>
+      <div class="dialogue-box">
+        And how do you manage the department day to day?
+      </div>
+    </div>
+
+    <div id="dialogue4" class="dialogue manager">
+      <div class="dialogue-name">HEAD OF CUSTOMER SUPPORT CENTER</div>
+      <div class="dialogue-box">
+        Through continuous follow-up, coordination with the team, and close monitoring of workflow and performance.
+      </div>
+    </div>
+
+    <div id="dialogue5" class="dialogue visitor">
+      <div class="dialogue-name">VISITOR</div>
+      <div class="dialogue-box">
+        Can I take a closer look inside the department?
+      </div>
+    </div>
+
+    <div id="dialogue6" class="dialogue manager">
+      <div class="dialogue-name">HEAD OF CUSTOMER SUPPORT CENTER</div>
+      <div class="dialogue-box">
+        Certainly. You can take a tour inside the department.
+      </div>
+    </div>
+
+    <div id="dialogue7" class="dialogue visitor">
+      <div class="dialogue-name">VISITOR</div>
+      <div class="dialogue-box">
+        Absolutely. Let’s take the tour.
+      </div>
+    </div>
+
+  </main>
+
+
+  <!-- =========================================================
+       MANAGEMENT BRIDGE
+       Group introduction -> Management Decision & Coordination Hub -> Assistant Head
+  ========================================================== -->
+  <section id="managementBridge" class="management-bridge" aria-hidden="true">
+    <div class="management-grid-bg"></div>
+
+    <!-- INTRODUCTION: one real group image only. -->
+    <div id="managementGroupView" class="management-group-view">
+      <div class="management-group-frame">
+        <img referrerpolicy="no-referrer"
+          id="managementGroupPhoto"
+          class="management-group-photo"
+          src="assets/images/ft024At.png"
+          alt="Customer Support Management Team"
+        >
+        <div class="management-group-shade"></div>
+
+        <div class="management-group-kicker">
+          <i></i>
+          CUSTOMER SUPPORT MANAGEMENT TEAM · INTRODUCTION
+        </div>
+
+        <!-- FINAL IMAGE POSITION: Assistant Head = RIGHT, Head of Customer Support = CENTER, Quality Manager = LEFT. -->
+        <div id="assistantRoleChip" class="management-role-chip assistant">
+          <i></i>
+          <span data-role-title="assistant_head">ASSISTANT HEAD OF CUSTOMER SUPPORT CENTER</span>
+        </div>
+
+        <div id="managerRoleChip" class="management-role-chip manager">
+          <i></i>
+          <span data-role-title="support_manager">HEAD OF CUSTOMER SUPPORT CENTER</span>
+        </div>
+
+        <div id="qualityRoleChip" class="management-role-chip quality">
+          <i></i>
+          <span data-role-title="quality_manager">QUALITY MANAGER</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AFTER INTRODUCTION THE PHOTO DISAPPEARS. THE HUB TAKES THE FULL FOCUS. -->
+    <div id="managementFocusView" class="management-focus-view">
+      <div class="decision-hub-shell">
+        <header class="decision-hub-header">
+          <div>
+            <div class="hub-eyebrow">CUSTOMER SUPPORT MANAGEMENT TEAM · DECISION & COORDINATION HUB</div>
+            <div id="hubMainTitle" class="hub-title">One Customer Support management process. Different actions.</div>
+          </div>
+          <div class="hub-header-status"><span class="hub-live-dot"></span>DISCUSS · DECIDE · COORDINATE · FOLLOW UP</div>
+        </header>
+
+        <div class="hub-mode-strip">
+          <div class="hub-mode-tab active" data-hub-tab="operational">
+            <strong>OPERATIONAL ISSUE</strong>
+            <small>Validate · evidence · route · follow up</small>
+          </div>
+          <div class="hub-mode-tab" data-hub-tab="improvement">
+            <strong>IMPROVEMENT REQUEST</strong>
+            <small>Feedback · validate · discuss · decide</small>
+          </div>
+          <div class="hub-mode-tab" data-hub-tab="build">
+            <strong>INTERNAL BUILD</strong>
+            <small>Modify · automate · create a system</small>
+          </div>
+        </div>
+
+        <div class="hub-stage">
+          <!-- =====================================================
+               MODE 1 — OPERATIONAL ISSUE / CLICKUP ESCALATION
+          ====================================================== -->
+          <section class="hub-mode-panel active" data-hub-panel="operational">
+            <div class="hub-three-column">
+              <div class="hub-card">
+                <div class="hub-card-head">ISSUE ESCALATION PATH</div>
+                <div class="hub-flow-list">
+                  <div class="hub-flow-step" data-op-step="0"><span>01</span><div><strong>Issue Received</strong><small>Customer, application, system or operational issue.</small></div></div>
+                  <div class="hub-flow-step" data-op-step="1"><span>02</span><div><strong>Validate & Reproduce</strong><small>Confirm the exact behavior and collect the evidence.</small></div></div>
+                  <div class="hub-flow-step" data-op-step="2"><span>03</span><div><strong>Internal Record</strong><small>Register details, status, ownership and destination department.</small></div></div>
+                  <div class="hub-flow-step" data-op-step="3"><span>04</span><div><strong>Management Review</strong><small>Confirm impact, ownership and the correct next action.</small></div></div>
+                  <div class="hub-flow-step" data-op-step="4"><span>05</span><div><strong>ClickUp Ticket</strong><small>Create the official ticket for the relevant department.</small></div></div>
+                  <div class="hub-flow-step" data-op-step="5"><span>06</span><div><strong>Follow Up & Resolve</strong><small>Support follows ClickUp and the internal record until closure.</small></div></div>
+                </div>
+              </div>
+
+              <div class="hub-card">
+                <div class="hub-card-head">SYSTEMS & CASE EVIDENCE</div>
+                <div class="management-tools-stack">
+                  <article id="trackingToolCard" class="management-tool-card tracking-tool">
+                    <div class="management-tool-media" id="trackingToolMedia">
+                      <img referrerpolicy="no-referrer" id="trackingToolImage" alt="Internal tracking system screenshot">
+                      <div class="management-tool-placeholder"><b>◎</b><strong>INTERNAL TRACKING SYSTEM</strong><small>ManagementTools → internal_tracking</small></div>
+                    </div>
+                    <div class="management-tool-copy">
+                      <div class="management-tool-kicker">INTERNAL RECORD</div>
+                      <strong id="trackingToolName">Internal Tracking System</strong>
+                      <span id="trackingToolDescription">Records case details, status, department and follow-up.</span>
+                      <a id="trackingToolLink" class="management-tool-link disabled" target="_blank" rel="noopener">OPEN SYSTEM ↗</a>
+                    </div>
+                  </article>
+
+                  <article id="clickupToolCard" class="management-tool-card clickup-tool">
+                    <div class="management-tool-media" id="clickupToolMedia">
+                      <img referrerpolicy="no-referrer" id="clickupToolImage" alt="ClickUp screenshot">
+                      <div class="management-tool-placeholder"><b>↗</b><strong>CLICKUP</strong><small>ManagementTools → clickup</small></div>
+                    </div>
+                    <div class="management-tool-copy">
+                      <div class="management-tool-kicker">OFFICIAL EXTERNAL TICKET</div>
+                      <strong id="clickupToolName">ClickUp</strong>
+                      <span id="clickupToolDescription">Official ticketing path to the relevant department.</span>
+                      <a id="clickupToolLink" class="management-tool-link disabled" target="_blank" rel="noopener">OPEN CLICKUP ↗</a>
+                    </div>
+                  </article>
+
+                  <div class="issue-evidence-strip">
+                    <div id="evidenceScreen1" class="hub-evidence-screen compact-evidence">
+                      <img referrerpolicy="no-referrer" id="evidenceImage1" alt="Issue evidence screenshot 1">
+                      <div class="evidence-placeholder"><b>▧</b><strong>ISSUE SCREENSHOT 1</strong><small>ManagementTools → issue_evidence_1</small></div>
+                    </div>
+                    <div id="evidenceScreen2" class="hub-evidence-screen compact-evidence">
+                      <img referrerpolicy="no-referrer" id="evidenceImage2" alt="Issue evidence screenshot 2">
+                      <div class="evidence-placeholder"><b>▧</b><strong>ISSUE SCREENSHOT 2</strong><small>ManagementTools → issue_evidence_2</small></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hub-card">
+                <div class="hub-card-head">OWNERSHIP & COORDINATION</div>
+                <div class="hub-output-stack">
+                  <div class="output-question">One case. Two controlled records.</div>
+                  <div class="output-copy">The internal system keeps the Support-side record. ClickUp is the official ticket sent to the department that owns the next action.</div>
+                  <div class="coordination-thread" id="operationalThread">
+                    <div class="thread-line" data-op-thread="0"><strong>SUPPORT AGENT</strong><span>Issue received and the affected flow is identified.</span></div>
+                    <div class="thread-line" data-op-thread="1"><strong>VALIDATION & EVIDENCE</strong><span>Reproduce the issue and attach the supporting screenshots.</span></div>
+                    <div class="thread-line" data-op-thread="2"><strong>INTERNAL TRACKING SYSTEM</strong><span>Case details, status and destination department are recorded internally.</span></div>
+                    <div class="thread-line" data-op-thread="3"><strong>MANAGEMENT REVIEW</strong><span>Impact and ownership are confirmed before external escalation.</span></div>
+                    <div class="thread-line" data-op-thread="4"><strong>CLICKUP → RELEVANT DEPARTMENT</strong><span>One official ticket is raised with the complete requirement and evidence.</span></div>
+                    <div class="thread-line" data-op-thread="5"><strong>SUPPORT FOLLOW-UP</strong><span>Both records remain visible until resolution and customer update.</span></div>
+                  </div>
+                  <div class="ownership-lanes">
+                    <div class="ownership-lane" data-op-owner="external">
+                      <strong>CLICKUP · RELEVANT DEPARTMENT</strong>
+                      <span>Same official escalation method regardless of which department owns the action.</span>
+                      <div class="department-options">
+                        <span class="department-options-label">OTHER DEPARTMENTS</span>
+                        <b class="department-option">BACKEND</b><b class="department-option">VoIP</b><b class="department-option">MARKETING</b><b class="department-option">COMMERCIAL</b><b class="department-option">ANALYSIS</b>
+                      </div>
+                    </div>
+                    <div class="ownership-lane" data-op-owner="support">
+                      <strong>INTERNAL TRACKING · SUPPORT FOLLOW-UP</strong>
+                      <span>Support keeps the case status and follow-up history visible internally until closure.</span>
+                    </div>
+                  </div>
+                  <div class="hub-outcome">ISSUE → INTERNAL RECORD → CLICKUP → RELEVANT DEPARTMENT → FOLLOW-UP → RESOLUTION</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- =====================================================
+               MODE 2 — DEVELOPMENT REQUEST TO OTHER DEPARTMENTS
+          ====================================================== -->
+          <section class="hub-mode-panel" data-hub-panel="improvement">
+            <div class="hub-three-column">
+              <div class="hub-card">
+                <div class="hub-card-head">WHERE DEVELOPMENT CAN START</div>
+                <div class="source-grid">
+                  <div class="source-card" data-imp-source>Customer Feedback</div>
+                  <div class="source-card" data-imp-source>Employee Suggestion</div>
+                  <div class="source-card" data-imp-source>Assistant Head Observation</div>
+                  <div class="source-card" data-imp-source>Quality Manager Observation</div>
+                </div>
+                <div class="hub-flow-list">
+                  <div class="hub-flow-step" data-imp-step="0"><span>01</span><div><strong>Need / Idea</strong><small>Capture the real problem, request or opportunity.</small></div></div>
+                  <div class="hub-flow-step" data-imp-step="1"><span>02</span><div><strong>Validate the Need</strong><small>Confirm value, impact and ownership.</small></div></div>
+                  <div class="hub-flow-step" data-imp-step="2"><span>03</span><div><strong>Management Discussion</strong><small>Agree whether the change is external or internal.</small></div></div>
+                  <div class="hub-flow-step" data-imp-step="3"><span>04</span><div><strong>Internal Record</strong><small>Register the converted development request and its status.</small></div></div>
+                  <div class="hub-flow-step" data-imp-step="4"><span>05</span><div><strong>ClickUp Development Ticket</strong><small>If another department owns it, raise the official request in ClickUp.</small></div></div>
+                </div>
+              </div>
+
+              <div class="hub-card">
+                <div class="hub-card-head">OFFICIAL DEVELOPMENT ROUTE</div>
+                <div class="development-tool-stack">
+                  <div class="development-tool-lead">
+                    <div class="core-title">Same control path. Different request.</div>
+                    <div class="core-copy">A development request is discussed first. If another department owns the change, it becomes an official ClickUp ticket and remains visible in the internal tracking record.</div>
+                  </div>
+
+                  <article class="management-tool-card development-copy">
+                    <div class="management-tool-media" id="clickupDevMedia">
+                      <img referrerpolicy="no-referrer" id="clickupDevImage" alt="ClickUp development ticket screenshot">
+                      <div class="management-tool-placeholder"><b>↗</b><strong>CLICKUP DEVELOPMENT</strong><small>Uses the same ClickUp row</small></div>
+                    </div>
+                    <div class="management-tool-copy">
+                      <div class="management-tool-kicker">DEVELOPMENT TICKET</div>
+                      <strong id="clickupDevName">ClickUp</strong>
+                      <span id="clickupDevDescription">Raise the approved requirement to the department that owns the change.</span>
+                      <a id="clickupDevLink" class="management-tool-link disabled" target="_blank" rel="noopener">OPEN CLICKUP ↗</a>
+                    </div>
+                  </article>
+
+                  <article class="management-tool-card development-copy tracking-tool">
+                    <div class="management-tool-media" id="trackingDevMedia">
+                      <img referrerpolicy="no-referrer" id="trackingDevImage" alt="Internal development tracking screenshot">
+                      <div class="management-tool-placeholder"><b>◎</b><strong>INTERNAL TRACKING</strong><small>Uses the same internal tracking row</small></div>
+                    </div>
+                    <div class="management-tool-copy">
+                      <div class="management-tool-kicker">SUPPORT-SIDE RECORD</div>
+                      <strong id="trackingDevName">Internal Tracking System</strong>
+                      <span id="trackingDevDescription">Track where the request went, its status and the follow-up history.</span>
+                      <a id="trackingDevLink" class="management-tool-link disabled" target="_blank" rel="noopener">OPEN SYSTEM ↗</a>
+                    </div>
+                  </article>
+                </div>
+              </div>
+
+              <div class="hub-card">
+                <div class="hub-card-head">EXECUTION PATH</div>
+                <div class="hub-output-stack">
+                  <div class="output-question">Who owns the change?</div>
+                  <div class="output-copy">Management chooses the execution owner. ClickUp is used whenever another department must implement the change.</div>
+                  <div class="core-decision-track development-decision-track">
+                    <div class="core-decision-step" data-imp-core="0">Validate the need</div>
+                    <div class="core-decision-step" data-imp-core="1">Discuss impact and ownership</div>
+                    <div class="core-decision-step" data-imp-core="2">Record the converted request internally</div>
+                    <div class="core-decision-step" data-imp-core="3">Create ClickUp ticket when ownership is external</div>
+                  </div>
+                  <div class="ownership-lanes">
+                    <div class="ownership-lane" data-imp-owner="external">
+                      <strong>CLICKUP → RELEVANT DEPARTMENT</strong>
+                      <span>Approved development request goes to the department responsible for implementation.</span>
+                      <div class="department-options">
+                        <span class="department-options-label">OTHER DEPARTMENTS</span>
+                        <b class="department-option">BACKEND</b><b class="department-option">VoIP</b><b class="department-option">MARKETING</b><b class="department-option">COMMERCIAL</b><b class="department-option">ANALYSIS</b>
+                      </div>
+                    </div>
+                    <div class="ownership-lane" data-imp-owner="internal">
+                      <strong>INTERNAL SUPPORT DEVELOPMENT</strong>
+                      <span>If Support owns the change, it moves to the internal build path instead of another department.</span>
+                    </div>
+                  </div>
+                  <div class="hub-outcome">NEED → MANAGEMENT REVIEW → INTERNAL RECORD → CLICKUP / INTERNAL BUILD → FOLLOW-UP</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- =====================================================
+               MODE 3 — INTERNAL MODIFY / DEVELOP / CREATE SYSTEM
+          ====================================================== -->
+          <section class="hub-mode-panel" data-hub-panel="build">
+            <div class="hub-three-column">
+              <div class="hub-card">
+                <div class="hub-card-head">INTERNAL NEED</div>
+                <div class="build-actions">
+                  <div class="build-action" data-build-step="0">Modify an existing system or internal tool</div>
+                  <div class="build-action" data-build-step="1">Automate a repetitive operational process</div>
+                  <div class="build-action" data-build-step="2">Create a new internal system when the need requires it</div>
+                </div>
+              </div>
+
+              <div class="hub-card">
+                <div class="hub-card-head">MANAGEMENT ALIGNMENT</div>
+                <div class="management-core">
+                  <div class="core-title">Discuss before building.</div>
+                  <div class="core-copy">An internal build starts with a real operational need. It is reviewed inside management before time is invested in implementation.</div>
+                  <div class="core-roles">
+                    <div class="core-role"><strong>Head of Customer Support Center</strong><span>Direction · approval</span></div>
+                    <div class="core-role assistant"><strong>Assistant Head</strong><span>Design · build · automation</span></div>
+                    <div class="core-role"><strong>Quality Manager</strong><span>Findings · validation feedback</span></div>
+                  </div>
+                  <div class="core-decision-track">
+                    <div class="core-decision-step" data-build-core="0">Problem / idea confirmed</div>
+                    <div class="core-decision-step" data-build-core="1">Management agrees the solution</div>
+                    <div class="core-decision-step" data-build-core="2">Assistant Head executes the internal build</div>
+                    <div class="core-decision-step" data-build-core="3">Review results and improve again</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hub-card">
+                <div class="hub-card-head">INTERNAL EXECUTION</div>
+                <div class="hub-output-stack">
+                  <div class="output-question">From need to working tool.</div>
+                  <div class="output-copy">Not every development request leaves Support. Internal systems, scripts and automation can be designed and implemented inside the center after management agreement.</div>
+                  <div class="ownership-lanes">
+                    <div class="ownership-lane" data-build-owner="assistant">
+                      <strong>ASSISTANT HEAD · EXECUTION OWNER</strong>
+                      <span>Modify · automate · build · test · deploy the internal solution after alignment.</span>
+                    </div>
+                    <div class="ownership-lane" data-build-owner="quality">
+                      <strong>QUALITY FEEDBACK LOOP</strong>
+                      <span>Quality findings can confirm whether the change solved the gap or needs another improvement cycle.</span>
+                    </div>
+                  </div>
+                  <div class="hub-outcome">OBSERVATION → DISCUSSION → AGREEMENT → BUILD / MODIFY → REVIEW</div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- ACTION PLAN + KEY MANAGEMENT SYSTEMS -->
+    <div id="managementSystemsView" class="management-systems-view">
+      <div class="management-systems-shell">
+        <header class="management-systems-header">
+          <div>
+            <div class="management-systems-kicker">CUSTOMER SUPPORT MANAGEMENT TEAM · PLANNING & SYSTEMS</div>
+            <div class="management-systems-title">Plan · measure · improve · report.</div>
+          </div>
+          <div id="managementSystemsStatus" class="management-systems-status">KEY SYSTEMS · AUTO REVIEW</div>
+        </header>
+
+        <div class="action-plan-strip">
+          <div class="action-plan-step"><span>01 · PLAN</span><strong>Set the annual action plan, objectives and KPIs.</strong></div>
+          <div class="action-plan-step"><span>02 · Q1–Q4</span><strong>Measure every quarter against clear targets and criteria.</strong></div>
+          <div class="action-plan-step"><span>03 · SYSTEMS</span><strong>Build or improve systems, scripts and reports to measure and improve results.</strong></div>
+          <div class="action-plan-step"><span>04 · REPORT</span><strong>Report performance to Higher Management and act on feedback.</strong></div>
+        </div>
+
+        <div class="management-system-body">
+          <div id="managementSystemMedia" class="management-system-media">
+            <img referrerpolicy="no-referrer" id="managementSystemImage" alt="Management system screenshot">
+            <div class="management-system-placeholder">ADD SCREENSHOTS IN ManagementSystems → image_url / image_urls</div>
+            <div id="managementScreenCounter" class="management-screen-counter">NO SCREENSHOT</div>
+          </div>
+          <aside class="management-system-info">
+            <div id="managementSystemNumber" class="management-system-number">SYSTEM 01</div>
+            <div id="managementSystemName" class="management-system-name">Management Systems</div>
+            <div id="managementSystemShort" class="management-system-short">Add the key systems you want external visitors to see.</div>
+            <div id="managementSystemDots" class="management-system-dots"></div>
+            <div class="management-system-actions">
+              <button id="managementSystemDetails" class="management-system-action" type="button">MORE DETAILS</button>
+              <a id="managementSystemLink" class="management-system-action disabled" target="_blank" rel="noopener">OPEN SYSTEM ↗</a>
+            </div>
+          </aside>
+        </div>
+
+        <div id="seniorManagementStrip" class="senior-management-strip">
+          <div id="seniorManagementMedia" class="senior-management-media">
+            <img referrerpolicy="no-referrer" id="seniorManagementImage" alt="Higher Management">
+            <div class="senior-management-placeholder">HIGHER MANAGEMENT<br>REPORTING · FEEDBACK · PRIORITIES</div>
+          </div>
+          <div class="senior-management-info">
+            <div class="senior-management-label">HIGHER MANAGEMENT · REPORTING & FEEDBACK</div>
+            <div class="senior-management-title">Direction comes back into measurable improvement.</div>
+            <div class="senior-management-copy">We provide periodic performance and operational reports, receive feedback, priorities and requests, then review them within the Customer Support Management Team and reflect the approved direction in our action plan, systems and continuous improvement work.</div>
+            <div class="senior-management-flow"><span>REPORT</span><span>FEEDBACK</span><span>PRIORITIES</span><span>SUPPORT REVIEW</span><span>ACTION</span><span>MEASURE</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- V47: visual-only manager systems landscape. Name + logo only; no descriptions or clicks. -->
+    <div id="managementLandscapeView" class="management-landscape-view" aria-hidden="true">
+      <div class="management-landscape-shell">
+        <header class="management-landscape-header">
+          <div>
+            <div class="management-landscape-kicker">CUSTOMER SUPPORT · OPERATIONAL SYSTEMS</div>
+            <div class="management-landscape-title">Systems across the support center.</div>
+          </div>
+          <div id="managementLandscapeStatus" class="management-landscape-status">NAME + LOGO · AUTO REVIEW</div>
+        </header>
+        <div id="managementLandscapeGrid" class="management-landscape-grid"></div>
+      </div>
+    </div>
+
+    <div id="managementSystemModal" class="management-system-modal" aria-hidden="true">
+      <div class="management-system-modal-card">
+        <button id="managementSystemModalClose" class="management-system-modal-close" type="button">CLOSE</button>
+        <div id="managementSystemModalTitle" class="management-system-modal-title"></div>
+        <div id="managementSystemModalDescription" class="management-system-modal-description"></div>
+        <img referrerpolicy="no-referrer" id="managementSystemModalImage" class="management-system-modal-image" alt="Expanded system screenshot">
+        <a id="managementSystemModalLink" class="management-system-modal-link" target="_blank" rel="noopener">OPEN SYSTEM ↗</a>
+      </div>
+    </div>
+
+
+    <!-- ONE CAPTION ONLY. Arabic appears underneath only if the viewer enables AR. -->
+    <div id="bridgeDialogue" class="bridge-dialogue">
+      <div id="bridgeDialogueName" class="bridge-dialogue-name"></div>
+      <div class="bridge-dialogue-box">
+        <div id="bridgeDialogueBox"></div>
+        <div id="bridgeDialogueArabic" class="bridge-dialogue-ar"></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =========================
+       PLAY / PAUSE
+  ========================== -->
+
+  <button
+    id="presentationControl"
+    class="presentation-control"
+    type="button"
+    aria-label="Pause presentation"
+  >
+
+    <span
+      id="presentationControlIcon"
+      class="presentation-control-icon"
+    >
+      ⏸
+    </span>
+
+    <span
+      id="presentationControlText"
+      class="presentation-control-text"
+    >
+      PAUSE
+    </span>
+
+  </button>
+
+
+  <button
+    id="languageControl"
+    class="language-control"
+    type="button"
+    aria-label="Toggle Arabic subtitles"
+  >
+    <span id="languageControlText">AR OFF · عربي</span>
+  </button>
+
+
+  <button
+    id="soundControl"
+    class="sound-control"
+    type="button"
+    aria-label="Toggle browser voice"
+  >
+    <span id="soundControlIcon">🔊</span>
+    <span id="soundControlText">VOICE ON</span>
+  </button>
+
+
+  <div
+    id="transitionCover"
+    class="transition-cover"
+  ></div>
+
+
+  <script>
+
+    /*
+      Important:
+      This page is loaded with document.write().
+      Keep all JavaScript inside a private scope so
+      variables from the previous index cannot collide
+      with this page and stop the timeline.
+    */
+
+    (function() {
+
+      'use strict';
+
+
+    /* =========================
+       PLAY / PAUSE ENGINE
+    ========================== */
+
+    let presentationPaused = false;
+
+    const presentationTimers =
+      new Set();
+
+
+    function presentationTimer(
+      callback,
+      delay
+    ) {
+
+      const timer = {
+
+        callback: callback,
+
+        remaining: delay,
+
+        startedAt: Date.now(),
+
+        timeoutId: null
+
+      };
+
+
+      function runTimer() {
+
+        timer.startedAt =
+          Date.now();
+
+
+        timer.timeoutId =
+          window.setTimeout(
+            function() {
+
+              presentationTimers
+                .delete(timer);
+
+              timer.callback();
+
+            },
+            timer.remaining
+          );
+
+      }
+
+
+      timer.run =
+        runTimer;
+
+
+      presentationTimers
+        .add(timer);
+
+
+      if (!presentationPaused) {
+
+        runTimer();
+
+      }
+
+
+      return timer;
+
+    }
+
+
+    function pausePresentation() {
+
+      if (presentationPaused) {
+        return;
+      }
+
+
+      presentationPaused = true;
+
+
+      document.body
+        .classList
+        .add(
+          'presentation-paused'
+        );
+
+      if (
+        voiceEnabled &&
+        'speechSynthesis' in window
+      ) {
+        try {
+          window.speechSynthesis.pause();
+        }
+        catch (error) {
+          console.warn('Speech pause failed:', error);
+        }
+      }
+
+
+      presentationTimers
+        .forEach(
+          function(timer) {
+
+            if (
+              timer.timeoutId !==
+              null
+            ) {
+
+              window.clearTimeout(
+                timer.timeoutId
+              );
+
+
+              const elapsed =
+                Date.now() -
+                timer.startedAt;
+
+
+              timer.remaining =
+                Math.max(
+                  0,
+                  timer.remaining -
+                  elapsed
+                );
+
+
+              timer.timeoutId =
+                null;
+
+            }
+
+          }
+        );
+
+
+      document
+        .getElementById(
+          'presentationControlIcon'
+        )
+        .textContent =
+          '▶';
+
+
+      document
+        .getElementById(
+          'presentationControlText'
+        )
+        .textContent =
+          'PLAY';
+
+    }
+
+
+    function resumePresentation() {
+
+      if (!presentationPaused) {
+        return;
+      }
+
+
+      presentationPaused = false;
+
+
+      document.body
+        .classList
+        .remove(
+          'presentation-paused'
+        );
+
+      if (
+        voiceEnabled &&
+        'speechSynthesis' in window
+      ) {
+        try {
+          window.speechSynthesis.resume();
+        }
+        catch (error) {
+          console.warn('Speech resume failed:', error);
+        }
+      }
+
+
+      presentationTimers
+        .forEach(
+          function(timer) {
+
+            if (
+              timer.timeoutId ===
+              null
+            ) {
+
+              timer.run();
+
+            }
+
+          }
+        );
+
+
+      document
+        .getElementById(
+          'presentationControlIcon'
+        )
+        .textContent =
+          '⏸';
+
+
+      document
+        .getElementById(
+          'presentationControlText'
+        )
+        .textContent =
+          'PAUSE';
+
+    }
+
+
+    document
+      .getElementById(
+        'presentationControl'
+      )
+      .addEventListener(
+        'click',
+        function() {
+
+          if (presentationPaused) {
+
+            resumePresentation();
+
+          }
+          else {
+
+            pausePresentation();
+
+          }
+
+        }
+      );
+
+
+    /* =========================
+       ELEMENTS
+    ========================== */
+
+    const transitionCover =
+      document.getElementById(
+        'transitionCover'
+      );
+
+    const dialogues = [
+      document.getElementById('dialogue1'),
+      document.getElementById('dialogue2'),
+      document.getElementById('dialogue3'),
+      document.getElementById('dialogue4'),
+      document.getElementById('dialogue5'),
+      document.getElementById('dialogue6'),
+      document.getElementById('dialogue7')
+    ];
+
+
+    /* =========================================================
+       BROWSER VOICE + MANAGEMENT BRIDGE TIMELINE
+       Voice profile comes from the optional "Voices" sheet.
+       Gender is used to choose the closest available browser voice.
+    ========================================================== */
+
+    const soundControl =
+      document.getElementById('soundControl');
+
+    const soundControlIcon =
+      document.getElementById('soundControlIcon');
+
+    const soundControlText =
+      document.getElementById('soundControlText');
+
+    const languageControl =
+      document.getElementById('languageControl');
+
+    const languageControlText =
+      document.getElementById('languageControlText');
+
+    const managementBridge =
+      document.getElementById('managementBridge');
+
+    const managementGroupView =
+      document.getElementById('managementGroupView');
+
+    const managementFocusView =
+      document.getElementById('managementFocusView');
+
+    const managementSystemsView = document.getElementById('managementSystemsView');
+    const managementLandscapeView = document.getElementById('managementLandscapeView');
+    const managementLandscapeGrid = document.getElementById('managementLandscapeGrid');
+    const managementLandscapeStatus = document.getElementById('managementLandscapeStatus');
+    const managementSystemMedia = document.getElementById('managementSystemMedia');
+    const managementSystemImage = document.getElementById('managementSystemImage');
+    const managementScreenCounter = document.getElementById('managementScreenCounter');
+    const managementSystemNumber = document.getElementById('managementSystemNumber');
+    const managementSystemName = document.getElementById('managementSystemName');
+    const managementSystemShort = document.getElementById('managementSystemShort');
+    const managementSystemDots = document.getElementById('managementSystemDots');
+    const managementSystemDetails = document.getElementById('managementSystemDetails');
+    const managementSystemLink = document.getElementById('managementSystemLink');
+    const seniorManagementStrip = document.getElementById('seniorManagementStrip');
+    const seniorManagementMedia = document.getElementById('seniorManagementMedia');
+    const seniorManagementImage = document.getElementById('seniorManagementImage');
+    const managementSystemModal = document.getElementById('managementSystemModal');
+    const managementSystemModalClose = document.getElementById('managementSystemModalClose');
+    const managementSystemModalTitle = document.getElementById('managementSystemModalTitle');
+    const managementSystemModalDescription = document.getElementById('managementSystemModalDescription');
+    const managementSystemModalImage = document.getElementById('managementSystemModalImage');
+    const managementSystemModalLink = document.getElementById('managementSystemModalLink');
+
+    const managementGroupPhoto =
+      document.getElementById('managementGroupPhoto');
+
+    const assistantRoleChip =
+      document.getElementById('assistantRoleChip');
+
+    const managerRoleChip =
+      document.getElementById('managerRoleChip');
+
+    const qualityRoleChip =
+      document.getElementById('qualityRoleChip');
+
+    const bridgeDialogue =
+      document.getElementById('bridgeDialogue');
+
+    const bridgeDialogueName =
+      document.getElementById('bridgeDialogueName');
+
+    const bridgeDialogueBox =
+      document.getElementById('bridgeDialogueBox');
+
+    const bridgeDialogueArabic =
+      document.getElementById('bridgeDialogueArabic');
+
+    const hubMainTitle =
+      document.getElementById('hubMainTitle');
+
+    const hubTabs =
+      Array.from(document.querySelectorAll('[data-hub-tab]'));
+
+    const hubPanels =
+      Array.from(document.querySelectorAll('[data-hub-panel]'));
+
+    const opSteps =
+      Array.from(document.querySelectorAll('[data-op-step]'));
+
+    const opOwners =
+      Array.from(document.querySelectorAll('[data-op-owner]'));
+
+    const impSteps =
+      Array.from(document.querySelectorAll('[data-imp-step]'));
+
+    const impSources =
+      Array.from(document.querySelectorAll('[data-imp-source]'));
+
+    const impCoreSteps =
+      Array.from(document.querySelectorAll('[data-imp-core]'));
+
+    const impOwners =
+      Array.from(document.querySelectorAll('[data-imp-owner]'));
+
+    const buildSteps =
+      Array.from(document.querySelectorAll('[data-build-step]'));
+
+    const buildCoreSteps =
+      Array.from(document.querySelectorAll('[data-build-core]'));
+
+    const buildOwners =
+      Array.from(document.querySelectorAll('[data-build-owner]'));
+
+    let voiceEnabled = true;
+    let availableVoices = [];
+    let voiceProfiles = {};
+    let voiceAssignments = {};
+    let currentSpeechLine = null;
+
+    // Keep the active utterance alive and ignore stale callbacks after cancel().
+    let activeSpeechUtterance = null;
+    let speechGeneration = 0;
+    let activeSpeechCompletion = null;
+
+    let presentationStarted = false;
+    let arabicEnabled = false;
+    let dialogueMap = {};
+    let managementToolsMap = {};
+    let managementSystemsData = [];
+    let managementLandscapeData = [];
+    let activeManagementSystem = null;
+    let managementSystemShowcaseToken = 0;
+    let managementLandscapeShowcaseToken = 0;
+    let managementSystemModalWasPaused = false;
+
+
+    const fallbackVoiceProfiles = {
+      visitor: {
+        speaker_key: 'visitor',
+        title: 'VISITOR',
+        gender: 'female',
+        lang: 'en-US',
+        voice_hint: '',
+        rate: 1.00,
+        pitch: 1.03
+      },
+      support_manager: {
+        speaker_key: 'support_manager',
+        title: 'HEAD OF CUSTOMER SUPPORT CENTER',
+        gender: 'male',
+        lang: 'en-US',
+        voice_hint: '',
+        rate: .93,
+        pitch: .91
+      },
+      assistant_head: {
+        speaker_key: 'assistant_head',
+        title: 'ASSISTANT HEAD OF CUSTOMER SUPPORT CENTER',
+        gender: 'male',
+        lang: 'en-US',
+        voice_hint: '',
+        rate: .96,
+        pitch: .97
+      },
+      quality_manager: {
+        speaker_key: 'quality_manager',
+        title: 'QUALITY MANAGER',
+        gender: 'male',
+        lang: 'en-US',
+        voice_hint: '',
+        rate: .94,
+        pitch: .92
+      },
+      system: {
+        speaker_key: 'system',
+        title: 'SYSTEM',
+        gender: 'female',
+        lang: 'en-US',
+        voice_hint: '',
+        rate: .98,
+        pitch: .98
+      },
+      team_leaders: {
+        speaker_key: 'team_leaders',
+        title: 'TEAM LEADERS',
+        gender: 'female',
+        lang: 'en-US',
+        voice_hint: '',
+        rate: .97,
+        pitch: 1.00
+      }
+    };
+
+
+    function normalizeGender(value) {
+
+      const clean =
+        String(value || '')
+          .trim()
+          .toLowerCase();
+
+      if (
+        clean === 'm' ||
+        clean === 'male' ||
+        clean === 'ذكر'
+      ) {
+        return 'male';
+      }
+
+      if (
+        clean === 'f' ||
+        clean === 'female' ||
+        clean === 'أنثى' ||
+        clean === 'انثى'
+      ) {
+        return 'female';
+      }
+
+      return clean || 'neutral';
+
+    }
+
+
+    function getVoiceProfile(speakerKey) {
+
+      const base =
+        fallbackVoiceProfiles[speakerKey] ||
+        fallbackVoiceProfiles.system;
+
+      const sheetProfile =
+        voiceProfiles[speakerKey] || {};
+
+      return {
+        speaker_key: speakerKey,
+        title:
+          sheetProfile.title ||
+          base.title ||
+          speakerKey,
+        gender:
+          normalizeGender(
+            sheetProfile.gender ||
+            base.gender
+          ),
+        lang:
+          sheetProfile.lang ||
+          base.lang ||
+          'en-US',
+        voice_hint:
+          sheetProfile.voice_hint ||
+          base.voice_hint ||
+          '',
+        rate:
+          Number(
+            sheetProfile.rate ||
+            base.rate ||
+            1
+          ),
+        pitch:
+          Number(
+            sheetProfile.pitch ||
+            base.pitch ||
+            1
+          )
+      };
+
+    }
+
+
+    function loadBrowserVoices() {
+
+      if (!('speechSynthesis' in window)) {
+        return;
+      }
+
+      availableVoices =
+        window.speechSynthesis
+          .getVoices() || [];
+
+      voiceAssignments = {};
+
+    }
+
+
+    loadBrowserVoices();
+
+
+    if (
+      'speechSynthesis' in window &&
+      'onvoiceschanged' in window.speechSynthesis
+    ) {
+      window.speechSynthesis.onvoiceschanged =
+        loadBrowserVoices;
+    }
+
+
+    function voiceNameLooksFemale(name) {
+
+      return /samantha|victoria|karen|moira|tessa|zira|aria|jenny|sara|ava|susan|hazel|female/i
+        .test(name || '');
+
+    }
+
+
+    function voiceNameLooksMale(name) {
+
+      return /daniel|alex|fred|tom|arthur|george|guy|david|mark|ryan|christopher|male/i
+        .test(name || '');
+
+    }
+
+
+    function pickBrowserVoice(speakerKey) {
+
+      if (voiceAssignments[speakerKey]) {
+        return voiceAssignments[speakerKey];
+      }
+
+      const profile =
+        getVoiceProfile(speakerKey);
+
+      const allVoices =
+        availableVoices.length
+          ? availableVoices
+          : (
+              'speechSynthesis' in window
+                ? window.speechSynthesis.getVoices()
+                : []
+            );
+
+      if (!allVoices.length) {
+        return null;
+      }
+
+      let pool = allVoices.filter(
+        function(voice) {
+          const lang =
+            String(voice.lang || '')
+              .toLowerCase();
+
+          const wanted =
+            String(profile.lang || '')
+              .toLowerCase();
+
+          return (
+            !wanted ||
+            lang.indexOf(
+              wanted.split('-')[0]
+            ) === 0
+          );
+        }
+      );
+
+
+      if (!pool.length) {
+        pool = allVoices.slice();
+      }
+
+
+      if (profile.voice_hint) {
+
+        const wantedHint =
+          String(profile.voice_hint)
+            .toLowerCase();
+
+        const hinted =
+          pool.find(
+            function(voice) {
+              return String(voice.name || '')
+                .toLowerCase()
+                .indexOf(wantedHint) >= 0;
+            }
+          );
+
+        if (hinted) {
+          voiceAssignments[speakerKey] = hinted;
+          return hinted;
+        }
+
+      }
+
+
+      /*
+        If no explicit voice_hint is configured, keep the tested good
+        Head of Customer Support browser voice as the base for the other two
+        management positions. Their rate/pitch still differ.
+      */
+      if (
+        !profile.voice_hint &&
+        (
+          speakerKey === 'assistant_head' ||
+          speakerKey === 'quality_manager'
+        )
+      ) {
+        const managementBase =
+          voiceAssignments.support_manager ||
+          pickBrowserVoice('support_manager');
+
+        if (managementBase) {
+          voiceAssignments[speakerKey] = managementBase;
+          return managementBase;
+        }
+      }
+
+
+      const genderPool =
+        pool.filter(
+          function(voice) {
+
+            if (profile.gender === 'female') {
+              return voiceNameLooksFemale(
+                voice.name
+              );
+            }
+
+            if (profile.gender === 'male') {
+              return voiceNameLooksMale(
+                voice.name
+              );
+            }
+
+            return true;
+
+          }
+        );
+
+
+      if (genderPool.length) {
+        pool = genderPool;
+      }
+
+
+      const speakerOrder = [
+        'visitor',
+        'support_manager',
+        'assistant_head',
+        'quality_manager',
+        'system'
+      ];
+
+      let speakerIndex =
+        speakerOrder.indexOf(speakerKey);
+
+      if (speakerIndex < 0) {
+        speakerIndex = String(speakerKey || '')
+          .split('')
+          .reduce(function(total, char) {
+            return total + char.charCodeAt(0);
+          }, 0);
+      }
+
+      const selected =
+        pool[
+          Math.abs(speakerIndex) % pool.length
+        ];
+
+
+      voiceAssignments[speakerKey] =
+        selected;
+
+
+      return selected;
+
+    }
+
+
+    function splitSpeechChunks(
+      text,
+      maxLength
+    ) {
+
+      const source =
+        String(text || '')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+      const limit =
+        Number(maxLength || 105);
+
+      if (!source) {
+        return [];
+      }
+      if (window.supportTourFixedAudio && window.supportTourFixedAudio.usingFixedAudio) { return [source]; } /* FIXED_AUDIO_NO_SPLIT */
+
+
+      /*
+        First split on natural punctuation.
+        This keeps the browser utterances short and stable.
+      */
+      const naturalParts =
+        source.match(
+          /[^.!?;:]+[.!?;:]?|[^.!?;:]+$/g
+        ) || [source];
+
+      const chunks = [];
+
+
+      naturalParts.forEach(
+        function(part) {
+
+          let remaining =
+            String(part || '').trim();
+
+          while (
+            remaining.length >
+            limit
+          ) {
+
+            let cut =
+              remaining.lastIndexOf(
+                ',',
+                limit
+              );
+
+            if (
+              cut < 45
+            ) {
+              cut =
+                remaining.lastIndexOf(
+                  ' ',
+                  limit
+                );
+            }
+
+            if (
+              cut < 45
+            ) {
+              cut = limit;
+            }
+
+
+            const piece =
+              remaining
+                .slice(
+                  0,
+                  cut + (
+                    remaining.charAt(cut) === ','
+                      ? 1
+                      : 0
+                  )
+                )
+                .trim();
+
+            if (piece) {
+              chunks.push(piece);
+            }
+
+            remaining =
+              remaining
+                .slice(
+                  cut + (
+                    remaining.charAt(cut) === ','
+                      ? 1
+                      : 0
+                  )
+                )
+                .trim();
+
+          }
+
+          if (remaining) {
+            chunks.push(remaining);
+          }
+
+        }
+      );
+
+
+      return chunks;
+    }
+
+
+    function speakText(
+      text,
+      speakerKey,
+      onComplete
+    ) {
+
+      currentSpeechLine = {
+        text: text,
+        speakerKey: speakerKey
+      };
+
+
+      if (
+        !voiceEnabled ||
+        !('speechSynthesis' in window) ||
+        !('SpeechSynthesisUtterance' in window)
+      ) {
+        return false;
+      }
+
+
+      try {
+
+        /*
+          One generation represents the COMPLETE line.
+          Old callbacks from canceled speech cannot advance this line.
+        */
+        speechGeneration += 1;
+
+        const myGeneration =
+          speechGeneration;
+
+
+        try {
+          window.speechSynthesis.cancel();
+        }
+        catch (cancelError) {}
+
+
+        activeSpeechUtterance = null;
+        activeSpeechCompletion =
+          typeof onComplete === 'function'
+            ? onComplete
+            : null;
+
+
+        const profile =
+          getVoiceProfile(speakerKey);
+
+        const voice =
+          pickBrowserVoice(speakerKey);
+
+        const chunks =
+          splitSpeechChunks(
+            text,
+            105
+          );
+
+
+        if (!chunks.length) {
+
+          const callback =
+            activeSpeechCompletion;
+
+          activeSpeechCompletion = null;
+
+          if (
+            typeof callback === 'function'
+          ) {
+            callback('empty');
+          }
+
+          return true;
+        }
+
+
+        let chunkIndex = 0;
+        let lineSettled = false;
+
+
+        function finishWholeLine(
+          reason
+        ) {
+
+          if (
+            lineSettled ||
+            myGeneration !==
+            speechGeneration
+          ) {
+            return;
+          }
+
+          lineSettled = true;
+          activeSpeechUtterance = null;
+
+          const callback =
+            activeSpeechCompletion;
+
+          activeSpeechCompletion = null;
+
+          if (
+            typeof callback ===
+            'function'
+          ) {
+            callback(
+              reason || 'ended'
+            );
+          }
+
+        }
+
+
+        function speakNextChunk() {
+
+          if (
+            lineSettled ||
+            myGeneration !==
+            speechGeneration
+          ) {
+            return;
+          }
+
+
+          if (
+            chunkIndex >=
+            chunks.length
+          ) {
+            finishWholeLine(
+              'ended'
+            );
+            return;
+          }
+
+
+          const chunk =
+            chunks[chunkIndex];
+
+          chunkIndex += 1;
+
+
+          const utterance =
+            new SpeechSynthesisUtterance(
+              chunk
+            );
+
+
+          if (voice) {
+            utterance.voice =
+              voice;
+
+            utterance.lang =
+              voice.lang ||
+              profile.lang ||
+              'en-US';
+          }
+          else {
+            utterance.lang =
+              profile.lang ||
+              'en-US';
+          }
+
+
+          utterance.rate =
+            Math.max(
+              .75,
+              Math.min(
+                1.10,
+                Number(
+                  profile.rate ||
+                  1
+                )
+              )
+            );
+
+          utterance.pitch =
+            Math.max(
+              .72,
+              Math.min(
+                1.18,
+                Number(
+                  profile.pitch ||
+                  1
+                )
+              )
+            );
+
+          utterance.volume = 1;
+
+
+          let chunkSettled =
+            false;
+
+          let idleSince = 0;
+
+          let seenSpeaking =
+            false;
+
+          const chunkStartedAt =
+            Date.now();
+
+
+          const monitor =
+            window.setInterval(
+              function() {
+
+                if (
+                  chunkSettled ||
+                  lineSettled ||
+                  myGeneration !==
+                  speechGeneration
+                ) {
+                  window.clearInterval(
+                    monitor
+                  );
+                  return;
+                }
+
+
+                const synth =
+                  window.speechSynthesis;
+                if (window.supportTourFixedAudio && window.supportTourFixedAudio.usingFixedAudio) { return; } /* FIXED_AUDIO_MONITOR_GUARD */
+
+
+                if (
+                  synth.speaking ||
+                  synth.pending
+                ) {
+                  seenSpeaking = true;
+                  idleSince = 0;
+                  return;
+                }
+
+
+                if (
+                  synth.paused
+                ) {
+                  idleSince = 0;
+                  return;
+                }
+
+
+                if (
+                  !seenSpeaking &&
+                  Date.now() -
+                  chunkStartedAt <
+                  1400
+                ) {
+                  return;
+                }
+
+
+                if (!idleSince) {
+                  idleSince =
+                    Date.now();
+                  return;
+                }
+
+
+                /*
+                  Short chunks + confirmed idle:
+                  continue even if Chromium forgot onend.
+                */
+                if (
+                  Date.now() -
+                  idleSince >=
+                  550
+                ) {
+                  settleChunk(
+                    'idle'
+                  );
+                }
+
+              },
+              180
+            );
+
+
+          function settleChunk(
+            reason
+          ) {
+
+            if (
+              chunkSettled ||
+              lineSettled ||
+              myGeneration !==
+              speechGeneration
+            ) {
+              return;
+            }
+
+
+            chunkSettled = true;
+
+            window.clearInterval(
+              monitor
+            );
+
+
+            if (
+              activeSpeechUtterance ===
+              utterance
+            ) {
+              activeSpeechUtterance =
+                null;
+            }
+
+
+            /*
+              Tiny natural pause between phrase chunks.
+            */
+            window.setTimeout(
+              speakNextChunk,
+              reason === 'ended'
+                ? 90
+                : 130
+            );
+
+          }
+
+
+          utterance.onstart =
+            function() {
+              seenSpeaking = true;
+            };
+
+
+          utterance.onend =
+            function() {
+              settleChunk(
+                'ended'
+              );
+            };
+
+
+          utterance.onerror =
+            function(event) {
+
+              const errorName =
+                event &&
+                event.error
+                  ? String(
+                      event.error
+                    )
+                  : 'error';
+
+
+              /*
+                If THIS generation was intentionally canceled,
+                the generation guard already blocks continuation.
+                Otherwise continue with the next short chunk instead
+                of losing the rest of the sentence.
+              */
+              settleChunk(
+                errorName
+              );
+
+            };
+
+
+          /*
+            Strong reference prevents garbage collection.
+          */
+          activeSpeechUtterance =
+            utterance;
+
+
+          window.speechSynthesis
+            .speak(
+              utterance
+            );
+
+        }
+
+
+        speakNextChunk();
+
+        return true;
+
+      }
+      catch (error) {
+
+        activeSpeechUtterance = null;
+
+        const callback =
+          activeSpeechCompletion;
+
+        activeSpeechCompletion = null;
+
+        if (
+          typeof callback ===
+          'function'
+        ) {
+          callback(
+            'exception'
+          );
+        }
+
+        console.warn(
+          'Browser voice failed:',
+          error
+        );
+
+        return false;
+      }
+
+    }
+
+
+    function stopSpeech(
+      completeCurrent
+    ) {
+
+      speechGeneration += 1;
+
+      const completion =
+        activeSpeechCompletion;
+
+      activeSpeechCompletion = null;
+      activeSpeechUtterance = null;
+
+      if ('speechSynthesis' in window) {
+        try {
+          window.speechSynthesis.cancel();
+        }
+        catch (error) {
+          console.warn(error);
+        }
+      }
+
+      if (
+        completeCurrent &&
+        typeof completion === 'function'
+      ) {
+        completion('stopped');
+      }
+    }
+
+
+    function updateSoundControl() {
+
+      if (!('speechSynthesis' in window)) {
+        soundControl.disabled = true;
+        soundControlIcon.textContent = '—';
+        soundControlText.textContent = 'VOICE N/A';
+        soundControl.classList.add('off');
+        return;
+      }
+
+
+      soundControl.disabled = false;
+      soundControlIcon.textContent =
+        voiceEnabled ? '🔊' : '🔇';
+      soundControlText.textContent =
+        voiceEnabled ? 'VOICE ON' : 'VOICE OFF';
+      soundControl.classList.toggle(
+        'off',
+        !voiceEnabled
+      );
+
+    }
+
+
+    try {
+      const storedVoice = window.localStorage.getItem('support_center_voice');
+      voiceEnabled = storedVoice === null ? true : storedVoice !== '0';
+    }
+    catch (error) {
+      voiceEnabled = true;
+    }
+
+
+    soundControl.addEventListener(
+      'click',
+      function() {
+
+        voiceEnabled =
+          !voiceEnabled;
+
+        try {
+          window.localStorage.setItem(
+            'support_center_voice',
+            voiceEnabled ? '1' : '0'
+          );
+        }
+        catch (error) {}
+
+        if (!voiceEnabled) {
+          /*
+            Complete the current line lifecycle so the presentation
+            does not remain waiting for a speech event that was canceled.
+          */
+          stopSpeech(true);
+        }
+        else {
+          /*
+            Do not manually replay currentSpeechLine here.
+            Replaying it without the original sequencing callback was the
+            reason VOICE OFF -> ON could speak the last sentence and then
+            leave the tour stuck.
+
+            The next scheduled dialogue line will speak normally.
+          */
+        }
+
+
+        updateSoundControl();
+
+      }
+    );
+
+
+    updateSoundControl();
+
+
+    /* =========================================================
+       OPTIONAL ARABIC SUBTITLES
+       English voice stays unchanged. The viewer decides whether
+       Arabic appears underneath the current English dialogue.
+    ========================================================== */
+
+    function updateLanguageControl() {
+      document.body.classList.toggle(
+        'arabic-enabled',
+        arabicEnabled
+      );
+
+      languageControl.classList.toggle(
+        'active',
+        arabicEnabled
+      );
+
+      languageControlText.textContent =
+        arabicEnabled
+          ? 'AR ON · عربي'
+          : 'AR OFF · عربي';
+
+      try {
+        window.localStorage.setItem(
+          'support_center_ar',
+          arabicEnabled ? '1' : '0'
+        );
+      }
+      catch (error) {
+        /* sessionStorage is optional */
+      }
+    }
+
+
+    try {
+      arabicEnabled =
+        window.localStorage.getItem(
+          'support_center_ar'
+        ) === '1';
+    }
+    catch (error) {
+      arabicEnabled = false;
+    }
+
+
+    languageControl.addEventListener(
+      'click',
+      function() {
+        arabicEnabled = !arabicEnabled;
+        updateLanguageControl();
+      }
+    );
+
+
+    updateLanguageControl();
+
+
+    function getDialogueRow(
+      key,
+      fallbackEn,
+      fallbackAr,
+      speakerKey
+    ) {
+      const row = dialogueMap[key] || {};
+
+      const rawSpeakerKey = String(
+        row.speaker_key || speakerKey || 'support_manager'
+      ).trim();
+      const normalizedSpeakerKey = rawSpeakerKey.toLowerCase();
+      const canonicalSpeakerKey = (
+        normalizedSpeakerKey === 'support manager' ||
+        normalizedSpeakerKey === 'support_manager' ||
+        normalizedSpeakerKey === 'head of customer support' ||
+        normalizedSpeakerKey === 'head of customer support center'
+      ) ? 'support_manager' : rawSpeakerKey;
+
+      return {
+        dialogue_key: key,
+        speaker_key: canonicalSpeakerKey,
+        text_en:
+          row.text_en ||
+          fallbackEn ||
+          '',
+        text_ar:
+          row.text_ar ||
+          fallbackAr ||
+          ''
+      };
+    }
+
+
+    function applyPresentationDialogue(rows) {
+      dialogueMap = {};
+
+      const fallbackRows = [
+        { dialogue_key:'MGR_001', speaker_key:'visitor', text_en:'Hello. What is your role in the support center?', text_ar:'مرحبًا. ما هو دورك في مركز الدعم؟' },
+        { dialogue_key:'MGR_002', speaker_key:'support_manager', text_en:'I lead the support center and oversee the overall operation, team structure, and service performance.', text_ar:'أدير مركز الدعم وأشرف على العمليات بشكل عام، وهيكل الفريق، ومستوى أداء الخدمة.' },
+        { dialogue_key:'MGR_003', speaker_key:'visitor', text_en:'And how do you manage the department day to day?', text_ar:'وكيف تتم إدارة القسم ومتابعته بشكل يومي؟' },
+        { dialogue_key:'MGR_004', speaker_key:'support_manager', text_en:'Through continuous follow-up, coordination with the team, and close monitoring of workflow and performance.', text_ar:'من خلال المتابعة المستمرة، والتنسيق مع الفريق، والمراقبة الدقيقة لسير العمل والأداء.' },
+        { dialogue_key:'MGR_005', speaker_key:'visitor', text_en:'Can I take a closer look inside the department?', text_ar:'هل يمكنني أن أتعرف بشكل أقرب على ما يحدث داخل القسم؟' },
+        { dialogue_key:'MGR_006', speaker_key:'support_manager', text_en:'Certainly. Let me introduce the Customer Support Management Team first, then I will show you how decisions move into action.', text_ar:'بالتأكيد. دعني أعرّفك أولًا على فريق إدارة دعم العملاء، ثم أريك كيف تتحول القرارات إلى خطوات عملية.' },
+        { dialogue_key:'MGR_007', speaker_key:'visitor', text_en:'Perfect. Let us continue.', text_ar:'ممتاز. لنكمل الجولة.' }
+      ];
+
+      const sourceRows =
+        rows && rows.length
+          ? rows
+          : fallbackRows;
+
+      sourceRows.forEach(
+        function(row) {
+          if (!row || !row.dialogue_key) {
+            return;
+          }
+
+          dialogueMap[
+            String(row.dialogue_key).trim()
+          ] = row;
+        }
+      );
+
+
+      dialogues.forEach(
+        function(element, index) {
+          if (!element) return;
+
+          const key =
+            'MGR_' +
+            String(index + 1)
+              .padStart(3, '0');
+
+          const box =
+            element.querySelector(
+              '.dialogue-box'
+            );
+
+          if (!box) return;
+
+          const originalEnglish =
+            String(box.textContent || '')
+              .trim();
+
+          const row =
+            getDialogueRow(
+              key,
+              originalEnglish,
+              '',
+              index % 2 === 0
+                ? 'visitor'
+                : 'support_manager'
+            );
+
+          box.innerHTML = '';
+
+          const englishNode =
+            document.createElement('div');
+
+          englishNode.className =
+            'dialogue-en';
+
+          englishNode.textContent =
+            row.text_en;
+
+          const arabicNode =
+            document.createElement('div');
+
+          arabicNode.className =
+            'dialogue-ar';
+
+          arabicNode.textContent =
+            row.text_ar;
+
+          box.appendChild(englishNode);
+          box.appendChild(arabicNode);
+
+          element.setAttribute(
+            'data-dialogue-key',
+            key
+          );
+
+          element.setAttribute(
+            'data-text-en',
+            row.text_en
+          );
+
+          element.setAttribute(
+            'data-text-ar',
+            row.text_ar
+          );
+        }
+      );
+    }
+
+
+    function speakerTitle(
+      speakerKey,
+      fallback
+    ) {
+
+      const normalizedKey = String(speakerKey || '').trim().toLowerCase();
+      const profile = getVoiceProfile(speakerKey);
+      const rawTitle = String(
+        (profile && profile.title) || fallback || speakerKey || ''
+      ).trim();
+      const normalizedTitle = rawTitle.toLowerCase();
+
+      /*
+        The Google Sheet can still contain the legacy title "Support Manager".
+        Keep the internal speaker key for voice routing, but NEVER expose the old
+        title in the presentation UI.
+      */
+      if (
+        normalizedKey === 'support_manager' ||
+        normalizedKey === 'support manager' ||
+        normalizedTitle === 'support manager' ||
+        normalizedTitle === 'support_manager' ||
+        normalizedTitle === 'head of customer support' ||
+        normalizedTitle === 'head of customer support center'
+      ) {
+        return 'HEAD OF CUSTOMER SUPPORT CENTER';
+      }
+
+      return rawTitle;
+
+    }
+
+
+    /*
+      Returns true only for the visitor speaker.
+      This helper is used by the management bridge dialogue styling.
+      It was missing in the previous file, which caused a ReferenceError
+      exactly when MGMT_001 tried to start.
+    */
+    function isVisitorKey(speakerKey) {
+      return String(speakerKey || '')
+        .trim()
+        .toLowerCase() === 'visitor';
+    }
+
+
+    function applyVoiceProfiles(rows) {
+
+      voiceProfiles = {};
+
+
+      (rows || []).forEach(
+        function(row) {
+
+          if (!row || !row.speaker_key) {
+            return;
+          }
+
+          voiceProfiles[
+            String(row.speaker_key)
+              .trim()
+          ] = row;
+
+        }
+      );
+
+
+      Array.from(
+        document.querySelectorAll(
+          '[data-role-title]'
+        )
+      ).forEach(
+        function(node) {
+
+          const key =
+            node.getAttribute(
+              'data-role-title'
+            );
+
+          node.textContent =
+            speakerTitle(
+              key,
+              node.textContent
+            );
+
+        }
+      );
+
+    }
+
+
+    function setEvidenceImage(
+      index,
+      url
+    ) {
+      const clean = String(url || '').trim();
+      const wrapper = document.getElementById('evidenceScreen' + index);
+      const image = document.getElementById('evidenceImage' + index);
+
+      if (!wrapper || !image) return;
+
+      wrapper.classList.remove('has-image');
+      image.removeAttribute('src');
+
+      if (!clean) return;
+
+      image.src = clean;
+      wrapper.classList.add('has-image');
+    }
+
+
+    function applyManagementContent(content) {
+      const values = content || {};
+
+      // Keep the management introduction image fixed in this page.
+      // Do not allow Google Sheet content to override it.
+      if (managementGroupPhoto) {
+        managementGroupPhoto.src = 'assets/images/ft024At.png';
+      }
+
+      if (seniorManagementMedia && seniorManagementImage) {
+        const seniorImage = String(values.senior_management_image || '').trim();
+        seniorManagementMedia.classList.remove('has-image');
+        seniorManagementImage.removeAttribute('src');
+        if (seniorImage) {
+          const normalized = window.SupportTourShared && window.SupportTourShared.normalizeImageUrl
+            ? window.SupportTourShared.normalizeImageUrl(seniorImage)
+            : seniorImage;
+          seniorManagementImage.src = normalized;
+          seniorManagementMedia.classList.add('has-image');
+        }
+      }
+    }
+
+
+    function findManagementTool(role) {
+      return managementToolsMap[role] || null;
+    }
+
+
+    function applyToolView(prefix, tool) {
+      const name = document.getElementById(prefix + 'Name');
+      const description = document.getElementById(prefix + 'Description');
+      const image = document.getElementById(prefix + 'Image');
+      const media = document.getElementById(prefix + 'Media');
+      const link = document.getElementById(prefix + 'Link');
+
+      if (!tool) return;
+
+      if (name) name.textContent = tool.name || '';
+      if (description) description.textContent = tool.description || '';
+
+      if (media && image) {
+        media.classList.remove('has-image');
+        image.removeAttribute('src');
+        if (tool.image_url) {
+          image.src = tool.image_url;
+          media.classList.add('has-image');
+        }
+      }
+
+      if (link) {
+        if (tool.link) {
+          link.href = tool.link;
+          link.classList.remove('disabled');
+        }
+        else {
+          link.removeAttribute('href');
+          link.classList.add('disabled');
+        }
+      }
+    }
+
+
+    function applyManagementTools(rows) {
+      managementToolsMap = {};
+      const evidence = [];
+
+      (rows || []).forEach(function(row) {
+        if (!row || !row.tool_role) return;
+        const role = String(row.tool_role).trim();
+
+        if (role === 'issue_evidence') {
+          evidence.push(row);
+          return;
+        }
+
+        if (!managementToolsMap[role]) {
+          managementToolsMap[role] = row;
+        }
+      });
+
+      const clickup = findManagementTool('clickup');
+      const tracking = findManagementTool('internal_tracking');
+
+      applyToolView('clickupTool', clickup);
+      applyToolView('clickupDev', clickup);
+      applyToolView('trackingTool', tracking);
+      applyToolView('trackingDev', tracking);
+
+      evidence.sort(function(a,b) {
+        return Number(a.order_no || 0) - Number(b.order_no || 0);
+      });
+
+      setEvidenceImage(1, evidence[0] ? evidence[0].image_url : '');
+      setEvidenceImage(2, evidence[1] ? evidence[1].image_url : '');
+    }
+
+
+    function setManagementToolFocus(role) {
+      const clickupCards = [
+        document.getElementById('clickupToolCard')
+      ];
+      const trackingCards = [
+        document.getElementById('trackingToolCard')
+      ];
+
+      clickupCards.forEach(function(node) {
+        if (node) node.classList.toggle('active-tool', role === 'clickup');
+      });
+
+      trackingCards.forEach(function(node) {
+        if (node) node.classList.toggle('active-tool', role === 'internal_tracking');
+      });
+    }
+
+
+    function estimateDialogueDuration(
+      text,
+      speakerKey
+    ) {
+
+      const clean =
+        String(text || '')
+          .trim();
+
+      const words =
+        clean
+          ? clean.split(/\s+/).length
+          : 0;
+
+      const punctuation =
+        (clean.match(/[,.!?;:]/g) || [])
+          .length;
+
+      const profile =
+        getVoiceProfile(speakerKey);
+
+      const speedFactor =
+        Math.max(
+          .80,
+          Number(profile.rate || 1)
+        );
+
+      const speechEstimate =
+        1450 +
+        ((words * 330) / speedFactor) +
+        (punctuation * 125);
+
+      /*
+        Natural tail is deliberate: the next line does not
+        start immediately when the voice finishes.
+      */
+      return Math.max(
+        4100,
+        speechEstimate + 1300
+      );
+
+    }
+
+
+    function getDialogueText(element) {
+      if (!element) return '';
+
+      const stored =
+        element.getAttribute(
+          'data-text-en'
+        );
+
+      if (stored) {
+        return String(stored).trim();
+      }
+
+      const englishNode =
+        element.querySelector(
+          '.dialogue-en'
+        );
+
+      if (englishNode) {
+        return String(
+          englishNode.textContent || ''
+        ).trim();
+      }
+
+      const box =
+        element.querySelector(
+          '.dialogue-box'
+        );
+
+      return box
+        ? String(box.textContent || '').trim()
+        : '';
+    }
+
+
+    function hideAllManagerDialogues() {
+
+      dialogues.forEach(
+        function(element) {
+          element.classList.remove(
+            'show',
+            'hide'
+          );
+        }
+      );
+
+    }
+
+
+    function runManagerDialogue(
+      index,
+      done
+    ) {
+
+      const speakerKeys = [
+        'visitor',
+        'support_manager',
+        'visitor',
+        'support_manager',
+        'visitor',
+        'support_manager',
+        'visitor'
+      ];
+
+      if (index >= dialogues.length) {
+        hideAllManagerDialogues();
+        presentationTimer(done, 900);
+        return;
+      }
+
+      const element =
+        dialogues[index];
+
+      const speakerKey =
+        speakerKeys[index];
+
+      const text =
+        getDialogueText(element);
+
+      const duration =
+        estimateDialogueDuration(
+          text,
+          speakerKey
+        );
+
+      hideAllManagerDialogues();
+      element.classList.add('show');
+
+      let lineFinished = false;
+
+      function advanceLine() {
+
+        if (lineFinished) {
+          return;
+        }
+
+        lineFinished = true;
+
+        presentationTimer(
+          function() {
+            element.classList.add('hide');
+          },
+          650
+        );
+
+        presentationTimer(
+          function() {
+            element.classList.remove(
+              'show',
+              'hide'
+            );
+
+            runManagerDialogue(
+              index + 1,
+              done
+            );
+          },
+          1300
+        );
+      }
+
+      const speechStarted =
+        speakText(
+          text,
+          speakerKey,
+          advanceLine
+        );
+
+      /*
+        Never let a browser SpeechSynthesis stall freeze the presentation.
+        Chromium can occasionally remain stuck in speaking/pending forever
+        without firing onend/onerror.  Normal speech still advances from the
+        real callback; this timer is only a last-resort watchdog.
+      */
+      presentationTimer(
+        function() {
+          if (lineFinished) return;
+
+          if (speechStarted) {
+            stopSpeech(false);
+          }
+
+          advanceLine();
+        },
+        speechStarted
+          ? Math.max(duration + 4500, 11000)
+          : duration
+      );
+    }
+
+
+    function clearRoleFocus() {
+      [
+        assistantRoleChip,
+        managerRoleChip,
+        qualityRoleChip
+      ].forEach(function(node) {
+        if (node) node.classList.remove('focus');
+      });
+    }
+
+
+    function setRoleFocus(key) {
+      clearRoleFocus();
+
+      if (key === 'assistant_head' && assistantRoleChip) {
+        assistantRoleChip.classList.add('focus');
+      }
+      else if (key === 'support_manager' && managerRoleChip) {
+        managerRoleChip.classList.add('focus');
+      }
+      else if (key === 'quality_manager' && qualityRoleChip) {
+        qualityRoleChip.classList.add('focus');
+      }
+      else if (key === 'all') {
+        if (assistantRoleChip) assistantRoleChip.classList.add('focus');
+        if (managerRoleChip) managerRoleChip.classList.add('focus');
+        if (qualityRoleChip) qualityRoleChip.classList.add('focus');
+      }
+    }
+
+
+    function activateManagementBridge(
+      onReady
+    ) {
+      const managerScene =
+        document.querySelector('.manager-scene');
+
+      if (managerScene) {
+        managerScene.classList.add('bridge-leaving');
+      }
+
+      presentationTimer(
+        function() {
+
+          managementBridge.classList.add('active');
+          managementBridge.setAttribute(
+            'aria-hidden',
+            'false'
+          );
+
+          managementGroupView.classList.remove(
+            'hidden'
+          );
+
+          managementFocusView.classList.remove(
+            'visible'
+          );
+
+          setRoleFocus('none');
+
+          /*
+            Preserve the intended scene order:
+            group photo -> manager introductions -> decision/system hub.
+            Never jump directly to the hub as an error fallback.
+          */
+          if (typeof onReady === 'function') {
+            try {
+              onReady();
+            }
+            catch (error) {
+              console.error(
+                'Management introduction failed to start:',
+                error
+              );
+            }
+          }
+
+        },
+        700
+      );
+    }
+
+
+    function showBridgeDialogue(
+      text,
+      speakerKey,
+      done,
+      arabicText
+    ) {
+      const safeText = String(text || '');
+      const safeArabic = String(arabicText || '');
+
+      const duration =
+        estimateDialogueDuration(
+          safeText,
+          speakerKey
+        );
+
+      /* Render the dialogue BEFORE touching SpeechSynthesis. */
+      bridgeDialogue.classList.remove('hide');
+      bridgeDialogue.classList.toggle(
+        'visitor',
+        isVisitorKey(speakerKey)
+      );
+
+      bridgeDialogueName.textContent =
+        speakerTitle(
+          speakerKey,
+          speakerKey
+        );
+
+      bridgeDialogueBox.textContent = safeText;
+      bridgeDialogueArabic.textContent = safeArabic;
+
+      void bridgeDialogue.offsetHeight;
+      bridgeDialogue.classList.add('show');
+
+      let lineFinished = false;
+
+      function finishBridgeLine() {
+        if (lineFinished) {
+          return;
+        }
+
+        lineFinished = true;
+
+        presentationTimer(
+          function() {
+            bridgeDialogue.classList.add('hide');
+          },
+          650
+        );
+
+        presentationTimer(
+          function() {
+            bridgeDialogue.classList.remove(
+              'show',
+              'hide'
+            );
+
+            if (typeof done === 'function') {
+              done();
+            }
+          },
+          1300
+        );
+      }
+
+      let speechStarted = false;
+
+      try {
+        speechStarted =
+          speakText(
+            safeText,
+            speakerKey,
+            finishBridgeLine
+          );
+      }
+      catch (error) {
+        console.warn(
+          'Management bridge voice failed; continuing by timeline.',
+          error
+        );
+        speechStarted = false;
+      }
+
+      /*
+        Speech is preferred, but it is never allowed to own the timeline.
+        If Chromium forgets onend/onerror, this pause-aware watchdog advances
+        the SAME dialogue sequence; it does not skip the introduction.
+      */
+      presentationTimer(
+        function() {
+          if (lineFinished) return;
+
+          if (speechStarted) {
+            try {
+              stopSpeech(false);
+            }
+            catch (error) {}
+          }
+
+          finishBridgeLine();
+        },
+        speechStarted
+          ? Math.max(duration + 3500, 12000)
+          : duration
+      );
+    }
+
+
+
+    function normalizeManagementScreens(system) {
+      if (!system) return [];
+      if (Array.isArray(system.screenshots) && system.screenshots.length) {
+        return system.screenshots.filter(Boolean);
+      }
+      const list = [];
+      if (system.image_url) list.push(String(system.image_url).trim());
+      String(system.image_urls || '')
+        .split(/[\n\r|,;]+/)
+        .map(function(v){ return String(v || '').trim(); })
+        .filter(Boolean)
+        .forEach(function(url){ if (list.indexOf(url) < 0) list.push(url); });
+      return list;
+    }
+
+    function renderManagementSystem(system, index) {
+      activeManagementSystem = system || null;
+      const total = managementSystemsData.length || 1;
+      const shortText = system
+        ? (system.description || '')
+        : 'Add the key systems you want external visitors to see.';
+
+      managementSystemNumber.textContent = 'SYSTEM ' + String((index || 0) + 1).padStart(2,'0') + ' · ' + String((index || 0) + 1) + ' / ' + total;
+      managementSystemName.textContent = system ? (system.system_name || system.name || 'System') : 'Management Systems';
+      managementSystemShort.textContent = shortText;
+      managementSystemShort.classList.remove('is-speaking');
+
+      managementSystemDots.innerHTML = '';
+      managementSystemsData.forEach(function(_, dotIndex) {
+        const dot = document.createElement('span');
+        dot.className = 'management-system-dot' + (dotIndex === index ? ' active' : '');
+        managementSystemDots.appendChild(dot);
+      });
+
+      const link = system ? String(system.link || '').trim() : '';
+      if (link && link !== '#') {
+        managementSystemLink.href = link;
+        managementSystemLink.classList.remove('disabled');
+      } else {
+        managementSystemLink.removeAttribute('href');
+        managementSystemLink.classList.add('disabled');
+      }
+
+      managementSystemDetails.disabled = !system;
+      return normalizeManagementScreens(system);
+    }
+
+    function showManagementScreenshot(url, position, total) {
+      const clean = String(url || '').trim();
+      managementSystemMedia.classList.toggle('has-image', !!clean);
+      if (clean) {
+        managementSystemImage.src = clean;
+        managementScreenCounter.textContent = 'SCREEN ' + String(position + 1) + ' / ' + String(total);
+      } else {
+        managementSystemImage.removeAttribute('src');
+        managementScreenCounter.textContent = 'NO SCREENSHOT';
+      }
+    }
+
+    function showManagementSystemsView() {
+      managementGroupView.classList.add('hidden');
+      managementFocusView.classList.remove('visible');
+      managementLandscapeView.classList.remove('visible');
+      managementLandscapeView.setAttribute('aria-hidden','true');
+      managementSystemsView.classList.remove('senior-focus');
+      managementSystemsView.classList.add('visible');
+    }
+
+
+    function showManagementGroupAgain() {
+      managementSystemsView.classList.remove('visible');
+      managementSystemsView.classList.remove('senior-focus');
+      managementLandscapeView.classList.remove('visible');
+      managementLandscapeView.setAttribute('aria-hidden','true');
+      managementFocusView.classList.remove('visible');
+      managementGroupView.classList.remove('hidden');
+      setRoleFocus('none');
+    }
+
+    function showSeniorManagementFocus() {
+      managementGroupView.classList.add('hidden');
+      managementFocusView.classList.remove('visible');
+      managementLandscapeView.classList.remove('visible');
+      managementLandscapeView.setAttribute('aria-hidden','true');
+      managementSystemsView.classList.add('visible');
+      managementSystemsView.classList.add('senior-focus');
+    }
+
+    function managementLandscapeColor(value) {
+      const key = String(value || '').trim().toLowerCase();
+      const colors = {
+        blue:'#456fa8', green:'#3c945f', purple:'#7757a1', orange:'#b96f34',
+        red:'#a54b52', cyan:'#2d8fa6', gold:'#aa8540', indigo:'#535fa0',
+        teal:'#3f897f', pink:'#a84f83'
+      };
+      if (colors[key]) return colors[key];
+      if (/^#[0-9a-f]{3,8}$/i.test(key)) return key;
+      return '#456fa8';
+    }
+
+    function managementLandscapeTheme(value) {
+      const hex = managementLandscapeColor(value);
+      const clean = hex.replace('#','');
+      const full = clean.length === 3
+        ? clean.split('').map(function(ch){ return ch + ch; }).join('')
+        : clean.slice(0,6);
+      const r = parseInt(full.slice(0,2),16) || 69;
+      const g = parseInt(full.slice(2,4),16) || 111;
+      const b = parseInt(full.slice(4,6),16) || 168;
+      return {
+        accent: hex,
+        glow: 'rgba(' + r + ',' + g + ',' + b + ',.38)',
+        bg: 'rgba(' + r + ',' + g + ',' + b + ',.28)',
+        card1: 'rgba(' + r + ',' + g + ',' + b + ',.62)',
+        card2: 'rgba(' + r + ',' + g + ',' + b + ',.34)',
+        border: 'rgba(' + r + ',' + g + ',' + b + ',.72)',
+        shadow: 'rgba(' + r + ',' + g + ',' + b + ',.34)'
+      };
+    }
+
+    function renderManagementLandscape() {
+      managementLandscapeGrid.innerHTML = '';
+      const systems = managementLandscapeData.slice();
+      if (!systems.length) {
+        const empty = document.createElement('div');
+        empty.className = 'management-landscape-empty';
+        empty.textContent = 'Add systems in ManagementSystemsLandscape: system_name + image_url/emoji + color.';
+        managementLandscapeGrid.appendChild(empty);
+        return [];
+      }
+
+      return systems.map(function(system, index) {
+        const card = document.createElement('div');
+        card.className = 'management-landscape-card';
+        card.dataset.landscapeIndex = String(index);
+        const cardTheme = managementLandscapeTheme(system.color);
+        card.style.setProperty('--card-accent', cardTheme.accent);
+        card.style.background = 'linear-gradient(145deg,' + cardTheme.card1 + ',' + cardTheme.card2 + ')';
+        card.style.borderColor = cardTheme.border;
+
+        const logo = document.createElement('div');
+        logo.className = 'management-landscape-logo';
+        const image = String(system.image_url || '').trim();
+        if (image) {
+          const img = document.createElement('img');
+          img.referrerPolicy = 'no-referrer';
+          img.alt = system.system_name || system.name || 'System logo';
+          img.onerror = function() {
+            logo.innerHTML = '';
+            logo.textContent = String(system.emoji || '◈');
+          };
+          img.src = image;
+          logo.appendChild(img);
+        } else {
+          logo.textContent = String(system.emoji || '◈');
+        }
+
+        const name = document.createElement('div');
+        name.className = 'management-landscape-name';
+        name.textContent = system.system_name || system.name || 'System';
+        card.appendChild(logo);
+        card.appendChild(name);
+        managementLandscapeGrid.appendChild(card);
+        return card;
+      });
+    }
+
+    function showManagementLandscapeView() {
+      managementGroupView.classList.add('hidden');
+      managementFocusView.classList.remove('visible');
+      managementSystemsView.classList.remove('visible');
+      managementSystemsView.classList.remove('senior-focus');
+      managementLandscapeView.classList.add('visible');
+      managementLandscapeView.setAttribute('aria-hidden','false');
+    }
+
+    function runManagementLandscapeShowcase(done) {
+      showManagementLandscapeView();
+      managementLandscapeShowcaseToken += 1;
+      const token = managementLandscapeShowcaseToken;
+      const systems = managementLandscapeData.slice();
+      const cards = renderManagementLandscape();
+
+      if (!systems.length) {
+        presentationTimer(function(){ if (token === managementLandscapeShowcaseToken && done) done(); }, 1800);
+        return;
+      }
+
+      function runCard(index) {
+        if (token !== managementLandscapeShowcaseToken) return;
+        if (index >= systems.length) {
+          presentationTimer(function(){ if (token === managementLandscapeShowcaseToken && done) done(); }, 800);
+          return;
+        }
+
+        cards.forEach(function(card, cardIndex) {
+          const isActive = cardIndex === index;
+          card.classList.toggle('active', isActive);
+          if (isActive) {
+            const activeTheme = managementLandscapeTheme(systems[cardIndex].color);
+            card.style.boxShadow = '0 16px 38px ' + activeTheme.shadow + ', 0 0 0 2px ' + activeTheme.border;
+          } else {
+            card.style.boxShadow = '';
+          }
+        });
+
+        const system = systems[index];
+        const name = String(system.system_name || system.name || 'System').trim();
+        const theme = managementLandscapeTheme(system.color);
+        managementLandscapeView.style.setProperty('--landscape-accent', theme.accent);
+        managementLandscapeView.style.setProperty('--landscape-glow', theme.glow);
+        managementLandscapeView.style.setProperty('--landscape-bg', theme.bg);
+        managementLandscapeStatus.textContent = 'SYSTEM ' + String(index + 1).padStart(2,'0') + ' · ' + String(index + 1) + ' / ' + String(systems.length);
+        if (cards[index] && cards[index].scrollIntoView) {
+          cards[index].scrollIntoView({behavior:'smooth', block:'nearest', inline:'nearest'});
+        }
+
+        let advanced = false;
+        function next() {
+          if (advanced || token !== managementLandscapeShowcaseToken) return;
+          advanced = true;
+          presentationTimer(function(){ runCard(index + 1); }, 420);
+        }
+
+        if (name && voiceEnabled) {
+          let started = false;
+          try {
+            started = speakText(name, 'support_manager', next);
+          } catch (error) {
+            started = false;
+          }
+          if (!started) presentationTimer(next, Math.max(1600, estimateDialogueDuration(name, 'support_manager') + 350));
+        } else {
+          presentationTimer(next, 1500);
+        }
+      }
+
+      runCard(0);
+    }
+
+    function runManagementSystemsShowcase(done) {
+      showManagementSystemsView();
+      managementSystemShowcaseToken += 1;
+      const token = managementSystemShowcaseToken;
+      const systems = managementSystemsData.slice();
+
+      if (!systems.length) {
+        renderManagementSystem(null, 0);
+        showManagementScreenshot('', 0, 0);
+        presentationTimer(function(){ if (token === managementSystemShowcaseToken && done) done(); }, 3200);
+        return;
+      }
+
+      function runSystem(index) {
+        if (token !== managementSystemShowcaseToken) return;
+        if (index >= systems.length) {
+          presentationTimer(function(){ if (token === managementSystemShowcaseToken && done) done(); }, 900);
+          return;
+        }
+
+        const system = systems[index];
+        const screenshots = renderManagementSystem(system, index);
+        const shortText = String(system.description || '').trim();
+        const profileKey = 'assistant_head';
+        const speechEstimate = estimateDialogueDuration(shortText, profileKey);
+        const visualDuration = Math.max(5200, Math.max(1, screenshots.length) * 5000);
+        const dwell = Math.max(visualDuration, speechEstimate + 900);
+
+        if (screenshots.length) {
+          screenshots.forEach(function(url, shotIndex) {
+            presentationTimer(function() {
+              if (token !== managementSystemShowcaseToken || activeManagementSystem !== system) return;
+              showManagementScreenshot(url, shotIndex, screenshots.length);
+            }, shotIndex * 5000);
+          });
+        } else {
+          showManagementScreenshot('', 0, 0);
+        }
+
+        /*
+          V31: the next system is NOT allowed to start while the current
+          description is still being spoken.  This removes the old fixed-
+          dwell race that could cancel the third system mid-sentence.
+        */
+        let advanced = false;
+        function advanceAfterCurrentSystem() {
+          if (advanced || token !== managementSystemShowcaseToken) return;
+          advanced = true;
+          presentationTimer(function() {
+            if (token === managementSystemShowcaseToken) runSystem(index + 1);
+          }, 850);
+        }
+
+        if (shortText && voiceEnabled) {
+          let speechStarted = false;
+          managementSystemShort.classList.add('is-speaking');
+          try {
+            speechStarted = speakText(shortText, profileKey, function() {
+              managementSystemShort.classList.remove('is-speaking');
+              advanceAfterCurrentSystem();
+            });
+          }
+          catch (error) {
+            speechStarted = false;
+          }
+
+          if (!speechStarted) {
+            managementSystemShort.classList.remove('is-speaking');
+            presentationTimer(advanceAfterCurrentSystem, dwell);
+          }
+        }
+        else {
+          presentationTimer(advanceAfterCurrentSystem, dwell);
+        }
+      }
+
+      runSystem(0);
+    }
+
+    function openManagementSystemDetails() {
+      const system = activeManagementSystem;
+      if (!system) return;
+      managementSystemModalWasPaused = presentationPaused;
+      if (!presentationPaused) pausePresentation();
+      managementSystemModalTitle.textContent = system.system_name || system.name || 'System Details';
+      managementSystemModalDescription.textContent = system.long_description || 'No additional details added yet.';
+      const images = normalizeManagementScreens(system);
+      if (images.length) {
+        managementSystemModalImage.src = images[0];
+        managementSystemModalImage.classList.add('visible');
+      } else {
+        managementSystemModalImage.removeAttribute('src');
+        managementSystemModalImage.classList.remove('visible');
+      }
+      const detailsLink = String(system.link || '').trim();
+      if (detailsLink && detailsLink !== '#') {
+        managementSystemModalLink.href = detailsLink;
+        managementSystemModalLink.classList.add('visible');
+      } else {
+        managementSystemModalLink.removeAttribute('href');
+        managementSystemModalLink.classList.remove('visible');
+      }
+      managementSystemModal.classList.add('open');
+      managementSystemModal.setAttribute('aria-hidden','false');
+    }
+
+    function closeManagementSystemDetails() {
+      managementSystemModal.classList.remove('open');
+      managementSystemModal.setAttribute('aria-hidden','true');
+      if (!managementSystemModalWasPaused && presentationPaused) resumePresentation();
+    }
+
+    managementSystemDetails.addEventListener('click', openManagementSystemDetails);
+    managementSystemModalClose.addEventListener('click', closeManagementSystemDetails);
+    managementSystemModal.addEventListener('click', function(event) {
+      if (event.target === managementSystemModal) closeManagementSystemDetails();
+    });
+
+    function showDecisionHub() {
+      managementGroupView.classList.add('hidden');
+      managementSystemsView.classList.remove('senior-focus');
+      managementSystemsView.classList.remove('visible');
+      managementLandscapeView.classList.remove('visible');
+      managementLandscapeView.setAttribute('aria-hidden','true');
+      managementFocusView.classList.add('visible');
+      setHubMode('operational');
+    }
+
+
+    function setHubMode(mode) {
+      hubTabs.forEach(
+        function(tab) {
+          tab.classList.toggle(
+            'active',
+            tab.getAttribute('data-hub-tab') === mode
+          );
+        }
+      );
+
+      hubPanels.forEach(
+        function(panel) {
+          panel.classList.toggle(
+            'active',
+            panel.getAttribute('data-hub-panel') === mode
+          );
+        }
+      );
+
+      if (mode === 'operational') {
+        hubMainTitle.textContent =
+          'Internal record. Official ClickUp ticket. Full follow-up.';
+      }
+      else if (mode === 'improvement') {
+        hubMainTitle.textContent =
+          'Development follows the same controlled path.';
+      }
+      else {
+        hubMainTitle.textContent =
+          'If Support owns it, discuss first — then build.';
+      }
+    }
+
+
+    function setProgressState(nodes, index) {
+      nodes.forEach(
+        function(node, nodeIndex) {
+          node.classList.toggle(
+            'active',
+            nodeIndex === index
+          );
+
+          node.classList.toggle(
+            'complete',
+            nodeIndex < index
+          );
+        }
+      );
+    }
+
+
+    function setOperationalStage(index) {
+      setHubMode('operational');
+      setProgressState(opSteps, index);
+
+      if (index === 2) setManagementToolFocus('internal_tracking');
+      else if (index === 4) setManagementToolFocus('clickup');
+      else setManagementToolFocus('');
+
+      opOwners.forEach(
+        function(node) {
+          const key =
+            node.getAttribute('data-op-owner');
+
+          node.classList.toggle(
+            'active',
+            (key === 'external' && index >= 4) ||
+            (key === 'support' && index >= 5)
+          );
+        }
+      );
+
+      const threadLines =
+        Array.from(
+          document.querySelectorAll(
+            '[data-op-thread]'
+          )
+        );
+
+      const threadIndex =
+        Math.max(
+          -1,
+          Math.min(
+            threadLines.length - 1,
+            index
+          )
+        );
+
+      threadLines.forEach(
+        function(node, nodeIndex) {
+          node.classList.toggle(
+            'visible',
+            nodeIndex <= threadIndex
+          );
+
+          node.classList.toggle(
+            'active',
+            nodeIndex === threadIndex
+          );
+        }
+      );
+    }
+
+
+    function setImprovementStage(index) {
+      setHubMode('improvement');
+      setProgressState(impSteps, index);
+
+      impSources.forEach(
+        function(node) {
+          node.classList.toggle(
+            'active',
+            index >= 0
+          );
+        }
+      );
+
+      impCoreSteps.forEach(
+        function(node, nodeIndex) {
+          node.classList.toggle(
+            'active',
+            nodeIndex <= Math.max(0,index - 1)
+          );
+        }
+      );
+
+      impOwners.forEach(
+        function(node) {
+          node.classList.toggle(
+            'active',
+            index >= 4
+          );
+        }
+      );
+    }
+
+
+    function setBuildStage(index) {
+      setHubMode('build');
+
+      buildSteps.forEach(
+        function(node, nodeIndex) {
+          node.classList.toggle(
+            'active',
+            nodeIndex <= Math.min(2,index)
+          );
+        }
+      );
+
+      buildCoreSteps.forEach(
+        function(node, nodeIndex) {
+          node.classList.toggle(
+            'active',
+            nodeIndex <= index
+          );
+        }
+      );
+
+      buildOwners.forEach(
+        function(node) {
+          const key =
+            node.getAttribute('data-build-owner');
+
+          node.classList.toggle(
+            'active',
+            (key === 'assistant' && index >= 2) ||
+            (key === 'quality' && index >= 3)
+          );
+        }
+      );
+    }
+
+
+    function runSteps(
+      steps,
+      index,
+      done
+    ) {
+      if (index >= steps.length) {
+        if (done) done();
+        return;
+      }
+
+      const step = steps[index];
+
+      if (step.runner) {
+        step.runner(function() {
+          runSteps(steps, index + 1, done);
+        });
+        return;
+      }
+
+      if (step.action) {
+        step.action();
+      }
+
+      if (step.text) {
+        showBridgeDialogue(
+          step.text,
+          step.speakerKey || 'support_manager',
+          function() {
+            runSteps(
+              steps,
+              index + 1,
+              done
+            );
+          },
+          step.textAr || ''
+        );
+        return;
+      }
+
+      presentationTimer(
+        function() {
+          runSteps(
+            steps,
+            index + 1,
+            done
+          );
+        },
+        Number(step.wait || 800)
+      );
+    }
+
+
+    function stepFromDialogue(
+      key,
+      fallbackEn,
+      fallbackAr,
+      speakerKey,
+      action
+    ) {
+      const row =
+        getDialogueRow(
+          key,
+          fallbackEn,
+          fallbackAr,
+          speakerKey
+        );
+
+      return {
+        action: action || null,
+        speakerKey:
+          row.speaker_key ||
+          speakerKey ||
+          'support_manager',
+        text: row.text_en,
+        textAr: row.text_ar
+      };
+    }
+
+
+    function buildManagementSteps() {
+      /* Role cards are momentary: Assistant appears only during MGMT_001,
+         Quality appears only during MGMT_002, then all cards stay hidden. */
+      return [
+        stepFromDialogue(
+          'MGMT_001',
+          'This is our Assistant Head of Customer Support Center. He works closely with me on operations, systems, automation, and internal development.',
+          'هذا هو مساعد رئيس مركز دعم العملاء. يعمل معي بشكل مباشر في العمليات والأنظمة والأتمتة والتطوير الداخلي.',
+          'support_manager',
+          function() {
+            setRoleFocus('assistant_head');
+          }
+        ),
+        stepFromDialogue(
+          'MGMT_002',
+          'And this is our Quality Manager. He leads quality monitoring, performance review, standards, and continuous improvement.',
+          'وهذا هو مدير الجودة. يقود متابعة الجودة ومراجعة الأداء والمعايير والتحسين المستمر.',
+          'support_manager',
+          function() {
+            setRoleFocus('quality_manager');
+          }
+        ),
+        stepFromDialogue(
+          'MGMT_003',
+          'Together, we form the Customer Support Management Team. We plan, measure performance, review priorities, and agree on the actions needed across the center.',
+          'معًا نشكل فريق إدارة دعم العملاء. نخطط ونقيس الأداء ونراجع الأولويات ونتفق على الإجراءات المطلوبة على مستوى المركز.',
+          'support_manager',
+          function() {
+            setRoleFocus('none');
+          }
+        ),
+
+        /* FIRST: planning and KPI story while the three-person management image is still visible. */
+        stepFromDialogue(
+          'ACTION_PLAN_001',
+          'At the beginning of each year, the Customer Support Management Team prepares the annual action plan and defines the KPIs, targets, and criteria we want to achieve.',
+          'في بداية كل سنة، يجهز فريق إدارة دعم العملاء خطة العمل السنوية ويحدد مؤشرات الأداء والأهداف والمعايير التي نريد تحقيقها.',
+          'support_manager',
+          function() {
+            setRoleFocus('none');
+          }
+        ),
+        stepFromDialogue(
+          'ACTION_PLAN_002',
+          'We review performance quarter by quarter — Q1, Q2, Q3 and Q4. The results tell us where we are on track, where we need improvement, and what systems or automation we need to measure and improve the operation.',
+          'ونراجع الأداء ربعًا بعد ربع، من الربع الأول حتى الربع الرابع. وتوضح لنا النتائج أين نسير حسب الخطة، وأين نحتاج تحسينًا، وما الأنظمة أو الأتمتة التي نحتاجها للقياس والتطوير.',
+          'assistant_head',
+          function() {
+            setRoleFocus('none');
+          }
+        ),
+        /* FIRST: show the detailed ManagementSystems walkthrough from the sheet
+           (screenshots + spoken description), then move to the name/logo-only landscape. */
+        {
+          runner: runManagementSystemsShowcase
+        },
+        stepFromDialogue(
+          'MGMT_SYSTEMS_BRIDGE_001',
+          'We also use many other systems across Customer Support. Here are a few examples.',
+          'كما نستخدم العديد من الأنظمة الأخرى في دعم العملاء. وهذه بعض الأمثلة.',
+          'support_manager'
+        ),
+        {
+          runner: runManagementLandscapeShowcase
+        },
+
+        /* SECOND: return to the management team, then explain development and cross-department coordination. */
+        {
+          action: function() {
+            showManagementGroupAgain();
+          },
+          wait: 900
+        },
+        stepFromDialogue(
+          'MGMT_DEVELOPMENT_001',
+          'Now that you have seen how we plan and measure the operation, let us show you how this management team handles problems, development requests, and coordination with other departments.',
+          'بعد أن رأيتم كيف نخطط للعمل ونقيسه، دعونا نوضح كيف يتعامل فريق الإدارة مع المشاكل وطلبات التطوير والتنسيق مع الأقسام الأخرى.',
+          'support_manager',
+          function() {
+            setRoleFocus('none');
+          }
+        ),
+        {
+          action: function() {
+            showDecisionHub();
+            setOperationalStage(0);
+          },
+          wait: 1200
+        },
+        stepFromDialogue(
+          'CLICKUP_OP_001',
+          'When an issue requires another department, we do not send an informal message. We first validate the case and prepare the evidence.',
+          'عندما تحتاج المشكلة إلى قسم آخر، لا نرسل رسالة غير رسمية. نتحقق أولًا من الحالة ونجهز الأدلة.',
+          'support_manager',
+          function() {
+            setOperationalStage(1);
+          }
+        ),
+        stepFromDialogue(
+          'CLICKUP_OP_002',
+          'Once the issue is clear, we register it in our internal tracking system. That gives us the details, current status, destination department and follow-up history in one place.',
+          'بعد أن تتضح المشكلة، نسجلها في نظام المتابعة الداخلي. وهكذا تصبح التفاصيل والحالة الحالية والقسم المحول إليه وسجل المتابعة في مكان واحد.',
+          'assistant_head',
+          function() {
+            setOperationalStage(2);
+          }
+        ),
+        stepFromDialogue(
+          'CLICKUP_OP_003',
+          'Before it leaves Support, management reviews the impact and makes sure the evidence is complete enough for the receiving department to act.',
+          'قبل أن تخرج الحالة من الدعم، تراجع الإدارة التأثير وتتأكد من أن الأدلة مكتملة بما يكفي ليتمكن القسم المستلم من اتخاذ الإجراء.',
+          'quality_manager',
+          function() {
+            setOperationalStage(3);
+          }
+        ),
+        stepFromDialogue(
+          'CLICKUP_OP_004',
+          'Then we create the official ClickUp ticket for the relevant department with the complete problem description and supporting screenshots.',
+          'بعد ذلك ننشئ التذكرة الرسمية على كليك أب للقسم المختص، مع وصف المشكلة كاملًا ولقطات الشاشة الداعمة.',
+          'support_manager',
+          function() {
+            setOperationalStage(4);
+          }
+        ),
+        stepFromDialogue(
+          'CLICKUP_OP_005',
+          'Whether it goes to Backend, VoIP, Marketing, Commercial or Analysis, we keep following both ClickUp and the internal record until the case is resolved.',
+          'سواء ذهبت إلى الباك إند أو VoIP أو التسويق أو التجاري أو التحليل، نستمر بمتابعة كليك أب والسجل الداخلي معًا حتى حل الحالة.',
+          'assistant_head',
+          function() {
+            setOperationalStage(5);
+          }
+        ),
+        {
+          action: function() {
+            setImprovementStage(0);
+          },
+          wait: 1300
+        },
+        stepFromDialogue(
+          'CLICKUP_DEV_001',
+          'Development needs can start from customer feedback, an employee suggestion, a Support observation, or a Quality finding.',
+          'قد تبدأ احتياجات التطوير من ملاحظات العملاء أو اقتراح موظف أو ملاحظة من الدعم أو نتيجة من الجودة.',
+          'quality_manager',
+          function() {
+            setImprovementStage(1);
+          }
+        ),
+        stepFromDialogue(
+          'CLICKUP_DEV_002',
+          'We validate the need as the Customer Support Management Team and decide who owns the change before anything is sent for implementation.',
+          'نتحقق من الحاجة كفريق إدارة دعم العملاء ونحدد الجهة المسؤولة عن التغيير قبل إرسال أي شيء للتنفيذ.',
+          'support_manager',
+          function() {
+            setImprovementStage(2);
+          }
+        ),
+        stepFromDialogue(
+          'CLICKUP_DEV_003',
+          'If another department owns the change, we record the converted request internally, raise the official ClickUp development ticket, and keep the follow-up visible from our side.',
+          'إذا كان التغيير من مسؤولية قسم آخر، نسجل الطلب المحول داخليًا، ونرفع تذكرة التطوير الرسمية على كليك أب، ونبقي المتابعة واضحة من جهتنا.',
+          'assistant_head',
+          function() {
+            setImprovementStage(4);
+          }
+        ),
+        {
+          action: function() {
+            setBuildStage(0);
+          },
+          wait: 1300
+        },
+        stepFromDialogue(
+          'INTERNAL_BUILD_001',
+          'If the need belongs inside Support, management can agree to modify an existing tool, automate a process, or create a new internal system.',
+          'إذا كانت الحاجة داخل الدعم، يمكن للإدارة الاتفاق على تعديل أداة موجودة أو أتمتة عملية أو إنشاء نظام داخلي جديد.',
+          'support_manager',
+          function() {
+            setBuildStage(1);
+          }
+        ),
+        stepFromDialogue(
+          'INTERNAL_BUILD_002',
+          'Once we agree on the solution, the Assistant Head handles the internal implementation: design, build, automation, testing and deployment.',
+          'بعد الاتفاق على الحل، يتولى مساعد رئيس المركز التنفيذ الداخلي: التصميم والبناء والأتمتة والاختبار والإطلاق.',
+          'assistant_head',
+          function() {
+            setBuildStage(2);
+          }
+        ),
+        stepFromDialogue(
+          'INTERNAL_BUILD_003',
+          'And the result can come back into the quality cycle, so we can confirm whether the change solved the gap or needs another improvement.',
+          'ويمكن أن تعود النتيجة إلى دورة الجودة، حتى نتأكد إن كان التغيير قد عالج الفجوة أو يحتاج إلى تحسين إضافي.',
+          'quality_manager',
+          function() {
+            setBuildStage(3);
+          }
+        ),
+        {
+          runner: function() {
+            loadIndex2_1();
+          }
+        }
+      ];
+    }
+
+
+    function loadIndex2_1() {
+
+      stopSpeech();
+
+      transitionCover
+        .classList
+        .add('active');
+
+      presentationTimer(
+        function() {
+
+          google.script.run
+
+            .withSuccessHandler(
+              function(html) {
+
+                document.open();
+                document.write(html);
+                document.close();
+
+              }
+            )
+
+            .withFailureHandler(
+              function(error) {
+
+                console.error(
+                  'Index2_1 load failed:',
+                  error
+                );
+
+                transitionCover
+                  .classList
+                  .remove('active');
+
+              }
+            )
+
+            .getPage('index2_1');
+
+        },
+        950
+      );
+
+    }
+
+
+    function loadIndex3() {
+
+      stopSpeech();
+
+      transitionCover
+        .classList
+        .add('active');
+
+
+      presentationTimer(
+        function() {
+
+          google.script.run
+
+            .withSuccessHandler(
+              function(html) {
+
+                document.open();
+                document.write(html);
+                document.close();
+
+              }
+            )
+
+            .withFailureHandler(
+              function(error) {
+
+                console.error(
+                  'Index3 load failed:',
+                  error
+                );
+
+                transitionCover
+                  .classList
+                  .remove('active');
+
+              }
+            )
+
+            .getPage('index3');
+
+        },
+        950
+      );
+
+    }
+
+
+    let managementSequenceStarted =
+      false;
+
+
+    function startManagementSequenceOnce() {
+
+      if (managementSequenceStarted) {
+        return;
+      }
+
+      try {
+        const managementSteps =
+          buildManagementSteps();
+
+        if (!managementSteps || !managementSteps.length) {
+          throw new Error('No management steps were built');
+        }
+
+        managementSequenceStarted = true;
+
+        runSteps(
+          managementSteps,
+          0,
+          loadIndex3
+        );
+      }
+      catch (error) {
+        managementSequenceStarted = false;
+        console.error(
+          'Unable to start management introduction:',
+          error
+        );
+      }
+
+    }
+
+
+    function startPresentationFlow() {
+
+      if (presentationStarted) {
+        return;
+      }
+
+
+      presentationStarted = true;
+
+
+      presentationTimer(
+        function() {
+
+          runManagerDialogue(
+            0,
+            function() {
+
+              activateManagementBridge(
+                startManagementSequenceOnce
+              );
+
+            }
+          );
+
+        },
+        1200
+      );
+
+    }
+
+
+    function loadManagementDataAndStart() {
+
+      let voiceFinished = false;
+      let contentFinished = false;
+      let dialogueFinished = false;
+      let managementToolsFinished = false;
+      let managementSystemsFinished = false;
+      let managementLandscapeFinished = false;
+
+
+      function ready() {
+
+        if (
+          voiceFinished &&
+          contentFinished &&
+          dialogueFinished &&
+          managementToolsFinished &&
+          managementSystemsFinished &&
+          managementLandscapeFinished
+        ) {
+          startPresentationFlow();
+        }
+
+      }
+
+
+      if (
+        typeof google !== 'undefined' &&
+        google.script &&
+        google.script.run
+      ) {
+
+        google.script.run
+          .withSuccessHandler(
+            function(rows) {
+              applyVoiceProfiles(rows || []);
+              voiceFinished = true;
+              ready();
+            }
+          )
+          .withFailureHandler(
+            function(error) {
+              console.warn(
+                'Voice profile sheet not available. Using defaults.',
+                error
+              );
+              applyVoiceProfiles([]);
+              voiceFinished = true;
+              ready();
+            }
+          )
+          .getVoiceProfiles();
+
+
+        google.script.run
+          .withSuccessHandler(
+            function(rows) {
+              applyPresentationDialogue(rows || []);
+              dialogueFinished = true;
+              ready();
+            }
+          )
+          .withFailureHandler(
+            function(error) {
+              console.warn(
+                'Presentation dialogue sheet not available. Using embedded bilingual defaults.',
+                error
+              );
+              applyPresentationDialogue([]);
+              dialogueFinished = true;
+              ready();
+            }
+          )
+          .getPresentationDialogue();
+
+
+        google.script.run
+          .withSuccessHandler(
+            function(rows) {
+              applyManagementTools(rows || []);
+              managementToolsFinished = true;
+              ready();
+            }
+          )
+          .withFailureHandler(
+            function(error) {
+              console.warn(
+                'ManagementTools sheet not available. Using embedded placeholders.',
+                error
+              );
+              applyManagementTools([]);
+              managementToolsFinished = true;
+              ready();
+            }
+          )
+          .getManagementTools();
+
+
+        google.script.run
+          .withSuccessHandler(function(rows) {
+            managementSystemsData = Array.isArray(rows) ? rows : [];
+            managementSystemsFinished = true;
+            ready();
+          })
+          .withFailureHandler(function(error) {
+            console.warn('ManagementSystems sheet not available.', error);
+            managementSystemsData = [];
+            managementSystemsFinished = true;
+            ready();
+          })
+          .getManagementSystems();
+
+
+        google.script.run
+          .withSuccessHandler(function(rows) {
+            managementLandscapeData = Array.isArray(rows) ? rows : [];
+            managementLandscapeFinished = true;
+            ready();
+          })
+          .withFailureHandler(function(error) {
+            console.warn('ManagementSystemsLandscape sheet not available.', error);
+            managementLandscapeData = [];
+            managementLandscapeFinished = true;
+            ready();
+          })
+          .getManagementSystemsLandscape();
+
+
+        google.script.run
+          .withSuccessHandler(
+            function(content) {
+              applyManagementContent(content || {});
+              contentFinished = true;
+              ready();
+            }
+          )
+          .withFailureHandler(
+            function(error) {
+              console.warn(
+                'Management content load failed. Using defaults.',
+                error
+              );
+              contentFinished = true;
+              ready();
+            }
+          )
+          .getContent();
+
+      }
+      else {
+
+        applyVoiceProfiles([]);
+        applyPresentationDialogue([]);
+        applyManagementTools([]);
+        voiceFinished = true;
+        contentFinished = true;
+        dialogueFinished = true;
+        managementToolsFinished = true;
+        managementSystemsFinished = true;
+        managementLandscapeFinished = true;
+        ready();
+
+      }
+
+
+      window.setTimeout(
+        function() {
+
+          if (!presentationStarted) {
+            applyVoiceProfiles([]);
+            applyPresentationDialogue([]);
+            applyManagementTools([]);
+            managementSystemsData = managementSystemsData || [];
+            managementLandscapeData = managementLandscapeData || [];
+            startPresentationFlow();
+          }
+
+        },
+        5000
+      );
+
+    }
+
+
+    loadManagementDataAndStart();
+
+    })();
+
+  </script>
+
+
+<script id="canonical-head-title-guard">
+(function () {
+  'use strict';
+  var CANONICAL_HEAD_TITLE = 'HEAD OF CUSTOMER SUPPORT CENTER';
+  var LEGACY = /^\s*support\s+manager\s*$/i;
+
+  function fixTextNode(node) {
+    if (!node || node.nodeType !== 3) return;
+    var parent = node.parentElement;
+    if (!parent || /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA)$/i.test(parent.tagName)) return;
+    if (LEGACY.test(String(node.nodeValue || ''))) {
+      node.nodeValue = CANONICAL_HEAD_TITLE;
+    }
+  }
+
+  function fixTree(root) {
+    if (!root) return;
+    if (root.nodeType === 3) { fixTextNode(root); return; }
+    if (root.nodeType !== 1 && root.nodeType !== 9 && root.nodeType !== 11) return;
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    var node;
+    while ((node = walker.nextNode())) fixTextNode(node);
+  }
+
+  function start() {
+    fixTree(document.body);
+    if (!document.body || !window.MutationObserver) return;
+    new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.type === 'characterData') {
+          fixTextNode(mutation.target);
+          return;
+        }
+        Array.prototype.forEach.call(mutation.addedNodes || [], fixTree);
+      });
+    }).observe(document.body, { childList: true, subtree: true, characterData: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start, { once: true });
+  } else {
+    start();
+  }
+})();
+</script>
+</body>
+</html>

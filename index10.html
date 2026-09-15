@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base target="_top">
+  <link rel="stylesheet" href="tour-runtime.css">
+  <script src="tour-data.js"></script>
+  <script src="tour-runtime.js"></script>
+  
+  <!-- FIXED_TOUR_AUDIO -->
+  <script src="tour-audio-map.js"></script>
+  <script src="tour-audio.js"></script>
+<meta name="referrer" content="no-referrer">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Customer Support Center — Employees</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f2ec;
+      color: #1e3038;
+    }
+
+    button {
+      font-family: inherit;
+    }
+
+    .page {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 18%, rgba(255,255,255,.92), transparent 34%),
+        linear-gradient(180deg, #f9f7f2 0%, #efebe3 100%);
+    }
+
+    .scene {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .7s ease, visibility .7s ease;
+    }
+
+    .scene.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* ============================================================
+       PHOTO SCENE
+    ============================================================ */
+
+    .photo-stage {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #ece8df;
+    }
+
+    .employee-photo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      transform: scale(1.012);
+      filter: saturate(.96) contrast(1.015);
+    }
+
+    .photo-shade {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(15,25,30,.08) 0%, transparent 32%, transparent 60%, rgba(11,19,24,.54) 100%),
+        linear-gradient(90deg, rgba(12,20,24,.10), transparent 26%, transparent 76%, rgba(12,20,24,.08));
+      pointer-events: none;
+    }
+
+    .role {
+      position: absolute;
+      z-index: 6;
+      left: 4.2%;
+      top: 5.4%;
+      padding: 11px 15px;
+      border: 1px solid rgba(255,255,255,.30);
+      border-radius: 13px;
+      background: rgba(17,29,35,.32);
+      box-shadow: 0 18px 46px rgba(10,18,22,.12);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .role-kicker {
+      margin-bottom: 5px;
+      color: rgba(255,255,255,.70);
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: 2.3px;
+    }
+
+    .role-title {
+      color: #fff;
+      font-size: clamp(23px, 2.2vw, 34px);
+      font-weight: 700;
+      letter-spacing: -.3px;
+    }
+
+    /* ============================================================
+       SYSTEM SHOWCASE
+    ============================================================ */
+
+    .system-scene {
+      background:
+        radial-gradient(circle at 50% 14%, rgba(255,255,255,.95), transparent 34%),
+        linear-gradient(180deg, #faf8f4 0%, #efebe3 100%);
+    }
+
+    .system-shell {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-rows: 92px 1fr 184px;
+      gap: 0;
+    }
+
+    .system-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 20px 4.5% 12px;
+      border-bottom: 1px solid rgba(37,55,63,.08);
+      background: rgba(250,248,244,.80);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .system-kicker {
+      margin-bottom: 5px;
+      color: #8a7552;
+      font-size: 8px;
+      font-weight: 900;
+      letter-spacing: 2.4px;
+    }
+
+    .system-title {
+      max-width: 830px;
+      overflow: hidden;
+      color: #203039;
+      font-size: clamp(24px, 2.25vw, 36px);
+      font-weight: 750;
+      line-height: 1.05;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .system-team {
+      flex: 0 0 auto;
+      min-width: 128px;
+      padding: 10px 14px;
+      border: 1px solid rgba(40,58,66,.10);
+      border-radius: 13px;
+      text-align: center;
+      color: #4d5e65;
+      background: rgba(255,255,255,.68);
+      box-shadow: 0 12px 30px rgba(31,48,57,.06);
+    }
+
+    .system-team small {
+      display: block;
+      margin-bottom: 4px;
+      color: rgba(61,77,84,.48);
+      font-size: 7px;
+      font-weight: 900;
+      letter-spacing: 1.6px;
+    }
+
+    .system-team span {
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .system-visual {
+      position: relative;
+      min-height: 0;
+      margin: 18px 4.5% 10px;
+      overflow: hidden;
+      border: 1px solid rgba(41,58,66,.10);
+      border-radius: 20px;
+      background: #17232b;
+      box-shadow: 0 24px 60px rgba(28,43,51,.16);
+    }
+
+    .system-shot {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #10181e;
+      opacity: 0;
+      transform: scale(.995);
+      transition: opacity .45s ease, transform .55s ease;
+    }
+
+    .system-shot.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .system-placeholder {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 30px;
+      text-align: center;
+      color: rgba(255,255,255,.58);
+      background:
+        radial-gradient(circle at 50% 40%, rgba(97,141,159,.15), transparent 30%),
+        linear-gradient(135deg, #18262e, #10191f);
+    }
+
+    .placeholder-inner {
+      max-width: 620px;
+    }
+
+    .placeholder-icon {
+      margin-bottom: 14px;
+      font-size: 44px;
+      opacity: .65;
+    }
+
+    .placeholder-title {
+      margin-bottom: 8px;
+      color: rgba(255,255,255,.84);
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .placeholder-copy {
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .system-actions {
+      position: absolute;
+      z-index: 5;
+      right: 18px;
+      top: 18px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      min-width: 96px;
+      height: 34px;
+      padding: 0 13px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 10px;
+      color: #fff;
+      background: rgba(19,31,38,.72);
+      cursor: pointer;
+      font-size: 8px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: .18s ease;
+    }
+
+    .action-btn:hover {
+      background: rgba(255,255,255,.94);
+      color: #203039;
+    }
+
+    .system-description {
+      position: absolute;
+      z-index: 4;
+      left: 18px;
+      bottom: 16px;
+      max-width: min(680px, 68%);
+      padding: 11px 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 12px;
+      color: rgba(255,255,255,.76);
+      background: rgba(13,22,28,.68);
+      font-size: 10px;
+      line-height: 1.5;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .system-counter {
+      position: absolute;
+      z-index: 4;
+      right: 18px;
+      bottom: 16px;
+      padding: 8px 11px;
+      border-radius: 999px;
+      color: rgba(255,255,255,.70);
+      background: rgba(13,22,28,.64);
+      font-size: 8px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+    }
+
+    /* ============================================================
+       DIALOGUE
+    ============================================================ */
+
+    .dialogue-zone {
+      position: absolute;
+      z-index: 20;
+      left: 50%;
+      bottom: 3.1%;
+      width: min(960px, 88vw);
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .system-scene .dialogue-zone {
+      position: relative;
+      left: auto;
+      bottom: auto;
+      width: min(960px, 91vw);
+      align-self: center;
+      justify-self: center;
+      transform: none;
+      padding-top: 10px;
+    }
+
+    .dialogue {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .5s ease, transform .5s ease;
+    }
+
+    .dialogue.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .dialogue-name {
+      margin-bottom: 7px;
+      text-align: center;
+      color: rgba(225,196,145,.96);
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 2.5px;
+      text-shadow: 0 2px 14px rgba(0,0,0,.28);
+    }
+
+    .system-scene .dialogue-name {
+      color: #8b7550;
+      text-shadow: none;
+    }
+
+    .dialogue.visitor .dialogue-name {
+      color: rgba(255,255,255,.70);
+    }
+
+    .system-scene .dialogue.visitor .dialogue-name {
+      color: #617079;
+    }
+
+    .dialogue-box {
+      padding: 15px 24px 14px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 15px;
+      text-align: center;
+      color: #fff;
+      background:
+        linear-gradient(135deg, rgba(18,29,35,.90), rgba(34,45,50,.82));
+      box-shadow: 0 20px 46px rgba(10,18,22,.24);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .system-scene .dialogue-box {
+      border-color: rgba(41,58,66,.10);
+      color: #26373f;
+      background: rgba(255,255,255,.76);
+      box-shadow: 0 18px 38px rgba(32,48,56,.10);
+    }
+
+    .dialogue-en {
+      font-size: clamp(16px, 1.34vw, 21px);
+      line-height: 1.46;
+      font-weight: 600;
+    }
+
+    .dialogue-ar {
+      display: none;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255,255,255,.13);
+      color: rgba(255,255,255,.76);
+      font-size: clamp(13px, 1.03vw, 16px);
+      line-height: 1.55;
+      direction: rtl;
+    }
+
+    .system-scene .dialogue-ar {
+      border-top-color: rgba(41,58,66,.09);
+      color: #627178;
+    }
+
+    .dialogue-ar.on {
+      display: block;
+    }
+
+    /* ============================================================
+       CONTROLS
+    ============================================================ */
+
+    .controls {
+      position: fixed;
+      z-index: 50;
+      top: 14px;
+      right: 14px;
+      display: flex;
+      gap: 7px;
+    }
+
+    .ctl {
+      height: 31px;
+      min-width: 76px;
+      padding: 0 11px;
+      border: 1px solid rgba(27,44,53,.12);
+      border-radius: 10px;
+      color: #506169;
+      background: rgba(251,249,245,.90);
+      box-shadow: 0 10px 28px rgba(26,43,51,.10);
+      cursor: pointer;
+      font-size: 8px;
+      font-weight: 900;
+      letter-spacing: .9px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .ctl.on {
+      color: #fff;
+      border-color: #20323a;
+      background: #20323a;
+    }
+
+    .progress {
+      position: fixed;
+      z-index: 49;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 3px;
+      background: rgba(34,52,61,.08);
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, #bea36e, #7b92a0);
+      transition: width .45s ease;
+    }
+
+    /* ============================================================
+       MODAL
+    ============================================================ */
+
+    .modal {
+      position: fixed;
+      z-index: 100;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 3vh 3vw;
+      background: rgba(12,20,25,.84);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-card {
+      position: relative;
+      width: min(1500px, 94vw);
+      max-height: min(900px, 91vh);
+      overflow: auto;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 18px;
+      background: #0f181e;
+      box-shadow: 0 30px 90px rgba(0,0,0,.48);
+      padding:18px;
+    }
+    .modal-title{padding-right:55px;color:#fff;font-size:26px;font-weight:650}
+    .modal-description{margin:10px 0 14px;color:rgba(255,255,255,.64);font-size:11px;line-height:1.7;white-space:pre-wrap}
+    .modal-img {
+      width: 100%;
+      height: min(68vh,680px);
+      object-fit: contain;
+      border-radius:12px;
+      background:#0b1115;
+      display:none;
+    }
+    .modal-img.visible{display:block}
+    .modal-link{margin-top:12px;display:none;align-items:center;justify-content:center;min-height:36px;border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#fff;text-decoration:none;font-size:7px;font-weight:900;letter-spacing:1px}
+    .modal-link.visible{display:flex}
+
+    .modal-close {
+      position: absolute;
+      z-index: 3;
+      top: 14px;
+      right: 14px;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 11px;
+      color: #fff;
+      background: rgba(15,25,31,.72);
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    @media (max-height: 760px) {
+      .system-shell {
+        grid-template-rows: 78px 1fr 156px;
+      }
+
+      .system-header {
+        padding-top: 14px;
+        padding-bottom: 8px;
+      }
+
+      .dialogue-box {
+        padding: 11px 19px;
+      }
+
+      .dialogue-en {
+        font-size: 15px;
+      }
+
+      .dialogue-ar {
+        font-size: 12px;
+      }
+    }
+  
+
+    /* V30 readability pass for the employee photo scene. */
+    #photoScene .dialogue-box{
+      padding:9px 16px !important;border:none !important;border-radius:10px !important;
+      background:rgba(8,14,18,.16) !important;box-shadow:none !important;
+      backdrop-filter:none !important;-webkit-backdrop-filter:none !important;
+      color:#fff !important;text-shadow:0 2px 9px rgba(0,0,0,.96) !important;
+    }
+    #photoScene .dialogue-ar{margin-top:4px !important;padding-top:4px !important;border-top:none !important;color:#fff !important;text-shadow:0 2px 9px rgba(0,0,0,.98) !important;}
+
+  </style>
+
+<style id="systemDescriptionReadingStyle">
+.system-description.is-speaking-description{
+  color:#0b0d0f !important;
+  background:rgba(255,255,255,.95) !important;
+  border-color:rgba(17,17,17,.16) !important;
+  font-weight:800 !important;
+  box-shadow:0 10px 26px rgba(0,0,0,.18) !important;
+}
+</style>
+
+<style id="employeeSystemSingleDescriptionFix">
+/* Keep the system description in the dialogue area only; avoid showing it twice. */
+#systemDescription{display:none !important;}
+</style>
+
+
+<style id="employeePhotoCompositionFix">
+/* Employee photo composition fix:
+   - show the full brand mark/slogan lower in frame
+   - keep the role card away from the branding
+   - move the controls off the 24/7 wall message while the photo scene is active
+*/
+#photoScene .employee-photo{
+  object-position:center 36% !important;
+  transform:scale(1.0) !important;
+}
+
+#photoScene .role{
+  left:22px !important;
+  top:122px !important;
+  padding:9px 13px !important;
+  max-width:220px !important;
+}
+
+#photoScene .role-kicker{
+  font-size:7px !important;
+  letter-spacing:2px !important;
+}
+
+#photoScene .role-title{
+  font-size:clamp(21px,2vw,30px) !important;
+}
+
+body:has(#photoScene.active) .controls{
+  top:12px !important;
+  right:auto !important;
+  left:50% !important;
+  transform:translateX(-50%) !important;
+}
+
+body:has(#photoScene.active) .ctl{
+  min-width:72px !important;
+  height:30px !important;
+  background:rgba(247,245,240,.88) !important;
+}
+
+@media (max-width:900px){
+  #photoScene .role{
+    top:94px !important;
+    left:14px !important;
+  }
+  body:has(#photoScene.active) .controls{
+    left:auto !important;
+    right:10px !important;
+    transform:none !important;
+  }
+}
+</style>
+
+  <script>/* FIXED_AUDIO_NO_CUTOFF */</script>
+</head>
+
+<body>
+
+  <div id="page" class="page">
+
+    <div class="progress">
+      <div id="progressBar" class="progress-bar"></div>
+    </div>
+
+    <div class="controls">
+      <button id="arabicToggle" class="ctl">AR OFF</button>
+      <button id="voiceToggle" class="ctl">VOICE ON</button>
+      <button id="pauseBtn" class="ctl">PAUSE</button>
+    </div>
+
+    <!-- ==========================================================
+         EMPLOYEE PHOTO SCENE
+    =========================================================== -->
+    <main id="photoScene" class="scene active">
+
+      <div class="photo-stage">
+        <img referrerpolicy="no-referrer" id="employeePhoto" class="employee-photo" alt="Customer Support Employees">
+        <div class="photo-shade"></div>
+
+        <div class="role">
+          <div class="role-kicker">CUSTOMER SUPPORT CENTER</div>
+          <div class="role-title">Employees</div>
+        </div>
+      </div>
+
+      <div class="dialogue-zone">
+        <div id="photoDialogue" class="dialogue">
+          <div id="photoDialogueName" class="dialogue-name">VISITOR</div>
+          <div class="dialogue-box">
+            <div id="photoDialogueEn" class="dialogue-en"></div>
+            <div id="photoDialogueAr" class="dialogue-ar"></div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- ==========================================================
+         EMPLOYEE SYSTEMS
+    =========================================================== -->
+    <section id="systemScene" class="scene system-scene">
+
+      <div class="system-shell">
+
+        <header class="system-header">
+          <div>
+            <div class="system-kicker">EMPLOYEE OPERATIONS</div>
+            <div id="systemTitle" class="system-title">Employee Systems</div>
+          </div>
+
+          <div class="system-team">
+            <small>ACCESS</small>
+            <span id="systemTeam">ALL</span>
+          </div>
+        </header>
+
+        <div class="system-visual">
+
+          <img referrerpolicy="no-referrer" id="systemShot" class="system-shot" alt="Employee system screenshot">
+
+          <div id="systemPlaceholder" class="system-placeholder">
+            <div class="placeholder-inner">
+              <div class="placeholder-icon">▦</div>
+              <div class="placeholder-title">Employee System Screenshot</div>
+              <div class="placeholder-copy">
+                Add the system screenshot in the <b>EmployeeSystems</b> sheet.
+                Only system screenshots and system links are loaded from the sheet.
+              </div>
+            </div>
+          </div>
+
+          <div class="system-actions">
+            <button id="expandBtn" class="action-btn" type="button">EXPAND VIEW</button>
+            <button id="openBtn" class="action-btn" type="button">OPEN SYSTEM</button>
+          </div>
+
+          <div id="systemDescription" class="system-description">
+            Systems used by employees during daily customer support operations.
+          </div>
+
+          <div id="systemCounter" class="system-counter">0 / 0</div>
+
+        </div>
+
+        <div class="dialogue-zone">
+          <div id="systemDialogue" class="dialogue">
+            <div id="systemDialogueName" class="dialogue-name">EMPLOYEES</div>
+            <div class="dialogue-box">
+              <div id="systemDialogueEn" class="dialogue-en"></div>
+              <div id="systemDialogueAr" class="dialogue-ar"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+  <!-- SYSTEM SCREENSHOT MODAL -->
+  <div id="modal" class="modal">
+    <div class="modal-card">
+      <button id="modalClose" class="modal-close" type="button">×</button>
+      <div id="modalTitle" class="modal-title"></div>
+      <div id="modalDescription" class="modal-description"></div>
+      <img referrerpolicy="no-referrer" id="modalImg" class="modal-img" alt="Expanded system screenshot">
+      <a id="modalLink" class="modal-link" target="_blank" rel="noopener">OPEN SYSTEM ↗</a>
+    </div>
+  </div>
+
+
+<script>
+(function () {
+
+  function isVisitorKey(key){
+    const value=String(key||'').toLowerCase();
+    return value==='visitor' || value.indexOf('visitor_')===0;
+  }
+
+
+
+  /* ============================================================
+     APPROVED EMPLOYEE SCENE IMAGE
+     User reference: https://imgur.com/a/Go1Zw1p
+     The scene image is intentionally embedded in index10.
+     Only SYSTEM screenshots are loaded from EmployeeSystems.
+  ============================================================ */
+
+  const EMPLOYEE_IMAGE = 'assets/images/5h8fgjx.png';
+
+
+  /* ============================================================
+     PERSISTENT PRESENTATION SETTINGS
+  ============================================================ */
+
+  const AR_KEY = 'support_center_ar';
+  const VOICE_KEY = 'support_center_voice';
+
+  const fallbackPhotoRows = [
+    {
+      speaker_key: 'visitor_female_03',
+      text_en: 'Now that I understand how the teams are structured, what does the work look like for the employees themselves?',
+      text_ar: 'بعد أن فهمت طريقة تنظيم الفرق، كيف يبدو العمل بالنسبة للموظفين أنفسهم؟'
+    },
+    {
+      speaker_key: 'employee_male_01',
+      text_en: 'Once we are qualified for a team, we handle customer cases through the tools and systems assigned to that operation.',
+      text_ar: 'بعد التأهل للعمل ضمن فريق، نتعامل مع حالات العملاء باستخدام الأدوات والأنظمة المخصصة لذلك العمل.'
+    },
+    {
+      speaker_key: 'visitor_female_03',
+      text_en: 'So the systems you use can depend on the team you are working with?',
+      text_ar: 'إذًا الأنظمة التي تستخدمونها قد تختلف حسب الفريق الذي تعملون معه؟'
+    },
+    {
+      speaker_key: 'employee_female_01',
+      text_en: 'Exactly. Some tools are shared across the support center, while others are specific to certain teams and responsibilities.',
+      text_ar: 'بالضبط. بعض الأدوات مشتركة على مستوى مركز الدعم، بينما توجد أنظمة مرتبطة بفرق ومسؤوليات محددة.'
+    },
+    {
+      speaker_key: 'visitor_female_03',
+      text_en: 'And can one employee work with more than one team?',
+      text_ar: 'وهل يمكن للموظف أن يعمل مع أكثر من فريق؟'
+    },
+    {
+      speaker_key: 'employee_male_02',
+      text_en: 'Yes. If an employee earns more than one qualification card, they can support more than one team and use the relevant systems for each.',
+      text_ar: 'نعم. إذا حصل الموظف على أكثر من بطاقة تأهيل، يمكنه العمل مع أكثر من فريق واستخدام الأنظمة المناسبة لكل فريق.'
+    },
+    {
+      speaker_key: 'visitor_female_03',
+      text_en: 'Can you show me the systems you work with?',
+      text_ar: 'هل يمكنكم أن تعرضوا لي الأنظمة التي تستخدمونها؟'
+    },
+    {
+      speaker_key: 'employee_female_02',
+      text_en: 'Of course. Let us show you how the tools support our daily customer cases.',
+      text_ar: 'بالتأكيد. دعنا نريك كيف تدعم هذه الأدوات عملنا اليومي مع حالات العملاء.'
+    }
+  ];
+
+  const systemIntroRows = [
+    {
+      speaker_key: 'visitor_female_03',
+      text_en: 'Do all employees use every system shown here?',
+      text_ar: 'هل يستخدم جميع الموظفين كل الأنظمة المعروضة هنا؟'
+    },
+    {
+      speaker_key: 'employee_male_01',
+      text_en: 'No. The team label shows whether a system is shared by everyone or used by a specific team.',
+      text_ar: 'لا. يوضح اسم الفريق ما إذا كان النظام مشتركًا بين الجميع أو مخصصًا لفريق معين.'
+    }
+  ];
+
+  const closingRows = [
+    {
+      speaker_key: 'visitor_female_03',
+      text_en: 'So qualification determines not only the team, but also the operational tools an employee works with?',
+      text_ar: 'إذًا التأهيل لا يحدد الفريق فقط، بل يحدد أيضًا الأدوات التشغيلية التي يعمل بها الموظف؟'
+    },
+    {
+      speaker_key: 'employee_female_01',
+      text_en: 'Exactly. Team qualification and system access work together so each customer case reaches the right people with the right tools.',
+      text_ar: 'بالضبط. تأهيل الفريق وصلاحيات الأنظمة يعملان معًا حتى تصل كل حالة عميل إلى الأشخاص المناسبين وبالأدوات المناسبة.'
+    },
+    {
+      speaker_key: 'visitor_female_03',
+      text_en: 'And what happens when a case needs broader review beyond the normal daily workflow?',
+      text_ar: 'وماذا يحدث عندما تحتاج الحالة إلى مراجعة أوسع من مسار العمل اليومي المعتاد؟'
+    },
+    {
+      speaker_key: 'employee_male_02',
+      text_en: 'Those cases can move into our OPDC committee workflow for structured review, ownership and follow-up. Let us show you that next.',
+      text_ar: 'يمكن أن تنتقل هذه الحالات إلى مسار لجنة OPDC للمراجعة المنظمة وتحديد المسؤولية والمتابعة. دعنا نريك ذلك الآن.'
+    }
+  ];
+
+
+  const state = {
+    phase: 'photo',
+    photoIndex: 0,
+    systemIntroIndex: 0,
+    systemIndex: 0,
+    closingIndex: 0,
+    systems: [],
+    profiles: [],
+    voices: [],
+    token: 0,
+    timer: null,
+    currentUtterance: null,
+    paused: false,
+    arabicEnabled: false,
+    voiceEnabled: true,
+    modalWasPaused: false,
+    started: false
+  };
+
+
+  const els = {
+    photoScene: document.getElementById('photoScene'),
+    systemScene: document.getElementById('systemScene'),
+
+    employeePhoto: document.getElementById('employeePhoto'),
+
+    photoDialogue: document.getElementById('photoDialogue'),
+    photoDialogueName: document.getElementById('photoDialogueName'),
+    photoDialogueEn: document.getElementById('photoDialogueEn'),
+    photoDialogueAr: document.getElementById('photoDialogueAr'),
+
+    systemDialogue: document.getElementById('systemDialogue'),
+    systemDialogueName: document.getElementById('systemDialogueName'),
+    systemDialogueEn: document.getElementById('systemDialogueEn'),
+    systemDialogueAr: document.getElementById('systemDialogueAr'),
+
+    systemTitle: document.getElementById('systemTitle'),
+    systemTeam: document.getElementById('systemTeam'),
+    systemShot: document.getElementById('systemShot'),
+    systemPlaceholder: document.getElementById('systemPlaceholder'),
+    systemDescription: document.getElementById('systemDescription'),
+    systemCounter: document.getElementById('systemCounter'),
+
+    expandBtn: document.getElementById('expandBtn'),
+    openBtn: document.getElementById('openBtn'),
+
+    arabicToggle: document.getElementById('arabicToggle'),
+    voiceToggle: document.getElementById('voiceToggle'),
+    pauseBtn: document.getElementById('pauseBtn'),
+    progressBar: document.getElementById('progressBar'),
+
+    modal: document.getElementById('modal'),
+    modalImg: document.getElementById('modalImg'),
+    modalTitle: document.getElementById('modalTitle'),
+    modalDescription: document.getElementById('modalDescription'),
+    modalLink: document.getElementById('modalLink'),
+    modalClose: document.getElementById('modalClose')
+  };
+
+
+  function safeGet(key, fallback) {
+    try {
+      const value = localStorage.getItem(key);
+      return value === null ? fallback : value;
+    } catch (e) {
+      return fallback;
+    }
+  }
+
+  function safeSet(key, value) {
+    try {
+      localStorage.setItem(key, value);
+    } catch (e) {}
+  }
+
+  state.arabicEnabled = safeGet(AR_KEY, '0') === '1';
+  state.voiceEnabled = safeGet(VOICE_KEY, '1') !== '0';
+
+  els.employeePhoto.src = EMPLOYEE_IMAGE;
+
+
+  function stopVoice() {
+    if ('speechSynthesis' in window) {
+      try {
+        window.speechSynthesis.cancel();
+      } catch (e) {}
+    }
+    state.currentUtterance = null;
+    if (els && els.systemDescription) {
+      els.systemDescription.classList.remove('is-speaking-description');
+      els.systemDescription.removeAttribute('data-reading-token');
+    }
+  }
+
+  function clearTimer() {
+    if (state.timer) {
+      clearTimeout(state.timer);
+      state.timer = null;
+    }
+  }
+
+  function schedule(ms, token) {
+    clearTimer();
+
+    state.timer = setTimeout(function () {
+      if (!state.paused && token === state.token) {
+        advance();
+      }
+    }, ms);
+  }
+
+  function estimate(row) {
+    const text = String((row && row.text_en) || '');
+    return Math.max(3400, Math.min(9200, text.length * 54 + 1600));
+  }
+
+
+  function loadVoices() {
+    if ('speechSynthesis' in window) {
+      state.voices = window.speechSynthesis.getVoices() || [];
+    }
+  }
+
+  loadVoices();
+
+  if ('speechSynthesis' in window && 'onvoiceschanged' in window.speechSynthesis) {
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }
+
+
+  function getProfile(speakerKey) {
+    const exact = state.profiles.find(function (p) {
+      return String(p.speaker_key || '').toLowerCase() === String(speakerKey || '').toLowerCase();
+    });
+
+    if (exact) return exact;
+
+    if (speakerKey === 'employees') {
+      const employeeFallback = state.profiles.find(function (p) {
+        const key = String(p.speaker_key || '').toLowerCase();
+        return key === 'quality_team' || key === 'system';
+      });
+
+      if (employeeFallback) {
+        return Object.assign({}, employeeFallback, {
+          title: 'EMPLOYEES'
+        });
+      }
+    }
+
+    return {
+      speaker_key: speakerKey,
+      title: isVisitorKey(speakerKey) ? 'VISITOR' : 'EMPLOYEE',
+      gender: isVisitorKey(speakerKey)
+        ? (
+            String(speakerKey).indexOf('male_') >= 0
+              ? 'male'
+              : 'female'
+          )
+        : (
+            String(speakerKey).indexOf('female_') >= 0
+              ? 'female'
+              : 'male'
+          ),
+      lang: 'en-US',
+      voice_hint: '',
+      rate: isVisitorKey(speakerKey) ? 1.00 : 0.97,
+      pitch: isVisitorKey(speakerKey) ? 1.03 : 0.98
+    };
+  }
+
+
+  function chooseVoice(profile) {
+    const voices = state.voices.length
+      ? state.voices
+      : (window.speechSynthesis ? window.speechSynthesis.getVoices() : []);
+
+    if (!voices.length) return null;
+
+    const hint = String(profile.voice_hint || '').trim().toLowerCase();
+
+    if (hint) {
+      const hinted = voices.find(function(voice) {
+        return String(voice.name || '').toLowerCase().includes(hint);
+      });
+
+      if (hinted) return hinted;
+    }
+
+    const managementVoiceKey =
+      String(profile.speaker_key || '').toLowerCase();
+
+    if (
+      !profile.voice_hint &&
+      (
+        managementVoiceKey === 'assistant_head' ||
+        managementVoiceKey === 'quality_manager'
+      )
+    ) {
+      return chooseVoice(
+        Object.assign(
+          {},
+          profile,
+          {
+            speaker_key:'support_manager',
+            gender:'male',
+            voice_hint:''
+          }
+        )
+      );
+    }
+
+    const wantedLang = String(profile.lang || 'en-US').toLowerCase();
+    const langBase = wantedLang.split('-')[0];
+
+    let pool = voices.filter(function(voice) {
+      return String(voice.lang || '').toLowerCase().startsWith(langBase);
+    });
+
+    if (!pool.length) pool = voices.slice();
+
+    const femalePattern =
+      /samantha|victoria|karen|moira|tessa|zira|aria|jenny|sara|ava|susan|hazel|emma|jane|sonia|libby|female/i;
+
+    const malePattern =
+      /daniel|alex|fred|tom|arthur|george|guy|david|mark|ryan|christopher|andrew|brian|eric|roger|stefan|male/i;
+
+    const gender = String(profile.gender || '').toLowerCase();
+
+    const genderPool = pool.filter(function(voice) {
+      if (gender === 'female') return femalePattern.test(voice.name || '');
+      if (gender === 'male') return malePattern.test(voice.name || '');
+      return true;
+    });
+
+    if (genderPool.length) {
+      pool = genderPool;
+    }
+
+    const roleOrder = [
+      'visitor',
+      'support_manager',
+      'assistant_head',
+      'quality_manager',
+      'quality_team',
+      'supervisor',
+      'team_leaders',
+      'opdc',
+      'employees',
+      'ai_employee',
+      'system'
+    ];
+
+    const speakerKey = String(profile.speaker_key || '').toLowerCase();
+    let roleIndex = roleOrder.indexOf(speakerKey);
+
+    if (roleIndex < 0) {
+      roleIndex = speakerKey
+        .split('')
+        .reduce(function(total, char) {
+          return total + char.charCodeAt(0);
+        }, 0);
+    }
+
+    return pool[Math.abs(roleIndex) % pool.length] || pool[0] || null;
+  }
+
+
+  function splitSpeechText(text, maxLength) {
+    const words = String(text || '').replace(/\s+/g, ' ').trim().split(' ');
+    const chunks = [];
+    let current = '';
+
+    words.forEach(function(word) {
+      const candidate = current ? current + ' ' + word : word;
+      if (candidate.length > maxLength && current) {
+        chunks.push(current);
+        current = word;
+      } else {
+        current = candidate;
+      }
+    });
+
+    if (current) chunks.push(current);
+    if (window.supportTourFixedAudio && window.supportTourFixedAudio.usingFixedAudio && typeof text !== 'undefined') { var __fat=String(text||'').replace(/\s+/g,' ').trim(); if(__fat){ chunks.length=0; chunks.push(__fat); } } /* FIXED_AUDIO_NO_SPLIT */
+    return chunks;
+  }
+
+
+  function speak(row, token) {
+    const highlightSystemDescription =
+      state.phase === 'systems' && els && els.systemDescription;
+
+    if (highlightSystemDescription) {
+      els.systemDescription.dataset.readingToken = String(token);
+      els.systemDescription.classList.add('is-speaking-description');
+    }
+
+    function clearSystemDescriptionReading() {
+      if (
+        els && els.systemDescription &&
+        els.systemDescription.dataset.readingToken === String(token)
+      ) {
+        els.systemDescription.classList.remove('is-speaking-description');
+        els.systemDescription.removeAttribute('data-reading-token');
+      }
+    }
+
+    if (
+      !state.voiceEnabled ||
+      state.paused ||
+      !('speechSynthesis' in window)
+    ) {
+      schedule(estimate(row), token);
+      return;
+    }
+
+    /* Cancel any older utterance, then restore this system's active reading state. */
+    stopVoice();
+    if (highlightSystemDescription) {
+      els.systemDescription.dataset.readingToken = String(token);
+      els.systemDescription.classList.add('is-speaking-description');
+    }
+
+    const profile = getProfile(row.speaker_key);
+    const selectedVoice = chooseVoice(profile);
+    const chunks = splitSpeechText(row.text_en || '', 96);
+    let chunkIndex = 0;
+
+    function finishSpeech() {
+      state.currentUtterance = null;
+      clearSystemDescriptionReading();
+      if (!state.paused && token === state.token) schedule(1350, token);
+    }
+
+    function speakNextChunk() {
+      if (state.paused || token !== state.token) return;
+      if (chunkIndex >= chunks.length) {
+        finishSpeech();
+        return;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(chunks[chunkIndex++]);
+      utterance.lang = profile.lang || 'en-US';
+      utterance.rate = Math.max(.84, Math.min(.96, Number(profile.rate || 1) * .92));
+      utterance.pitch = Number(profile.pitch || 1);
+
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+        utterance.lang = selectedVoice.lang || utterance.lang;
+      }
+
+      state.currentUtterance = utterance;
+      let settled = false;
+
+      function finishChunk() {
+        if (settled || token !== state.token) return;
+        settled = true;
+        if (state.currentUtterance === utterance) state.currentUtterance = null;
+        if (!state.paused) setTimeout(speakNextChunk, 90);
+      }
+
+      utterance.onend = finishChunk;
+      utterance.onerror = finishChunk;
+
+      try { window.speechSynthesis.speak(utterance); }
+      catch (e) { finishChunk(); }
+    }
+
+    speakNextChunk();
+  }
+
+
+  function speakerTitle(key) {
+    if (isVisitorKey(key)) return 'VISITOR';
+    if (String(key || '').toLowerCase() === 'support_manager') return 'HEAD OF CUSTOMER SUPPORT CENTER';
+
+    const profile=getProfile(key);
+    return String(
+      (profile && profile.title) || 'EMPLOYEE'
+    ).toUpperCase();
+  }
+
+
+  function setDialogue(dialogueEl, nameEl, enEl, arEl, row) {
+    dialogueEl.classList.remove('show', 'visitor');
+
+    setTimeout(function () {
+      nameEl.textContent = speakerTitle(row.speaker_key);
+      enEl.textContent = row.text_en || '';
+      arEl.textContent = row.text_ar || '';
+      arEl.classList.toggle('on', state.arabicEnabled);
+      dialogueEl.classList.toggle('visitor', isVisitorKey(row.speaker_key));
+      dialogueEl.classList.add('show');
+    }, 90);
+  }
+
+
+  function syncControls() {
+    els.arabicToggle.textContent = state.arabicEnabled ? 'AR ON' : 'AR OFF';
+    els.arabicToggle.classList.toggle('on', state.arabicEnabled);
+
+    els.voiceToggle.textContent = state.voiceEnabled ? 'VOICE ON' : 'VOICE OFF';
+    els.voiceToggle.classList.toggle('on', state.voiceEnabled);
+
+    els.pauseBtn.textContent = state.paused ? 'PLAY' : 'PAUSE';
+
+    els.photoDialogueAr.classList.toggle('on', state.arabicEnabled);
+    els.systemDialogueAr.classList.toggle('on', state.arabicEnabled);
+  }
+
+
+  function totalStepCount() {
+    return fallbackPhotoRows.length +
+      systemIntroRows.length +
+      Math.max(1, state.systems.length) +
+      closingRows.length;
+  }
+
+  function currentStepNumber() {
+    if (state.phase === 'photo') {
+      return state.photoIndex + 1;
+    }
+
+    if (state.phase === 'systemIntro') {
+      return fallbackPhotoRows.length + state.systemIntroIndex + 1;
+    }
+
+    if (state.phase === 'systems') {
+      return fallbackPhotoRows.length + systemIntroRows.length + state.systemIndex + 1;
+    }
+
+    return fallbackPhotoRows.length +
+      systemIntroRows.length +
+      Math.max(1, state.systems.length) +
+      state.closingIndex + 1;
+  }
+
+  function updateProgress() {
+    const total = Math.max(1, totalStepCount());
+    const current = Math.max(1, currentStepNumber());
+    els.progressBar.style.width = Math.min(100, current / total * 100).toFixed(2) + '%';
+  }
+
+
+  function showPhotoScene() {
+    els.photoScene.classList.add('active');
+    els.systemScene.classList.remove('active');
+  }
+
+  function showSystemScene() {
+    els.photoScene.classList.remove('active');
+    els.systemScene.classList.add('active');
+  }
+
+
+
+  function isUrlLikeText(value) {
+    return /^https?:\/\//i.test(String(value || '').trim());
+  }
+
+  function safeSystemDescription(system) {
+    const value = String((system && system.description) || '').trim();
+    return value && !isUrlLikeText(value) ? value : '';
+  }
+
+  function systemNarration(system) {
+    const name = String(system.name || 'this system').trim();
+    const team = String(system.team || 'ALL').trim();
+
+    const teamEn = team.toUpperCase() === 'ALL'
+      ? 'employees across the support center'
+      : 'the ' + team + ' team';
+
+    const teamAr = team.toUpperCase() === 'ALL'
+      ? 'موظفي مركز الدعم'
+      : 'فريق ' + team;
+
+    const safeDescription = safeSystemDescription(system);
+
+    return {
+      /* One fixed narrator for Employee Systems; never alternate male/female here. */
+      speaker_key: 'employee_male_01',
+      text_en: safeDescription || ('This is ' + name + '. It is used by ' + teamEn + ' as part of the daily operation.'),
+      text_ar: 'هذا هو ' + name + '. ويستخدمه ' + teamAr + ' ضمن العمل التشغيلي اليومي.'
+    };
+  }
+
+
+  function normalizeEmployeeSystemClient(system) {
+    if (!system) return system;
+    const s = Object.assign({}, system);
+    const shifted =
+      String(s.system_key || '').trim() &&
+      String(s.name || '').trim().length >= 28 &&
+      isUrlLikeText(s.description) &&
+      isUrlLikeText(s.link) &&
+      !isUrlLikeText(s.image_url);
+
+    if (shifted) {
+      const actualName = String(s.system_key || '').trim();
+      const actualDescription = String(s.name || '').trim();
+      const actualLink = String(s.description || '').trim();
+      const actualImage = String(s.link || '').trim();
+      const actualTeam = String(s.image_url || '').trim();
+      s.name = actualName;
+      s.system_name = actualName;
+      s.description = actualDescription;
+      s.link = actualLink;
+      s.image_url = actualImage;
+      s.team = actualTeam || 'ALL';
+    }
+
+    if (isUrlLikeText(s.description)) s.description = '';
+    return s;
+  }
+
+  function systemImageCandidates(system) {
+    const list=[];
+    function add(value){
+      const v=String(value||'').trim();
+      if(!v || !/^https?:\/\//i.test(v) || list.indexOf(v)>=0) return;
+      list.push(v);
+    }
+    if(!system) return list;
+    add(system.image_url);
+    add(system.screenshot_url);
+    add(system.screenshot);
+    add(system.image);
+    if(Array.isArray(system.screenshots)) system.screenshots.forEach(add);
+    else add(system.screenshots);
+    return list;
+  }
+
+  function showEmployeeSystemImage(system){
+    const candidates=systemImageCandidates(system);
+    let idx=0;
+    function failOrNext(){
+      idx+=1;
+      if(idx<candidates.length){
+        els.systemShot.src=candidates[idx];
+        return;
+      }
+      els.systemShot.removeAttribute('src');
+      els.systemShot.classList.remove('visible');
+      els.systemPlaceholder.style.display='grid';
+      els.expandBtn.style.display='none';
+      els.systemShot.onerror=null;
+    }
+    if(!candidates.length){
+      failOrNext();
+      return;
+    }
+    els.systemShot.onerror=failOrNext;
+    els.systemShot.onload=function(){
+      els.systemShot.classList.add('visible');
+      els.systemPlaceholder.style.display='none';
+      els.expandBtn.style.display='inline-block';
+    };
+    els.systemShot.src=candidates[0];
+  }
+
+  function applySystem(system) {
+    system = normalizeEmployeeSystemClient(system);
+    if (!system) {
+      els.systemTitle.textContent = 'Employee Systems';
+      els.systemTeam.textContent = 'ADD DATA';
+      els.systemDescription.textContent = 'Add rows to the EmployeeSystems sheet.';
+      els.systemCounter.textContent = '0 / 0';
+      els.systemShot.classList.remove('visible');
+      els.systemPlaceholder.style.display = 'grid';
+      els.expandBtn.style.display = 'none';
+      els.openBtn.style.display = 'none';
+      return;
+    }
+
+    els.systemTitle.textContent = system.name || 'Employee System';
+    els.systemTeam.textContent = system.team || 'ALL';
+    const safeDescription = safeSystemDescription(system);
+    els.systemDescription.textContent = safeDescription || 'Operational system used by employees.';
+    els.systemCounter.textContent =
+      String(state.systemIndex + 1) + ' / ' + String(state.systems.length);
+
+    showEmployeeSystemImage(system);
+
+    const link = String(system.link || '').trim();
+    if (link && link !== '#') {
+      els.openBtn.style.display = 'inline-block';
+      els.openBtn.onclick = function () {
+        window.open(link, '_blank', 'noopener');
+      };
+    } else {
+      els.openBtn.style.display = 'none';
+      els.openBtn.onclick = null;
+    }
+  }
+
+
+  function render() {
+    state.token += 1;
+    clearTimer();
+    stopVoice();
+
+    const token = state.token;
+    let row = null;
+
+    if (state.phase === 'photo') {
+      showPhotoScene();
+      row = fallbackPhotoRows[state.photoIndex];
+      setDialogue(
+        els.photoDialogue,
+        els.photoDialogueName,
+        els.photoDialogueEn,
+        els.photoDialogueAr,
+        row
+      );
+    }
+
+    else if (state.phase === 'systemIntro') {
+      showSystemScene();
+      applySystem(state.systems[0] || null);
+      row = systemIntroRows[state.systemIntroIndex];
+      setDialogue(
+        els.systemDialogue,
+        els.systemDialogueName,
+        els.systemDialogueEn,
+        els.systemDialogueAr,
+        row
+      );
+    }
+
+    else if (state.phase === 'systems') {
+      showSystemScene();
+
+      const system = normalizeEmployeeSystemClient(state.systems[state.systemIndex] || null);
+      applySystem(system);
+
+      row = system
+        ? systemNarration(system)
+        : {
+            speaker_key: 'employee_male_01',
+            text_en: 'The EmployeeSystems sheet is ready. Add the systems and screenshots you want to present here.',
+            text_ar: 'شيت EmployeeSystems جاهز. أضف الأنظمة وصور الشاشات التي تريد عرضها هنا.'
+          };
+
+      setDialogue(
+        els.systemDialogue,
+        els.systemDialogueName,
+        els.systemDialogueEn,
+        els.systemDialogueAr,
+        row
+      );
+    }
+
+    else {
+      showSystemScene();
+      if (state.systems.length) {
+        state.systemIndex = state.systems.length - 1;
+        applySystem(state.systems[state.systemIndex]);
+      } else {
+        applySystem(null);
+      }
+
+      row = closingRows[state.closingIndex];
+
+      setDialogue(
+        els.systemDialogue,
+        els.systemDialogueName,
+        els.systemDialogueEn,
+        els.systemDialogueAr,
+        row
+      );
+    }
+
+    updateProgress();
+    syncControls();
+
+    if (!state.paused) {
+      speak(row, token);
+    }
+  }
+
+
+  function openPage(pageName) {
+    stopVoice();
+    clearTimer();
+
+    if (
+      typeof google === 'undefined' ||
+      !google.script ||
+      !google.script.run
+    ) {
+      return;
+    }
+
+    google.script.run
+      .withSuccessHandler(function (nextHtml) {
+        document.open();
+        document.write(nextHtml);
+        document.close();
+      })
+      .withFailureHandler(function (error) {
+        console.error('Could not open ' + pageName, error);
+        state.paused = true;
+        syncControls();
+      })
+      .getPage(pageName);
+  }
+
+
+  function advance() {
+    if (state.phase === 'photo') {
+      if (state.photoIndex < fallbackPhotoRows.length - 1) {
+        state.photoIndex += 1;
+      } else {
+        state.phase = 'systemIntro';
+        state.systemIntroIndex = 0;
+      }
+      render();
+      return;
+    }
+
+    if (state.phase === 'systemIntro') {
+      if (state.systemIntroIndex < systemIntroRows.length - 1) {
+        state.systemIntroIndex += 1;
+      } else {
+        state.phase = 'systems';
+        state.systemIndex = 0;
+      }
+      render();
+      return;
+    }
+
+    if (state.phase === 'systems') {
+      if (state.systems.length && state.systemIndex < state.systems.length - 1) {
+        state.systemIndex += 1;
+      } else {
+        state.phase = 'closing';
+        state.closingIndex = 0;
+      }
+      render();
+      return;
+    }
+
+    if (state.closingIndex < closingRows.length - 1) {
+      state.closingIndex += 1;
+      render();
+      return;
+    }
+
+    state.paused = true;
+    syncControls();
+
+    setTimeout(function () {
+      openPage('index9');
+    }, 1100);
+  }
+
+
+  els.arabicToggle.addEventListener('click', function () {
+    state.arabicEnabled = !state.arabicEnabled;
+    safeSet(AR_KEY, state.arabicEnabled ? '1' : '0');
+    syncControls();
+  });
+
+
+  els.voiceToggle.addEventListener('click', function () {
+    state.voiceEnabled = !state.voiceEnabled;
+    safeSet(VOICE_KEY, state.voiceEnabled ? '1' : '0');
+
+    if (!state.voiceEnabled) {
+      stopVoice();
+      if (!state.paused) {
+        state.token += 1;
+        schedule(4300, state.token);
+      }
+    } else if (!state.paused) {
+      render();
+    }
+
+    syncControls();
+  });
+
+
+  els.pauseBtn.addEventListener('click', function () {
+    state.paused = !state.paused;
+
+    if (state.paused) {
+      clearTimer();
+
+      if ('speechSynthesis' in window && state.currentUtterance) {
+        try {
+          window.speechSynthesis.pause();
+        } catch (e) {}
+      }
+    } else {
+      if ('speechSynthesis' in window && state.currentUtterance) {
+        try {
+          window.speechSynthesis.resume();
+        } catch (e) {}
+      } else {
+        schedule(850, state.token);
+      }
+    }
+
+    syncControls();
+  });
+
+
+  els.expandBtn.addEventListener('click', function () {
+    const currentSystem = state.systems[state.systemIndex] || null;
+    if (!currentSystem) return;
+
+    state.modalWasPaused = state.paused;
+
+    if (!state.paused) {
+      state.paused = true;
+      clearTimer();
+
+      if ('speechSynthesis' in window) {
+        try {
+          window.speechSynthesis.pause();
+        } catch (e) {}
+      }
+    }
+
+    const shots = Array.isArray(currentSystem.screenshots) && currentSystem.screenshots.length
+      ? currentSystem.screenshots
+      : (currentSystem.image_url ? [currentSystem.image_url] : []);
+    els.modalTitle.textContent = currentSystem.name || currentSystem.system_name || 'System Details';
+    els.modalDescription.textContent = currentSystem.long_description || 'No additional details added yet.';
+    if (shots.length) {
+      els.modalImg.src = shots[0];
+      els.modalImg.classList.add('visible');
+    } else {
+      els.modalImg.removeAttribute('src');
+      els.modalImg.classList.remove('visible');
+    }
+    const detailsLink = String(currentSystem.link || '').trim();
+    if (detailsLink && detailsLink !== '#') {
+      els.modalLink.href = detailsLink;
+      els.modalLink.classList.add('visible');
+    } else {
+      els.modalLink.removeAttribute('href');
+      els.modalLink.classList.remove('visible');
+    }
+    els.modal.classList.add('open');
+    syncControls();
+  });
+
+
+  function closeModal() {
+    els.modal.classList.remove('open');
+
+    if (!state.modalWasPaused) {
+      state.paused = false;
+
+      if ('speechSynthesis' in window && state.currentUtterance) {
+        try {
+          window.speechSynthesis.resume();
+        } catch (e) {}
+      } else {
+        schedule(850, state.token);
+      }
+    }
+
+    syncControls();
+  }
+
+  els.modalClose.addEventListener('click', closeModal);
+
+  els.modal.addEventListener('click', function (event) {
+    if (event.target === els.modal) {
+      closeModal();
+    }
+  });
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && els.modal.classList.contains('open')) {
+      closeModal();
+    }
+  });
+
+
+  function start() {
+    if (state.started) return;
+    state.started = true;
+    render();
+  }
+
+
+  /* ============================================================
+     LOAD DATA
+  ============================================================ */
+
+  let pending = 2;
+
+  function ready() {
+    pending -= 1;
+    if (pending <= 0) {
+      start();
+    }
+  }
+
+  if (
+    typeof google !== 'undefined' &&
+    google.script &&
+    google.script.run
+  ) {
+    google.script.run
+      .withSuccessHandler(function (profiles) {
+        state.profiles = Array.isArray(profiles) ? profiles : [];
+        ready();
+      })
+      .withFailureHandler(function () {
+        state.profiles = [];
+        ready();
+      })
+      .getVoiceProfiles();
+
+    google.script.run
+      .withSuccessHandler(function (systems) {
+        state.systems = (Array.isArray(systems) ? systems : [])
+          .map(normalizeEmployeeSystemClient)
+          .filter(Boolean)
+          .slice()
+          .sort(function(a,b) {
+            const ao = Number((a && (a.order_no !== undefined ? a.order_no : a.order)) || 0);
+            const bo = Number((b && (b.order_no !== undefined ? b.order_no : b.order)) || 0);
+            return ao - bo;
+          });
+        ready();
+      })
+      .withFailureHandler(function () {
+        state.systems = [];
+        ready();
+      })
+      .getEmployeeSystems();
+  } else {
+    state.profiles = [];
+    state.systems = [];
+    pending = 0;
+    start();
+  }
+
+})();
+</script>
+
+</body>
+</html>

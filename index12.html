@@ -1,0 +1,2040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base target="_top">
+  <link rel="stylesheet" href="tour-runtime.css">
+  <script src="tour-data.js"></script>
+  <script src="tour-runtime.js"></script>
+  
+  <!-- FIXED_TOUR_AUDIO -->
+  <script src="tour-audio-map.js"></script>
+  <script src="tour-audio.js"></script>
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://i.imgur.com" crossorigin>
+  <link rel="preload" as="image" href="assets/images/rtcGJm3.png">
+  <link rel="preload" as="image" href="assets/images/NKRATjh.png">
+  <title>Customer Support Center — AI Integration</title>
+
+  <style>
+    *{box-sizing:border-box}
+    html,body{
+      width:100%;
+      height:100%;
+      margin:0;
+      overflow:hidden;
+      font-family:Arial,Helvetica,sans-serif;
+      background:#f5f1ea;
+      color:#22343c
+    }
+    button{font-family:inherit}
+    :root{
+      --ink:#22343c;
+      --muted:#69787f;
+      --paper:rgba(255,255,255,.84);
+      --line:rgba(35,53,62,.10);
+      --gold:#aa8b58;
+      --blue:#4e78d8;
+      --purple:#7669dc;
+      --cyan:#2bb7cf;
+      --green:#27af77;
+      --amber:#dba33d;
+      --shadow:0 28px 74px rgba(30,47,55,.13);
+    }
+
+    .page{
+      position:relative;
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at 50% 8%,rgba(255,255,255,.98),transparent 34%),
+        linear-gradient(180deg,#faf8f4,#ece7de)
+    }
+
+    .progress{
+      position:fixed;
+      z-index:100;
+      left:0;
+      top:0;
+      width:100%;
+      height:3px;
+      background:rgba(35,53,62,.07)
+    }
+    .progress-bar{
+      width:0;
+      height:100%;
+      background:linear-gradient(90deg,#a68a58,#617da8,#7569d9);
+      transition:width .42s ease
+    }
+
+    .controls{
+      position:fixed;
+      z-index:110;
+      top:14px;
+      right:14px;
+      display:flex;
+      gap:7px
+    }
+    .ctl{
+      height:31px;
+      min-width:78px;
+      padding:0 11px;
+      border:1px solid rgba(34,52,60,.12);
+      border-radius:10px;
+      background:rgba(252,250,246,.92);
+      box-shadow:0 10px 28px rgba(30,46,54,.10);
+      color:#56666d;
+      cursor:pointer;
+      font-size:8px;
+      font-weight:900;
+      letter-spacing:.9px;
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px)
+    }
+    .ctl.on{
+      color:#fff;
+      border-color:#21343d;
+      background:#21343d
+    }
+
+    .visual{
+      position:absolute;
+      inset:0;
+      opacity:0;
+      visibility:hidden;
+      transition:opacity .58s ease,visibility .58s ease
+    }
+    .visual.active{
+      opacity:1;
+      visibility:visible
+    }
+
+    /* PHOTO */
+    .photo-visual{
+      background:#111b22
+    }
+    .photo-img{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center center
+    }
+    .photo-shade{
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(180deg,rgba(10,18,23,.06),transparent 36%,transparent 57%,rgba(10,18,23,.60)),
+        linear-gradient(90deg,rgba(10,18,23,.05),transparent 31%,transparent 82%,rgba(10,18,23,.04))
+    }
+    .scene-label{
+      position:absolute;
+      z-index:8;
+      left:4%;
+      top:5%;
+      max-width:min(720px,69vw);
+      padding:11px 15px 12px;
+      border:1px solid rgba(255,255,255,.25);
+      border-radius:13px;
+      color:#fff;
+      background:rgba(20,32,38,.31);
+      box-shadow:0 18px 48px rgba(0,0,0,.13);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px)
+    }
+    .scene-kicker{
+      margin-bottom:5px;
+      color:rgba(255,255,255,.68);
+      font-size:8px;
+      font-weight:900;
+      letter-spacing:2.2px
+    }
+    .scene-title{
+      font-size:clamp(23px,2.2vw,36px);
+      font-weight:780;
+      letter-spacing:-.4px
+    }
+    .scene-sub{
+      margin-top:5px;
+      color:rgba(255,255,255,.74);
+      font-size:10px;
+      line-height:1.5
+    }
+
+    /* LIGHT UI */
+    .ui-visual{
+      padding:7vh 5vw 21vh;
+      background:
+        radial-gradient(circle at 50% 12%,rgba(255,255,255,.98),transparent 34%),
+        linear-gradient(180deg,#faf8f4,#ece7de)
+    }
+    .ui-shell{
+      width:min(1360px,92vw);
+      height:100%;
+      margin:0 auto;
+      display:flex;
+      flex-direction:column;
+      justify-content:center
+    }
+    .ui-kicker{
+      margin-bottom:9px;
+      text-align:center;
+      color:#94794f;
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:2.8px
+    }
+    .ui-title{
+      margin:0 auto 9px;
+      max-width:1040px;
+      text-align:center;
+      color:#22343c;
+      font-size:clamp(28px,3vw,48px);
+      font-weight:790;
+      letter-spacing:-.8px;
+      line-height:1.08
+    }
+    .ui-subtitle{
+      max-width:900px;
+      margin:0 auto 26px;
+      text-align:center;
+      color:#69787f;
+      font-size:12px;
+      line-height:1.62
+    }
+
+    .status-pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      margin:0 auto 20px;
+      padding:9px 14px;
+      border:1px solid rgba(219,163,61,.24);
+      border-radius:999px;
+      color:#86641f;
+      background:rgba(255,248,226,.82);
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:1.2px
+    }
+    .status-dot{
+      width:7px;
+      height:7px;
+      border-radius:50%;
+      background:var(--amber);
+      box-shadow:0 0 0 5px rgba(219,163,61,.10)
+    }
+
+    .value-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(180px,1fr));
+      gap:15px
+    }
+    .value-card{
+      min-height:160px;
+      padding:22px 18px;
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:rgba(255,255,255,.80);
+      box-shadow:0 18px 44px rgba(31,48,56,.08)
+    }
+    .value-no{
+      margin-bottom:16px;
+      color:#9b8154;
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:1.8px
+    }
+    .value-name{
+      margin-bottom:8px;
+      font-size:18px;
+      font-weight:850;
+      line-height:1.25
+    }
+    .value-copy{
+      color:#6b797f;
+      font-size:10px;
+      line-height:1.55
+    }
+
+    .role-grid{
+      display:grid;
+      grid-template-columns:1.55fr .75fr;
+      gap:18px;
+      width:min(1040px,91vw);
+      margin:0 auto
+    }
+    .role-card{
+      min-height:260px;
+      padding:28px;
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:rgba(255,255,255,.80);
+      box-shadow:var(--shadow)
+    }
+    .role-card.lead{
+      border-top:4px solid var(--purple)
+    }
+    .role-card.support{
+      border-top:4px solid var(--cyan)
+    }
+    .role-tag{
+      margin-bottom:10px;
+      color:#8b7451;
+      font-size:8px;
+      font-weight:900;
+      letter-spacing:1.8px
+    }
+    .role-title{
+      margin-bottom:18px;
+      font-size:25px;
+      font-weight:850;
+      line-height:1.2
+    }
+    .role-list{
+      display:grid;
+      gap:10px
+    }
+    .role-item{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color:#53636a;
+      font-size:11px;
+      font-weight:700
+    }
+    .role-item::before{
+      content:'';
+      width:7px;
+      height:7px;
+      flex:0 0 auto;
+      border-radius:50%;
+      background:#8797a0
+    }
+    .lead .role-item::before{background:var(--purple)}
+    .support .role-item::before{background:var(--cyan)}
+
+    .foundation-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(180px,1fr));
+      gap:12px;
+      max-width:1160px;
+      margin:0 auto
+    }
+    .foundation{
+      min-height:82px;
+      padding:15px 14px;
+      border:1px solid var(--line);
+      border-radius:15px;
+      background:rgba(255,255,255,.79);
+      box-shadow:0 14px 34px rgba(31,48,56,.07);
+      display:flex;
+      align-items:center;
+      gap:11px
+    }
+    .foundation-icon{
+      width:30px;
+      height:30px;
+      flex:0 0 auto;
+      display:grid;
+      place-items:center;
+      border-radius:9px;
+      background:#eef1f4;
+      color:#6a7b83;
+      font-size:10px;
+      font-weight:900
+    }
+    .foundation-name{
+      font-size:10px;
+      font-weight:800;
+      line-height:1.32
+    }
+
+    .ai-used{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(290px,430px));
+      gap:20px;
+      justify-content:center
+    }
+    .ai-used-card{
+      min-height:190px;
+      padding:28px;
+      border:1px solid rgba(117,105,217,.17);
+      border-radius:22px;
+      background:linear-gradient(145deg,rgba(255,255,255,.91),rgba(246,245,255,.88));
+      box-shadow:var(--shadow)
+    }
+    .ai-used-icon{
+      width:48px;
+      height:48px;
+      margin-bottom:18px;
+      display:grid;
+      place-items:center;
+      border:1px solid rgba(117,105,217,.18);
+      border-radius:15px;
+      color:#6659cf;
+      background:rgba(117,105,217,.08);
+      font-size:20px;
+      font-weight:900
+    }
+    .ai-used-name{
+      margin-bottom:8px;
+      font-size:20px;
+      font-weight:850
+    }
+    .ai-used-copy{
+      color:#67767d;
+      font-size:10px;
+      line-height:1.55
+    }
+
+    .opportunity-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(210px,1fr));
+      gap:12px;
+      max-width:1120px;
+      margin:0 auto
+    }
+    .opportunity{
+      min-height:100px;
+      padding:16px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:rgba(255,255,255,.80);
+      box-shadow:0 15px 35px rgba(31,48,56,.07)
+    }
+    .opportunity-tag{
+      margin-bottom:7px;
+      color:#8270d4;
+      font-size:8px;
+      font-weight:900;
+      letter-spacing:1.4px
+    }
+    .opportunity-name{
+      color:#2d4149;
+      font-size:11px;
+      font-weight:820;
+      line-height:1.4
+    }
+
+    .analysis-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(180px,1fr));
+      gap:12px;
+      max-width:1180px;
+      margin:0 auto
+    }
+    .analysis-card{
+      min-height:105px;
+      padding:17px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:rgba(255,255,255,.80);
+      box-shadow:0 15px 35px rgba(31,48,56,.07)
+    }
+    .analysis-card:last-child{
+      grid-column:2 / span 2
+    }
+    .analysis-no{
+      margin-bottom:7px;
+      color:#2f9bb0;
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:1.4px
+    }
+    .analysis-name{
+      font-size:11px;
+      font-weight:820;
+      line-height:1.4
+    }
+
+    .flow-row{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:9px;
+      flex-wrap:wrap
+    }
+    .flow-card{
+      width:145px;
+      min-height:102px;
+      padding:15px 12px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:rgba(255,255,255,.80);
+      box-shadow:0 16px 38px rgba(31,48,56,.07);
+      text-align:center
+    }
+    .flow-card.focus{
+      transform:translateY(-5px);
+      border-color:rgba(117,105,217,.28);
+      box-shadow:0 22px 48px rgba(46,49,89,.12)
+    }
+    .flow-index{
+      margin-bottom:8px;
+      color:#8d77d7;
+      font-size:8px;
+      font-weight:900;
+      letter-spacing:1.5px
+    }
+    .flow-name{
+      font-size:11px;
+      font-weight:850;
+      line-height:1.35
+    }
+    .arrow{
+      color:#ad9872;
+      font-size:18px
+    }
+
+    .principle{
+      width:min(1000px,90vw);
+      margin:0 auto;
+      padding:34px;
+      border:1px solid rgba(117,105,217,.13);
+      border-radius:25px;
+      background:
+        radial-gradient(circle at 18% 10%,rgba(117,105,217,.08),transparent 33%),
+        rgba(255,255,255,.83);
+      box-shadow:var(--shadow)
+    }
+    .principle-line{
+      text-align:center;
+      font-size:clamp(24px,2.45vw,38px);
+      font-weight:820;
+      line-height:1.28;
+      letter-spacing:-.55px
+    }
+    .principle-line em{
+      color:#675bd0;
+      font-style:normal
+    }
+    .principle-small{
+      max-width:770px;
+      margin:16px auto 0;
+      text-align:center;
+      color:#68777e;
+      font-size:11px;
+      line-height:1.65
+    }
+
+    .vision-map{
+      width:min(1070px,91vw);
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:13px
+    }
+    .vision-node{
+      min-height:103px;
+      padding:17px;
+      border:1px solid var(--line);
+      border-radius:17px;
+      background:rgba(255,255,255,.81);
+      box-shadow:0 15px 35px rgba(31,48,56,.07);
+      text-align:center
+    }
+    .vision-node strong{
+      display:block;
+      margin-bottom:6px;
+      font-size:12px
+    }
+    .vision-node span{
+      color:#6c7a80;
+      font-size:9px;
+      line-height:1.45
+    }
+    .vision-center{
+      grid-column:2;
+      padding:21px;
+      border-color:rgba(39,175,119,.24);
+      background:rgba(244,253,248,.88)
+    }
+    .vision-center strong{
+      color:#257854;
+      font-size:16px
+    }
+
+    .handoff{
+      width:min(1040px,91vw);
+      margin:0 auto;
+      text-align:center
+    }
+    .handoff-line{
+      margin-bottom:20px;
+      color:#24363e;
+      font-size:clamp(28px,3.15vw,50px);
+      font-weight:820;
+      line-height:1.13;
+      letter-spacing:-.8px
+    }
+    .handoff-line span{
+      color:#665bd0
+    }
+    .handoff-strip{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:9px;
+      flex-wrap:wrap
+    }
+    .handoff-pill{
+      padding:11px 15px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.82);
+      box-shadow:0 12px 30px rgba(31,48,56,.07);
+      color:#43565e;
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:1px
+    }
+
+    /* DIALOGUE */
+    .dialogue-wrap{
+      position:absolute;
+      z-index:70;
+      left:50%;
+      bottom:3.1%;
+      width:min(990px,89vw);
+      transform:translateX(-50%);
+      pointer-events:none
+    }
+    .dialogue{
+      opacity:0;
+      transform:translateY(16px);
+      transition:opacity .46s ease,transform .46s ease
+    }
+    .dialogue.show{
+      opacity:1;
+      transform:none
+    }
+    .dialogue-name{
+      margin-bottom:7px;
+      text-align:center;
+      color:rgba(226,195,143,.98);
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:2.5px;
+      text-shadow:0 2px 12px rgba(0,0,0,.23)
+    }
+    .light-dialogue .dialogue-name{
+      color:#8b7651;
+      text-shadow:none
+    }
+    .dialogue.visitor .dialogue-name{
+      color:rgba(255,255,255,.72)
+    }
+    .light-dialogue .dialogue.visitor .dialogue-name{
+      color:#6b797f
+    }
+    .dialogue-box{
+      padding:15px 24px;
+      border:1px solid rgba(255,255,255,.17);
+      border-radius:15px;
+      text-align:center;
+      color:#fff;
+      background:linear-gradient(135deg,rgba(18,29,35,.92),rgba(33,45,50,.85));
+      box-shadow:0 20px 48px rgba(0,0,0,.22);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px)
+    }
+    .light-dialogue .dialogue-box{
+      border-color:rgba(35,53,62,.10);
+      color:#273940;
+      background:rgba(255,255,255,.84);
+      box-shadow:0 18px 42px rgba(31,48,56,.10)
+    }
+    .dialogue-en{
+      font-size:clamp(16px,1.32vw,21px);
+      font-weight:620;
+      line-height:1.47
+    }
+    .dialogue-ar{
+      display:none;
+      margin-top:8px;
+      padding-top:8px;
+      border-top:1px solid rgba(255,255,255,.13);
+      color:rgba(255,255,255,.78);
+      direction:rtl;
+      font-size:clamp(13px,1.02vw,16px);
+      line-height:1.56
+    }
+    .light-dialogue .dialogue-ar{
+      border-top-color:rgba(35,53,62,.09);
+      color:#66767d
+    }
+    .dialogue-ar.on{display:block}
+
+    @media(max-width:980px){
+      .value-grid{grid-template-columns:repeat(2,1fr)}
+      .foundation-grid{grid-template-columns:repeat(3,1fr)}
+      .analysis-grid{grid-template-columns:repeat(2,1fr)}
+      .analysis-card:last-child{grid-column:auto}
+      .role-grid{grid-template-columns:1fr 1fr}
+    }
+    @media(max-height:760px){
+      .ui-visual{padding-top:5.7vh;padding-bottom:22vh}
+      .dialogue-box{padding:11px 19px}
+      .dialogue-en{font-size:15px}
+      .dialogue-ar{font-size:12px}
+      .value-card{min-height:132px;padding:18px 15px}
+      .role-card{min-height:210px;padding:22px}
+      .foundation{min-height:66px}
+      .opportunity{min-height:84px}
+      .analysis-card{min-height:84px}
+    }
+  
+
+    /* V30 scene framing — smaller top title, lighter caption treatment, more image visible. */
+    .scene-header{
+      top:18px !important;left:26px !important;max-width:min(540px,46vw) !important;
+      padding:9px 13px !important;border-radius:13px !important;
+      background:rgba(10,18,23,.22) !important;border-color:rgba(255,255,255,.13) !important;
+      box-shadow:none !important;backdrop-filter:blur(7px) !important;-webkit-backdrop-filter:blur(7px) !important;
+    }
+
+    /* Keep the AI manager portrait clear: place only this intro title in the open office area. */
+    #aiManagerIntro .scene-header{
+      left:auto !important;
+      right:17vw !important;
+      top:18px !important;
+      width:min(520px,40vw) !important;
+      max-width:none !important;
+    }
+    @media(max-width:1100px){
+      #aiManagerIntro .scene-header{
+        left:auto !important;
+        right:16px !important;
+        top:60px !important;
+        width:min(350px,42vw) !important;
+        max-width:none !important;
+      }
+    }
+    @media(max-width:820px){
+      #aiManagerIntro .scene-header{
+        left:auto !important;
+        right:12px !important;
+        top:62px !important;
+        width:min(320px,42vw) !important;
+        max-width:none !important;
+        padding:8px 11px !important;
+      }
+      #aiManagerIntro .scene-kicker{
+        font-size:7px !important;
+        letter-spacing:1.5px !important;
+      }
+      #aiManagerIntro .scene-title{
+        font-size:clamp(16px,2.6vw,21px) !important;
+        line-height:1.08 !important;
+      }
+      #aiManagerIntro .scene-sub{
+        font-size:8px !important;
+        line-height:1.35 !important;
+      }
+    }
+    @media(max-width:560px){
+      #aiManagerIntro .scene-header{
+        right:8px !important;
+        top:58px !important;
+        width:46vw !important;
+        padding:7px 9px !important;
+      }
+      #aiManagerIntro .scene-sub{display:none !important;}
+    }
+    .scene-title{font-size:clamp(20px,2.25vw,34px) !important;line-height:1.08 !important;letter-spacing:-.55px !important;}
+    .dialogue-wrap{width:min(980px,82vw) !important;bottom:2.4% !important;}
+    .dialogue-box{
+      padding:9px 16px !important;border:none !important;border-radius:10px !important;
+      background:rgba(8,14,18,.16) !important;box-shadow:none !important;
+      backdrop-filter:none !important;-webkit-backdrop-filter:none !important;
+      color:#fff !important;text-shadow:0 2px 9px rgba(0,0,0,.95) !important;
+    }
+    .dialogue-ar{margin-top:4px !important;padding-top:4px !important;border-top:none !important;color:#fff !important;line-height:1.45 !important;text-shadow:0 2px 9px rgba(0,0,0,.98) !important;}
+    @media(max-width:820px){.dialogue-wrap{width:94vw !important;}}
+
+  
+
+    /* FINAL AI POLISH — title placement, portrait framing, Arabic readability, balanced cards */
+    #aiStaticHero .scene-label{
+      left:auto !important;
+      right:4% !important;
+      top:5% !important;
+      width:min(520px,40vw) !important;
+      max-width:none !important;
+    }
+    #aiStaticHero .photo-img{
+      object-position:center 30% !important;
+    }
+    .analysis-card:last-child{grid-column:auto !important;}
+
+    .dialogue-box{
+      padding:12px 20px 13px !important;
+      border:1px solid rgba(255,255,255,.16) !important;
+      border-radius:14px !important;
+      background:rgba(8,14,18,.72) !important;
+      box-shadow:0 14px 36px rgba(0,0,0,.28) !important;
+      backdrop-filter:blur(10px) !important;
+      -webkit-backdrop-filter:blur(10px) !important;
+      text-shadow:none !important;
+    }
+    .dialogue-en{
+      color:#fff !important;
+      font-size:clamp(16px,1.35vw,21px) !important;
+      line-height:1.5 !important;
+      font-weight:700 !important;
+    }
+    .dialogue-ar{
+      margin-top:8px !important;
+      padding-top:8px !important;
+      border-top:1px solid rgba(255,255,255,.14) !important;
+      color:#ffe2a3 !important;
+      font-size:clamp(15px,1.22vw,18px) !important;
+      line-height:1.68 !important;
+      font-weight:800 !important;
+      text-shadow:none !important;
+    }
+    .light-dialogue .dialogue-box{
+      border-color:rgba(31,48,56,.13) !important;
+      background:rgba(255,255,255,.96) !important;
+      box-shadow:0 14px 34px rgba(31,48,56,.14) !important;
+      color:#20343d !important;
+    }
+    .light-dialogue .dialogue-en{color:#20343d !important;}
+    .light-dialogue .dialogue-ar{
+      border-top-color:rgba(31,48,56,.10) !important;
+      color:#334a54 !important;
+    }
+    @media(max-width:820px){
+      #aiStaticHero .scene-label{right:12px !important;top:60px !important;width:min(330px,44vw) !important;}
+      #aiStaticHero .photo-img{object-position:center 25% !important;}
+      .dialogue-wrap{width:94vw !important;}
+      .dialogue-box{padding:10px 13px 11px !important;}
+      .dialogue-ar{font-size:13.5px !important;line-height:1.55 !important;}
+    }
+</style>
+  <script>/* FIXED_AUDIO_NO_CUTOFF */</script>
+</head>
+
+<body>
+<div class="page">
+
+  <div class="progress">
+    <div id="progressBar" class="progress-bar"></div>
+  </div>
+
+  <div class="controls">
+    <button id="arBtn" class="ctl">AR OFF</button>
+    <button id="voiceBtn" class="ctl">VOICE ON</button>
+    <button id="pauseBtn" class="ctl">PAUSE</button>
+  </div>
+
+  <!-- The Head of Customer Support introduces the new area before entry. -->
+  <section id="aiManagerIntro" class="visual photo-visual">
+    <img class="photo-img" src="assets/images/rtcGJm3.png" alt="Head of Customer Support introducing the AI development area" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/ai-manager-intro.png';">
+    <div class="photo-shade"></div>
+    <div class="scene-label scene-header">
+      <div class="scene-kicker">HEAD OF CUSTOMER SUPPORT · NEW AREA</div>
+      <div class="scene-title">AI Department · Under Development</div>
+      <div class="scene-sub">A new support department currently being planned, built and tested.</div>
+    </div>
+  </section>
+
+  <!-- Existing AI hero shown after the manager's introduction. -->
+  <section id="aiStaticHero" class="visual photo-visual">
+    <img class="photo-img" src="assets/images/NKRATjh.png" alt="AI Integration & Operational Improvement">
+    <div class="photo-shade"></div>
+    <div class="scene-label">
+      <div class="scene-kicker">NEW DEVELOPMENT AREA</div>
+      <div class="scene-title">AI Integration & Operational Improvement</div>
+      <div class="scene-sub">Building practical AI and automation into the support operation where they add real value.</div>
+    </div>
+  </section>
+
+  <div id="visualHost"></div>
+
+  <div id="dialogueWrap" class="dialogue-wrap">
+    <div id="dialogue" class="dialogue">
+      <div id="dialogueName" class="dialogue-name">VISITOR</div>
+      <div class="dialogue-box">
+        <div id="dialogueEn" class="dialogue-en"></div>
+        <div id="dialogueAr" class="dialogue-ar"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+
+  function isVisitorKey(key){
+    const value=String(key||'').toLowerCase();
+    return value==='visitor' || value.indexOf('visitor_')===0;
+  }
+
+
+
+  /* ============================================================
+     APPROVED AI SCENE IMAGE — DIRECT IMGUR, SAME AS INDEX 3
+  ============================================================ */
+  const AI_SCENE_IMAGE = 'assets/images/NKRATjh.png';
+  const AI_MANAGER_IMAGE = 'assets/images/rtcGJm3.png';
+
+  const AR_KEY='support_center_ar';
+  const VOICE_KEY='support_center_voice';
+
+  /* ============================================================
+     AI INITIATIVE RESPONSIBILITIES
+     Support Management = shared strategic direction and major decisions
+     Assistant Head = day-to-day coordination / operational requirements
+     AI Development Employee = research / testing / implementation support
+  ============================================================ */
+  const steps=[
+
+    {
+      visual:'manager-intro',
+      speaker:'support_manager',
+      en:'Before we enter, I want to introduce a new area we are currently building: our AI Development and Operational Improvement department. It is still under construction, but the direction is clear.',
+      ar:'قبل أن ندخل، أريد أن أعرّفكم على مجال جديد نعمل حالياً على بنائه: قسم تطوير الذكاء الاصطناعي والتحسين التشغيلي. ما زال قيد الإنشاء، لكن الاتجاه واضح.'
+    },
+    {
+      visual:'manager-intro',
+      speaker:'support_manager',
+      en:'The goal is to keep developing the department and stay current with any advancement that can genuinely support the work, reduce time and effort, and improve operational efficiency. Let us go inside and see what we are developing.',
+      ar:'الهدف هو الاستمرار في تطوير القسم ومواكبة أي تطور يمكن أن يخدم العمل فعلياً، ويقلل الوقت والجهد، ويرفع الكفاءة التشغيلية. دعونا ندخل ونرى ما الذي نعمل على تطويره.'
+    },
+
+    {
+      visual:'hero',
+      speaker:'visitor_female_02',
+      en:'This looks like a new area. Is AI already fully integrated into the support center?',
+      ar:'يبدو أن هذا مجال جديد. هل تم دمج الذكاء الاصطناعي بالكامل في مركز الدعم؟'
+    },
+    {
+      visual:'hero',
+      speaker:'assistant_head',
+      en:'Not yet. This is a new development area that we are currently building and organizing.',
+      ar:'ليس بعد. هذا مجال تطوير جديد نعمل حالياً على بنائه وتنظيمه.'
+    },
+    {
+      visual:'hero',
+      speaker:'assistant_head',
+      en:'My goal is to review how we work across the support center and identify every place where AI or automation can make the job easier, faster, or more accurate.',
+      ar:'هدفي هو مراجعة طريقة عملنا في مركز الدعم وتحديد كل مكان يمكن للذكاء الاصطناعي أو الأتمتة أن يجعل العمل فيه أسهل أو أسرع أو أدق.'
+    },
+
+    {
+      visual:'objective',
+      speaker:'visitor_female_02',
+      en:'So you want AI inside every process?',
+      ar:'إذن تريد إدخال الذكاء الاصطناعي في كل عملية؟'
+    },
+    {
+      visual:'objective',
+      speaker:'assistant_head',
+      en:'Where it actually adds value. I do not want to use AI just because it is available.',
+      ar:'في الأماكن التي يضيف فيها قيمة فعلية. لا أريد استخدام الذكاء الاصطناعي لمجرد أنه متاح.'
+    },
+    {
+      visual:'objective',
+      speaker:'assistant_head',
+      en:'I want to use it where it can reduce repetitive work, improve analysis, reduce avoidable mistakes, or help us reach better results.',
+      ar:'أريد استخدامه عندما يستطيع تقليل العمل المتكرر وتحسين التحليل وتقليل الأخطاء التي يمكن تجنبها أو مساعدتنا في الوصول إلى نتائج أفضل.'
+    },
+
+    {
+      visual:'roles',
+      speaker:'visitor_female_02',
+      en:'And who is responsible for this initiative?',
+      ar:'ومن المسؤول عن هذه المبادرة؟'
+    },
+    {
+      visual:'roles',
+      speaker:'assistant_head',
+      en:'The strategic direction and major decisions are agreed jointly by the Customer Support Management Team. I coordinate the initiative day to day, translate those decisions into operational requirements, and assess which solutions are genuinely useful for the operation.',
+      ar:'الاتجاه الاستراتيجي والقرارات الرئيسية يتم الاتفاق عليها بشكل مشترك من فريق إدارة مركز الدعم. وأنا أتولى تنسيق المبادرة يومياً، وتحويل هذه القرارات إلى متطلبات تشغيلية، وتقييم الحلول التي تحقق فائدة فعلية للعمل.'
+    },
+    {
+      visual:'roles',
+      speaker:'ai_employee',
+      en:'I support the research, testing, implementation, and follow-up. We turn approved ideas into small working solutions and test them in real operations.',
+      ar:'أنا أساعد في البحث والاختبار والتنفيذ والمتابعة. نحول الأفكار المعتمدة إلى حلول عملية صغيرة ونختبرها في التشغيل الحقيقي.'
+    },
+
+    {
+      visual:'foundations',
+      speaker:'visitor_female_02',
+      en:'Have you already built anything that gives you a foundation for this?',
+      ar:'هل لديكم بالفعل شيء مبني يشكل أساساً لهذه المبادرة؟'
+    },
+    {
+      visual:'foundations',
+      speaker:'assistant_head',
+      en:'Yes. We already rely heavily on automation and operational tools built with Google Scripts, reports, trackers, dashboards, alarms, verification utilities, number management, scheduling support, and reconciliation.',
+      ar:'نعم. نعتمد بالفعل بشكل كبير على الأتمتة والأدوات التشغيلية المبنية باستخدام Google Scripts والتقارير وأدوات التتبع والداشبورد والإنذارات وأدوات التحقق وإدارة الأرقام ودعم الجداول والمطابقة.'
+    },
+    {
+      visual:'foundations',
+      speaker:'assistant_head',
+      en:'Those tools are not all AI, but they give us an important foundation: we already know how to identify repetitive work and turn it into a system.',
+      ar:'هذه الأدوات ليست كلها ذكاءً اصطناعياً، لكنها تعطينا أساساً مهماً: نحن نعرف بالفعل كيف نحدد العمل المتكرر ونحوله إلى نظام.'
+    },
+    {
+      visual:'foundations',
+      speaker:'ai_employee',
+      en:'That existing automation also gives us real workflows to study, test, and improve instead of starting from zero.',
+      ar:'كما أن الأتمتة الموجودة تعطينا مسارات عمل حقيقية يمكننا دراستها واختبارها وتحسينها بدلاً من البدء من الصفر.'
+    },
+
+    {
+      visual:'usedAI',
+      speaker:'visitor_female_02',
+      en:'And where have you already used AI itself?',
+      ar:'وأين استخدمتم الذكاء الاصطناعي نفسه بالفعل؟'
+    },
+    {
+      visual:'usedAI',
+      speaker:'assistant_head',
+      en:'We have already used AI in specific cases, including matching selfie photos with ID cards and analyzing results in some reports.',
+      ar:'استخدمنا الذكاء الاصطناعي بالفعل في حالات محددة، منها مطابقة صور السيلفي مع بطاقات الهوية وتحليل النتائج في بعض التقارير.'
+    },
+    {
+      visual:'usedAI',
+      speaker:'ai_employee',
+      en:'Those early cases help us learn what works well, where human review is still needed, and what can be expanded safely.',
+      ar:'هذه الحالات المبكرة تساعدنا على معرفة ما الذي يعمل بشكل جيد وأين نحتاج للمراجعة البشرية وما الذي يمكن توسيعه بشكل آمن.'
+    },
+
+    {
+      visual:'inside',
+      speaker:'visitor_female_02',
+      en:'What do you want AI to do inside the systems employees already use?',
+      ar:'ماذا تريدون أن يفعل الذكاء الاصطناعي داخل الأنظمة التي يستخدمها الموظفون بالفعل؟'
+    },
+    {
+      visual:'inside',
+      speaker:'assistant_head',
+      en:'I want the systems themselves to assist the employee while they work — collect information, detect context, organize results, support translation, alert to language or response issues, and guide handling steps where appropriate.',
+      ar:'أريد من الأنظمة نفسها أن تساعد الموظف أثناء العمل: تجمع المعلومات وتفهم السياق وتنظم النتائج وتدعم الترجمة وتنبه لمشكلات اللغة أو الرد وتوجه خطوات المعالجة عند الحاجة.'
+    },
+    {
+      visual:'inside',
+      speaker:'assistant_head',
+      en:'Examples we are exploring include eSIM device detection, automatic ticket-note information, sales data aggregation, smarter filtering, ticket sorting, handling guidance, and WhatsApp API integration.',
+      ar:'من الأمثلة التي ندرسها اكتشاف دعم الجهاز لـ eSIM وإضافة معلومات تلقائياً إلى ملاحظة التيكت وتجميع بيانات المبيعات والفلترة الأذكى وترتيب التيكتات وإرشاد المعالجة وربط WhatsApp API.'
+    },
+    {
+      visual:'inside',
+      speaker:'ai_employee',
+      en:'Our job is to test which ideas can be implemented reliably and which ones actually save time in real use.',
+      ar:'مهمتنا هي اختبار الأفكار التي يمكن تنفيذها بشكل موثوق ومعرفة أيها يوفر وقتاً فعلياً في الاستخدام الحقيقي.'
+    },
+
+    {
+      visual:'outside',
+      speaker:'visitor_female_02',
+      en:'And outside the ticket workflow?',
+      ar:'وماذا عن خارج مسار التعامل مع التيكتات؟'
+    },
+    {
+      visual:'outside',
+      speaker:'assistant_head',
+      en:'That may be one of the highest-value areas. I want AI to help us analyze larger operational datasets and surface patterns faster.',
+      ar:'قد يكون هذا من أعلى المجالات قيمة. أريد أن يساعدنا الذكاء الاصطناعي في تحليل كميات أكبر من البيانات التشغيلية وإظهار الأنماط بشكل أسرع.'
+    },
+    {
+      visual:'outside',
+      speaker:'assistant_head',
+      en:'That includes weekly schedule creation, stock analysis, package consumption and sales, ticket volume and recurring issues, employee performance, and number replacement reasons.',
+      ar:'ويشمل ذلك إنشاء الجدول الأسبوعي وتحليل المخزون واستهلاك وبيع الباقات وحجم التيكتات والمشكلات المتكررة وأداء الموظفين وأسباب استبدال الأرقام.'
+    },
+    {
+      visual:'outside',
+      speaker:'ai_employee',
+      en:'For these use cases, we can compare AI-assisted results with the current manual process and see whether the improvement is real.',
+      ar:'في هذه الاستخدامات يمكننا مقارنة النتائج المدعومة بالذكاء الاصطناعي بالطريقة اليدوية الحالية ومعرفة ما إذا كان التحسن حقيقياً.'
+    },
+
+    {
+      visual:'method',
+      speaker:'visitor_female_02',
+      en:'With all these possibilities, how do you decide what to build first?',
+      ar:'مع كل هذه الاحتمالات، كيف تقررون ما الذي سيتم بناؤه أولاً؟'
+    },
+    {
+      visual:'method',
+      speaker:'assistant_head',
+      en:'We start with the operational problem, not with the technology.',
+      ar:'نبدأ بالمشكلة التشغيلية، وليس بالتكنولوجيا.'
+    },
+    {
+      visual:'method',
+      speaker:'assistant_head',
+      en:'If a task is repeated, takes too much manual effort, creates avoidable mistakes, or produces enough data to analyze, we evaluate whether AI or automation can improve it.',
+      ar:'إذا كانت المهمة متكررة أو تحتاج جهداً يدوياً كبيراً أو تسبب أخطاء يمكن تجنبها أو تنتج بيانات كافية للتحليل، نقيّم ما إذا كان الذكاء الاصطناعي أو الأتمتة يمكن أن يحسنها.'
+    },
+    {
+      visual:'method',
+      speaker:'ai_employee',
+      en:'Then we prototype, test with real work, measure the result, and improve it. If it is not useful or reliable, we do not force it into the operation.',
+      ar:'ثم نبني نموذجاً أولياً ونختبره في العمل الحقيقي ونقيس النتيجة ونحسنه. وإذا لم يكن مفيداً أو موثوقاً فلا نفرضه على العملية.'
+    },
+
+    {
+      visual:'principle',
+      speaker:'visitor_female_02',
+      en:'So the goal is not simply to say that the support center uses AI?',
+      ar:'إذن الهدف ليس فقط القول إن مركز الدعم يستخدم الذكاء الاصطناعي؟'
+    },
+    {
+      visual:'principle',
+      speaker:'assistant_head',
+      en:'Exactly. AI is not the objective. Better work is the objective.',
+      ar:'بالضبط. الذكاء الاصطناعي ليس هو الهدف. الهدف هو عمل أفضل.'
+    },
+    {
+      visual:'principle',
+      speaker:'assistant_head',
+      en:'The employee stays responsible for the customer. AI should remove unnecessary effort, give better information, and help people make faster and better decisions.',
+      ar:'يبقى الموظف مسؤولاً عن العميل. يجب أن يزيل الذكاء الاصطناعي الجهد غير الضروري ويوفر معلومات أفضل ويساعد الأشخاص على اتخاذ قرارات أسرع وأفضل.'
+    },
+    {
+      visual:'principle',
+      speaker:'ai_employee',
+      en:'That also means every tool has to be understandable, testable, and easy for the team to use in the real workflow.',
+      ar:'وهذا يعني أيضاً أن كل أداة يجب أن تكون مفهومة وقابلة للاختبار وسهلة على الفريق ضمن مسار العمل الحقيقي.'
+    },
+
+    {
+      visual:'vision',
+      speaker:'visitor_female_02',
+      en:'Where do you want this initiative to reach?',
+      ar:'إلى أين تريد أن تصل هذه المبادرة؟'
+    },
+    {
+      visual:'vision',
+      speaker:'assistant_head',
+      en:'I want AI to become a practical layer across the support center — wherever it can help in systems, reports, quality, training, employee support, management analysis, or operational decisions.',
+      ar:'أريد أن يصبح الذكاء الاصطناعي طبقة عملية في مركز الدعم، في كل مكان يمكنه أن يساعد فيه ضمن الأنظمة والتقارير والجودة والتدريب ودعم الموظفين وتحليل الإدارة والقرارات التشغيلية.'
+    },
+    {
+      visual:'vision',
+      speaker:'ai_employee',
+      en:'Every successful improvement can then become part of the normal way we work.',
+      ar:'وكل تحسين يثبت نجاحه يمكن بعدها أن يصبح جزءاً من طريقة العمل الطبيعية لدينا.'
+    },
+
+    {
+      visual:'handoff',
+      speaker:'visitor_female_02',
+      en:'So this is still the beginning?',
+      ar:'إذن هذه ما زالت البداية؟'
+    },
+    {
+      visual:'handoff',
+      speaker:'assistant_head',
+      en:'Yes. We are still building it, but the direction is clear: wherever AI can save time, reduce unnecessary effort, improve accuracy, or help us make better decisions, we want to explore it.',
+      ar:'نعم. ما زلنا نبنيه، لكن الاتجاه واضح: أينما يستطيع الذكاء الاصطناعي توفير الوقت أو تقليل الجهد غير الضروري أو تحسين الدقة أو مساعدتنا على اتخاذ قرارات أفضل، نريد استكشافه.'
+    },
+    {
+      visual:'handoff',
+      speaker:'assistant_head',
+      en:'Because in the end, systems, training, quality, automation, and AI all serve the same final objective.',
+      ar:'لأن الأنظمة والتدريب والجودة والأتمتة والذكاء الاصطناعي في النهاية تخدم جميعها نفس الهدف النهائي.'
+    }
+  ];
+
+  const state={
+    index:0,
+    paused:false,
+    arabic:false,
+    voice:true,
+    timer:null,
+    token:0,
+    currentUtterance:null,
+    voices:[],
+    profiles:[]
+  };
+
+  const els={
+    host:document.getElementById('visualHost'),
+    managerIntro:document.getElementById('aiManagerIntro'),
+    staticHero:document.getElementById('aiStaticHero'),
+    wrap:document.getElementById('dialogueWrap'),
+    dialogue:document.getElementById('dialogue'),
+    name:document.getElementById('dialogueName'),
+    en:document.getElementById('dialogueEn'),
+    ar:document.getElementById('dialogueAr'),
+    arBtn:document.getElementById('arBtn'),
+    voiceBtn:document.getElementById('voiceBtn'),
+    pauseBtn:document.getElementById('pauseBtn'),
+    progress:document.getElementById('progressBar')
+  };
+
+  const foundations=[
+    'Customer Support Reports',
+    'Mistakes Analysis',
+    'Spam Verification System',
+    'Stock Tracker',
+    'Alarm System',
+    'Supervisors Dashboard',
+    'Google & Apple Rate',
+    'WhatsApp Number Management',
+    'Check Numbers',
+    'VoIP Problems',
+    'Schedule Support',
+    'Numero Reconciliation'
+  ];
+
+  const insideOpportunities=[
+    'Detect whether the user’s device supports eSIM',
+    'Collect customer information into the ticket note',
+    'Aggregate sales data for all products in one place',
+    'Use AI to filter ticket results',
+    'Alert to language and response issues',
+    'AI-powered translation assistance',
+    'Suggest ticket handling steps',
+    'Ticket sorting by filters',
+    'WhatsApp API integration'
+  ];
+
+  const outsideOpportunities=[
+    'Weekly Schedule Creation',
+    'Stock System Analysis',
+    'Package Consumption Analysis',
+    'Package Sales Analysis',
+    'Ticket Volume & Issue Analysis',
+    'Employee Performance Analysis',
+    'Number Replacement Reason Analysis'
+  ];
+
+  function safeGet(key,fallback){
+    try{
+      const value=localStorage.getItem(key);
+      return value===null?fallback:value;
+    }catch(e){
+      return fallback;
+    }
+  }
+  function safeSet(key,value){
+    try{localStorage.setItem(key,value)}catch(e){}
+  }
+
+  state.arabic=safeGet(AR_KEY,'0')==='1';
+  state.voice=safeGet(VOICE_KEY,'1')!=='0';
+
+  function clearTimer(){
+    if(state.timer){
+      clearTimeout(state.timer);
+      state.timer=null;
+    }
+  }
+
+  function stopVoice(){
+    if('speechSynthesis' in window){
+      try{window.speechSynthesis.cancel();}catch(e){}
+    }
+    state.currentUtterance=null;
+  }
+
+  function loadVoices(){
+    if('speechSynthesis' in window){
+      state.voices=window.speechSynthesis.getVoices()||[];
+    }
+  }
+  loadVoices();
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged=loadVoices;
+  }
+
+  function speakerTitle(key){
+    if(String(key||'').toLowerCase()==='support_manager') return 'HEAD OF CUSTOMER SUPPORT CENTER';
+    const found=state.profiles.find(profile =>
+      String(profile.speaker_key||'').toLowerCase()===String(key||'').toLowerCase()
+    );
+
+    if(found && found.title){
+      return String(found.title).toUpperCase();
+    }
+
+    if(isVisitorKey(key)) return 'VISITOR';
+
+    const map={
+      support_manager:'HEAD OF CUSTOMER SUPPORT CENTER',
+      assistant_head:'ASSISTANT HEAD OF CUSTOMER SUPPORT CENTER',
+      ai_employee:'AI DEVELOPMENT EMPLOYEE'
+    };
+
+    return map[key]||String(key||'SYSTEM').replaceAll('_',' ').toUpperCase();
+  }
+
+  function getProfile(key){
+    const found=state.profiles.find(profile =>
+      String(profile.speaker_key||'').toLowerCase()===String(key||'').toLowerCase()
+    );
+
+    if(found) return found;
+
+    if(key==='ai_employee'){
+      return {
+        speaker_key:'ai_employee',
+        title:'AI DEVELOPMENT EMPLOYEE',
+        gender:'male',
+        lang:'en-US',
+        voice_hint:'',
+        rate:.98,
+        pitch:1.01
+      };
+    }
+
+    return {
+      speaker_key:key,
+      title:speakerTitle(key),
+      gender:isVisitorKey(key)
+        ? (String(key).indexOf('male_')>=0?'male':'female')
+        : 'male',
+      lang:'en-US',
+      voice_hint:'',
+      rate:isVisitorKey(key)?1.00:.96,
+      pitch:isVisitorKey(key)?1.03:.97
+    };
+  }
+
+  function chooseVoice(profile) {
+    const voices = state.voices.length
+      ? state.voices
+      : (window.speechSynthesis ? window.speechSynthesis.getVoices() : []);
+
+    if (!voices.length) return null;
+
+    const hint = String(profile.voice_hint || '').trim().toLowerCase();
+
+    if (hint) {
+      const hinted = voices.find(function(voice) {
+        return String(voice.name || '').toLowerCase().includes(hint);
+      });
+
+      if (hinted) return hinted;
+    }
+
+    const managementVoiceKey =
+      String(profile.speaker_key || '').toLowerCase();
+
+    if (
+      !profile.voice_hint &&
+      (
+        managementVoiceKey === 'assistant_head' ||
+        managementVoiceKey === 'quality_manager'
+      )
+    ) {
+      return chooseVoice(
+        Object.assign(
+          {},
+          profile,
+          {
+            speaker_key:'support_manager',
+            gender:'male',
+            voice_hint:''
+          }
+        )
+      );
+    }
+
+    const wantedLang = String(profile.lang || 'en-US').toLowerCase();
+    const langBase = wantedLang.split('-')[0];
+
+    let pool = voices.filter(function(voice) {
+      return String(voice.lang || '').toLowerCase().startsWith(langBase);
+    });
+
+    if (!pool.length) pool = voices.slice();
+
+    const femalePattern =
+      /samantha|victoria|karen|moira|tessa|zira|aria|jenny|sara|ava|susan|hazel|emma|jane|sonia|libby|female/i;
+
+    const malePattern =
+      /daniel|alex|fred|tom|arthur|george|guy|david|mark|ryan|christopher|andrew|brian|eric|roger|stefan|male/i;
+
+    const gender = String(profile.gender || '').toLowerCase();
+
+    const genderPool = pool.filter(function(voice) {
+      if (gender === 'female') return femalePattern.test(voice.name || '');
+      if (gender === 'male') return malePattern.test(voice.name || '');
+      return true;
+    });
+
+    if (genderPool.length) {
+      pool = genderPool;
+    }
+
+    const roleOrder = [
+      'visitor',
+      'support_manager',
+      'assistant_head',
+      'quality_manager',
+      'quality_team',
+      'supervisor',
+      'team_leaders',
+      'opdc',
+      'employees',
+      'ai_employee',
+      'system'
+    ];
+
+    const speakerKey = String(profile.speaker_key || '').toLowerCase();
+    let roleIndex = roleOrder.indexOf(speakerKey);
+
+    if (roleIndex < 0) {
+      roleIndex = speakerKey
+        .split('')
+        .reduce(function(total, char) {
+          return total + char.charCodeAt(0);
+        }, 0);
+    }
+
+    return pool[Math.abs(roleIndex) % pool.length] || pool[0] || null;
+  }
+
+  function estimate(text){
+    text=String(text||'');
+    return Math.max(3600,Math.min(11500,text.length*53+1850));
+  }
+
+  function splitSpeechText(text,maxLength){
+    const words=String(text||'').replace(/\s+/g,' ').trim().split(' ');
+    const chunks=[];
+    let current='';
+    words.forEach(function(word){
+      const candidate=current?current+' '+word:word;
+      if(candidate.length>maxLength&&current){
+        chunks.push(current);
+        current=word;
+      }else{
+        current=candidate;
+      }
+    });
+    if(current) chunks.push(current);
+    if (window.supportTourFixedAudio && window.supportTourFixedAudio.usingFixedAudio && typeof text !== 'undefined') { var __fat=String(text||'').replace(/\s+/g,' ').trim(); if(__fat){ chunks.length=0; chunks.push(__fat); } } /* FIXED_AUDIO_NO_SPLIT */
+    return chunks;
+  }
+
+  function schedule(ms,token){
+    clearTimer();
+    state.timer=setTimeout(()=>{
+      if(!state.paused && token===state.token){
+        next();
+      }
+    },ms);
+  }
+
+  function speak(step,token){
+    if(!state.voice || state.paused || !('speechSynthesis' in window)){
+      schedule(estimate(step.en),token);
+      return;
+    }
+
+    stopVoice();
+
+    const profile=getProfile(step.speaker);
+    const voice=chooseVoice(profile);
+    const chunks=splitSpeechText(step.en||'',96);
+    let chunkIndex=0;
+
+    function finishSpeech(){
+      state.currentUtterance=null;
+      if(!state.paused&&token===state.token) schedule(1300,token);
+    }
+
+    function speakNextChunk(){
+      if(state.paused||token!==state.token) return;
+      if(chunkIndex>=chunks.length){
+        finishSpeech();
+        return;
+      }
+
+      const utterance=new SpeechSynthesisUtterance(chunks[chunkIndex++]);
+      utterance.lang=profile.lang||'en-US';
+      utterance.rate=Number(profile.rate||1);
+      utterance.pitch=Number(profile.pitch||1);
+
+      if(voice){
+        utterance.voice=voice;
+        utterance.lang=voice.lang||utterance.lang;
+      }
+
+      state.currentUtterance=utterance;
+      let settled=false;
+
+      function finishChunk(){
+        if(settled||token!==state.token) return;
+        settled=true;
+        if(state.currentUtterance===utterance) state.currentUtterance=null;
+        if(!state.paused) setTimeout(speakNextChunk,90);
+      }
+
+      utterance.onend=finishChunk;
+      utterance.onerror=finishChunk;
+
+      try{window.speechSynthesis.speak(utterance);}
+      catch(e){finishChunk();}
+    }
+
+    speakNextChunk();
+  }
+
+  function heroHTML(){
+    /* Hero is a static DOM image, matching Index 3. */
+    return '';
+  }
+
+  function objectiveHTML(){
+    const cards=[
+      ['01','Reduce Repetition','Remove unnecessary repeated manual work.'],
+      ['02','Improve Analysis','Process more operational information faster.'],
+      ['03','Reduce Avoidable Errors','Support employees before small mistakes become customer-facing problems.'],
+      ['04','Reach Better Results','Give employees and management stronger information for decisions.']
+    ];
+
+    return `
+      <section class="visual ui-visual active">
+        <div class="ui-shell">
+          <div class="status-pill">
+            <span class="status-dot"></span>
+            NEW INITIATIVE · CURRENTLY BEING BUILT
+          </div>
+
+          <div class="ui-kicker">WHY AI</div>
+          <div class="ui-title">Use AI Where It Makes the Work Better</div>
+          <div class="ui-subtitle">
+            The initiative is not about adding AI everywhere. It is about finding operational friction and using the right tool where it produces a measurable benefit.
+          </div>
+
+          <div class="value-grid">
+            ${cards.map(card=>`
+              <div class="value-card">
+                <div class="value-no">${card[0]}</div>
+                <div class="value-name">${card[1]}</div>
+                <div class="value-copy">${card[2]}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function rolesHTML(){
+    return `
+      <section class="visual ui-visual active">
+        <div class="ui-shell">
+          <div class="ui-kicker">OWNERSHIP</div>
+          <div class="ui-title">Shared Direction by Support Management</div>
+          <div class="ui-subtitle">
+            Strategic direction and major decisions are agreed jointly by Support Management, while the Assistant Head coordinates execution and the AI Development Employee supports research, testing and implementation.
+          </div>
+
+          <div class="role-grid">
+            <div class="role-card lead">
+              <div class="role-tag">INITIATIVE COORDINATION</div>
+              <div class="role-title">Assistant Head</div>
+
+              <div class="role-list">
+                <div class="role-item">Identify operational problems worth solving</div>
+                <div class="role-item">Translate management priorities into expected outcomes</div>
+                <div class="role-item">Translate decisions into operational requirements</div>
+                <div class="role-item">Review usefulness and impact</div>
+                <div class="role-item">Present recommendations to Support Management</div>
+              </div>
+            </div>
+
+            <div class="role-card support">
+              <div class="role-tag">IMPLEMENTATION SUPPORT</div>
+              <div class="role-title">AI Development Employee</div>
+
+              <div class="role-list">
+                <div class="role-item">Research</div>
+                <div class="role-item">Build and test</div>
+                <div class="role-item">Implementation support</div>
+                <div class="role-item">Follow-up and iteration</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function foundationsHTML(){
+    return `
+      <section class="visual ui-visual active">
+        <div class="ui-shell">
+          <div class="ui-kicker">FOUNDATION ALREADY IN PLACE</div>
+          <div class="ui-title">Automation Came Before the AI Initiative</div>
+          <div class="ui-subtitle">
+            These are operational tools and automation foundations already used or relied upon. They are not all AI — and that distinction matters.
+          </div>
+
+          <div class="foundation-grid">
+            ${foundations.map((item,index)=>`
+              <div class="foundation">
+                <div class="foundation-icon">${String(index+1).padStart(2,'0')}</div>
+                <div class="foundation-name">${item}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function usedAIHTML(){
+    return `
+      <section class="visual ui-visual active">
+        <div class="ui-shell">
+          <div class="ui-kicker">AI ALREADY USED</div>
+          <div class="ui-title">Start With Real, Focused Use Cases</div>
+          <div class="ui-subtitle">
+            AI has already been used in specific areas while the wider initiative is still being organized.
+          </div>
+
+          <div class="ai-used">
+            <div class="ai-used-card">
+              <div class="ai-used-icon">ID</div>
+              <div class="ai-used-name">Selfie & ID Matching</div>
+              <div class="ai-used-copy">
+                AI-assisted comparison of selfie photos and identification cards to support verification workflows.
+              </div>
+            </div>
+
+            <div class="ai-used-card">
+              <div class="ai-used-icon">Σ</div>
+              <div class="ai-used-name">Report Result Analysis</div>
+              <div class="ai-used-copy">
+                Using AI to help analyze results in selected operational reports and surface useful patterns faster.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function insideHTML(){
+    return `
+      <section class="visual ui-visual active">
+        <div class="ui-shell">
+          <div class="ui-kicker">AI INSIDE THE SYSTEMS</div>
+          <div class="ui-title">Opportunities Under Review</div>
+          <div class="ui-subtitle">
+            The next phase is to bring useful intelligence directly into the systems employees already work with.
+          </div>
+
+          <div class="opportunity-grid">
+            ${insideOpportunities.map((item,index)=>`
+              <div class="opportunity">
+                <div class="opportunity-tag">OPPORTUNITY ${String(index+1).padStart(2,'0')}</div>
+                <div class="opportunity-name">${item}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function outsideHTML(){
+    return `
+      <section class="visual ui-visual active">
+        <div class="ui-shell">
+          <div class="ui-kicker">AI OUTSIDE THE SYSTEMS</div>
+          <div class="ui-title">Operational Intelligence for Better Decisions</div>
+          <div class="ui-subtitle">
+            Some of the highest-value opportunities are in analysis, planning and management support rather than inside the customer conversation itself.
+          </div>
+
+          <div class="analysis-grid">
+            ${outsideOpportunities.map((item,index)=>`
+              <div class="analysis-card">
+                <div class="analysis-no">${String(index+1).padStart(2,'0')}</div>
+                <div class="analysis-name">${item}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function methodHTML(){
+    const flow=[
+      'Observe Work',
+      'Identify Pain Point',
+      'AI / Automation Opportunity',
+      'Prototype',
+      'Test',
+      'Measure Result',
+      'Adopt / Improve / Reject'
+    ];
+
+    return `
+      <section class="visual ui-visual active">
+        <div class="ui-shell">
+          <div class="ui-kicker">HOW WE CHOOSE WHAT TO BUILD</div>
+          <div class="ui-title">Start With the Problem, Not the Technology</div>
+          <div class="ui-subtitle">
+            Every idea has to prove that it solves a real operational need.
+          </div>
+
+          <div class="flow-row">
+            ${flow.map((item,index)=>`
+              <div class="flow-card ${index===1 || index===5 ? 'focus' : ''}">
+                <div class="flow-index">${String(index+1).padStart(2,'0')}</div>
+                <div class="flow-name">${item}</div>
+              </div>
+              ${index<flow.length-1?'<div class="arrow">→</div>':''}
+            `).join('')}
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function principleHTML(){
+    return `
+      <section class="visual ui-visual active">
+        <div class="ui-shell">
+          <div class="ui-kicker">THE PRINCIPLE</div>
+
+          <div class="principle">
+            <div class="principle-line">
+              <em>AI is not the objective.</em><br>
+              Better work is the objective.
+            </div>
+
+            <div class="principle-small">
+              The employee remains responsible for the customer. AI should reduce unnecessary effort, improve the information available, and help people make faster and better decisions.
+            </div>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function visionHTML(){
+    return `
+      <section class="visual ui-visual active">
+        <div class="ui-shell">
+          <div class="ui-kicker">THE DIRECTION</div>
+          <div class="ui-title">A Practical AI Layer Across the Support Center</div>
+          <div class="ui-subtitle">
+            Not one isolated AI tool — a growing capability that can be applied wherever it improves the operation.
+          </div>
+
+          <div class="vision-map">
+            <div class="vision-node">
+              <strong>Systems</strong>
+              <span>Assistance inside operational workflows</span>
+            </div>
+            <div class="vision-node">
+              <strong>Reports</strong>
+              <span>Faster interpretation of larger datasets</span>
+            </div>
+            <div class="vision-node">
+              <strong>Quality</strong>
+              <span>Patterns, mistakes and improvement opportunities</span>
+            </div>
+
+            <div class="vision-node">
+              <strong>Training</strong>
+              <span>Knowledge support and guided development</span>
+            </div>
+            <div class="vision-node vision-center">
+              <strong>AI Integration</strong>
+              <span>Applied only where it creates practical value</span>
+            </div>
+            <div class="vision-node">
+              <strong>Employee Support</strong>
+              <span>Less repeated effort, better information</span>
+            </div>
+
+            <div class="vision-node">
+              <strong>Management</strong>
+              <span>Analysis that supports faster decisions</span>
+            </div>
+            <div class="vision-node">
+              <strong>Automation</strong>
+              <span>Connect AI with workflows and existing systems</span>
+            </div>
+            <div class="vision-node">
+              <strong>Operations</strong>
+              <span>Continuous testing, measurement and improvement</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function handoffHTML(){
+    return `
+      <section class="visual ui-visual active">
+        <div class="ui-shell">
+          <div class="ui-kicker">ONE FINAL CHAPTER REMAINS</div>
+
+          <div class="handoff">
+            <div class="handoff-line">
+              Systems. People. Quality. Training. Automation. AI.<br>
+              <span>One final objective.</span>
+            </div>
+
+            <div class="handoff-strip">
+              <div class="handoff-pill">MANAGEMENT</div>
+              <div class="handoff-pill">QUALITY</div>
+              <div class="handoff-pill">TEAMS</div>
+              <div class="handoff-pill">SYSTEMS</div>
+              <div class="handoff-pill">TRAINING</div>
+              <div class="handoff-pill">AI</div>
+              <div class="arrow">→</div>
+              <div class="handoff-pill">FINAL CHAPTER</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function renderVisual(step){
+    if(step.visual==='manager-intro'){
+      els.host.innerHTML='';
+      els.managerIntro.classList.add('active');
+      els.staticHero.classList.remove('active');
+      document.body.classList.remove('light-visual');
+      return;
+    }
+
+    if(step.visual==='hero'){
+      els.host.innerHTML='';
+      els.managerIntro.classList.remove('active');
+      els.staticHero.classList.add('active');
+      document.body.classList.remove('light-visual');
+      return;
+    }
+
+    els.managerIntro.classList.remove('active');
+    els.staticHero.classList.remove('active');
+
+    let html='';
+    switch(step.visual){
+      case 'objective': html=objectiveHTML(); break;
+      case 'roles': html=rolesHTML(); break;
+      case 'foundations': html=foundationsHTML(); break;
+      case 'used-ai': html=usedAIHTML(); break;
+      case 'inside': html=insideHTML(); break;
+      case 'outside': html=outsideHTML(); break;
+      case 'method': html=methodHTML(); break;
+      case 'principle': html=principleHTML(); break;
+      case 'vision': html=visionHTML(); break;
+      case 'handoff': html=handoffHTML(); break;
+      default: html=objectiveHTML();
+    }
+
+    els.host.innerHTML=html;
+    document.body.classList.add('light-visual');
+  }
+
+  function renderDialogue(step){
+    els.dialogue.classList.remove('show','visitor');
+
+    setTimeout(()=>{
+      els.name.textContent=speakerTitle(step.speaker);
+      els.en.textContent=step.en||'';
+      els.ar.textContent=step.ar||'';
+      els.ar.classList.toggle('on',state.arabic);
+      els.dialogue.classList.toggle('visitor',isVisitorKey(step.speaker));
+      els.dialogue.classList.add('show');
+    },90);
+  }
+
+  function updateControls(){
+    els.arBtn.textContent=state.arabic?'AR ON':'AR OFF';
+    els.arBtn.classList.toggle('on',state.arabic);
+
+    els.voiceBtn.textContent=state.voice?'VOICE ON':'VOICE OFF';
+    els.voiceBtn.classList.toggle('on',state.voice);
+
+    els.pauseBtn.textContent=state.paused?'PLAY':'PAUSE';
+    els.ar.classList.toggle('on',state.arabic);
+  }
+
+  function render(){
+    clearTimer();
+    stopVoice();
+
+    state.token+=1;
+    const token=state.token;
+    const step=steps[state.index];
+
+    renderVisual(step);
+    renderDialogue(step);
+    updateControls();
+
+    els.progress.style.width=
+      (((state.index+1)/steps.length)*100).toFixed(2)+'%';
+
+    if(!state.paused){
+      speak(step,token);
+    }
+  }
+
+  function next(){
+    if(state.index<steps.length-1){
+      state.index+=1;
+      render();
+      return;
+    }
+
+    state.paused=true;
+    updateControls();
+
+    setTimeout(()=>{
+      if(
+        typeof google!=='undefined' &&
+        google.script &&
+        google.script.run
+      ){
+        google.script.run
+          .withSuccessHandler(nextHtml=>{
+            document.open();
+            document.write(nextHtml);
+            document.close();
+          })
+          .withFailureHandler(err=>{
+            console.error('Could not open index13',err);
+          })
+          .getPage('index13');
+      }
+    },1100);
+  }
+
+  els.arBtn.addEventListener('click',()=>{
+    state.arabic=!state.arabic;
+    safeSet(AR_KEY,state.arabic?'1':'0');
+    updateControls();
+  });
+
+  els.voiceBtn.addEventListener('click',()=>{
+    state.voice=!state.voice;
+    safeSet(VOICE_KEY,state.voice?'1':'0');
+
+    if(!state.voice){
+      stopVoice();
+      state.token+=1;
+
+      if(!state.paused){
+        schedule(4400,state.token);
+      }
+    }else if(!state.paused){
+      render();
+    }
+
+    updateControls();
+  });
+
+  els.pauseBtn.addEventListener('click',()=>{
+    state.paused=!state.paused;
+
+    if(state.paused){
+      clearTimer();
+
+      if('speechSynthesis' in window && state.currentUtterance){
+        try{window.speechSynthesis.pause();}catch(e){}
+      }
+    }else{
+      if('speechSynthesis' in window && state.currentUtterance){
+        try{window.speechSynthesis.resume();}catch(e){}
+      }else{
+        schedule(850,state.token);
+      }
+    }
+
+    updateControls();
+  });
+
+  function start(){
+    render();
+  }
+
+  if(
+    typeof google!=='undefined' &&
+    google.script &&
+    google.script.run
+  ){
+    google.script.run
+      .withSuccessHandler(profiles=>{
+        state.profiles=Array.isArray(profiles)?profiles:[];
+        start();
+      })
+      .withFailureHandler(()=>{
+        state.profiles=[];
+        start();
+      })
+      .getVoiceProfiles();
+  }else{
+    state.profiles=[];
+    start();
+  }
+
+})();
+</script>
+
+<script id="canonical-head-title-guard">
+(function () {
+  'use strict';
+  var CANONICAL_HEAD_TITLE = 'HEAD OF CUSTOMER SUPPORT CENTER';
+  var LEGACY = /^\s*support\s+manager\s*$/i;
+
+  function fixTextNode(node) {
+    if (!node || node.nodeType !== 3) return;
+    var parent = node.parentElement;
+    if (!parent || /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA)$/i.test(parent.tagName)) return;
+    if (LEGACY.test(String(node.nodeValue || ''))) {
+      node.nodeValue = CANONICAL_HEAD_TITLE;
+    }
+  }
+
+  function fixTree(root) {
+    if (!root) return;
+    if (root.nodeType === 3) { fixTextNode(root); return; }
+    if (root.nodeType !== 1 && root.nodeType !== 9 && root.nodeType !== 11) return;
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    var node;
+    while ((node = walker.nextNode())) fixTextNode(node);
+  }
+
+  function start() {
+    fixTree(document.body);
+    if (!document.body || !window.MutationObserver) return;
+    new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.type === 'characterData') {
+          fixTextNode(mutation.target);
+          return;
+        }
+        Array.prototype.forEach.call(mutation.addedNodes || [], fixTree);
+      });
+    }).observe(document.body, { childList: true, subtree: true, characterData: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start, { once: true });
+  } else {
+    start();
+  }
+})();
+</script>
+</body>
+</html>

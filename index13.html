@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base target="_top">
+  <link rel="stylesheet" href="tour-runtime.css">
+  <script src="tour-data.js"></script>
+  <script src="tour-runtime.js"></script>
+  
+  <!-- FIXED_TOUR_AUDIO -->
+  <script src="tour-audio-map.js"></script>
+  <script src="tour-audio.js"></script>
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://i.imgur.com" crossorigin>
+  <link rel="preload" as="image" href="assets/images/kPKVFZZ.png">
+  <link rel="preload" as="image" href="assets/images/pQ93K0l.png">
+  <link rel="preload" as="image" href="assets/images/4iFWYMw.png">
+  <link rel="preload" as="image" href="assets/images/8xXldIt.png">
+  <link rel="preload" as="image" href="assets/images/IeiVzkl.png">
+  <link rel="preload" as="image" href="assets/images/E5tYauo.png">
+  <title>Customer Support Center — Final Chapter</title>
+
+  <style>
+    *{box-sizing:border-box}
+    html,body{
+      width:100%;
+      height:100%;
+      margin:0;
+      overflow:hidden;
+      font-family:Arial,Helvetica,sans-serif;
+      background:#101820;
+      color:#fff
+    }
+    button{font-family:inherit}
+
+    :root{
+      --ink:#21343d;
+      --paper:rgba(255,255,255,.86);
+      --line:rgba(255,255,255,.17);
+      --gold:#e0c08a;
+      --muted:rgba(255,255,255,.73);
+    }
+
+    .page{
+      position:relative;
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      background:#101820
+    }
+
+    .progress{
+      position:fixed;
+      z-index:120;
+      left:0;
+      top:0;
+      width:100%;
+      height:3px;
+      background:rgba(255,255,255,.10)
+    }
+    .progress-bar{
+      width:0;
+      height:100%;
+      background:linear-gradient(90deg,#e1c18b,#77aac2,#7a6fd8);
+      transition:width .45s ease
+    }
+
+    .controls{
+      position:fixed;
+      z-index:125;
+      top:14px;
+      right:14px;
+      display:flex;
+      gap:7px
+    }
+    .ctl{
+      height:31px;
+      min-width:78px;
+      padding:0 11px;
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:10px;
+      color:#fff;
+      background:rgba(18,29,35,.54);
+      box-shadow:0 10px 28px rgba(0,0,0,.16);
+      cursor:pointer;
+      font-size:8px;
+      font-weight:900;
+      letter-spacing:.9px;
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px)
+    }
+    .ctl.on{
+      color:#21343d;
+      border-color:rgba(255,255,255,.72);
+      background:rgba(255,255,255,.90)
+    }
+
+    .visual{
+      position:absolute;
+      inset:0;
+      opacity:0;
+      visibility:hidden;
+      transform:scale(1.012);
+      transition:opacity .9s ease,visibility .9s ease,transform 6s ease
+    }
+    .visual.active{
+      opacity:1;
+      visibility:visible;
+      transform:scale(1.035)
+    }
+
+    .scene-img{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center center
+    }
+
+    /* Images are static DOM nodes, exactly like the working Index 3 image request. */
+    .scene-static-img{
+      opacity:0;
+      visibility:hidden;
+      transition:opacity .85s ease, visibility .85s ease;
+    }
+    .scene-static-img.active-image{
+      opacity:1;
+      visibility:visible;
+    }
+    #finalSceneHeader.hidden{display:none}
+    #finalStaticOverlay{display:none}
+    #finalStaticOverlay.show{display:flex}
+
+    .shade{
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(180deg,rgba(7,13,17,.06),transparent 30%,transparent 53%,rgba(7,13,17,.72)),
+        linear-gradient(90deg,rgba(7,13,17,.10),transparent 24%,transparent 78%,rgba(7,13,17,.10))
+    }
+
+    .scene-header{
+      position:absolute;
+      z-index:10;
+      left:4%;
+      top:5.2%;
+      max-width:min(760px,72vw);
+      padding:11px 15px 12px;
+      border:1px solid rgba(255,255,255,.23);
+      border-radius:13px;
+      background:rgba(17,28,34,.30);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+      box-shadow:0 18px 48px rgba(0,0,0,.14)
+    }
+    .scene-kicker{
+      margin-bottom:5px;
+      color:rgba(255,255,255,.66);
+      font-size:8px;
+      font-weight:900;
+      letter-spacing:2.3px
+    }
+    .scene-title{
+      font-size:clamp(24px,2.4vw,38px);
+      font-weight:800;
+      letter-spacing:-.45px;
+      line-height:1.1
+    }
+
+    .dialogue-wrap{
+      position:absolute;
+      z-index:70;
+      left:50%;
+      bottom:3.2%;
+      width:min(1010px,90vw);
+      transform:translateX(-50%);
+      pointer-events:none
+    }
+    .dialogue{
+      opacity:0;
+      transform:translateY(17px);
+      transition:opacity .46s ease,transform .46s ease
+    }
+    .dialogue.show{
+      opacity:1;
+      transform:none
+    }
+    .dialogue-name{
+      margin-bottom:7px;
+      text-align:center;
+      color:var(--gold);
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:2.6px;
+      text-shadow:0 2px 12px rgba(0,0,0,.22)
+    }
+    .dialogue.visitor .dialogue-name{
+      color:rgba(255,255,255,.72)
+    }
+    .dialogue-box{
+      padding:15px 24px;
+      border:1px solid rgba(255,255,255,.17);
+      border-radius:15px;
+      text-align:center;
+      color:#fff;
+      background:linear-gradient(135deg,rgba(18,29,35,.92),rgba(33,45,50,.84));
+      box-shadow:0 20px 48px rgba(0,0,0,.24);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px)
+    }
+    .dialogue-en{
+      font-size:clamp(16px,1.34vw,21px);
+      font-weight:630;
+      line-height:1.47
+    }
+    .dialogue-ar{
+      display:none;
+      margin-top:8px;
+      padding-top:8px;
+      border-top:1px solid rgba(255,255,255,.13);
+      color:rgba(255,255,255,.78);
+      direction:rtl;
+      font-size:clamp(13px,1.04vw,16px);
+      line-height:1.58
+    }
+    .dialogue-ar.on{display:block}
+
+    .final-overlay{
+      position:absolute;
+      z-index:30;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:8vh 6vw 22vh;
+      background:
+        radial-gradient(circle at 50% 38%,rgba(255,255,255,.10),transparent 35%),
+        linear-gradient(180deg,rgba(8,15,19,.28),rgba(8,15,19,.62))
+    }
+    .final-card{
+      width:min(1120px,90vw);
+      padding:34px 40px;
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:26px;
+      background:rgba(18,29,35,.48);
+      box-shadow:0 30px 80px rgba(0,0,0,.22);
+      text-align:center;
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px)
+    }
+    .final-kicker{
+      margin-bottom:12px;
+      color:rgba(255,255,255,.68);
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:3px
+    }
+    .final-title{
+      margin-bottom:14px;
+      font-size:clamp(34px,4.3vw,70px);
+      font-weight:830;
+      letter-spacing:-1.6px;
+      line-height:1.02
+    }
+    .final-title span{color:#e4c38f}
+    .final-copy{
+      max-width:900px;
+      margin:0 auto;
+      color:rgba(255,255,255,.82);
+      font-size:clamp(14px,1.2vw,18px);
+      line-height:1.65
+    }
+    .final-strip{
+      margin-top:26px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:9px
+    }
+    .pill{
+      padding:10px 15px;
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:999px;
+      background:rgba(255,255,255,.09);
+      color:#fff;
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:1px
+    }
+    .arrow{
+      color:#d8bd8e;
+      font-size:18px
+    }
+
+    .end-actions{
+      position:absolute;
+      z-index:90;
+      left:50%;
+      bottom:3.3%;
+      transform:translateX(-50%);
+      display:none;
+      gap:9px
+    }
+    .end-actions.show{display:flex}
+    .end-btn{
+      height:38px;
+      padding:0 16px;
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:12px;
+      background:rgba(18,29,35,.70);
+      color:#fff;
+      cursor:pointer;
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:1px;
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px)
+    }
+
+    /* Customer review showcase — shown after the final customer image and before farewell. */
+    .reviews-stage{
+      position:absolute;
+      z-index:55;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:7vh 5vw 8vh;
+      background:
+        radial-gradient(circle at 18% 22%,rgba(94,127,230,.22),transparent 28%),
+        radial-gradient(circle at 82% 76%,rgba(177,72,164,.20),transparent 31%),
+        linear-gradient(145deg,#0b131a,#111d26 52%,#0c151c);
+    }
+    .reviews-stage.show{display:flex}
+    .reviews-shell{width:min(1180px,92vw);text-align:center}
+    .reviews-kicker{margin-bottom:8px;color:rgba(255,255,255,.58);font-size:9px;font-weight:900;letter-spacing:3.2px}
+    .reviews-store{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px}
+    .store-mark{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-width:40px;height:40px;padding:0 11px;border-radius:12px;
+      background:rgba(255,255,255,.92);color:#17232c;font-size:15px;font-weight:950;
+      box-shadow:0 10px 30px rgba(0,0,0,.16)
+    }
+    .reviews-title{font-size:clamp(28px,3.1vw,50px);font-weight:850;letter-spacing:-1px;line-height:1.04}
+    .reviews-subtitle{margin:9px auto 24px;max-width:760px;color:rgba(255,255,255,.72);font-size:13px;line-height:1.5}
+    .review-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+    .review-card{
+      min-height:238px;padding:22px 21px 18px;border:1px solid rgba(255,255,255,.14);border-radius:21px;
+      text-align:left;background:rgba(255,255,255,.075);box-shadow:0 22px 58px rgba(0,0,0,.18);
+      backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px)
+    }
+    .review-stars{color:#f4bf42;font-size:20px;letter-spacing:2px;margin-bottom:16px;text-shadow:0 2px 10px rgba(244,191,66,.18)}
+    .review-heading{min-height:42px;margin-bottom:11px;color:#fff;font-size:16px;font-weight:820;line-height:1.28}
+    .review-quote{color:rgba(255,255,255,.88);font-size:15px;font-weight:610;line-height:1.55}
+    .review-meta{margin-top:17px;padding-top:13px;border-top:1px solid rgba(255,255,255,.10);color:rgba(255,255,255,.58);font-size:10px;font-weight:850;letter-spacing:.6px}
+    .review-source-note{margin-top:18px;color:rgba(255,255,255,.40);font-size:9px;font-weight:800;letter-spacing:1.2px}
+    @media(max-width:900px){
+      .reviews-stage{padding:7vh 3vw 6vh}
+      .review-grid{gap:10px}
+      .review-card{padding:17px 15px;min-height:220px}
+      .review-quote{font-size:13px}
+      .review-heading{font-size:14px}
+    }
+
+    @media(max-height:760px){
+      .dialogue-box{padding:11px 18px}
+      .dialogue-en{font-size:15px}
+      .dialogue-ar{font-size:12px}
+      .final-card{padding:26px 32px}
+    }
+  
+
+    /* V30 scene framing — smaller top title, lighter caption treatment, more image visible. */
+    .scene-header{
+      top:18px !important;left:26px !important;max-width:min(540px,46vw) !important;
+      padding:9px 13px !important;border-radius:13px !important;
+      background:rgba(10,18,23,.22) !important;border-color:rgba(255,255,255,.13) !important;
+      box-shadow:none !important;backdrop-filter:blur(7px) !important;-webkit-backdrop-filter:blur(7px) !important;
+    }
+    .scene-title{font-size:clamp(20px,2.25vw,34px) !important;line-height:1.08 !important;letter-spacing:-.55px !important;}
+    .dialogue-wrap{width:min(980px,82vw) !important;bottom:2.4% !important;}
+    .dialogue-box{
+      padding:9px 16px !important;border:none !important;border-radius:10px !important;
+      background:rgba(8,14,18,.16) !important;box-shadow:none !important;
+      backdrop-filter:none !important;-webkit-backdrop-filter:none !important;
+      color:#fff !important;text-shadow:0 2px 9px rgba(0,0,0,.95) !important;
+    }
+    .dialogue-ar{margin-top:4px !important;padding-top:4px !important;border-top:none !important;color:#fff !important;line-height:1.45 !important;text-shadow:0 2px 9px rgba(0,0,0,.98) !important;}
+    @media(max-width:820px){.dialogue-wrap{width:94vw !important;}}
+
+  
+
+    /* V31 — framing fix only: keep full artwork/logo visible and make the title compact. */
+    .visual,
+    .visual.active{
+      transform:none !important;
+    }
+
+    #finalStaticScene{
+      background:#101820;
+    }
+
+    #finalStaticScene .scene-img{
+      top:48px !important;
+      bottom:auto !important;
+      left:0 !important;
+      right:0 !important;
+      width:100% !important;
+      height:calc(100% - 48px) !important;
+      object-fit:contain !important;
+      object-position:center top !important;
+      transform:none !important;
+    }
+
+    #finalSceneHeader{
+      position:fixed !important;
+      top:7px !important;
+      left:14px !important;
+      z-index:130 !important;
+      max-width:calc(100vw - 365px) !important;
+      min-height:34px !important;
+      padding:5px 11px 6px !important;
+      border-radius:10px !important;
+      background:rgba(16,24,32,.82) !important;
+      border:1px solid rgba(255,255,255,.14) !important;
+      box-shadow:none !important;
+      backdrop-filter:blur(10px) !important;
+      -webkit-backdrop-filter:blur(10px) !important;
+    }
+
+    #finalSceneHeader .scene-kicker{
+      display:none !important;
+    }
+
+    #finalSceneHeader .scene-title{
+      margin:0 !important;
+      font-size:clamp(15px,1.45vw,21px) !important;
+      font-weight:800 !important;
+      line-height:1.12 !important;
+      letter-spacing:-.15px !important;
+      white-space:normal !important;
+    }
+
+    @media(max-width:820px){
+      #finalStaticScene .scene-img{
+        top:46px !important;
+        height:calc(100% - 46px) !important;
+      }
+      #finalSceneHeader{
+        max-width:calc(100vw - 270px) !important;
+        left:8px !important;
+      }
+      #finalSceneHeader .scene-title{
+        font-size:15px !important;
+      }
+    }
+</style>
+</head>
+
+<body>
+<div class="page">
+
+  <div class="progress">
+    <div id="progressBar" class="progress-bar"></div>
+  </div>
+
+  <div class="controls">
+    <button id="arBtn" class="ctl">AR OFF</button>
+    <button id="voiceBtn" class="ctl">VOICE ON</button>
+    <button id="pauseBtn" class="ctl">PAUSE</button>
+  </div>
+
+  <!-- All five final images are requested immediately as static IMG tags, same pattern as Index 3. -->
+  <div id="visualHost">
+    <section id="finalStaticScene" class="visual active">
+      <img class="scene-img scene-static-img active-image" data-img-index="0" src="assets/images/kPKVFZZ.png" alt="Every Customer Matters">
+      <img class="scene-img scene-static-img" data-img-index="1" src="assets/images/pQ93K0l.png" alt="We Stay With the Customer">
+      <img class="scene-img scene-static-img" data-img-index="2" src="assets/images/4iFWYMw.png" alt="People Supporting People">
+      <img class="scene-img scene-static-img" data-img-index="3" src="assets/images/8xXldIt.png" alt="Customer Satisfaction">
+      <img class="scene-img scene-static-img" data-img-index="4" src="assets/images/IeiVzkl.png" alt="Performance That Moves Forward">
+      <img class="scene-img scene-static-img" data-img-index="5" src="assets/images/E5tYauo.png" alt="Numero customer giving a five-star rating">
+      <div class="shade"></div>
+
+      <div id="finalSceneHeader" class="scene-header">
+        <div class="scene-kicker">FINAL CHAPTER</div>
+        <div id="finalSceneTitle" class="scene-title">Every Customer Matters</div>
+      </div>
+
+      <div id="finalStaticOverlay" class="final-overlay">
+        <div class="final-card">
+          <div class="final-kicker">THE FINAL MESSAGE</div>
+          <div class="final-title">We Do Everything Possible<br><span>For a Better Customer Experience.</span></div>
+          <div class="final-copy">
+            Every system, every process, every training decision, every quality review, every automation, and every AI initiative ultimately serves the same purpose: helping people better.
+          </div>
+          <div class="final-strip">
+            <div class="pill">PEOPLE</div><div class="arrow">→</div>
+            <div class="pill">SYSTEMS</div><div class="arrow">→</div>
+            <div class="pill">QUALITY</div><div class="arrow">→</div>
+            <div class="pill">TRAINING</div><div class="arrow">→</div>
+            <div class="pill">AI</div><div class="arrow">→</div>
+            <div class="pill">CUSTOMER EXPERIENCE</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="reviewsStage" class="reviews-stage" aria-live="polite">
+      <div class="reviews-shell">
+        <div class="reviews-kicker">REAL CUSTOMER REVIEWS</div>
+        <div class="reviews-store">
+          <div id="storeMark" class="store-mark">▶</div>
+          <div id="reviewsTitle" class="reviews-title">Google Play Reviews</div>
+        </div>
+        <div id="reviewsSubtitle" class="reviews-subtitle">A few real comments from customers about their support experience.</div>
+        <div id="reviewGrid" class="review-grid"></div>
+        <div class="review-source-note">Selected public customer reviews · excerpts shown for presentation</div>
+      </div>
+    </section>
+  </div>
+
+  <div id="dialogueWrap" class="dialogue-wrap">
+    <div id="dialogue" class="dialogue">
+      <div id="dialogueName" class="dialogue-name">VISITOR</div>
+      <div class="dialogue-box">
+        <div id="dialogueEn" class="dialogue-en"></div>
+        <div id="dialogueAr" class="dialogue-ar"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="endActions" class="end-actions">
+    <button id="replayBtn" class="end-btn">REPLAY FINAL</button>
+    <button id="restartBtn" class="end-btn">BACK TO ENTRANCE</button>
+  </div>
+
+</div>
+
+<script>
+(function(){
+
+  function isVisitorKey(key){
+    const value=String(key||'').toLowerCase();
+    return value==='visitor' || value.indexOf('visitor_')===0;
+  }
+
+
+
+  /* ============================================================
+     FINAL CLOSING IMAGES — DIRECT IMGUR, SAME AS INDEX 3
+  ============================================================ */
+  const IMG = [
+    'assets/images/kPKVFZZ.png',
+    'assets/images/pQ93K0l.png',
+    'assets/images/4iFWYMw.png',
+    'assets/images/8xXldIt.png',
+    'assets/images/IeiVzkl.png',
+    'assets/images/E5tYauo.png'
+  ];
+
+  const AR_KEY='support_center_ar';
+  const VOICE_KEY='support_center_voice';
+
+  const REVIEW_SETS={
+    google:{
+      mark:'▶',
+      title:'Google Play Reviews',
+      subtitle:'A few real comments from Google Play customers about their support experience.',
+      items:[
+        {name:'evan',date:'Aug 4, 2025',heading:'Long-time customer',quote:'“Customer support is awesome, resolves problem almost immediately.”'},
+        {name:'Tycho Poupeye',date:'Oct 20, 2025',heading:'Fast help when it mattered',quote:'“Great customer support… they helped me quickly.”'},
+        {name:'Alexey Shott',date:'Jun 18, 2026',heading:'Issue resolved with support',quote:'“Customer support helped me resolve them, and I’m very grateful.”'}
+      ]
+    },
+    apple:{
+      mark:'A',
+      title:'Apple App Store Reviews',
+      subtitle:'A few real App Store comments highlighting follow-up, responsiveness, and personal support.',
+      items:[
+        {name:'Jordanyai',date:'Feb 11, 2025',heading:'Great and great one 7 stars',quote:'“If I could, I would give them 7 stars instead of 5!”'},
+        {name:'Kholoud khasawneh',date:'Dec 23, 2024',heading:'Special thanks to Mais from after sales',quote:'“She is the only one who took extra step to contact us personally.”'},
+        {name:'SeeJaneSurf',date:'Apr 3',heading:'Highly responsive customer service',quote:'“Stayed available until my issue was fully resolved.”'}
+      ]
+    }
+  };
+
+  const steps=[
+    {
+      image:IMG[0],
+      title:'Every Customer Matters',
+      speaker:'visitor_male_01',
+      en:'After everything I have seen, what is the one thing all of this is ultimately trying to achieve?',
+      ar:'بعد كل ما رأيته، ما هو الشيء الواحد الذي تحاولون في النهاية تحقيقه من كل هذا؟'
+    },
+    {
+      image:IMG[0],
+      title:'Every Customer Matters',
+      speaker:'assistant_head',
+      en:'Customer satisfaction. Every system, every process, every review, and every improvement exists because there is a person on the other side who needs help.',
+      ar:'رضا العميل. كل نظام وكل عملية وكل مراجعة وكل تطوير موجود لأن هناك شخصاً في الطرف الآخر يحتاج إلى المساعدة.'
+    },
+
+    {
+      image:IMG[1],
+      title:'We Stay With the Customer',
+      speaker:'assistant_head',
+      en:'Sometimes the solution is technical. Sometimes it is follow-up, escalation, explanation, or simply staying with the customer until the situation becomes clear.',
+      ar:'أحياناً يكون الحل تقنياً، وأحياناً يكون متابعة أو تصعيداً أو شرحاً أو ببساطة البقاء مع العميل حتى تصبح الصورة واضحة.'
+    },
+    {
+      image:IMG[1],
+      title:'We Stay With the Customer',
+      speaker:'visitor_male_01',
+      en:'So support is not only about closing a ticket?',
+      ar:'إذن الدعم ليس فقط إغلاق تيكت؟'
+    },
+    {
+      image:IMG[1],
+      title:'We Stay With the Customer',
+      speaker:'assistant_head',
+      en:'Exactly. Closing a ticket is not enough if the customer still feels unheard or uncertain.',
+      ar:'بالضبط. إغلاق التيكت وحده لا يكفي إذا كان العميل ما زال يشعر أنه غير مسموع أو غير مطمئن.'
+    },
+
+    {
+      image:IMG[2],
+      title:'People Supporting People',
+      speaker:'assistant_head',
+      en:'We train our people to listen, explain, solve, follow up, and support the customer as a person — not just as a case number.',
+      ar:'ندرب موظفينا على الاستماع والشرح والحل والمتابعة ودعم العميل كإنسان، وليس فقط كرقم حالة.'
+    },
+
+    {
+      image:IMG[3],
+      title:'Customer Satisfaction',
+      speaker:'visitor_male_01',
+      en:'And when customers leave satisfied, that becomes the real measure of the operation?',
+      ar:'وعندما يغادر العملاء وهم راضون، هل يصبح ذلك هو المقياس الحقيقي للعملية؟'
+    },
+    {
+      image:IMG[3],
+      title:'Customer Satisfaction',
+      speaker:'assistant_head',
+      en:'Yes. Satisfaction is where all the work connects — management, quality, supervisors, team leaders, OPDC, employees, training, systems, automation, and AI.',
+      ar:'نعم. عند رضا العميل تلتقي كل أجزاء العمل: الإدارة والجودة والمشرفون والتيم ليدر وOPDC والموظفون والتدريب والأنظمة والأتمتة والذكاء الاصطناعي.'
+    },
+
+    {
+      image:IMG[4],
+      title:'Performance That Moves Forward',
+      speaker:'assistant_head',
+      en:'We measure performance because we want to know whether the work is actually getting better — faster handling, stronger quality, fewer avoidable mistakes, and happier customers.',
+      ar:'نقيس الأداء لأننا نريد أن نعرف هل العمل يتحسن فعلاً: معالجة أسرع وجودة أقوى وأخطاء أقل يمكن تجنبها وعملاء أكثر رضاً.'
+    },
+    {
+      image:IMG[4],
+      title:'Performance That Moves Forward',
+      speaker:'visitor_male_01',
+      en:'So the numbers matter because they tell you whether the customer experience is improving?',
+      ar:'إذن الأرقام مهمة لأنها تخبركم ما إذا كانت تجربة العميل تتحسن؟'
+    },
+    {
+      image:IMG[4],
+      title:'Performance That Moves Forward',
+      speaker:'assistant_head',
+      en:'Exactly. The number is not the goal. The experience behind the number is the goal.',
+      ar:'بالضبط. الرقم ليس هو الهدف. التجربة الموجودة خلف الرقم هي الهدف.'
+    },
+
+    {
+      image:IMG[4],
+      title:'One Final Objective',
+      speaker:'assistant_head',
+      final:true,
+      en:'We will use every system we build, every lesson we learn, every tool we improve, and every new technology we can responsibly adopt to do everything possible for a better customer experience.',
+      ar:'سنستخدم كل نظام نبنيه وكل درس نتعلمه وكل أداة نطورها وكل تقنية جديدة نستطيع اعتمادها بمسؤولية لنفعل كل ما هو ممكن من أجل تجربة أفضل للعميل.'
+    },
+    {
+      image:IMG[5],
+      title:'The Customer Experience Speaks for Itself',
+      speaker:'support_manager',
+      en:'At the end of the day, the strongest measure of our work is the experience our customers share.',
+      ar:'في نهاية اليوم، أقوى مقياس لعملنا هو التجربة التي يشاركها عملاؤنا.'
+    },
+    {
+      kind:'reviews',
+      reviewSet:'google',
+      duration:7600
+    },
+    {
+      kind:'reviews',
+      reviewSet:'apple',
+      duration:8200
+    }
+  ];
+
+  const state={
+    index:0,
+    paused:false,
+    arabic:false,
+    voice:true,
+    timer:null,
+    token:0,
+    currentUtterance:null,
+    voices:[],
+    profiles:[],
+    ended:false
+  };
+
+  const els={
+    host:document.getElementById('visualHost'),
+    sceneImages:Array.from(document.querySelectorAll('.scene-static-img')),
+    sceneHeader:document.getElementById('finalSceneHeader'),
+    sceneTitle:document.getElementById('finalSceneTitle'),
+    finalOverlay:document.getElementById('finalStaticOverlay'),
+    reviewsStage:document.getElementById('reviewsStage'),
+    storeMark:document.getElementById('storeMark'),
+    reviewsTitle:document.getElementById('reviewsTitle'),
+    reviewsSubtitle:document.getElementById('reviewsSubtitle'),
+    reviewGrid:document.getElementById('reviewGrid'),
+    wrap:document.getElementById('dialogueWrap'),
+    dialogue:document.getElementById('dialogue'),
+    name:document.getElementById('dialogueName'),
+    en:document.getElementById('dialogueEn'),
+    ar:document.getElementById('dialogueAr'),
+    arBtn:document.getElementById('arBtn'),
+    voiceBtn:document.getElementById('voiceBtn'),
+    pauseBtn:document.getElementById('pauseBtn'),
+    progress:document.getElementById('progressBar'),
+    endActions:document.getElementById('endActions'),
+    replayBtn:document.getElementById('replayBtn'),
+    restartBtn:document.getElementById('restartBtn')
+  };
+
+  function safeGet(key,fallback){
+    try{
+      const value=localStorage.getItem(key);
+      return value===null?fallback:value;
+    }catch(e){
+      return fallback;
+    }
+  }
+
+  function safeSet(key,value){
+    try{localStorage.setItem(key,value)}catch(e){}
+  }
+
+  state.arabic=safeGet(AR_KEY,'0')==='1';
+  state.voice=safeGet(VOICE_KEY,'1')!=='0';
+
+  function clearTimer(){
+    if(state.timer){
+      clearTimeout(state.timer);
+      state.timer=null;
+    }
+  }
+
+  function stopVoice(){
+    if('speechSynthesis' in window){
+      try{window.speechSynthesis.cancel();}catch(e){}
+    }
+    state.currentUtterance=null;
+  }
+
+  function loadVoices(){
+    if('speechSynthesis' in window){
+      state.voices=window.speechSynthesis.getVoices()||[];
+    }
+  }
+  loadVoices();
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged=loadVoices;
+  }
+
+  function speakerTitle(key){
+    if(String(key||'').toLowerCase()==='support_manager') return 'HEAD OF CUSTOMER SUPPORT CENTER';
+    const found=state.profiles.find(profile =>
+      String(profile.speaker_key||'').toLowerCase()===String(key||'').toLowerCase()
+    );
+
+    if(found && found.title){
+      return String(found.title).toUpperCase();
+    }
+
+    if(isVisitorKey(key)) return 'VISITOR';
+
+    const map={
+      assistant_head:'ASSISTANT HEAD OF CUSTOMER SUPPORT CENTER'
+    };
+
+    return map[key]||String(key||'SYSTEM').replaceAll('_',' ').toUpperCase();
+  }
+
+  function getProfile(key){
+    const found=state.profiles.find(profile =>
+      String(profile.speaker_key||'').toLowerCase()===String(key||'').toLowerCase()
+    );
+
+    if(found) return found;
+
+    return {
+      speaker_key:key,
+      title:speakerTitle(key),
+      gender:isVisitorKey(key)
+        ? (String(key).indexOf('male_')>=0?'male':'female')
+        : 'male',
+      lang:'en-US',
+      voice_hint:'',
+      rate:isVisitorKey(key)?1.00:.96,
+      pitch:isVisitorKey(key)?1.03:.97
+    };
+  }
+
+  function chooseVoice(profile) {
+    const voices = state.voices.length
+      ? state.voices
+      : (window.speechSynthesis ? window.speechSynthesis.getVoices() : []);
+
+    if (!voices.length) return null;
+
+    const hint = String(profile.voice_hint || '').trim().toLowerCase();
+
+    if (hint) {
+      const hinted = voices.find(function(voice) {
+        return String(voice.name || '').toLowerCase().includes(hint);
+      });
+
+      if (hinted) return hinted;
+    }
+
+    const managementVoiceKey =
+      String(profile.speaker_key || '').toLowerCase();
+
+    if (
+      !profile.voice_hint &&
+      (
+        managementVoiceKey === 'assistant_head' ||
+        managementVoiceKey === 'quality_manager'
+      )
+    ) {
+      return chooseVoice(
+        Object.assign(
+          {},
+          profile,
+          {
+            speaker_key:'support_manager',
+            gender:'male',
+            voice_hint:''
+          }
+        )
+      );
+    }
+
+    const wantedLang = String(profile.lang || 'en-US').toLowerCase();
+    const langBase = wantedLang.split('-')[0];
+
+    let pool = voices.filter(function(voice) {
+      return String(voice.lang || '').toLowerCase().startsWith(langBase);
+    });
+
+    if (!pool.length) pool = voices.slice();
+
+    const femalePattern =
+      /samantha|victoria|karen|moira|tessa|zira|aria|jenny|sara|ava|susan|hazel|emma|jane|sonia|libby|female/i;
+
+    const malePattern =
+      /daniel|alex|fred|tom|arthur|george|guy|david|mark|ryan|christopher|andrew|brian|eric|roger|stefan|male/i;
+
+    const gender = String(profile.gender || '').toLowerCase();
+
+    const genderPool = pool.filter(function(voice) {
+      if (gender === 'female') return femalePattern.test(voice.name || '');
+      if (gender === 'male') return malePattern.test(voice.name || '');
+      return true;
+    });
+
+    if (genderPool.length) {
+      pool = genderPool;
+    }
+
+    const roleOrder = [
+      'visitor',
+      'support_manager',
+      'assistant_head',
+      'quality_manager',
+      'quality_team',
+      'supervisor',
+      'team_leaders',
+      'opdc',
+      'employees',
+      'ai_employee',
+      'system'
+    ];
+
+    const speakerKey = String(profile.speaker_key || '').toLowerCase();
+    let roleIndex = roleOrder.indexOf(speakerKey);
+
+    if (roleIndex < 0) {
+      roleIndex = speakerKey
+        .split('')
+        .reduce(function(total, char) {
+          return total + char.charCodeAt(0);
+        }, 0);
+    }
+
+    return pool[Math.abs(roleIndex) % pool.length] || pool[0] || null;
+  }
+
+  function estimate(text){
+    text=String(text||'');
+    return Math.max(3800,Math.min(12000,text.length*54+1900));
+  }
+
+  function schedule(ms,token){
+    clearTimer();
+    state.timer=setTimeout(()=>{
+      if(!state.paused && token===state.token){
+        next();
+      }
+    },ms);
+  }
+
+  function speak(step,token){
+    if(step.kind==='reviews'){
+      schedule(Number(step.duration||7600),token);
+      return;
+    }
+
+    if(!state.voice || state.paused || !('speechSynthesis' in window)){
+      schedule(estimate(step.en),token);
+      return;
+    }
+
+    stopVoice();
+
+    const profile=getProfile(step.speaker);
+    const utterance=new SpeechSynthesisUtterance(step.en||'');
+
+    utterance.lang=profile.lang||'en-US';
+    utterance.rate=Number(profile.rate||1);
+    utterance.pitch=Number(profile.pitch||1);
+
+    const voice=chooseVoice(profile);
+    if(voice){
+      utterance.voice=voice;
+      utterance.lang=voice.lang||utterance.lang;
+    }
+
+    state.currentUtterance=utterance;
+
+    utterance.onend=()=>{
+      if(state.currentUtterance===utterance) state.currentUtterance=null;
+      if(!state.paused && token===state.token){
+        schedule(step.final?1800:1300,token);
+      }
+    };
+
+    utterance.onerror=()=>{
+      if(state.currentUtterance===utterance) state.currentUtterance=null;
+      if(!state.paused && token===state.token){
+        schedule(estimate(step.en),token);
+      }
+    };
+
+    try{
+      window.speechSynthesis.speak(utterance);
+    }catch(e){
+      state.currentUtterance=null;
+      schedule(estimate(step.en),token);
+    }
+  }
+
+  function renderReviews(step){
+    const set=REVIEW_SETS[step.reviewSet]||REVIEW_SETS.google;
+    els.storeMark.textContent=set.mark||'★';
+    els.reviewsTitle.textContent=set.title||'Customer Reviews';
+    els.reviewsSubtitle.textContent=set.subtitle||'';
+    els.reviewGrid.innerHTML='';
+
+    set.items.forEach(item=>{
+      const card=document.createElement('article');
+      card.className='review-card';
+      card.innerHTML=
+        '<div class="review-stars">★★★★★</div>'+ 
+        '<div class="review-heading"></div>'+ 
+        '<div class="review-quote"></div>'+ 
+        '<div class="review-meta"></div>';
+      card.querySelector('.review-heading').textContent=item.heading||'';
+      card.querySelector('.review-quote').textContent=item.quote||'';
+      card.querySelector('.review-meta').textContent=(item.name||'')+' · '+(item.date||'');
+      els.reviewGrid.appendChild(card);
+    });
+  }
+
+  function renderVisual(step){
+    const isReviews=step.kind==='reviews';
+    els.reviewsStage.classList.toggle('show',isReviews);
+
+    if(isReviews){
+      els.sceneImages.forEach(img=>img.classList.remove('active-image'));
+      els.sceneHeader.classList.add('hidden');
+      els.finalOverlay.classList.remove('show');
+      renderReviews(step);
+      return;
+    }
+
+    const imageIndex=Math.max(0,IMG.indexOf(step.image));
+
+    els.sceneImages.forEach((img,index)=>{
+      img.classList.toggle('active-image',index===imageIndex);
+    });
+
+    els.sceneTitle.textContent=step.title||'';
+    els.sceneHeader.classList.toggle('hidden',!!step.final);
+    els.finalOverlay.classList.toggle('show',!!step.final);
+  }
+
+  function renderDialogue(step){
+    if(step.kind==='reviews'){
+      els.dialogue.classList.remove('show','visitor');
+      els.wrap.style.display='none';
+      return;
+    }
+
+    els.wrap.style.display='block';
+    els.dialogue.classList.remove('show','visitor');
+
+    setTimeout(()=>{
+      els.name.textContent=speakerTitle(step.speaker);
+      els.en.textContent=step.en||'';
+      els.ar.textContent=step.ar||'';
+      els.ar.classList.toggle('on',state.arabic);
+      els.dialogue.classList.toggle('visitor',isVisitorKey(step.speaker));
+      els.dialogue.classList.add('show');
+    },90);
+  }
+
+  function updateControls(){
+    els.arBtn.textContent=state.arabic?'AR ON':'AR OFF';
+    els.arBtn.classList.toggle('on',state.arabic);
+
+    els.voiceBtn.textContent=state.voice?'VOICE ON':'VOICE OFF';
+    els.voiceBtn.classList.toggle('on',state.voice);
+
+    els.pauseBtn.textContent=state.paused?'PLAY':'PAUSE';
+    els.ar.classList.toggle('on',state.arabic);
+  }
+
+  function render(){
+    clearTimer();
+    stopVoice();
+
+    state.token+=1;
+    const token=state.token;
+    const step=steps[state.index];
+
+    renderVisual(step);
+    renderDialogue(step);
+    updateControls();
+
+    els.endActions.classList.remove('show');
+
+    els.progress.style.width=
+      (((state.index+1)/steps.length)*100).toFixed(2)+'%';
+
+    if(!state.paused){
+      speak(step,token);
+    }
+  }
+
+  function finish(){
+    state.ended=true;
+    state.paused=true;
+    stopVoice();
+    clearTimer();
+    els.pauseBtn.textContent='PLAY';
+    els.endActions.classList.add('show');
+  }
+
+  function next(){
+    if(state.index<steps.length-1){
+      state.index+=1;
+      render();
+      return;
+    }
+
+    openIndex('index14');
+  }
+
+  function openIndex(file){
+    stopVoice();
+    clearTimer();
+
+    if(
+      typeof google!=='undefined' &&
+      google.script &&
+      google.script.run
+    ){
+      google.script.run
+        .withSuccessHandler(html=>{
+          document.open();
+          document.write(html);
+          document.close();
+        })
+        .withFailureHandler(err=>{
+          console.error('Navigation failed',err);
+        })
+        .getPage(file);
+    }
+  }
+
+  els.arBtn.addEventListener('click',()=>{
+    state.arabic=!state.arabic;
+    safeSet(AR_KEY,state.arabic?'1':'0');
+    updateControls();
+  });
+
+  els.voiceBtn.addEventListener('click',()=>{
+    state.voice=!state.voice;
+    safeSet(VOICE_KEY,state.voice?'1':'0');
+
+    if(!state.voice){
+      stopVoice();
+      state.token+=1;
+
+      if(!state.paused){
+        schedule(4600,state.token);
+      }
+    }else if(!state.paused){
+      render();
+    }
+
+    updateControls();
+  });
+
+  els.pauseBtn.addEventListener('click',()=>{
+    if(state.ended){
+      state.ended=false;
+      state.paused=false;
+      state.index=0;
+      render();
+      return;
+    }
+
+    state.paused=!state.paused;
+
+    if(state.paused){
+      clearTimer();
+
+      if('speechSynthesis' in window && state.currentUtterance){
+        try{window.speechSynthesis.pause();}catch(e){}
+      }
+    }else{
+      if('speechSynthesis' in window && state.currentUtterance){
+        try{window.speechSynthesis.resume();}catch(e){}
+      }else{
+        schedule(850,state.token);
+      }
+    }
+
+    updateControls();
+  });
+
+  els.replayBtn.addEventListener('click',()=>{
+    state.ended=false;
+    state.paused=false;
+    state.index=0;
+    render();
+  });
+
+  els.restartBtn.addEventListener('click',()=>{
+    openIndex('index');
+  });
+
+  function start(){
+    render();
+  }
+
+  if(
+    typeof google!=='undefined' &&
+    google.script &&
+    google.script.run
+  ){
+    google.script.run
+      .withSuccessHandler(profiles=>{
+        state.profiles=Array.isArray(profiles)?profiles:[];
+        start();
+      })
+      .withFailureHandler(()=>{
+        state.profiles=[];
+        start();
+      })
+      .getVoiceProfiles();
+  }else{
+    state.profiles=[];
+    start();
+  }
+
+})();
+</script>
+</body>
+</html>

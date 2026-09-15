@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base target="_top">
+  <link rel="stylesheet" href="tour-runtime.css">
+  <script src="tour-data.js"></script>
+  <script src="tour-runtime.js"></script>
+  
+  <!-- FIXED_TOUR_AUDIO -->
+  <script src="tour-audio-map.js"></script>
+  <script src="tour-audio.js"></script>
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Support Center — Guest Farewell</title>
+  <link rel="preconnect" href="https://i.imgur.com" crossorigin>
+  <link rel="preload" as="image" href="assets/images/J3CUkQr.png">
+  <link rel="preload" as="image" href="assets/images/6dBqjN5.png">
+  <link rel="preload" as="image" href="assets/images/3pjKZfm.png">
+  <style>
+    *{box-sizing:border-box}
+    html,body{width:100%;height:100%;margin:0;overflow:hidden;font-family:Arial,Helvetica,sans-serif;background:#071118;color:#fff}
+    button{font-family:inherit}
+    :root{--gold:#ddb97a;--panel:rgba(16,26,33,.84);--line:rgba(255,255,255,.16);--soft:rgba(255,255,255,.78)}
+    .page{position:relative;width:100%;height:100%;overflow:hidden;background:radial-gradient(circle at 50% 20%,rgba(184,145,82,.18),transparent 28%),linear-gradient(135deg,#081119,#0d1720)}
+    .progress{position:fixed;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,.08);z-index:120}
+    .progress-bar{height:100%;width:0;background:linear-gradient(90deg,#e0c186,#8aa8b6);transition:width .45s ease}
+    .controls{position:fixed;top:14px;right:14px;z-index:130;display:flex;gap:8px}
+    .ctl{height:38px;min-width:82px;padding:0 14px;border:1px solid rgba(255,255,255,.18);border-radius:12px;background:rgba(9,17,23,.76);color:#fff;font-size:10px;font-weight:900;letter-spacing:1px;cursor:pointer;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+    .ctl.on{background:#fff;color:#152129;border-color:#fff}
+
+    .hero{position:absolute;inset:0;overflow:hidden;background:#071118}
+    .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center center;opacity:0;transition:opacity .75s ease;transform:none}
+    .hero img.active{opacity:1;transform:none}
+    .overlay{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(5,10,14,.18),rgba(5,10,14,.04) 26%,rgba(5,10,14,.10) 56%,rgba(5,10,14,.80)),linear-gradient(90deg,rgba(5,10,14,.26),rgba(5,10,14,.02) 42%,rgba(5,10,14,.18))}
+
+    .header{position:absolute;z-index:40;left:32px;top:26px;max-width:min(820px,72vw);padding:14px 18px;border:1px solid rgba(255,255,255,.18);border-radius:18px;background:rgba(18,28,36,.48);box-shadow:0 18px 46px rgba(0,0,0,.24);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+    .kicker{font-size:11px;font-weight:900;letter-spacing:4px;color:rgba(255,255,255,.66);margin-bottom:6px}
+    .title{font-size:clamp(28px,3.2vw,58px);font-weight:860;line-height:1.05;letter-spacing:-1.3px}
+    .subtitle{margin-top:7px;color:rgba(255,255,255,.82);font-size:clamp(12px,1vw,15px);font-weight:600}
+
+    .scene-tag{position:absolute;right:34px;top:102px;z-index:40;padding:10px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(18,28,36,.42);color:var(--gold);font-size:10px;font-weight:900;letter-spacing:2.4px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+
+    .mini-roster{position:absolute;left:32px;bottom:148px;z-index:40;display:flex;flex-wrap:wrap;gap:8px;max-width:min(1000px,84vw)}
+    .pill{padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(10,18,24,.54);color:rgba(255,255,255,.88);font-size:10px;font-weight:800;letter-spacing:1.3px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+    .pill.gold{color:var(--gold)}
+
+    .dialogue-wrap{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:80;width:min(1120px,92vw)}
+    .dialogue{opacity:0;transform:translateY(16px);transition:opacity .35s ease,transform .35s ease}
+    .dialogue.show{opacity:1;transform:none}
+    .dialogue-name{text-align:center;margin-bottom:8px;font-size:10px;font-weight:900;letter-spacing:3px;color:var(--gold);text-shadow:0 2px 12px rgba(0,0,0,.3)}
+    .dialogue.visitor .dialogue-name{color:rgba(255,255,255,.76)}
+    .dialogue-box{padding:16px 22px;border-radius:18px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(135deg,rgba(12,22,29,.92),rgba(25,37,44,.84));box-shadow:0 18px 48px rgba(0,0,0,.28);text-align:center;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+    .dialogue-en{font-size:clamp(18px,1.5vw,24px);font-weight:650;line-height:1.46;color:#fff}
+    .dialogue-ar{display:none;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.12);direction:rtl;color:rgba(255,255,255,.82);font-size:clamp(14px,1.08vw,18px);line-height:1.62}
+    .dialogue-ar.on{display:block}
+
+    .end-actions{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:95;display:flex;gap:10px;opacity:0;pointer-events:none;transition:opacity .35s ease}
+    .end-actions.show{opacity:1;pointer-events:auto}
+    .ghost{padding:12px 18px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(14,22,28,.9);color:#fff;font-size:11px;font-weight:900;letter-spacing:1.2px;cursor:pointer}
+    .footer-note{position:absolute;left:20px;bottom:18px;z-index:60;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.88);color:#14202a;font-size:11px;font-weight:900;letter-spacing:1.2px}
+
+    @media(max-width:820px){
+      .header{left:14px;top:18px;max-width:88vw;padding:12px 14px}
+      .scene-tag{top:96px;right:14px;padding:8px 12px}
+      .mini-roster{left:14px;bottom:160px;max-width:92vw}
+      .dialogue-wrap{width:95vw;bottom:18px}
+      .dialogue-box{padding:14px 16px}
+      .controls{top:10px;right:10px}
+      .ctl{min-width:70px;height:34px;font-size:9px;padding:0 11px}
+    }
+  
+
+    /* Final farewell image only: keep all earlier closing scenes untouched. */
+    .page.final-farewell .header{
+      left:50% !important;
+      top:12px !important;
+      transform:translateX(-50%);
+      width:max-content;
+      max-width:min(600px,58vw) !important;
+      padding:8px 14px !important;
+      text-align:center;
+      border-radius:14px !important;
+      background:rgba(10,18,23,.30) !important;
+      box-shadow:0 10px 28px rgba(0,0,0,.16) !important;
+    }
+    .page.final-farewell .kicker{font-size:9px !important;letter-spacing:3px !important;margin-bottom:4px !important;}
+    .page.final-farewell .title{font-size:clamp(20px,2vw,30px) !important;line-height:1.08 !important;letter-spacing:-.5px !important;}
+    .page.final-farewell .subtitle{font-size:clamp(10px,.82vw,12px) !important;margin-top:4px !important;}
+    .page.final-farewell .scene-tag{top:76px !important;}
+
+    @media(max-width:820px){
+      .page.final-farewell .header{top:8px !important;max-width:72vw !important;padding:7px 10px !important;}
+      .page.final-farewell .subtitle{display:none;}
+      .page.final-farewell .scene-tag{top:64px !important;}
+    }
+
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="progress"><div id="progressBar" class="progress-bar"></div></div>
+
+  <div class="controls">
+    <button id="arBtn" class="ctl">AR OFF</button>
+    <button id="voiceBtn" class="ctl">VOICE ON</button>
+    <button id="pauseBtn" class="ctl">PAUSE</button>
+  </div>
+
+  <div class="hero">
+    <img id="scene0" class="active" src="assets/images/J3CUkQr.png" alt="Closing discussion with guests">
+    <img id="scene1" src="assets/images/6dBqjN5.png" alt="Warm thanks and greeting">
+    <img id="scene2" src="assets/images/3pjKZfm.png" alt="Guests leaving happily">
+    <div class="overlay"></div>
+  </div>
+
+  <div class="header">
+    <div class="kicker">CLOSING VISIT · CUSTOMER SUPPORT CENTER</div>
+    <div id="pageTitle" class="title">A strong visit. A clear impression.</div>
+    <div id="pageSubtitle" class="subtitle">Final dialogue · appreciation · a confident farewell</div>
+  </div>
+
+  <div id="sceneTag" class="scene-tag">CLOSING DIALOGUE</div>
+
+  <div class="mini-roster">
+    <div class="pill gold">HEAD OF CUSTOMER SUPPORT CENTER</div>
+    <div class="pill gold">ASSISTANT HEAD</div>
+    <div class="pill gold">QUALITY MANAGER</div>
+    <div class="pill">SUPERVISORS</div>
+    <div class="pill">TEAM LEADERS</div>
+    <div class="pill">COMMITTEE</div>
+    <div class="pill">EMPLOYEES</div>
+    <div class="pill">VISITORS</div>
+  </div>
+
+  <div class="dialogue-wrap">
+    <div id="dialogue" class="dialogue">
+      <div id="dialogueName" class="dialogue-name"></div>
+      <div class="dialogue-box">
+        <div id="dialogueEn" class="dialogue-en"></div>
+        <div id="dialogueAr" class="dialogue-ar"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="endActions" class="end-actions">
+    <button id="replayBtn" class="ghost">REPLAY CLOSING</button>
+    <button id="restartBtn" class="ghost">RESTART TOUR</button>
+  </div>
+
+  <div class="footer-note">DEV</div>
+</div>
+
+<script>
+(function(){
+  const AR_KEY='support_center_ar';
+  const VOICE_KEY='support_center_voice';
+
+  const scenes={
+    discussion:'scene0',
+    thanks:'scene1',
+    farewell:'scene2'
+  };
+
+  const sceneMeta={
+    discussion:{tag:'CLOSING DIALOGUE',title:'A strong visit. A clear impression.',subtitle:'Final dialogue · appreciation · a confident farewell'},
+    thanks:{tag:'VISITOR FEEDBACK',title:'The visit ends with appreciation.',subtitle:'The guests share their impression of the department'},
+    farewell:{tag:'HAPPY FAREWELL',title:'A warm goodbye from the Support Center.',subtitle:'Guests leave with a positive impression of the full team'}
+  };
+
+  const steps=[
+    {
+      speaker:'visitor',
+      scene:'discussion',
+      en:'Thank you. This visit gave us a clear picture of how the Customer Support Center is managed, measured, and continuously improved.',
+      ar:'شكرًا لكم. هذه الزيارة أعطتنا صورة واضحة عن كيفية إدارة مركز دعم العملاء وقياسه وتحسينه بشكل مستمر.'
+    },
+    {
+      speaker:'support_manager',
+      scene:'discussion',
+      en:'We appreciate your visit. Our goal is to keep support structured, accountable, and connected to the wider organization through clear follow-up and measurable results.',
+      ar:'نحن نقدّر زيارتكم. هدفنا أن يبقى الدعم منظمًا ومسؤولًا ومرتبطًا بالمؤسسة عبر متابعة واضحة ونتائج قابلة للقياس.'
+    },
+    {
+      speaker:'assistant_head',
+      scene:'discussion',
+      en:'From plans and systems to reports and coordination, we try to turn daily support work into stable operations and practical improvement.',
+      ar:'من الخطط والأنظمة إلى التقارير والتنسيق، نحاول تحويل العمل اليومي في الدعم إلى تشغيل مستقر وتحسين عملي.'
+    },
+    {
+      speaker:'quality_manager',
+      scene:'discussion',
+      en:'And from the quality side, we keep reviewing performance, identifying gaps, and supporting the teams so the customer experience keeps getting better.',
+      ar:'ومن جانب الجودة، نستمر في مراجعة الأداء وتحديد الفجوات ودعم الفرق حتى تستمر تجربة العميل بالتحسن.'
+    },
+    {
+      speaker:'visitor',
+      scene:'thanks',
+      en:'Honestly, the structure is clear, the roles are well connected, and the effort of the full team is very visible. It leaves a strong and professional impression.',
+      ar:'بصراحة، الهيكل واضح، والأدوار مترابطة، وجهد الفريق بالكامل ظاهر جدًا. وهذا يترك انطباعًا قويًا واحترافيًا.'
+    },
+    {
+      speaker:'support_manager',
+      scene:'thanks',
+      en:'That means a lot to us. Please share any note or suggestion. We always welcome feedback that helps us improve further.',
+      ar:'هذا يعني لنا الكثير. نرحب بأي ملاحظة أو اقتراح، فملاحظاتكم تساعدنا دائمًا على التطوير بشكل أفضل.'
+    },
+    {
+      speaker:'visitor',
+      scene:'farewell',
+      en:'Thank you again. We are leaving with a very positive impression of the Customer Support Center, its leadership, and the teams behind it.',
+      ar:'شكرًا لكم مرة أخرى. نغادر بانطباع إيجابي جدًا عن مركز دعم العملاء وقيادته والفرق التي تقف خلفه.'
+    },
+    {
+      speaker:'assistant_head',
+      scene:'farewell',
+      en:'You are always welcome. It was a pleasure to host you, and we hope the visit reflected the spirit of this department and the people behind it.',
+      ar:'أهلًا وسهلًا بكم دائمًا. كان من دواعي سرورنا استضافتكم، ونأمل أن تكون الزيارة قد عكست روح هذا القسم والناس الذين يقفون خلفه.'
+    }
+  ];
+
+  const state={index:0,arabic:false,voice:true,paused:false,ended:false,timer:null,token:0,currentUtterance:null,voices:[],profiles:[]};
+  const els={
+    arBtn:document.getElementById('arBtn'),
+    voiceBtn:document.getElementById('voiceBtn'),
+    pauseBtn:document.getElementById('pauseBtn'),
+    progress:document.getElementById('progressBar'),
+    dialogue:document.getElementById('dialogue'),
+    dialogueName:document.getElementById('dialogueName'),
+    dialogueEn:document.getElementById('dialogueEn'),
+    dialogueAr:document.getElementById('dialogueAr'),
+    pageTitle:document.getElementById('pageTitle'),
+    pageSubtitle:document.getElementById('pageSubtitle'),
+    sceneTag:document.getElementById('sceneTag'),
+    endActions:document.getElementById('endActions'),
+    replayBtn:document.getElementById('replayBtn'),
+    restartBtn:document.getElementById('restartBtn')
+  };
+
+  function safeGet(k,f){try{const v=localStorage.getItem(k);return v===null?f:v}catch(e){return f}}
+  function safeSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  state.arabic=safeGet(AR_KEY,'0')==='1';
+  state.voice=safeGet(VOICE_KEY,'1')!=='0';
+
+  function clearTimer(){if(state.timer){clearTimeout(state.timer);state.timer=null}}
+  function loadVoices(){if('speechSynthesis' in window) state.voices=window.speechSynthesis.getVoices()||[]}
+  loadVoices(); if('speechSynthesis' in window) window.speechSynthesis.onvoiceschanged=loadVoices;
+
+  function stopVoice(){
+    if('speechSynthesis' in window){
+      try{window.speechSynthesis.cancel();}catch(e){}
+    }
+    state.currentUtterance=null;
+  }
+
+  function speakerTitle(key){
+    if(String(key||'').toLowerCase()==='support_manager') return 'HEAD OF CUSTOMER SUPPORT CENTER';
+    const found=state.profiles.find(p=>String(p.speaker_key||'').toLowerCase()===String(key||'').toLowerCase());
+    if(found&&found.title) return String(found.title).toUpperCase();
+    const map={
+      visitor:'VISITOR',
+      support_manager:'HEAD OF CUSTOMER SUPPORT CENTER',
+      assistant_head:'ASSISTANT HEAD OF CUSTOMER SUPPORT CENTER',
+      quality_manager:'QUALITY MANAGER'
+    };
+    return map[key]||String(key||'SYSTEM').replaceAll('_',' ').toUpperCase();
+  }
+
+  function profileFor(key){
+    const found=state.profiles.find(p=>String(p.speaker_key||'').toLowerCase()===String(key||'').toLowerCase());
+    if(found) return found;
+    return {speaker_key:key,lang:'en-US',voice_hint:'',rate:.92,pitch:1};
+  }
+
+  function chooseVoice(profile){
+    const voices=state.voices.length?state.voices:(window.speechSynthesis?window.speechSynthesis.getVoices():[]);
+    if(!voices.length) return null;
+    const hint=String(profile.voice_hint||'').toLowerCase();
+    if(hint){
+      const exact=voices.find(v=>String(v.name||'').toLowerCase().includes(hint));
+      if(exact) return exact;
+    }
+    const base=String(profile.lang||'en-US').toLowerCase().split('-')[0];
+    const pool=voices.filter(v=>String(v.lang||'').toLowerCase().startsWith(base));
+    const set=pool.length?pool:voices;
+    const idx=Math.abs(String(profile.speaker_key||'').split('').reduce((a,c)=>a+c.charCodeAt(0),0))%(set.length||1);
+    return set[idx]||voices[0];
+  }
+
+  function estimateDuration(text){
+    return Math.max(4200,Math.min(12500,String(text||'').length*57+2200));
+  }
+
+  function schedule(ms,token){
+    clearTimer();
+    state.timer=setTimeout(()=>{
+      if(!state.paused && token===state.token) next();
+    },ms);
+  }
+
+  function renderScene(step){
+    Object.values(scenes).forEach(id=>document.getElementById(id).classList.remove('active'));
+    const imgId=scenes[step.scene]||scenes.discussion;
+    document.getElementById(imgId).classList.add('active');
+    document.querySelector('.page').classList.toggle('final-farewell',step.scene==='farewell');
+    const meta=sceneMeta[step.scene]||sceneMeta.discussion;
+    els.pageTitle.textContent=meta.title;
+    els.pageSubtitle.textContent=meta.subtitle;
+    els.sceneTag.textContent=meta.tag;
+  }
+
+  function renderDialogue(step){
+    els.dialogue.className='dialogue'+(step.speaker==='visitor'?' visitor':'');
+    els.dialogue.classList.remove('show');
+    setTimeout(()=>{
+      els.dialogueName.textContent=speakerTitle(step.speaker);
+      els.dialogueEn.textContent=step.en||'';
+      els.dialogueAr.textContent=step.ar||'';
+      els.dialogueAr.classList.toggle('on',state.arabic);
+      els.dialogue.classList.add('show');
+    },70);
+  }
+
+  function updateControls(){
+    els.arBtn.textContent=state.arabic?'AR ON':'AR OFF';
+    els.arBtn.classList.toggle('on',state.arabic);
+    els.voiceBtn.textContent=state.voice?'VOICE ON':'VOICE OFF';
+    els.voiceBtn.classList.toggle('on',state.voice);
+    els.pauseBtn.textContent=state.ended?'REPLAY':(state.paused?'PLAY':'PAUSE');
+  }
+
+  function speak(step,token){
+    if(!state.voice || state.paused || !('speechSynthesis' in window)){
+      schedule(estimateDuration(step.en),token);
+      return;
+    }
+
+    stopVoice();
+    const profile=profileFor(step.speaker);
+    const u=new SpeechSynthesisUtterance(step.en||'');
+    u.lang=profile.lang||'en-US';
+    u.rate=Math.min(.96,Number(profile.rate||.92));
+    u.pitch=Number(profile.pitch||1);
+    const voice=chooseVoice(profile);
+    if(voice){u.voice=voice;u.lang=voice.lang||u.lang}
+    state.currentUtterance=u;
+
+    u.onend=()=>{
+      if(state.currentUtterance===u) state.currentUtterance=null;
+      if(!state.paused && token===state.token) schedule(900,token);
+    };
+    u.onerror=()=>{
+      if(state.currentUtterance===u) state.currentUtterance=null;
+      if(!state.paused && token===state.token) schedule(estimateDuration(step.en),token);
+    };
+
+    try{window.speechSynthesis.speak(u)}catch(e){state.currentUtterance=null;schedule(estimateDuration(step.en),token)}
+  }
+
+  function render(){
+    const step=steps[state.index];
+    clearTimer();
+    stopVoice();
+    state.token+=1;
+    const token=state.token;
+    state.ended=false;
+    els.endActions.classList.remove('show');
+    renderScene(step);
+    renderDialogue(step);
+    els.progress.style.width=(((state.index+1)/steps.length)*100).toFixed(2)+'%';
+    updateControls();
+    if(!state.paused) speak(step,token);
+  }
+
+  function finish(){
+    state.ended=true;
+    state.paused=true;
+    clearTimer();
+    stopVoice();
+    els.endActions.classList.add('show');
+    updateControls();
+  }
+
+  function next(){
+    if(state.index<steps.length-1){
+      state.index+=1;
+      render();
+    }else{
+      finish();
+    }
+  }
+
+  function openIndex(file){
+    clearTimer();
+    stopVoice();
+    if(typeof google!=='undefined' && google.script && google.script.run){
+      google.script.run
+        .withSuccessHandler(html=>{document.open();document.write(html);document.close();})
+        .withFailureHandler(err=>console.error('Navigation failed',err))
+        .getPage(file);
+    }
+  }
+
+  els.arBtn.addEventListener('click',()=>{
+    state.arabic=!state.arabic;
+    safeSet(AR_KEY,state.arabic?'1':'0');
+    els.dialogueAr.classList.toggle('on',state.arabic);
+    updateControls();
+  });
+
+  els.voiceBtn.addEventListener('click',()=>{
+    state.voice=!state.voice;
+    safeSet(VOICE_KEY,state.voice?'1':'0');
+    if(!state.voice){
+      stopVoice();
+      state.token+=1;
+      if(!state.paused && !state.ended) schedule(estimateDuration(steps[state.index].en),state.token);
+    }else if(!state.paused && !state.ended){
+      render();
+    }
+    updateControls();
+  });
+
+  els.pauseBtn.addEventListener('click',()=>{
+    if(state.ended){
+      state.ended=false;
+      state.paused=false;
+      state.index=0;
+      render();
+      return;
+    }
+
+    state.paused=!state.paused;
+    if(state.paused){
+      clearTimer();
+      if('speechSynthesis' in window && state.currentUtterance){try{window.speechSynthesis.pause();}catch(e){}}
+    }else{
+      if('speechSynthesis' in window && state.currentUtterance){try{window.speechSynthesis.resume();}catch(e){}}
+      else render();
+    }
+    updateControls();
+  });
+
+  els.replayBtn.addEventListener('click',()=>{
+    state.ended=false;
+    state.paused=false;
+    state.index=0;
+    render();
+  });
+
+  els.restartBtn.addEventListener('click',()=>openIndex('index'));
+
+  window.addEventListener('beforeunload',stopVoice);
+
+  if(typeof google!=='undefined' && google.script && google.script.run){
+    google.script.run
+      .withSuccessHandler(profiles=>{state.profiles=Array.isArray(profiles)?profiles:[];render();})
+      .withFailureHandler(()=>{state.profiles=[];render();})
+      .getVoiceProfiles();
+  }else{
+    render();
+  }
+})();
+</script>
+
+<script id="canonical-head-title-guard">
+(function () {
+  'use strict';
+  var CANONICAL_HEAD_TITLE = 'HEAD OF CUSTOMER SUPPORT CENTER';
+  var LEGACY = /^\s*support\s+manager\s*$/i;
+
+  function fixTextNode(node) {
+    if (!node || node.nodeType !== 3) return;
+    var parent = node.parentElement;
+    if (!parent || /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA)$/i.test(parent.tagName)) return;
+    if (LEGACY.test(String(node.nodeValue || ''))) {
+      node.nodeValue = CANONICAL_HEAD_TITLE;
+    }
+  }
+
+  function fixTree(root) {
+    if (!root) return;
+    if (root.nodeType === 3) { fixTextNode(root); return; }
+    if (root.nodeType !== 1 && root.nodeType !== 9 && root.nodeType !== 11) return;
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    var node;
+    while ((node = walker.nextNode())) fixTextNode(node);
+  }
+
+  function start() {
+    fixTree(document.body);
+    if (!document.body || !window.MutationObserver) return;
+    new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.type === 'characterData') {
+          fixTextNode(mutation.target);
+          return;
+        }
+        Array.prototype.forEach.call(mutation.addedNodes || [], fixTree);
+      });
+    }).observe(document.body, { childList: true, subtree: true, characterData: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start, { once: true });
+  } else {
+    start();
+  }
+})();
+</script>
+</body>
+</html>

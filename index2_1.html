@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base target="_top">
+  <link rel="stylesheet" href="tour-runtime.css">
+  <script src="tour-data.js"></script>
+  <script src="tour-runtime.js"></script>
+  
+  <!-- FIXED_TOUR_AUDIO -->
+  <script src="tour-audio-map.js"></script>
+  <script src="tour-audio.js"></script>
+<meta name="referrer" content="no-referrer">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://i.imgur.com" crossorigin>
+  <link rel="preload" as="image" href="assets/images/uoptNSi.png">
+  <title>Customer Support Center — Higher Management Reporting</title>
+  <style>
+    *{box-sizing:border-box}
+    html,body{width:100%;height:100%;margin:0;overflow:hidden;font-family:Arial,Helvetica,sans-serif;background:#eef1f3;color:#18282f}
+    button{font-family:inherit}
+    :root{--ink:#18282f;--gold:#c9a76a;--panel:rgba(255,255,255,.92);--deep:#132027}
+    .page{position:relative;width:100%;height:100%;overflow:hidden;background:linear-gradient(135deg,#e8ecee,#d9e0e3)}
+    .progress{position:fixed;z-index:130;left:0;top:0;width:100%;height:3px;background:rgba(24,40,47,.11)}
+    .progress-bar{width:0;height:100%;background:linear-gradient(90deg,#c9a76a,#698b9d);transition:width .45s ease}
+    .controls{position:fixed;z-index:140;top:14px;right:14px;display:flex;gap:7px}
+    .ctl{height:32px;min-width:78px;padding:0 11px;border:1px solid rgba(255,255,255,.26);border-radius:10px;background:rgba(19,32,39,.74);color:#fff;cursor:pointer;font-size:8px;font-weight:900;letter-spacing:.9px;box-shadow:0 10px 30px rgba(0,0,0,.13);backdrop-filter:blur(14px)}
+    .ctl.on{background:#fff;color:var(--ink);border-color:#fff}
+    .hero{position:absolute;inset:0;overflow:hidden}
+    .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;transition:opacity .7s ease,transform 10s ease;transform:scale(1.01)}
+    .hero.has-image img{opacity:1;transform:scale(1.035)}
+    .fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:10vh 7vw 24vh;background:
+      radial-gradient(circle at 76% 24%,rgba(201,167,106,.22),transparent 29%),
+      linear-gradient(135deg,#dfe5e7,#cbd5d9 55%,#e6e0d6)}
+    .hero.has-image .fallback{opacity:0;pointer-events:none}
+    .fallback-card{width:min(1150px,88vw);padding:34px;border:1px solid rgba(24,40,47,.12);border-radius:26px;background:rgba(255,255,255,.62);box-shadow:0 28px 70px rgba(24,40,47,.12);backdrop-filter:blur(12px)}
+    .fallback-kicker{font-size:9px;font-weight:900;letter-spacing:3px;color:#6c7c84;margin-bottom:11px}
+    .fallback-title{font-size:clamp(34px,4.6vw,72px);font-weight:850;line-height:1;letter-spacing:-1.9px;margin-bottom:24px;color:var(--ink)}
+    .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+    .flow div{min-height:112px;padding:17px 14px;border-radius:16px;background:rgba(255,255,255,.82);border:1px solid rgba(24,40,47,.09);display:flex;flex-direction:column;justify-content:space-between}
+    .flow span{font-size:8px;font-weight:900;letter-spacing:1.5px;color:#7f8d93}
+    .flow strong{font-size:15px;line-height:1.22;color:var(--ink)}
+    .shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(7,14,18,.16),transparent 32%,transparent 56%,rgba(7,14,18,.74)),linear-gradient(90deg,rgba(7,14,18,.20),transparent 40%,rgba(7,14,18,.05))}
+    .hero:not(.has-image) .shade{background:linear-gradient(180deg,rgba(255,255,255,.02),transparent 56%,rgba(19,32,39,.10))}
+    .header{position:absolute;z-index:30;left:4%;top:5.2%;max-width:min(900px,76vw);padding:13px 17px;border-radius:15px;border:1px solid rgba(255,255,255,.28);background:rgba(19,32,39,.42);color:#fff;box-shadow:0 18px 55px rgba(0,0,0,.14);backdrop-filter:blur(15px)}
+    .hero:not(.has-image) .header{background:rgba(255,255,255,.82);color:var(--ink);border-color:rgba(24,40,47,.10)}
+    .kicker{font-size:8px;font-weight:900;letter-spacing:2.7px;opacity:.72;margin-bottom:5px}
+    .title{font-size:clamp(25px,2.7vw,44px);font-weight:830;line-height:1.07;letter-spacing:-.7px}
+    .subtitle{margin-top:7px;font-size:clamp(11px,1vw,15px);font-weight:650;opacity:.82}
+    .dialogue-wrap{position:absolute;z-index:80;left:50%;bottom:3.4%;width:min(1080px,91vw);transform:translateX(-50%);pointer-events:none}
+    .dialogue{opacity:0;transform:translateY(14px);transition:opacity .38s ease,transform .38s ease}
+    .dialogue.show{opacity:1;transform:none}
+    .dialogue-name{text-align:center;margin-bottom:7px;font-size:9px;font-weight:900;letter-spacing:2.5px;color:#e5c88f;text-shadow:0 2px 13px rgba(0,0,0,.25)}
+    .hero:not(.has-image) ~ .dialogue-wrap .dialogue-name{color:#6e5934;text-shadow:none}
+    .dialogue-box{padding:15px 24px;border-radius:15px;border:1px solid rgba(255,255,255,.18);background:rgba(19,32,39,.90);color:#fff;text-align:center;box-shadow:0 20px 48px rgba(0,0,0,.20);backdrop-filter:blur(16px)}
+    .dialogue-en{font-size:clamp(16px,1.34vw,21px);font-weight:650;line-height:1.48}
+    .dialogue-ar{display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.13);direction:rtl;font-size:clamp(13px,1.03vw,16px);line-height:1.58;color:rgba(255,255,255,.80)}
+    .dialogue-ar.on{display:block}
+    .transition{position:absolute;z-index:200;inset:0;background:#f5f6f6;opacity:0;visibility:hidden;transition:opacity .55s ease,visibility .55s ease}
+    .transition.active{opacity:1;visibility:visible}
+    @media(max-width:760px){.controls{top:9px;right:9px}.ctl{min-width:68px;height:29px}.header{left:3%;top:6%;max-width:88vw}.fallback{padding:13vh 4vw 27vh}.fallback-card{padding:20px}.flow{grid-template-columns:1fr 1fr}.flow div:last-child{grid-column:1/-1}.dialogue-wrap{bottom:3%;width:94vw}.dialogue-box{padding:13px 16px}}
+  
+
+    /* V30 — report-focused Senior Management scene. */
+    .hero{background:#eef2f5 !important;}
+    .hero img{
+      object-fit:contain !important;
+      object-position:center center !important;
+      padding:58px 22px 116px !important;
+      background:#eef2f5 !important;
+      transform:none !important;
+      opacity:1 !important;
+    }
+    .hero.has-image img{transform:none !important;opacity:1 !important;}
+    .shade{background:linear-gradient(180deg,rgba(236,241,244,.08),transparent 62%,rgba(238,242,244,.82)) !important;}
+    .header{
+      left:24px !important;
+      top:20px !important;
+      max-width:min(405px,42vw) !important;
+      padding:7px 10px !important;
+      border-color:rgba(24,40,47,.10) !important;
+      background:rgba(255,255,255,.88) !important;
+      color:#18282f !important;
+      box-shadow:0 8px 24px rgba(24,40,47,.08) !important;
+      backdrop-filter:blur(10px) !important;
+    }
+    .kicker{font-size:6.2px !important;letter-spacing:1.6px !important;color:#7a8790 !important;}
+    .title{font-size:clamp(16px,1.45vw,23px) !important;letter-spacing:-.2px !important;line-height:1.05 !important;}
+    .subtitle{margin-top:4px !important;font-size:clamp(8px,.68vw,10.5px) !important;color:#5d6d75 !important;line-height:1.2 !important;}
+    .dialogue-wrap{bottom:16px !important;width:min(980px,86vw) !important;}
+    .dialogue-name{color:#8b6e3d !important;text-shadow:none !important;margin-bottom:4px !important;}
+    .dialogue-box{
+      padding:10px 16px !important;
+      border:1px solid rgba(24,40,47,.10) !important;
+      background:rgba(255,255,255,.92) !important;
+      color:#16262e !important;
+      box-shadow:0 8px 28px rgba(24,40,47,.10) !important;
+      backdrop-filter:blur(10px) !important;
+    }
+    .dialogue-en{font-size:clamp(14px,1.12vw,18px) !important;line-height:1.38 !important;}
+    .dialogue-ar{margin-top:5px !important;padding-top:5px !important;border-top:1px solid rgba(24,40,47,.08) !important;color:#43545c !important;font-size:clamp(12px,.94vw,15px) !important;line-height:1.45 !important;}
+
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="progress"><div id="progressBar" class="progress-bar"></div></div>
+  <div class="controls">
+    <button id="arBtn" class="ctl">AR OFF</button>
+    <button id="voiceBtn" class="ctl">VOICE ON</button>
+    <button id="pauseBtn" class="ctl">PAUSE</button>
+  </div>
+
+  <div id="hero" class="hero has-image">
+    <img id="heroImage" src="assets/images/uoptNSi.png" alt="Customer Support Monthly Report">
+    <div class="fallback">
+      <div class="fallback-card">
+        <div class="fallback-kicker">CUSTOMER SUPPORT CENTER · HIGHER MANAGEMENT</div>
+        <div class="fallback-title">Monthly reporting turns operational data into direction and measurable improvement.</div>
+        <div class="flow">
+          <div><span>01</span><strong>MONTHLY SUPPORT REPORT</strong></div>
+          <div><span>02</span><strong>TICKETS & WORKLOAD</strong></div>
+          <div><span>03</span><strong>ESCALATIONS & TRENDS</strong></div>
+          <div><span>04</span><strong>MANAGEMENT DIRECTION</strong></div>
+          <div><span>05</span><strong>ACTION & IMPROVEMENT</strong></div>
+        </div>
+      </div>
+    </div>
+    <div class="shade"></div>
+    <div class="header">
+      <div class="kicker">CUSTOMER SUPPORT CENTER · HIGHER MANAGEMENT</div>
+      <div id="pageTitle" class="title">Higher Management</div>
+      <div id="pageSubtitle" class="subtitle">Monthly Reporting · Trends · Feedback · Direction · Improvement</div>
+    </div>
+  </div>
+
+  <div class="dialogue-wrap">
+    <div id="dialogue" class="dialogue">
+      <div id="dialogueName" class="dialogue-name"></div>
+      <div class="dialogue-box">
+        <div id="dialogueEn" class="dialogue-en"></div>
+        <div id="dialogueAr" class="dialogue-ar"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="transition" class="transition"></div>
+</div>
+
+<script>
+(function(){
+  const AR_KEY='support_center_ar';
+  const VOICE_KEY='support_center_voice';
+  const fallbackSteps=[
+    {
+      key:'SENIOR_MGMT_001', speaker:'support_manager',
+      en:'Every month, we prepare a comprehensive Customer Support report for Higher Management. It gives a clear view of the department’s workload, performance, and the most important operational results from that month.',
+      ar:'كل شهر نجهز تقريرًا شاملًا عن دعم العملاء للإدارة العليا، يعطي صورة واضحة عن حجم العمل والأداء وأهم النتائج التشغيلية خلال الشهر.'
+    },
+    {
+      key:'SENIOR_MGMT_002', speaker:'quality_manager',
+      en:'The report covers key indicators such as ticket volumes, incoming workload, service performance, recurring issues, and the cases that were escalated to teams such as Backend or VoIP for further action.',
+      ar:'ويشمل التقرير المؤشرات الرئيسية مثل حجم التذاكر وحجم العمل الوارد ومستوى الخدمة والمشاكل المتكررة، بالإضافة إلى الحالات التي تم تصعيدها إلى فرق مثل الباك إند أو الـVoIP لاستكمال المعالجة.'
+    },
+    {
+      key:'SENIOR_MGMT_003', speaker:'assistant_head',
+      en:'We also compare the results with previous months so we can identify trends, measure improvement, and highlight any area that needs additional attention or a different approach.',
+      ar:'كما نقارن النتائج بالأشهر السابقة حتى نحدد الاتجاهات ونقيس التحسن ونوضح أي جانب يحتاج إلى متابعة إضافية أو أسلوب عمل مختلف.'
+    },
+    {
+      key:'SENIOR_MGMT_004', speaker:'visitor',
+      en:'So the report is not only for visibility. It is also used to decide what should be improved next?',
+      ar:'إذًا التقرير ليس فقط لعرض النتائج، بل يُستخدم أيضًا لتحديد ما الذي يجب تحسينه في المرحلة التالية؟'
+    },
+    {
+      key:'SENIOR_MGMT_005', speaker:'support_manager',
+      en:'Exactly. We review Higher Management’s feedback, directions, and priorities, then translate them into follow-up actions, KPI targets, system improvements, or new initiatives. That keeps planning, execution, measurement, and management feedback connected.',
+      ar:'بالضبط. نراجع ملاحظات الإدارة العليا وتوجيهاتها وأولوياتها، ثم نحولها إلى إجراءات متابعة وأهداف لمؤشرات الأداء وتحسينات على الأنظمة أو مبادرات جديدة. بهذه الطريقة يبقى التخطيط والتنفيذ والقياس وملاحظات الإدارة مترابطة.'
+    },
+    {
+      key:'SENIOR_MGMT_006', speaker:'support_manager',
+      en:'With that management cycle in place, let us continue with the Assistant Head of Customer Support Center and the systems used in day-to-day operations.',
+      ar:'وبعد ما وضحنا دورة المتابعة مع الإدارة العليا، ننتقل الآن إلى مساعد رئيس مركز دعم العملاء والأنظمة المستخدمة في العمل اليومي.'
+    }
+  ];
+
+  const state={steps:fallbackSteps.map(x=>Object.assign({},x)),index:0,arabic:false,voice:true,paused:false,timer:null,utterance:null,voices:[],profiles:[],token:0};
+  const el={hero:document.getElementById('hero'),image:document.getElementById('heroImage'),title:document.getElementById('pageTitle'),subtitle:document.getElementById('pageSubtitle'),dialogue:document.getElementById('dialogue'),name:document.getElementById('dialogueName'),en:document.getElementById('dialogueEn'),ar:document.getElementById('dialogueAr'),arBtn:document.getElementById('arBtn'),voiceBtn:document.getElementById('voiceBtn'),pauseBtn:document.getElementById('pauseBtn'),progress:document.getElementById('progressBar'),transition:document.getElementById('transition')};
+
+  function safeGet(k,f){try{const v=localStorage.getItem(k);return v===null?f:v}catch(e){return f}}
+  function safeSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  function isVisitorKey(k){const v=String(k||'').toLowerCase();return v==='visitor'||v.indexOf('visitor_')===0}
+  state.arabic=safeGet(AR_KEY,'0')==='1';
+  state.voice=safeGet(VOICE_KEY,'1')!=='0';
+
+  function clearTimer(){if(state.timer){clearTimeout(state.timer);state.timer=null}}
+  function stopVoice(){if('speechSynthesis' in window){try{window.speechSynthesis.cancel()}catch(e){}}state.utterance=null}
+  function loadVoices(){if('speechSynthesis' in window) state.voices=window.speechSynthesis.getVoices()||[]}
+  loadVoices(); if('speechSynthesis' in window) window.speechSynthesis.onvoiceschanged=loadVoices;
+
+  function speakerTitle(key){
+    if(String(key||'').toLowerCase()==='support_manager') return 'HEAD OF CUSTOMER SUPPORT CENTER';
+    const found=state.profiles.find(p=>String(p.speaker_key||'').toLowerCase()===String(key||'').toLowerCase());
+    if(found&&found.title) return String(found.title).toUpperCase();
+    if(isVisitorKey(key)) return 'VISITOR';
+    const map={support_manager:'HEAD OF CUSTOMER SUPPORT CENTER',quality_manager:'QUALITY MANAGER',assistant_head:'ASSISTANT HEAD OF CUSTOMER SUPPORT CENTER'};
+    return map[key]||String(key||'SYSTEM').replaceAll('_',' ').toUpperCase();
+  }
+  function profileFor(key){
+    const found=state.profiles.find(p=>String(p.speaker_key||'').toLowerCase()===String(key||'').toLowerCase());
+    if(found) return found;
+    return {speaker_key:key,lang:'en-US',voice_hint:'',rate:.92,pitch:1,gender:isVisitorKey(key)?'male':'male'};
+  }
+  function chooseVoice(profile){
+    const voices=state.voices.length?state.voices:(window.speechSynthesis?window.speechSynthesis.getVoices():[]);
+    if(!voices.length) return null;
+    const hint=String(profile.voice_hint||'').toLowerCase();
+    if(hint){const v=voices.find(x=>String(x.name||'').toLowerCase().includes(hint));if(v)return v}
+    const base=String(profile.lang||'en-US').toLowerCase().split('-')[0];
+    const pool=voices.filter(v=>String(v.lang||'').toLowerCase().startsWith(base));
+    return (pool.length?pool:voices)[Math.abs(String(profile.speaker_key||'').split('').reduce((a,c)=>a+c.charCodeAt(0),0))%(pool.length||voices.length)]||voices[0];
+  }
+  function estimate(text){return Math.max(4200,Math.min(15000,String(text||'').length*58+2100))}
+  function scheduleNext(ms,token){clearTimer();state.timer=setTimeout(()=>{if(!state.paused&&token===state.token) next()},ms)}
+  function speak(step,token){
+    if(!state.voice||state.paused||!('speechSynthesis' in window)){scheduleNext(estimate(step.en),token);return}
+    stopVoice();
+    const p=profileFor(step.speaker); const u=new SpeechSynthesisUtterance(step.en||'');
+    u.lang=p.lang||'en-US'; u.rate=Math.min(.96,Number(p.rate||.92)); u.pitch=Number(p.pitch||1);
+    const v=chooseVoice(p); if(v){u.voice=v;u.lang=v.lang||u.lang}
+    state.utterance=u;
+    u.onend=()=>{if(state.utterance===u)state.utterance=null;if(!state.paused&&token===state.token)scheduleNext(950,token)};
+    u.onerror=()=>{if(state.utterance===u)state.utterance=null;if(!state.paused&&token===state.token)scheduleNext(estimate(step.en),token)};
+    try{window.speechSynthesis.speak(u)}catch(e){state.utterance=null;scheduleNext(estimate(step.en),token)}
+  }
+  function updateControls(){
+    el.arBtn.textContent=state.arabic?'AR ON':'AR OFF';el.arBtn.classList.toggle('on',state.arabic);
+    el.voiceBtn.textContent=state.voice?'VOICE ON':'VOICE OFF';el.voiceBtn.classList.toggle('on',state.voice);
+    el.pauseBtn.textContent=state.paused?'PLAY':'PAUSE';el.ar.classList.toggle('on',state.arabic);
+  }
+  function render(){
+    clearTimer(); stopVoice(); state.token+=1; const token=state.token; const step=state.steps[state.index];
+    el.dialogue.classList.remove('show');
+    setTimeout(()=>{el.name.textContent=speakerTitle(step.speaker);el.en.textContent=step.en||'';el.ar.textContent=step.ar||'';el.ar.classList.toggle('on',state.arabic);el.dialogue.classList.add('show')},80);
+    el.progress.style.width=(((state.index+1)/state.steps.length)*100).toFixed(2)+'%'; updateControls(); if(!state.paused)speak(step,token);
+  }
+  function next(){if(state.index<state.steps.length-1){state.index+=1;render()}else openIndex3()}
+  function openIndex3(){
+    clearTimer();stopVoice();el.transition.classList.add('active');
+    setTimeout(()=>{
+      if(typeof google!=='undefined'&&google.script&&google.script.run){google.script.run.withSuccessHandler(html=>{document.open();document.write(html);document.close()}).withFailureHandler(err=>{console.error(err);el.transition.classList.remove('active')}).getPage('index3')}
+    },650)
+  }
+  function applyContent(content){
+    content=content||{};
+    const image='assets/images/uoptNSi.png';
+    el.title.textContent=String(content.senior_management_title||'Higher Management Reporting').replace(/Senior Management/gi,'Higher Management');
+    el.subtitle.textContent=String(content.senior_management_subtitle||'Monthly Report · Trends · Feedback · Direction · Improvement');
+    if(image){el.image.onload=()=>el.hero.classList.add('has-image');el.image.onerror=()=>el.hero.classList.remove('has-image');el.image.src=image}else{el.hero.classList.remove('has-image')}
+  }
+  function applyDialogue(rows){
+    const map={};(Array.isArray(rows)?rows:[]).forEach(r=>{const k=String(r.dialogue_key||'').trim();if(k)map[k]=r});
+    state.steps=fallbackSteps.map(base=>{const r=map[base.key]||{};return {key:base.key,speaker:String(r.speaker_key||base.speaker),en:String(r.text_en||base.en).replace(/Senior Management/gi,'Higher Management'),ar:String(r.text_ar||base.ar)}});
+  }
+
+  el.arBtn.addEventListener('click',()=>{state.arabic=!state.arabic;safeSet(AR_KEY,state.arabic?'1':'0');updateControls()});
+  el.voiceBtn.addEventListener('click',()=>{state.voice=!state.voice;safeSet(VOICE_KEY,state.voice?'1':'0');if(!state.voice){stopVoice();state.token+=1;if(!state.paused)scheduleNext(estimate(state.steps[state.index].en),state.token)}else if(!state.paused){render()}updateControls()});
+  el.pauseBtn.addEventListener('click',()=>{state.paused=!state.paused;if(state.paused){clearTimer();stopVoice()}else{render()}updateControls()});
+  window.addEventListener('beforeunload',stopVoice);
+
+  let waits=3; function ready(){waits-=1;if(waits<=0)render()}
+  if(typeof google!=='undefined'&&google.script&&google.script.run){
+    google.script.run.withSuccessHandler(p=>{state.profiles=Array.isArray(p)?p:[];ready()}).withFailureHandler(()=>{state.profiles=[];ready()}).getVoiceProfiles();
+    google.script.run.withSuccessHandler(r=>{applyDialogue(r);ready()}).withFailureHandler(()=>{applyDialogue([]);ready()}).getPresentationDialogue();
+    google.script.run.withSuccessHandler(c=>{applyContent(c);ready()}).withFailureHandler(()=>{applyContent({});ready()}).getContent();
+  }else{state.profiles=[];applyDialogue([]);applyContent({});waits=0;render()}
+})();
+</script>
+</body>
+</html>
