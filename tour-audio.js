@@ -21,6 +21,10 @@
 
   function stopAudio(){
     serial += 1;
+    try {
+      var __g = document.querySelector('[data-tour-audio-gate="1"]');
+      if (__g && __g.parentNode) __g.parentNode.removeChild(__g);
+    } catch(e) {}
     if (activeAudio) {
       try { activeAudio.pause(); activeAudio.currentTime = 0; } catch(e) {}
     }
@@ -76,8 +80,84 @@
       clearAudioOnly();
       finishUtterance(utterance);
     }
+    var gateEl = null;
+
+    function removeGate(){
+      if (gateEl && gateEl.parentNode) {
+        try { gateEl.parentNode.removeChild(gateEl); } catch(e) {}
+      }
+      gateEl = null;
+    }
+
+    function showAutoplayGate(){
+      if (mySerial !== serial) return;
+
+      // Do NOT call utterance.onend while autoplay is blocked.
+      // Holding the utterance here prevents the tour from racing ahead silently.
+      if (gateEl && gateEl.parentNode) return;
+
+      gateEl = document.createElement('div');
+      gateEl.setAttribute('data-tour-audio-gate','1');
+      gateEl.style.cssText =
+        'position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;' +
+        'background:rgba(4,9,13,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);' +
+        'font-family:Arial,Helvetica,sans-serif;cursor:pointer;';
+
+      var box = document.createElement('div');
+      box.style.cssText =
+        'min-width:280px;max-width:88vw;padding:22px 28px;border-radius:18px;' +
+        'background:rgba(12,22,29,.96);border:1px solid rgba(255,255,255,.18);' +
+        'box-shadow:0 24px 70px rgba(0,0,0,.38);text-align:center;color:#fff;';
+
+      var title = document.createElement('div');
+      title.textContent = 'START TOUR';
+      title.style.cssText = 'font-size:22px;font-weight:900;letter-spacing:2px;margin-bottom:8px;';
+
+      var sub = document.createElement('div');
+      sub.textContent = 'Click once to enable presentation audio';
+      sub.style.cssText = 'font-size:13px;line-height:1.45;color:rgba(255,255,255,.76);';
+
+      box.appendChild(title);
+      box.appendChild(sub);
+      gateEl.appendChild(box);
+      document.body.appendChild(gateEl);
+
+      function retry(){
+        if (mySerial !== serial) { removeGate(); return; }
+        try {
+          var again = audio.play();
+          if (again && again.then) {
+            again.then(function(){
+              removeGate();
+              if (paused) {
+                try { audio.pause(); } catch(e) {}
+              }
+            }).catch(function(err){
+              // Keep the gate visible if the browser still refuses autoplay.
+              if (!err || (err.name !== 'NotAllowedError' && err.name !== 'AbortError')) {
+                removeGate();
+                fallback();
+              }
+            });
+          } else {
+            removeGate();
+          }
+        } catch(e) {
+          // Keep waiting for a real user gesture only for autoplay-style failures.
+          if (!e || (e.name !== 'NotAllowedError' && e.name !== 'AbortError')) {
+            removeGate();
+            fallback();
+          }
+        }
+      }
+
+      gateEl.addEventListener('click', retry, {once:false});
+      gateEl.addEventListener('touchend', function(ev){ try{ev.preventDefault();}catch(e){} retry(); }, {passive:false});
+    }
+
     function fallback(){
       if (mySerial !== serial) return;
+      removeGate();
       clearAudioOnly(); chunkSequence=null; pendingAmbiguous=null;
       try { original.speak(utterance); }
       catch(e) {
@@ -86,12 +166,26 @@
         }
       }
     }
-    audio.onended=fireEnd; audio.onerror=fallback;
+
+    audio.onended=function(){ removeGate(); fireEnd(); };
+    audio.onerror=fallback;
+
     try {
       var p=audio.play();
       if(paused) audio.pause();
-      if(p&&p.catch)p.catch(fallback);
-    } catch(e) { fallback(); }
+      if(p&&p.catch)p.catch(function(err){
+        // GitHub Pages / normal web hosting blocks audible autoplay until the visitor clicks.
+        // Wait for that click instead of falling back and letting the tour advance silently.
+        if (err && (err.name === 'NotAllowedError' || err.name === 'AbortError')) {
+          showAutoplayGate();
+        } else {
+          fallback();
+        }
+      });
+    } catch(e) {
+      if (e && (e.name === 'NotAllowedError' || e.name === 'AbortError')) showAutoplayGate();
+      else fallback();
+    }
     return true;
   }
 
