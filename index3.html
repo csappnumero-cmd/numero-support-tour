@@ -8352,6 +8352,21 @@
           if(narrationSeen){
             if(!idleSince) idleSince=now;
             if(now-idleSince>=650){
+              /*
+                V20: if Chrome played the replayed audio but dropped the
+                utterance.onend callback, the page voice layer can still have
+                voiceBusy/activeVoiceUtterance stuck on the OLD line.  V18/V19
+                advanced the visual timeline, but left that stale state behind;
+                the next dialogue was therefore queued forever until VOICE was
+                toggled OFF/ON.  Clear that stale page-voice state at the exact
+                moment we accept the replay as genuinely finished, then let the
+                existing master clock advance to the next line normally.
+              */
+              try{
+                if(typeof window.supportTourStopPageVoice==='function'){
+                  window.supportTourStopPageVoice();
+                }
+              }catch(e){}
               dialogueVoiceCompleted.add(node.id);
               window.clearInterval(watcher);
             }
@@ -8359,6 +8374,11 @@
 
           /* Last-resort guard only for a BACK replay; normal playback is untouched. */
           if(now-born>45000){
+            try{
+              if(typeof window.supportTourStopPageVoice==='function'){
+                window.supportTourStopPageVoice();
+              }
+            }catch(e){}
             dialogueVoiceCompleted.add(node.id);
             window.clearInterval(watcher);
           }
