@@ -8278,6 +8278,93 @@
         manualPaused=false; interactionPaused=false; syncPauseState();
       }
 
+      /*
+        V18 — semantic BACK completion guard for index3.
+        Chrome can occasionally finish a replayed SpeechSynthesis line after a
+        cancel/restart without delivering the page-level utterance.onend chain.
+        The audio is heard, but dialogueVoiceCompleted never receives the node id,
+        so the presentation waits until the user toggles sound.
+
+        This guard does NOT change text, voices, MP3 files or timing of normal
+        playback. It is armed only after BACK. It watches the real audio engines
+        (fixed MP3 + browser speech) and, once the replay has genuinely become
+        idle, marks that replayed line complete so the existing master clock can
+        continue normally.
+      */
+      let numeroBackReplayMonitorToken3=0;
+
+      function numeroIndex3VoicePreferenceOn(){
+        try{return window.localStorage.getItem('support_center_voice')!=='0';}
+        catch(e){return true;}
+      }
+
+      function numeroIndex3NarrationBusy(){
+        let fixedBusy=false;
+        let nativeBusy=false;
+        try{
+          fixedBusy=!!(window.supportTourFixedAudio &&
+            typeof window.supportTourFixedAudio.isActive==='function' &&
+            window.supportTourFixedAudio.isActive());
+        }catch(e){}
+        try{
+          nativeBusy=!!(window.speechSynthesis &&
+            (window.speechSynthesis.speaking || window.speechSynthesis.pending));
+        }catch(e){}
+        return fixedBusy || nativeBusy;
+      }
+
+      function numeroArmIndex3BackReplay(node, expectedPhase){
+        const token=++numeroBackReplayMonitorToken3;
+        if(!node || !node.id || !numeroIndex3VoicePreferenceOn()) return;
+
+        const born=performance.now();
+        let narrationSeen=false;
+        let idleSince=0;
+        dialogueVoiceCompleted.delete(node.id);
+
+        const watcher=window.setInterval(function(){
+          if(token!==numeroBackReplayMonitorToken3){
+            window.clearInterval(watcher);
+            return;
+          }
+          if(phase!==expectedPhase || node.classList.contains('hide') || !node.classList.contains('show')){
+            window.clearInterval(watcher);
+            return;
+          }
+
+          const now=performance.now();
+          const busy=numeroIndex3NarrationBusy();
+          if(busy){
+            narrationSeen=true;
+            idleSince=0;
+            return;
+          }
+
+          /*
+            data-tour-spoken becomes 1 when the existing observer actually
+            dispatches this node to the voice layer. This covers the tiny case
+            where a very short replay starts and finishes between two polls.
+          */
+          if(!narrationSeen && node.getAttribute('data-tour-spoken')==='1' && now-born>650){
+            narrationSeen=true;
+          }
+
+          if(narrationSeen){
+            if(!idleSince) idleSince=now;
+            if(now-idleSince>=650){
+              dialogueVoiceCompleted.add(node.id);
+              window.clearInterval(watcher);
+            }
+          }
+
+          /* Last-resort guard only for a BACK replay; normal playback is untouched. */
+          if(now-born>45000){
+            dialogueVoiceCompleted.add(node.id);
+            window.clearInterval(watcher);
+          }
+        },120);
+      }
+
       const numeroIntroNodes3=[d1,d2,d3,d4,computerPrompt];
       const numeroEndingNodes3=[end1,end2,end3];
 
@@ -8297,7 +8384,11 @@
           const n=numeroIntroNodes3[i]; if(n&&n.id) dialogueVoiceCompleted.delete(n.id);
         }
         const node=numeroIntroNodes3[target];
-        if(node) node.classList.add('show');
+        if(node){
+          node.setAttribute('data-tour-spoken','0');
+          node.classList.add('show');
+          numeroArmIndex3BackReplay(node,'intro');
+        }
         introDialogueStage=target+1;
         introDialogueStageStartedAt=0;
       }
@@ -8354,7 +8445,12 @@
         for(let i=target;i<numeroEndingNodes3.length;i++){
           const n=numeroEndingNodes3[i]; if(n&&n.id) dialogueVoiceCompleted.delete(n.id);
         }
-        const node=numeroEndingNodes3[target]; if(node) node.classList.add('show');
+        const node=numeroEndingNodes3[target];
+        if(node){
+          node.setAttribute('data-tour-spoken','0');
+          node.classList.add('show');
+          numeroArmIndex3BackReplay(node,'ending');
+        }
         endingDialogueStage=target+1; endingDialogueStageStartedAt=0;
       }
 
