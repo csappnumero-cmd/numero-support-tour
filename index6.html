@@ -1010,20 +1010,10 @@
     state.timeline=buildCompleteTimeline(rows);
     state.index=0;
 
-    var devEntry=false;
-    try{devEntry=new URLSearchParams(location.search).get('dev')==='1';}catch(e){}
-    if(devEntry){
-      state.paused=true;
-      state.token+=1;
-      clearTimer();
-      stopVoice();
-      updateProgress();
-      var firstRow=state.timeline[0]||null;
-      if(firstRow)showDialogue(firstRow);
-      syncControls();
-      return;
-    }
-
+    /* Always start index6 immediately. The old dev=1 branch forced this
+       page into a paused state, so it waited for the Play button. */
+    state.paused=false;
+    syncControls();
     runIndex(0);
   }
 
