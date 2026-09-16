@@ -1814,6 +1814,57 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
+
+<style id="targeted-pause-icon-only">
+#presentationControlText{display:none!important}
+#presentationControl{
+  min-width:46px!important;
+  width:46px!important;
+  height:40px!important;
+  padding:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:0!important;
+}
+#presentationControlIcon{
+  margin:0!important;
+  font-size:18px!important;
+  line-height:1!important;
+}
+</style>
+
+
+<style id="targeted-head-icon-controls">
+#languageControlText,#soundControlText{display:none!important}
+#languageControl,#soundControl,#presentationControl{
+  min-width:46px!important;
+  width:46px!important;
+  height:40px!important;
+  padding:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:0!important;
+  letter-spacing:0!important;
+}
+#soundControl.off{
+  background:#b42318!important;
+  border-color:#e04437!important;
+  color:#fff!important;
+}
+#languageControl.active{
+  background:#fff!important;
+  color:#14202a!important;
+}
+#languageControl::before{
+  content:'🌐';
+  font-size:19px;
+  line-height:1;
+}
+#soundControlIcon{font-size:18px!important;margin:0!important}
+</style>
+
 </head>
 
 
@@ -3760,13 +3811,11 @@
 
 
     try {
-      arabicEnabled =
-        window.localStorage.getItem(
-          'support_center_ar'
-        ) === '1';
+      const storedArabicPreference = window.localStorage.getItem('support_center_ar');
+      arabicEnabled = storedArabicPreference === null ? true : storedArabicPreference === '1';
     }
     catch (error) {
-      arabicEnabled = false;
+      arabicEnabled = true;
     }
 
 
