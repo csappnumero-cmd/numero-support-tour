@@ -8889,6 +8889,16 @@
       catch (error) {}
     }
 
+    /*
+      V17 semantic-BACK voice reset hook.
+      The BACK controller already calls this hook before replaying an older
+      dialogue.  Exporting the page's real voice reset prevents a cancelled
+      utterance from leaving voiceBusy/activeVoiceUtterance stuck, which used
+      to make index3 stop after the replayed Assistant Head sentence until the
+      user toggled sound OFF/ON.
+    */
+    window.supportTourStopPageVoice = stopVoice;
+
 
     function speakNode(node) {
 
