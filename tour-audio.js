@@ -215,6 +215,8 @@
 
     var endedFired = false;
     var endGuard = null;
+    var lastAudioTime = 0;
+    var lastProgressAt = Date.now();
     function clearEndGuard(){
       if(endGuard){ try{clearInterval(endGuard);}catch(e){} endGuard=null; }
     }
@@ -228,14 +230,40 @@
       clearAudioOnly();
       finishUtterance(utterance);
     }
+    function failAndContinue(reason){
+      if (endedFired || mySerial !== serial) return;
+      endedFired = true;
+      try { audio.pause(); } catch(e) {}
+      clearAudioOnly();
+      chunkSequence=null;
+      pendingAmbiguous=null;
+      // A broken/missing MP3 must never freeze the presentation. Let the page's
+      // existing utterance error handler advance to the next chunk/line.
+      if (utterance && typeof utterance.onerror === 'function') {
+        try { utterance.onerror({type:'error', error:reason || 'fixed-audio-failed', utterance:utterance}); return; } catch(e) {}
+      }
+      finishUtterance(utterance);
+    }
     function startEndGuard(){
       clearEndGuard();
+      lastAudioTime = Number(audio.currentTime) || 0;
+      lastProgressAt = Date.now();
       endGuard=setInterval(function(){
         if(endedFired || mySerial!==serial){ clearEndGuard(); return; }
         if(paused || audio.paused) return;
-        var d=Number(audio.duration), c=Number(audio.currentTime);
+        var d=Number(audio.duration), c=Number(audio.currentTime), now=Date.now();
+        if(isFinite(c) && c > lastAudioTime + .02){
+          lastAudioTime=c;
+          lastProgressAt=now;
+        }
         if(audio.ended || (isFinite(d)&&d>0&&isFinite(c)&&c>=Math.max(0,d-.08))){
           fireEnd();
+          return;
+        }
+        // If playback is supposedly running but the playhead does not move for
+        // 15 seconds, treat the file as stalled and continue instead of hanging.
+        if(now-lastProgressAt>15000){
+          failAndContinue('fixed-audio-stalled');
         }
       },250);
     }
@@ -317,13 +345,7 @@
     function fallback(){
       if (mySerial !== serial) return;
       removeGate();
-      clearAudioOnly(); chunkSequence=null; pendingAmbiguous=null;
-      try { original.speak(utterance); }
-      catch(e) {
-        if (utterance && typeof utterance.onerror === 'function') {
-          try { utterance.onerror({type:'error', error:e, utterance:utterance}); } catch(ignore) {}
-        }
-      }
+      failAndContinue('fixed-audio-load-failed');
     }
 
     audio.onended=function(){ removeGate(); fireEnd(); };

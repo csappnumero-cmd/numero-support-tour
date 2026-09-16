@@ -57,8 +57,8 @@
   <script src="tour-runtime.js?v=20260916-controls-v3"></script>
   
   <!-- FIXED_TOUR_AUDIO -->
-  <script src="tour-audio-map.js?v=20260916-controls-v3"></script>
-  <script src="tour-audio.js?v=20260916-controls-v3"></script>
+  <script src="tour-audio-map.js?v=20260916-index6-v4"></script>
+  <script src="tour-audio.js?v=20260916-index6-v4"></script>
 <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -668,12 +668,11 @@
 
   'use strict';
 
-  /* Kill any utterance that survived the Quality Team page replacement. */
+  /* Stop only audio left by the previous page. Do this once, before index6 starts.
+     Do NOT schedule a delayed cancel here: that can kill index6's first MP3 after it
+     has already started and leave the first dialogue waiting forever. */
   if ('speechSynthesis' in window) {
     try { window.speechSynthesis.cancel(); } catch (entryVoiceError) {}
-    window.setTimeout(function(){
-      try { window.speechSynthesis.cancel(); } catch (entryVoiceError2) {}
-    }, 80);
   }
 
   var AR_KEY='support_center_ar', VOICE_KEY='support_center_voice';
@@ -890,14 +889,25 @@
       u.pitch=Math.max(.72,Math.min(1.18,Number(p.pitch||1)));
       u.volume=1;
 
-      var settled=false,last=Date.now(),budget=(window.supportTourFixedAudio&&window.supportTourFixedAudio.usingFixedAudio)?120000:Math.max(11000,3500+chunk.split(/\s+/).length*720); /* FIXED_AUDIO_WATCHDOG */
+      var fixedAudioApi=window.supportTourFixedAudio&&window.supportTourFixedAudio.usingFixedAudio?window.supportTourFixedAudio:null;
+      var settled=false,last=Date.now(),budget=fixedAudioApi?120000:Math.max(11000,3500+chunk.split(/\s+/).length*720),fixedInactiveFor=0; /* FIXED_AUDIO_WATCHDOG */
       state.currentUtterance=u;
       clearSpeechWatchdog();
       state.speechWatchdog=setInterval(function(){
         if(settled||lineFinished||token!==state.token||serial!==state.speechSerial){clearSpeechWatchdog();return}
         var now=Date.now(),elapsed=now-last;last=now;
         if(state.paused||window.speechSynthesis.paused)return;
-        if(window.supportTourFixedAudio&&window.supportTourFixedAudio.usingFixedAudio)return;
+        if(fixedAudioApi){
+          var fixedActive=typeof fixedAudioApi.isActive==='function'&&fixedAudioApi.isActive();
+          if(fixedActive){fixedInactiveFor=0;return}
+          fixedInactiveFor+=elapsed;
+          // A cancelled/lost fixed MP3 used to leave currentUtterance pending forever.
+          // Give normal onend/onerror callbacks time to arrive, then recover automatically.
+          if(fixedInactiveFor<2500)return;
+          settled=true;clearSpeechWatchdog();state.currentUtterance=null;
+          setTimeout(speakNextChunk,180);
+          return;
+        }
         budget-=elapsed;
         if(budget<=0){
           settled=true;clearSpeechWatchdog();
@@ -1010,8 +1020,7 @@
     state.timeline=buildCompleteTimeline(rows);
     state.index=0;
 
-    /* Always start index6 immediately. The old dev=1 branch forced this
-       page into a paused state, so it waited for the Play button. */
+    /* index6 must always start in the playing state, including ?dev=1 links. */
     state.paused=false;
     syncControls();
     runIndex(0);
