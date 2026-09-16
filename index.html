@@ -832,6 +832,26 @@
   }catch(e){}
 })();
 </script>
+
+<style id="final-pause-toggle-4-pages-style">
+#presentationControlText{display:none!important}
+#presentationControl{
+  min-width:46px!important;
+  width:46px!important;
+  height:40px!important;
+  padding:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:0!important;
+}
+#presentationControlIcon{
+  margin:0!important;
+  font-size:18px!important;
+  line-height:1!important;
+}
+</style>
+
 </head>
 
 <body>
@@ -1296,5 +1316,54 @@
   if(document.body) obs.observe(document.body,{subtree:true,childList:true,characterData:true});
 })();
 </script>
+
+<script id="final-pause-toggle-4-pages">
+(function(){
+  'use strict';
+
+  function control(){ return document.getElementById('presentationControl'); }
+  function icon(){ return document.getElementById('presentationControlIcon'); }
+  function text(){ return document.getElementById('presentationControlText'); }
+
+  function setIconFromPausedState(){
+    var c=control(), i=icon(), t=text();
+    if(!c) return;
+
+    if(t) t.style.display='none';
+
+    var paused=document.body.classList.contains('presentation-paused');
+    var symbol=paused ? '▶' : '⏸';
+
+    if(i) i.textContent=symbol;
+    else c.textContent=symbol;
+
+    c.setAttribute('aria-label', paused ? 'Play presentation' : 'Pause presentation');
+    c.title=paused ? 'Play' : 'Pause';
+  }
+
+  function install(){
+    var c=control();
+    if(!c || c.getAttribute('data-final-pause-sync')==='1') return;
+
+    c.setAttribute('data-final-pause-sync','1');
+    setIconFromPausedState();
+
+    c.addEventListener('click',function(){
+      setTimeout(setIconFromPausedState,0);
+      setTimeout(setIconFromPausedState,40);
+    },false);
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',install,{once:true});
+  }else{
+    install();
+  }
+
+  setTimeout(install,100);
+  setTimeout(install,500);
+})();
+</script>
+
 </body>
 </html>
