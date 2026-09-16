@@ -10,7 +10,15 @@
       localStorage.setItem(__arInitKey, '1');
     }
   } catch(e) {}
-  if (!window.speechSynthesis || window.__tourFixedAudioInstalled) return;
+  // The entrance page is a real start gate: the presentation must not move
+  // until the visitor clicks START TOUR. index.html reads this flag and keeps
+  // its own timeline paused until the audio layer dispatches numero-tour-started.
+  var fileName = (window.location.pathname.split('/').pop() || '').toLowerCase();
+  var isDoorPage = !fileName || fileName === 'index.html';
+  var canInstallFixedAudio = !!window.speechSynthesis;
+  if (isDoorPage && canInstallFixedAudio) window.__numeroTourStartPending = true;
+
+  if (!canInstallFixedAudio || window.__tourFixedAudioInstalled) return;
   window.__tourFixedAudioInstalled = true;
 
   var synth = window.speechSynthesis;
@@ -28,9 +36,7 @@
   var pendingAmbiguous = null;  // wait for enough chunks to identify a line
 
   // SIMPLE/STABLE first-page start gate.
-  // We intentionally do NOT intercept setTimeout/setInterval here.
-  var fileName = (window.location.pathname.split('/').pop() || '').toLowerCase();
-  var isDoorPage = !fileName || fileName === 'index.html';
+  // The page timeline itself is paused by index.html until the start event.
   var userStarted = !isDoorPage;
   var startGateEl = null;
   var pendingFirstPlay = null;
@@ -42,116 +48,164 @@
     startGateEl = null;
   }
 
+  function notifyTourStarted(){
+    userStarted = true;
+    window.__numeroTourStartPending = false;
+    try { localStorage.setItem('support_center_voice','1'); } catch(e) {}
+    try { window.dispatchEvent(new CustomEvent('numero-tour-started')); }
+    catch(e) { try { window.dispatchEvent(new Event('numero-tour-started')); } catch(_) {} }
+  }
+
+  function primeMediaFromGesture(){
+    // Prime the browser's media policy while we are still inside the user's click.
+    // The clip is silent; it only establishes an explicit audio gesture.
+    try {
+      var primer = new Audio('data:audio/wav;base64,UklGRkQDAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YSADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==');
+      primer.preload = 'auto';
+      var pp = primer.play();
+      if (pp && pp.then) {
+        pp.then(function(){
+          try { primer.pause(); primer.removeAttribute('src'); primer.load(); } catch(e) {}
+        }).catch(function(){});
+      }
+    } catch(e) {}
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) {
+        var ctx = window.__numeroAudioContext || (window.__numeroAudioContext = new AC());
+        if (ctx.state === 'suspended') ctx.resume().catch(function(){});
+      }
+    } catch(e) {}
+  }
+
   function showStartGate(){
     if (!isDoorPage || userStarted || startGateEl || !document.body) return;
 
     var gate = document.createElement('div');
     gate.setAttribute('data-tour-start-gate','1');
+    gate.setAttribute('role','dialog');
+    gate.setAttribute('aria-modal','true');
+    gate.setAttribute('aria-label','Start Numero Support Tour');
     gate.style.cssText =
-      'position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;padding:24px;' +
-      'background:radial-gradient(circle at top,rgba(58,137,255,.22),transparent 32%),' +
-      'linear-gradient(135deg,#0a1a24 0%,#102634 48%,#081118 100%);' +
-      'font-family:Arial,Helvetica,sans-serif;color:#fff;overflow:hidden;';
-
-    var glow1 = document.createElement('div');
-    glow1.style.cssText = 'position:absolute;width:420px;height:420px;border-radius:50%;left:-120px;top:-120px;background:radial-gradient(circle,rgba(0,194,255,.20),transparent 68%);filter:blur(18px);pointer-events:none;';
-    var glow2 = document.createElement('div');
-    glow2.style.cssText = 'position:absolute;width:460px;height:460px;border-radius:50%;right:-150px;bottom:-150px;background:radial-gradient(circle,rgba(197,34,255,.20),transparent 68%);filter:blur(18px);pointer-events:none;';
+      'position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;padding:22px;' +
+      'background:radial-gradient(circle at 18% 5%,rgba(0,193,255,.18),transparent 30%),' +
+      'radial-gradient(circle at 92% 96%,rgba(191,48,255,.16),transparent 34%),' +
+      'linear-gradient(145deg,#081923 0%,#102733 52%,#111427 100%);' +
+      'font-family:Arial,Helvetica,sans-serif;color:#fff;overflow:auto;';
 
     var box = document.createElement('div');
     box.style.cssText =
-      'position:relative;width:min(620px,92vw);padding:36px 32px 30px;border-radius:26px;text-align:center;' +
-      'background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.08));' +
-      'border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);' +
-      'box-shadow:0 30px 90px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.12);';
+      'position:relative;width:min(520px,94vw);padding:32px 34px 28px;border-radius:24px;text-align:center;' +
+      'background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.075));' +
+      'border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);' +
+      'box-shadow:0 28px 80px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.11);';
 
     function detectLogoSrc(){
-      try {
-        if (window.TOUR_DATA && window.TOUR_DATA.logo_url) return window.TOUR_DATA.logo_url;
-      } catch(e) {}
+      try { if (window.TOUR_DATA && window.TOUR_DATA.logo_url) return window.TOUR_DATA.logo_url; } catch(e) {}
       try {
         var preload = document.querySelector('link[rel="preload"][as="image"][href]');
         if (preload && preload.href) return preload.href;
       } catch(e) {}
-      try {
-        var headerLogo = document.querySelector('img[src*="logo"], img[src*="numero"], img[src*="imgur"], .logo img, [class*="logo"] img');
-        if (headerLogo && headerLogo.src) return headerLogo.src;
-      } catch(e) {}
-      return 'https://i.imgur.com/Q5DSMWO.png';
+      return 'assets/images/Q5DSMWO.png';
     }
 
     var overline = document.createElement('div');
     overline.textContent = 'NUMERO SUPPORT TOUR';
-    overline.style.cssText = 'font-size:12px;font-weight:800;letter-spacing:3px;color:rgba(255,255,255,.72);margin-bottom:18px;';
-
-    var brandWrap = document.createElement('div');
-    brandWrap.style.cssText = 'display:flex;flex-direction:column;justify-content:center;align-items:center;margin-bottom:24px;';
+    overline.style.cssText = 'font-size:11px;font-weight:800;letter-spacing:3.2px;color:rgba(255,255,255,.68);margin-bottom:20px;';
 
     var brandImg = document.createElement('img');
     brandImg.src = detectLogoSrc();
     brandImg.alt = 'Numero eSIM';
-    brandImg.style.cssText = 'max-width:min(340px,76vw);max-height:120px;width:auto;height:auto;display:block;object-fit:contain;filter:drop-shadow(0 10px 24px rgba(0,0,0,.28));margin-bottom:14px;';
+    brandImg.style.cssText = 'width:104px;height:104px;display:block;object-fit:contain;margin:0 auto 20px;filter:drop-shadow(0 14px 26px rgba(0,0,0,.28));';
 
     var brandText = document.createElement('div');
     brandText.textContent = 'Numero eSIM';
-    brandText.style.cssText = 'font-size:38px;font-weight:900;letter-spacing:-1px;line-height:1.05;margin-bottom:8px;';
+    brandText.style.cssText = 'font-size:38px;font-weight:900;letter-spacing:-.7px;line-height:1.05;margin-bottom:7px;';
 
     var slogan = document.createElement('div');
     slogan.textContent = 'Be Local Anywhere';
-    slogan.style.cssText = 'font-size:16px;color:rgba(255,255,255,.82);margin-bottom:2px;';
+    slogan.style.cssText = 'font-size:15px;color:rgba(255,255,255,.76);margin-bottom:20px;';
+
+    var status = document.createElement('div');
+    status.innerHTML = '<span aria-hidden="true">🔊</span><span>AUDIO ON</span><span style="opacity:.38">•</span><span>ARABIC CAPTIONS ON</span>';
+    status.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:8px;max-width:100%;padding:8px 12px;border-radius:999px;' +
+      'background:rgba(6,13,18,.38);border:1px solid rgba(255,255,255,.12);font-size:10px;font-weight:800;letter-spacing:.7px;color:rgba(255,255,255,.82);margin-bottom:19px;';
 
     var btn = document.createElement('button');
     btn.type = 'button';
-    btn.textContent = 'START TOUR';
+    btn.innerHTML = '<span aria-hidden="true" style="font-size:17px">▶</span><span>START TOUR</span>';
     btn.style.cssText =
-      'border:0;border-radius:14px;padding:16px 30px;background:#fff;color:#111;' +
-      'font:900 15px Arial;letter-spacing:1.8px;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.18);';
+      'width:min(270px,100%);height:54px;border:0;border-radius:14px;padding:0 24px;background:#fff;color:#10161a;' +
+      'display:inline-flex;align-items:center;justify-content:center;gap:10px;font:900 15px Arial;letter-spacing:1.7px;cursor:pointer;' +
+      'box-shadow:0 12px 28px rgba(0,0,0,.22);transition:box-shadow .16s ease,background .16s ease;';
 
     var hint = document.createElement('div');
-    hint.textContent = 'Click once to start the presentation with audio';
-    hint.style.cssText = 'font-size:12px;color:rgba(255,255,255,.68);margin-top:14px;';
+    hint.textContent = 'The presentation will wait here until you start it.';
+    hint.style.cssText = 'font-size:12px;line-height:1.45;color:rgba(255,255,255,.68);margin-top:15px;';
 
     var subHint = document.createElement('div');
-    subHint.textContent = 'Arabic captions start ON by default and can be turned off anytime';
-    subHint.style.cssText = 'font-size:11px;color:rgba(255,255,255,.50);margin-top:8px;';
+    subHint.dir = 'rtl';
+    subHint.textContent = 'اضغط بدء الجولة لتفعيل الصوت — ولن يتم تخطي أول جملة.';
+    subHint.style.cssText = 'font-size:12px;line-height:1.55;color:rgba(255,255,255,.52);margin-top:5px;';
 
-    brandWrap.appendChild(brandImg);
-    brandWrap.appendChild(brandText);
-    brandWrap.appendChild(slogan);
+    var errorHint = document.createElement('div');
+    errorHint.style.cssText = 'display:none;font-size:12px;color:#ffd0cc;margin-top:10px;';
+
     box.appendChild(overline);
-    box.appendChild(brandWrap);
+    box.appendChild(brandImg);
+    box.appendChild(brandText);
+    box.appendChild(slogan);
+    box.appendChild(status);
+    box.appendChild(document.createElement('br'));
     box.appendChild(btn);
     box.appendChild(hint);
     box.appendChild(subHint);
-    gate.appendChild(glow1);
-    gate.appendChild(glow2);
+    box.appendChild(errorHint);
     gate.appendChild(box);
     document.body.appendChild(gate);
     startGateEl = gate;
 
     btn.addEventListener('click', function(){
-      userStarted = true;
-      removeStartGate();
+      if (btn.getAttribute('data-starting') === '1') return;
+      btn.setAttribute('data-starting','1');
+      btn.innerHTML = '<span aria-hidden="true">●</span><span>STARTING…</span>';
+      errorHint.style.display = 'none';
 
+      // If an utterance was already waiting, start it inside the same real click.
       if (pendingFirstPlay) {
         var rec = pendingFirstPlay;
-        pendingFirstPlay = null;
-        if (rec.mySerial === serial) {
-          try {
-            var p = rec.audio.play();
-            if (p && p.catch) p.catch(function(err){
-              if (err && (err.name === 'NotAllowedError' || err.name === 'AbortError')) {
-                rec.showGate();
-              } else {
-                rec.fallback();
-              }
+        try {
+          var p = rec.audio.play();
+          if (p && p.then) {
+            p.then(function(){
+              pendingFirstPlay = null;
+              notifyTourStarted();
+              removeStartGate();
+              if (paused) { try { rec.audio.pause(); } catch(e) {} }
+            }).catch(function(err){
+              btn.removeAttribute('data-starting');
+              btn.innerHTML = '<span aria-hidden="true" style="font-size:17px">▶</span><span>START TOUR</span>';
+              errorHint.textContent = 'Audio was blocked. Tap START TOUR again.';
+              errorHint.style.display = 'block';
+              if (!err || (err.name !== 'NotAllowedError' && err.name !== 'AbortError')) rec.fallback();
             });
-          } catch(e) {
-            if (e && (e.name === 'NotAllowedError' || e.name === 'AbortError')) rec.showGate();
-            else rec.fallback();
+          } else {
+            pendingFirstPlay = null;
+            notifyTourStarted();
+            removeStartGate();
           }
+        } catch(e) {
+          btn.removeAttribute('data-starting');
+          btn.innerHTML = '<span aria-hidden="true" style="font-size:17px">▶</span><span>START TOUR</span>';
+          errorHint.textContent = 'Audio was blocked. Tap START TOUR again.';
+          errorHint.style.display = 'block';
         }
+        return;
       }
+
+      primeMediaFromGesture();
+      notifyTourStarted();
+      removeStartGate();
     });
   }
 
@@ -286,26 +340,38 @@
       gateEl = document.createElement('div');
       gateEl.setAttribute('data-tour-audio-gate','1');
       gateEl.style.cssText =
-        'position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;' +
-        'background:rgba(4,9,13,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);' +
-        'font-family:Arial,Helvetica,sans-serif;cursor:pointer;';
+        'position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;padding:22px;' +
+        'background:rgba(4,9,13,.76);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);' +
+        'font-family:Arial,Helvetica,sans-serif;';
 
       var box = document.createElement('div');
       box.style.cssText =
-        'min-width:280px;max-width:88vw;padding:22px 28px;border-radius:18px;' +
-        'background:rgba(12,22,29,.96);border:1px solid rgba(255,255,255,.18);' +
-        'box-shadow:0 24px 70px rgba(0,0,0,.38);text-align:center;color:#fff;';
+        'width:min(390px,92vw);padding:28px 28px 24px;border-radius:20px;' +
+        'background:linear-gradient(180deg,rgba(18,32,41,.98),rgba(9,18,24,.98));border:1px solid rgba(255,255,255,.16);' +
+        'box-shadow:0 24px 70px rgba(0,0,0,.42);text-align:center;color:#fff;';
+
+      var speaker = document.createElement('div');
+      speaker.textContent = '🔊';
+      speaker.style.cssText = 'width:54px;height:54px;margin:0 auto 14px;border-radius:50%;display:flex;align-items:center;justify-content:center;' +
+        'background:rgba(255,255,255,.10);font-size:24px;border:1px solid rgba(255,255,255,.12);';
 
       var title = document.createElement('div');
-      title.textContent = 'START TOUR';
-      title.style.cssText = 'font-size:22px;font-weight:900;letter-spacing:2px;margin-bottom:8px;';
+      title.textContent = 'ENABLE AUDIO';
+      title.style.cssText = 'font-size:20px;font-weight:900;letter-spacing:1.5px;margin-bottom:8px;';
 
       var sub = document.createElement('div');
-      sub.textContent = 'Click once to enable presentation audio';
-      sub.style.cssText = 'font-size:13px;line-height:1.45;color:rgba(255,255,255,.76);';
+      sub.textContent = 'Tap once to continue this same line with sound. Nothing will be skipped.';
+      sub.style.cssText = 'font-size:13px;line-height:1.5;color:rgba(255,255,255,.72);';
 
+      var tap = document.createElement('div');
+      tap.textContent = 'TAP TO CONTINUE';
+      tap.style.cssText = 'margin:18px auto 0;display:inline-flex;align-items:center;justify-content:center;min-width:190px;height:44px;padding:0 18px;' +
+        'border-radius:12px;background:#fff;color:#10161a;font-size:12px;font-weight:900;letter-spacing:1.4px;cursor:pointer;';
+
+      box.appendChild(speaker);
       box.appendChild(title);
       box.appendChild(sub);
+      box.appendChild(tap);
       gateEl.appendChild(box);
       document.body.appendChild(gateEl);
 

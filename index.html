@@ -66,7 +66,7 @@
   
   <!-- FIXED_TOUR_AUDIO -->
   <script src="tour-audio-map.js?v=20260916-exactfix-1789553853"></script>
-  <script src="tour-audio.js?v=20260916-exactfix-1789553853"></script>
+  <script src="tour-audio.js?v=20260916-start-audio-v7"></script>
 <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1051,7 +1051,9 @@
        PRESENTATION TIMER ENGINE
     ========================== */
 
-    let presentationPaused = false;
+    // The entrance timeline is intentionally frozen until START TOUR is clicked.
+    // tour-audio.js sets this flag before the body loads.
+    let presentationPaused = !!window.__numeroTourStartPending;
     const presentationTimers = new Set();
 
     function presentationTimer(callback, delay) {
@@ -1113,6 +1115,18 @@
       document.getElementById('presentationControlText').textContent = 'PAUSE';
       document.getElementById('presentationControl').setAttribute('aria-label','Pause presentation');
     }
+
+    if (presentationPaused) {
+      document.body.classList.add('presentation-paused');
+      document.getElementById('presentationControlIcon').textContent = '▶';
+      document.getElementById('presentationControlText').textContent = 'PLAY';
+      document.getElementById('presentationControl').setAttribute('aria-label','Waiting for Start Tour');
+    }
+
+    // The START TOUR click unlocks audio and then releases the timeline from 0:00.
+    window.addEventListener('numero-tour-started', function() {
+      resumePresentation();
+    }, { once: true });
 
     document.getElementById('presentationControl').addEventListener('click', function() {
       if (presentationPaused) {
