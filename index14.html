@@ -551,18 +551,6 @@
   }else{
     render();
   }
-
-
-  /* V16 — semantic BACK: previous farewell sentence. */
-  window.numeroCanStepBack=function(){ return state.index>0; };
-  window.numeroStepBack=function(){
-    if(state.index<=0) return false;
-    state.index-=1;
-    state.ended=false;
-    render();
-    return true;
-  };
-
 })();
 </script>
 
@@ -817,6 +805,5 @@
   if(document.body) obs.observe(document.body,{subtree:true,childList:true,characterData:true});
 })();
 </script>
-  <script src="tour-step-back.js?v=20260916-step-back-v16"></script>
 </body>
 </html>

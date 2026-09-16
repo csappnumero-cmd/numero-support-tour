@@ -1071,18 +1071,7 @@
   }else start(fallbackRows);
 
   document.addEventListener('pointerdown',function(){if(state.voiceEnabled&&state.currentRow&&!state.paused&&!state.currentUtterance){clearTimer();speakAndAdvance(state.currentRow,state.token)}},{once:true,capture:true});
-
-
-  /* V16 — reuse the page's native sentence-by-sentence back engine. */
-  window.numeroCanStepBack=function(){ return state.index>0; };
-  window.numeroStepBack=function(){
-    if(state.index<=0) return false;
-    goBack();
-    return true;
-  };
-
 })();
 </script>
-  <script src="tour-step-back.js?v=20260916-step-back-v16"></script>
 </body>
 </html>

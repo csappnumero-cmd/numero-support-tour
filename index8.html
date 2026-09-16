@@ -6356,115 +6356,7 @@
       bindTeamFilters();
       applyTeamFilter('ALL', false);
 
-    
-      /* =========================================================
-         V16 — SEMANTIC BACK (Team Leaders)
-         Dialogue -> previous full sentence. Showcase -> previous system.
-      ========================================================== */
-      const numeroIntroNodes8=[d1,d2,d3,d4,d5,d6];
-      const numeroIntroShowTimes8=[1500,8000,22000,26500,45000,52500];
-      const numeroIntroHideTimes8=[7500,21500,26000,44500,52000,66500];
-      const numeroIntroShowKeys8=['d1-show','d2-show','d3-show','d4-show','d5-show','d6-show'];
-      const numeroIntroHideKeys8=['d1-hide','d2-hide','d3-hide','d4-hide','d5-hide','d6-hide'];
-      const numeroEndNodes8=[end1,end2,end3];
-      const numeroEndShowTimes8=[1450,4900,9250];
-      const numeroEndHideTimes8=[4400,8750,11650];
-      const numeroEndShowKeys8=['end1-show','end2-show','end3-show'];
-      const numeroEndHideKeys8=['end1-hide','end2-hide','transition'];
-
-      function numeroStopIndex8Voice(){
-        try{
-          if(typeof window.supportTourStopPageVoice==='function')window.supportTourStopPageVoice();
-          if(typeof window.supportTourStopSystemSpeech==='function')window.supportTourStopSystemSpeech();
-          if(window.speechSynthesis)window.speechSynthesis.cancel();
-        }catch(e){}
-      }
-      function numeroUnpauseIndex8(){manualPaused=false;interactionPaused=false;syncPauseState();}
-
-      function numeroCurrentTimedIndex8(nodes,showTimes){
-        for(let i=nodes.length-1;i>=0;i--){
-          const n=nodes[i];
-          if(n&&n.classList.contains('show')&&!n.classList.contains('hide'))return {visible:true,index:i};
-        }
-        let latest=-1;
-        for(let i=0;i<showTimes.length;i++)if(phaseElapsed>=showTimes[i])latest=i;
-        return {visible:false,index:latest};
-      }
-
-      function numeroJumpIntro8(target){
-        target=Math.max(0,Math.min(numeroIntroNodes8.length-1,target));
-        numeroStopIndex8Voice();numeroUnpauseIndex8();
-        phase='intro';phaseElapsed=numeroIntroShowTimes8[target];lastTick=performance.now();
-        firedEvents.clear();
-        for(let i=0;i<target;i++){firedEvents.add(numeroIntroShowKeys8[i]);firedEvents.add(numeroIntroHideKeys8[i]);}
-        firedEvents.add(numeroIntroShowKeys8[target]);
-        numeroIntroNodes8.forEach(function(n){if(n)n.classList.remove('show','hide');});
-        numeroEndNodes8.forEach(function(n){if(n)n.classList.remove('show','hide');});
-        leadersScene.classList.remove('hub-mode');commandHub.classList.remove('show');
-        transitionCover.classList.remove('active');
-        numeroIntroNodes8[target].classList.add('show');
-        return true;
-      }
-
-      function numeroFocusIndex8System(target){
-        if(!systemsReady||!teamLeaderSystems.length)return false;
-        target=Math.max(0,Math.min(teamLeaderSystems.length-1,target));
-        numeroStopIndex8Voice();numeroUnpauseIndex8();
-        phase='showcase';phaseElapsed=0;lastTick=performance.now();firedEvents.clear();
-        leadersScene.classList.add('hub-mode');commandHub.classList.add('show');
-        showcaseSequenceStarted=true;showcaseSequenceIndex=target;showcaseLastIndex=target;
-        showcaseWaitingForNarration=true;showcaseAdvanceAt=null;showcaseFinishAt=null;
-        focusSystem(target,function(){
-          showcaseWaitingForNarration=false;
-          if(showcaseSequenceIndex>=teamLeaderSystems.length-1)showcaseFinishAt=phaseElapsed+1100;
-          else showcaseAdvanceAt=phaseElapsed+650;
-        });
-        return true;
-      }
-
-      function numeroJumpEnding8(target){
-        target=Math.max(0,Math.min(numeroEndNodes8.length-1,target));
-        numeroStopIndex8Voice();numeroUnpauseIndex8();
-        phase='ending';phaseElapsed=numeroEndShowTimes8[target];lastTick=performance.now();firedEvents.clear();
-        for(let i=0;i<target;i++){firedEvents.add(numeroEndShowKeys8[i]);firedEvents.add(numeroEndHideKeys8[i]);}
-        firedEvents.add(numeroEndShowKeys8[target]);
-        numeroEndNodes8.forEach(function(n){if(n)n.classList.remove('show','hide');});
-        transitionCover.classList.remove('active');
-        numeroEndNodes8[target].classList.add('show');
-        return true;
-      }
-
-      window.numeroCanStepBack=function(){
-        if(phase==='intro'){
-          const c=numeroCurrentTimedIndex8(numeroIntroNodes8,numeroIntroShowTimes8);
-          return c.visible?c.index>0:c.index>=0;
-        }
-        if(phase==='showcase')return teamLeaderSystems.length>0;
-        if(phase==='ending')return true;
-        return false;
-      };
-      window.numeroStepBack=function(){
-        if(phase==='intro'){
-          const c=numeroCurrentTimedIndex8(numeroIntroNodes8,numeroIntroShowTimes8);
-          const target=c.visible?c.index-1:c.index;
-          if(target<0)return false;
-          return numeroJumpIntro8(target);
-        }
-        if(phase==='showcase'){
-          const current=Math.max(0,showcaseSequenceIndex>=0?showcaseSequenceIndex:showcaseLastIndex);
-          if(current>0)return numeroFocusIndex8System(current-1);
-          return numeroJumpIntro8(numeroIntroNodes8.length-1);
-        }
-        if(phase==='ending'){
-          const c=numeroCurrentTimedIndex8(numeroEndNodes8,numeroEndShowTimes8);
-          const target=c.visible?c.index-1:c.index;
-          if(target>=0)return numeroJumpEnding8(target);
-          if(teamLeaderSystems.length)return numeroFocusIndex8System(teamLeaderSystems.length-1);
-        }
-        return false;
-      };
-
-})();
+    })();
 
   </script>
 
@@ -7331,6 +7223,5 @@
   if(document.body) obs.observe(document.body,{subtree:true,childList:true,characterData:true});
 })();
 </script>
-  <script src="tour-step-back.js?v=20260916-step-back-v16"></script>
 </body>
 </html>

@@ -2387,19 +2387,7 @@
     render();
   }
 
-
-
-  /* V16 — semantic BACK: one trainee-tour step / sentence at a time. */
-  window.numeroCanStepBack=function(){ return state.index>0; };
-  window.numeroStepBack=function(){
-    if(state.index<=0) return false;
-    state.index-=1;
-    render();
-    return true;
-  };
-
 })();
 </script>
-  <script src="tour-step-back.js?v=20260916-step-back-v16"></script>
 </body>
 </html>

@@ -1533,18 +1533,7 @@
     state.dialogueLoaded = true;
     tryStartTour();
   }
-
-
-  /* V16 — OPDC dialogue back is one complete line at a time. */
-  window.numeroCanStepBack=function(){ return state.index>0; };
-  window.numeroStepBack=function(){
-    if(state.index<=0) return false;
-    prev();
-    return true;
-  };
-
 })();
 </script>
-  <script src="tour-step-back.js?v=20260916-step-back-v16"></script>
 </body>
 </html>

@@ -4942,101 +4942,7 @@
 
       syncPauseState();
 
-    
-      /* =========================================================
-         V16 — SEMANTIC BACK (Supervisor)
-         Intro story -> previous sentence/screen. Showcase -> previous system.
-      ========================================================== */
-      let numeroStoryIndex7=-1;
-      let numeroEndingIndex7=-1;
-
-      const numeroOriginalRunStoryScene7=runStoryScene;
-      runStoryScene=function(index,token){
-        numeroStoryIndex7=Number(index)||0;
-        return numeroOriginalRunStoryScene7(index,token);
-      };
-      const numeroOriginalRunEndingDialogue7=runEndingDialogue;
-      runEndingDialogue=function(index,token){
-        numeroEndingIndex7=Number(index)||0;
-        return numeroOriginalRunEndingDialogue7(index,token);
-      };
-
-      function numeroStopIndex7Voice(){
-        try{
-          if(typeof window.supportTourStopPageVoice==='function')window.supportTourStopPageVoice();
-          if(typeof window.supportTourStopSystemSpeech==='function')window.supportTourStopSystemSpeech();
-          if(window.speechSynthesis)window.speechSynthesis.cancel();
-        }catch(e){}
-      }
-      function numeroUnpauseIndex7(){manualPaused=false;interactionPaused=false;syncPauseState();}
-
-      function numeroRestartStory7(target){
-        target=Math.max(0,Math.min(storyScenes.length-1,target));
-        sequenceToken+=1;
-        const token=sequenceToken;
-        numeroStopIndex7Voice();numeroUnpauseIndex7();
-        phase='intro';phaseElapsed=0;firedEvents.clear();lastTick=performance.now();
-        introSequenceStarted=true;endingSequenceStarted=false;
-        scene.classList.remove('live-mode','story-exit');scene.classList.add('story-intro');
-        liveBoard.classList.remove('show');transitionCover.classList.remove('active');
-        storyScenes.forEach(function(item){if(item&&item.node)item.node.classList.remove('show','hide');});
-        [end1,end2,end3].forEach(function(n){if(n)n.classList.remove('show','hide');});
-        runStoryScene(target,token);
-        return true;
-      }
-
-      function numeroFocusIndex7System(target){
-        if(!systemsReady||!supervisorSystems.length)return false;
-        target=Math.max(0,Math.min(supervisorSystems.length-1,target));
-        sequenceToken+=1; /* invalidate any intro/ending setTimeout chain */
-        numeroStopIndex7Voice();numeroUnpauseIndex7();
-        phase='showcase';phaseElapsed=0;firedEvents.clear();lastTick=performance.now();
-        scene.classList.add('live-mode');liveBoard.classList.add('show');
-        showcaseSequenceStarted=true;showcaseSequenceIndex=target;showcaseLastIndex=target;
-        showcaseWaitingForNarration=true;showcaseAdvanceAt=null;showcaseFinishAt=null;
-        focusSystem(target,function(){
-          showcaseWaitingForNarration=false;
-          if(showcaseSequenceIndex>=supervisorSystems.length-1)showcaseFinishAt=phaseElapsed+1100;
-          else showcaseAdvanceAt=phaseElapsed+650;
-        });
-        return true;
-      }
-
-      function numeroRestartEnding7(target){
-        const nodes=[end1,end2,end3];
-        target=Math.max(0,Math.min(nodes.length-1,target));
-        sequenceToken+=1;const token=sequenceToken;
-        numeroStopIndex7Voice();numeroUnpauseIndex7();
-        phase='ending';phaseElapsed=0;firedEvents.clear();lastTick=performance.now();
-        endingSequenceStarted=true;transitionCover.classList.remove('active');
-        nodes.forEach(function(n){if(n)n.classList.remove('show','hide');});
-        runEndingDialogue(target,token);return true;
-      }
-
-      window.numeroCanStepBack=function(){
-        if(phase==='intro')return numeroStoryIndex7>0;
-        if(phase==='showcase')return supervisorSystems.length>0;
-        if(phase==='ending')return true;
-        return false;
-      };
-      window.numeroStepBack=function(){
-        if(phase==='intro'){
-          if(numeroStoryIndex7<=0)return false;
-          return numeroRestartStory7(numeroStoryIndex7-1);
-        }
-        if(phase==='showcase'){
-          const current=Math.max(0,showcaseSequenceIndex>=0?showcaseSequenceIndex:showcaseLastIndex);
-          if(current>0)return numeroFocusIndex7System(current-1);
-          return numeroRestartStory7(storyScenes.length-1);
-        }
-        if(phase==='ending'){
-          if(numeroEndingIndex7>0)return numeroRestartEnding7(numeroEndingIndex7-1);
-          if(supervisorSystems.length)return numeroFocusIndex7System(supervisorSystems.length-1);
-        }
-        return false;
-      };
-
-})();
+    })();
 
   </script>
 
@@ -5973,6 +5879,5 @@
 })();
 </script>
 
-  <script src="tour-step-back.js?v=20260916-step-back-v16"></script>
 </body>
 </html>
