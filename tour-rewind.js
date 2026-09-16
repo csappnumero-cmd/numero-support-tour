@@ -2,37 +2,46 @@
   'use strict';
 
   /*
-    Numero Tour — safe 15-second rewind controller.
+    Numero Tour — stable 15-second rewind (V14).
 
-    The presentation is not a video, so rewind is implemented as a checkpoint
-    replay: we remember the start of every spoken line. When the viewer taps
-    ↶ 15s, we choose the spoken line that was active about 15 seconds earlier,
-    reload that chapter, fast-forward its deterministic timers silently, and
-    resume NORMAL playback at the BEGINNING of that line.
-
-    This file does not change dialogue text, audio files, speaker casting, or
-    page sequence data.
+    IMPORTANT:
+    - Normal playback is untouched.
+    - Rewind uses spoken-line checkpoints.
+    - If 15 seconds lands inside a spoken line, playback resumes from the
+      BEGINNING of that line.
+    - During the internal replay needed to rebuild the page state, the viewer
+      sees a rewind curtain instead of the page racing from the beginning.
   */
 
-  var HISTORY_KEY = 'numero_tour_rewind_history_v13';
-  var TARGET_KEY = 'numero_tour_rewind_target_v13';
-  var MAX_HISTORY = 500;
-  var REWIND_MS = 15000;
+  var HISTORY_KEY = 'numero_tour_rewind_history_v14';
+  var TARGET_KEY  = 'numero_tour_rewind_target_v14';
+  var MAX_HISTORY = 600;
+  var REWIND_MS   = 15000;
 
   var nativeDateNow = Date.now.bind(Date);
   var nativeSetTimeout = window.setTimeout.bind(window);
   var nativeClearTimeout = window.clearTimeout.bind(window);
   var nativeSetInterval = window.setInterval.bind(window);
   var nativeClearInterval = window.clearInterval.bind(window);
+  var nativePerfNow = (window.performance && typeof window.performance.now === 'function')
+    ? window.performance.now.bind(window.performance)
+    : function(){ return nativeDateNow(); };
+
+  var perfOwnDescriptor = null;
+  try { perfOwnDescriptor = Object.getOwnPropertyDescriptor(window.performance, 'now') || null; } catch(e) {}
 
   function clean(v){ return String(v == null ? '' : v).replace(/\s+/g,' ').trim(); }
+
   function pageName(){
     try {
-      if (window.SupportTourShared && window.SupportTourShared.page) return clean(window.SupportTourShared.page) || 'index';
+      if (window.SupportTourShared && window.SupportTourShared.page) {
+        return clean(window.SupportTourShared.page) || 'index';
+      }
     } catch(e) {}
     var name = (location.pathname.split('/').pop() || 'index.html').replace(/\.html?$/i,'');
     return name || 'index';
   }
+
   var PAGE = pageName();
 
   function readJson(key, fallback){
@@ -43,19 +52,30 @@
       return value == null ? fallback : value;
     } catch(e) { return fallback; }
   }
+
   function writeJson(key, value){
     try { sessionStorage.setItem(key, JSON.stringify(value)); } catch(e) {}
   }
-  function removeKey(key){ try { sessionStorage.removeItem(key); } catch(e) {} }
+
+  function removeKey(key){
+    try { sessionStorage.removeItem(key); } catch(e) {}
+  }
 
   var target = readJson(TARGET_KEY, null);
   var queryRewind = false;
   try { queryRewind = new URL(window.location.href).searchParams.get('rw') === '1'; } catch(e) {}
-  var fastForward = !!(queryRewind && target && target.page === PAGE && target.text);
+
+  var fastForward = !!(
+    queryRewind &&
+    target &&
+    clean(target.page) === PAGE &&
+    Number(target.seq || 0) > 0
+  );
+
   window.__NUMERO_REWIND_ACTIVE = fastForward;
 
-  /* A normal visit to the entrance is a new timeline. A rewind into the
-     entrance is not: keep the history/started state intact. */
+  /* A true entrance visit starts a fresh rewind history. A rewind into the
+     entrance must keep the existing visit alive. */
   if (PAGE === 'index' && !fastForward) {
     removeKey(HISTORY_KEY);
     removeKey(TARGET_KEY);
@@ -64,53 +84,28 @@
     try { sessionStorage.setItem('numero_tour_started','1'); } catch(e) {}
   }
 
-  var occurrence = Object.create(null);
-  var lastNormalCheckpoint = { text:'', at:0 };
-
   function loadHistory(){
     var h = readJson(HISTORY_KEY, []);
     return Array.isArray(h) ? h : [];
   }
+
   function saveHistory(h){
     if (h.length > MAX_HISTORY) h = h.slice(h.length - MAX_HISTORY);
     writeJson(HISTORY_KEY, h);
   }
 
-  function nextOccurrence(text){
-    text = clean(text);
-    var n = (occurrence[text] || 0) + 1;
-    occurrence[text] = n;
-    return n;
-  }
+  /* ------------------------------------------------------------------
+     Virtual replay clock.
 
-  function recordCheckpoint(text, kind, forcedOccurrence){
-    text = clean(text);
-    if (!text) return;
-    var now = nativeDateNow();
+     The old build virtualized every interval, including harmless 700/900ms UI
+     sync loops. Those recurring loops could keep the fake clock running and
+     make the page visibly race. V14 virtualizes only short presentation/watch
+     intervals; UI/background intervals remain native.
+  ------------------------------------------------------------------- */
 
-    /* A failed HTMLAudio attempt can fall back to native TTS immediately.
-       Treat that as the same spoken line, not two rewind checkpoints. */
-    if (!fastForward && lastNormalCheckpoint.text === text && now - lastNormalCheckpoint.at < 850) {
-      return;
-    }
-
-    var n = forcedOccurrence || nextOccurrence(text);
-    var h = loadHistory();
-    h.push({
-      page: PAGE,
-      text: text,
-      occurrence: n,
-      kind: kind || 'speech',
-      at: now,
-      dev: /(?:^|[?&])dev=1(?:&|$)/.test(location.search)
-    });
-    saveHistory(h);
-    lastNormalCheckpoint = { text:text, at:now };
-  }
-
-  /* ---------------- Virtual timer engine used ONLY while rewinding ---------------- */
   var virtualNow = 0;
-  var virtualBase = nativeDateNow();
+  var virtualBaseDate = nativeDateNow();
+  var virtualBasePerf = nativePerfNow();
   var queue = [];
   var draining = false;
   var nextTimerId = 1;
@@ -137,24 +132,29 @@
   function scheduleDrain(){
     if (!fastForward || draining) return;
     draining = true;
-    nativeSetTimeout(drainOne, 0);
+    /* 1ms yield keeps fetch/promises/DOM observers responsive while still
+       rebuilding minutes of presentation state quickly. */
+    nativeSetTimeout(drainOne, 1);
   }
 
-  function sortQueue(){ queue.sort(function(a,b){ return a.due - b.due || a.id - b.id; }); }
+  function sortQueue(){
+    queue.sort(function(a,b){ return a.due - b.due || a.id - b.id; });
+  }
 
   function callTimer(t){
-    if (t.canceled) return;
+    if (!t || t.canceled) return;
     try {
       if (typeof t.fn === 'function') t.fn.apply(window, t.args);
       else if (t.fn != null) (0,eval)(String(t.fn));
     } catch(e) {
-      nativeSetTimeout(function(){ throw e; },0);
+      nativeSetTimeout(function(){ throw e; }, 0);
     }
   }
 
   function drainOne(){
     draining = false;
     if (!fastForward) return;
+
     sortQueue();
     var t = null;
     while (queue.length && !t) {
@@ -170,19 +170,38 @@
       t.due = virtualNow + t.interval;
       queue.push(t);
     }
+
     scheduleDrain();
   }
 
+  function intervalShouldBeVirtual(fn, delay){
+    var ms = Math.max(0, Number(delay) || 0);
+    /* Every known presentation clock/watchdog is < 600ms. The recurring
+       700/900ms control-label synchronizers and 30s decorative clocks are not
+       presentation time and must never drive replay. */
+    if (ms >= 600) return false;
+    var name = '';
+    var src = '';
+    try { name = clean(fn && fn.name).toLowerCase(); } catch(e) {}
+    try { src = String(fn || '').toLowerCase(); } catch(e) {}
+    if (name.indexOf('compact') !== -1 || src.indexOf('__synccompactcontrols') !== -1) return false;
+    return true;
+  }
+
   function patchedSetTimeout(fn, delay){
-    var args = Array.prototype.slice.call(arguments,2);
-    if (!fastForward) return nativeSetTimeout.apply(window,[fn,delay].concat(args));
-    return fakeTimer('timeout',fn,delay,args);
+    var args = Array.prototype.slice.call(arguments, 2);
+    if (!fastForward) return nativeSetTimeout.apply(window, [fn, delay].concat(args));
+    return fakeTimer('timeout', fn, delay, args);
   }
+
   function patchedSetInterval(fn, delay){
-    var args = Array.prototype.slice.call(arguments,2);
-    if (!fastForward) return nativeSetInterval.apply(window,[fn,delay].concat(args));
-    return fakeTimer('interval',fn,delay,args);
+    var args = Array.prototype.slice.call(arguments, 2);
+    if (!fastForward || !intervalShouldBeVirtual(fn, delay)) {
+      return nativeSetInterval.apply(window, [fn, delay].concat(args));
+    }
+    return fakeTimer('interval', fn, delay, args);
   }
+
   function cancelFake(id, intervalMode){
     if (id && id.__numeroRewindTimer) {
       id.canceled = true;
@@ -195,19 +214,65 @@
     }
     return false;
   }
-  function patchedClearTimeout(id){ if (!cancelFake(id,false)) nativeClearTimeout(id); }
-  function patchedClearInterval(id){ if (!cancelFake(id,true)) nativeClearInterval(id); }
+
+  function patchedClearTimeout(id){
+    if (!cancelFake(id, false)) nativeClearTimeout(id);
+  }
+
+  function patchedClearInterval(id){
+    if (!cancelFake(id, true)) nativeClearInterval(id);
+  }
+
+  function virtualDateNow(){
+    return fastForward ? (virtualBaseDate + virtualNow) : nativeDateNow();
+  }
+
+  function virtualPerfNow(){
+    return fastForward ? (virtualBasePerf + virtualNow) : nativePerfNow();
+  }
+
+  function patchPerformanceNow(){
+    if (!window.performance) return;
+    try {
+      Object.defineProperty(window.performance, 'now', {
+        configurable: true,
+        writable: true,
+        value: virtualPerfNow
+      });
+    } catch(e) {
+      try { window.performance.now = virtualPerfNow; } catch(_) {}
+    }
+  }
+
+  function restorePerformanceNow(){
+    if (!window.performance) return;
+    try {
+      if (perfOwnDescriptor) {
+        Object.defineProperty(window.performance, 'now', perfOwnDescriptor);
+      } else {
+        try { delete window.performance.now; } catch(e) {}
+      }
+    } catch(e) {
+      try { window.performance.now = nativePerfNow; } catch(_) {}
+    }
+  }
 
   function installVirtualClock(){
     window.setTimeout = patchedSetTimeout;
     window.clearTimeout = patchedClearTimeout;
     window.setInterval = patchedSetInterval;
     window.clearInterval = patchedClearInterval;
-    Date.now = function(){ return fastForward ? (virtualBase + virtualNow) : nativeDateNow(); };
+    Date.now = virtualDateNow;
+    patchPerformanceNow();
   }
 
   function restoreClockAndFlush(){
     Date.now = nativeDateNow;
+    restorePerformanceNow();
+
+    /* Keep wrappers installed; when fastForward=false they are transparent.
+       Existing fake presentation timers are converted back to real timers with
+       their remaining delay. */
     window.setTimeout = patchedSetTimeout;
     window.clearTimeout = patchedClearTimeout;
     window.setInterval = patchedSetInterval;
@@ -215,9 +280,11 @@
 
     var pending = queue.slice();
     queue.length = 0;
+
     pending.forEach(function(t){
-      if (t.canceled) return;
-      var remaining = Math.max(0, t.due - virtualNow);
+      if (!t || t.canceled) return;
+      var remaining = Math.max(20, t.due - virtualNow);
+
       if (t.kind === 'interval') {
         t.realStarter = nativeSetTimeout(function(){
           t.realStarter = null;
@@ -235,10 +302,17 @@
 
   if (fastForward) installVirtualClock();
 
-  /* ---------------- Visual fast-forward guard ---------------- */
+  /* ------------------------------------------------------------------
+     Rewind curtain: the state rebuild is deliberately hidden. The user never
+     sees the presentation restart and race through scenes.
+  ------------------------------------------------------------------- */
+
+  var rewindCurtain = null;
   var fastStyle = null;
-  function installFastStyle(){
+
+  function installFastVisuals(){
     if (!fastForward || !document.documentElement) return;
+
     document.documentElement.classList.add('numero-rewind-fast');
     fastStyle = document.createElement('style');
     fastStyle.id = 'numeroRewindFastStyle';
@@ -247,14 +321,39 @@
       'animation-duration:0s!important;animation-delay:0s!important;transition-duration:0s!important;transition-delay:0s!important;scroll-behavior:auto!important}' +
       '#numeroRewindButton{visibility:hidden!important}';
     (document.head || document.documentElement).appendChild(fastStyle);
+
+    rewindCurtain = document.createElement('div');
+    rewindCurtain.id = 'numeroRewindCurtain';
+    rewindCurtain.setAttribute('aria-live','polite');
+    rewindCurtain.innerHTML = '<div style="font-size:30px;line-height:1">↶</div><div style="margin-top:10px;font:900 14px Arial;letter-spacing:1.5px">REWINDING 15s</div><div style="margin-top:6px;font:12px Arial;color:rgba(255,255,255,.62)">Returning to the beginning of the line…</div>';
+    rewindCurtain.style.cssText =
+      'position:fixed;inset:0;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'text-align:center;color:#fff;background:radial-gradient(circle at center,rgba(31,41,46,.98),rgba(5,8,10,1) 72%);pointer-events:all;';
+
+    function mount(){
+      if (!rewindCurtain || rewindCurtain.parentNode) return;
+      (document.body || document.documentElement).appendChild(rewindCurtain);
+    }
+    if (document.body) mount();
+    else document.addEventListener('DOMContentLoaded', mount, {once:true});
   }
-  installFastStyle();
+
+  installFastVisuals();
+
+  function removeFastVisuals(){
+    try { document.documentElement.classList.remove('numero-rewind-fast'); } catch(e) {}
+    try { if (fastStyle) fastStyle.remove(); } catch(e) {}
+    try { if (rewindCurtain) rewindCurtain.remove(); } catch(e) {}
+    fastStyle = null;
+    rewindCurtain = null;
+  }
 
   function cleanRewindParam(){
     try {
       var u = new URL(location.href);
       u.searchParams.delete('rw');
-      window.history.replaceState(null,'',u.pathname + (u.search ? u.search : '') + u.hash);
+      u.searchParams.delete('rt');
+      window.history.replaceState(null, '', u.pathname + (u.search ? u.search : '') + u.hash);
     } catch(e) {}
   }
 
@@ -262,70 +361,120 @@
     if (!document.body) return;
     var el = document.createElement('div');
     el.textContent = message;
-    el.style.cssText = 'position:fixed;left:50%;bottom:82px;z-index:2147483646;transform:translateX(-50%);' +
+    el.style.cssText =
+      'position:fixed;left:50%;bottom:82px;z-index:2147483646;transform:translateX(-50%);' +
       'padding:9px 13px;border-radius:999px;background:rgba(8,13,17,.92);color:#fff;border:1px solid rgba(255,255,255,.18);' +
       'box-shadow:0 12px 34px rgba(0,0,0,.34);font:800 11px Arial,Helvetica,sans-serif;letter-spacing:.7px;pointer-events:none;';
     document.body.appendChild(el);
-    nativeSetTimeout(function(){ try{ el.remove(); }catch(e){} },1400);
+    nativeSetTimeout(function(){ try { el.remove(); } catch(e) {} }, 1400);
   }
 
-  function finishFastForward(text, kind, occurrenceNo){
+  /* ------------------------------------------------------------------
+     Spoken-line checkpoints. Sequence number is the stable identity within a
+     page. Text is kept as a safety cross-check/fallback.
+  ------------------------------------------------------------------- */
+
+  var speechSeq = 0;
+  var lastLogical = { text:'', clock:-Infinity, seq:0, decision:null };
+
+  function replayClockNow(){
+    return fastForward ? (virtualBaseDate + virtualNow) : nativeDateNow();
+  }
+
+  function recordCheckpoint(text, kind, seq){
+    text = clean(text);
+    if (!text || !seq) return;
+    var h = loadHistory();
+    h.push({
+      page: PAGE,
+      text: text,
+      seq: seq,
+      kind: kind || 'speech',
+      at: nativeDateNow(),
+      dev: /(?:^|[?&])dev=1(?:&|$)/.test(location.search)
+    });
+    saveHistory(h);
+  }
+
+  function finishFastForward(text, kind, seq){
     if (!fastForward) return;
+
     fastForward = false;
     window.__NUMERO_REWIND_ACTIVE = false;
     removeKey(TARGET_KEY);
     restoreClockAndFlush();
-    try { document.documentElement.classList.remove('numero-rewind-fast'); } catch(e) {}
-    try { if (fastStyle) fastStyle.remove(); } catch(e) {}
+    removeFastVisuals();
     cleanRewindParam();
-    recordCheckpoint(text,kind,occurrenceNo);
-    nativeSetTimeout(function(){ toast('↶ 15s · resumed from line start'); },60);
+    recordCheckpoint(text, kind, seq);
+
+    nativeSetTimeout(function(){ toast('↶ 15s · resumed from line start'); }, 80);
   }
 
   function speechCheckpoint(text, kind){
     text = clean(text);
-    if (!text) return {skip:false,target:false,occurrence:0};
-    var n = nextOccurrence(text);
+    if (!text) return {skip:false,target:false,seq:0};
 
-    if (fastForward) {
-      var match = clean(target && target.text) === text && Number(target && target.occurrence || 1) === n;
-      if (match) {
-        finishFastForward(text,kind,n);
-        return {skip:false,target:true,occurrence:n};
-      }
-      return {skip:true,target:false,occurrence:n};
+    var clock = replayClockNow();
+
+    /* One logical line can briefly touch both the fixed-MP3 and native fallback
+       paths. Do not count that as two lines. */
+    if (lastLogical.text === text && (clock - lastLogical.clock) >= 0 && (clock - lastLogical.clock) < 1200) {
+      return lastLogical.decision || {skip:fastForward,target:false,seq:lastLogical.seq};
     }
 
-    recordCheckpoint(text,kind,n);
-    return {skip:false,target:false,occurrence:n};
+    speechSeq += 1;
+    var seq = speechSeq;
+    var decision = {skip:false,target:false,seq:seq};
+
+    if (fastForward) {
+      var wantedSeq = Number(target && target.seq || 0);
+      var wantedText = clean(target && target.text);
+      var seqMatch = wantedSeq > 0 && seq === wantedSeq;
+      var textFallback = wantedSeq <= 0 && wantedText && wantedText === text;
+
+      if (seqMatch || textFallback) {
+        finishFastForward(text, kind, seq);
+        decision = {skip:false,target:true,seq:seq};
+      } else {
+        decision = {skip:true,target:false,seq:seq};
+      }
+    } else {
+      recordCheckpoint(text, kind, seq);
+    }
+
+    lastLogical = { text:text, clock:clock, seq:seq, decision:decision };
+    return decision;
   }
 
-  /* ---------------- Native TTS shim (installed before tour-audio.js) ---------------- */
+  /* Native TTS shim — installed before tour-audio.js. */
   if (window.speechSynthesis && typeof window.speechSynthesis.speak === 'function') {
     var nativeSpeechSpeak = window.speechSynthesis.speak.bind(window.speechSynthesis);
     window.speechSynthesis.speak = function(utterance){
       var text = clean(utterance && utterance.text);
-      var decision = speechCheckpoint(text,'native');
+      var decision = speechCheckpoint(text, 'native');
+
       if (decision.skip) {
         window.setTimeout(function(){
           try {
             if (utterance && typeof utterance.onend === 'function') {
-              utterance.onend({type:'end',utterance:utterance,rewindFastForward:true});
+              utterance.onend({type:'end', utterance:utterance, rewindFastForward:true});
             }
           } catch(e) {}
-        },0);
+        }, 0);
         return;
       }
+
       return nativeSpeechSpeak(utterance);
     };
   }
 
-  /* ---------------- Fixed MP3 checkpoint shim ---------------- */
+  /* Fixed MP3 checkpoint shim. */
   var reverseAudio = Object.create(null);
   function basename(url){
     var s = String(url || '').split('#')[0].split('?')[0];
     return s.substring(s.lastIndexOf('/') + 1).toLowerCase();
   }
+
   try {
     var map = window.TOUR_AUDIO_MAP || {};
     Object.keys(map).forEach(function(text){
@@ -343,7 +492,7 @@
       mediaProto.load = function(){
         this.__numeroRewindLoadGeneration = (this.__numeroRewindLoadGeneration || 0) + 1;
         this.__numeroRewindCountedGeneration = -1;
-        return nativeMediaLoad.apply(this,arguments);
+        return nativeMediaLoad.apply(this, arguments);
       };
     }
 
@@ -357,41 +506,42 @@
 
         if (isNewLine) {
           this.__numeroRewindCountedGeneration = gen;
-          decision = speechCheckpoint(text,'fixed');
+          decision = speechCheckpoint(text, 'fixed');
         }
 
         if (fastForward) {
-          /* During replay, every fixed-audio line BEFORE the target finishes
-             instantly. The target itself turns fast-forward off above and then
-             falls through to the real play() from time 0. */
+          /* Lines before the target are consumed instantly and silently. The
+             target turns replay off, then falls through to real play() at 0s. */
           if (!decision || decision.skip) {
             var media = this;
             window.setTimeout(function(){
               try {
-                if (typeof media.onended === 'function') media.onended({type:'ended',target:media,rewindFastForward:true});
-                else media.dispatchEvent(new Event('ended'));
+                if (typeof media.onended === 'function') {
+                  media.onended({type:'ended', target:media, rewindFastForward:true});
+                } else {
+                  media.dispatchEvent(new Event('ended'));
+                }
               } catch(e) {}
-            },0);
+            }, 0);
             return Promise.resolve();
           }
         }
 
-        return nativeMediaPlay.apply(this,arguments);
+        return nativeMediaPlay.apply(this, arguments);
       };
     }
   }
 
-  /* If rewind targets the entrance, START TOUR must stay unlocked. index.html
-     installs its listener in the body script, so dispatch after DOMContentLoaded. */
+  /* Rewind into the entrance without showing START TOUR again. */
   if (fastForward && PAGE === 'index') {
-    document.addEventListener('DOMContentLoaded',function(){
+    document.addEventListener('DOMContentLoaded', function(){
       try { window.dispatchEvent(new CustomEvent('numero-tour-started')); }
-      catch(e){ try { window.dispatchEvent(new Event('numero-tour-started')); } catch(_){} }
-    },{once:true});
+      catch(e) { try { window.dispatchEvent(new Event('numero-tour-started')); } catch(_) {} }
+    }, {once:true});
   }
 
-  /* Safety: if a changed future build cannot find the stored target, do not
-     leave the page permanently fast-forwarding. This watchdog uses native time. */
+  /* If a future edit changes sequence order, fail safely instead of leaving the
+     app in replay mode. */
   if (fastForward) {
     nativeSetTimeout(function(){
       if (!fastForward) return;
@@ -399,31 +549,42 @@
       window.__NUMERO_REWIND_ACTIVE = false;
       removeKey(TARGET_KEY);
       restoreClockAndFlush();
-      try { document.documentElement.classList.remove('numero-rewind-fast'); } catch(e) {}
-      try { if (fastStyle) fastStyle.remove(); } catch(e) {}
+      removeFastVisuals();
       cleanRewindParam();
       toast('Rewind target unavailable · continuing normally');
-    },12000);
+    }, 15000);
   }
 
-  /* ---------------- Rewind button ---------------- */
   function chooseTarget(){
     var h = loadHistory();
     if (!h.length) return null;
+
     var cutoff = nativeDateNow() - REWIND_MS;
     var chosen = null;
     var chosenIndex = -1;
-    for (var i=0;i<h.length;i++) {
+
+    for (var i = 0; i < h.length; i++) {
       if (Number(h[i].at || 0) <= cutoff) {
         chosen = h[i];
         chosenIndex = i;
       }
     }
+
     if (!chosen) {
       chosen = h[0];
       chosenIndex = 0;
     }
-    return {item:chosen,index:chosenIndex,history:h};
+
+    return {item:chosen, index:chosenIndex, history:h};
+  }
+
+  function showImmediateCurtain(){
+    if (!document.body || document.getElementById('numeroRewindImmediate')) return;
+    var el = document.createElement('div');
+    el.id = 'numeroRewindImmediate';
+    el.innerHTML = '<div style="font-size:30px">↶</div><div style="margin-top:8px;font:900 14px Arial;letter-spacing:1.4px">REWINDING 15s</div>';
+    el.style.cssText = 'position:fixed;inset:0;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;background:#070b0d;';
+    document.body.appendChild(el);
   }
 
   function rewind15(){
@@ -437,21 +598,20 @@
     var now = nativeDateNow();
     var shift = now - Number(chosen.at || now);
 
-    /* Rebase the retained past to the new "now" and remove the old future.
-       This makes repeated 15-second rewinds behave naturally after a rewind. */
-    var kept = pick.history.slice(0,pick.index);
-    kept = kept.map(function(x){
+    /* Keep history only before the destination and move its timebase forward.
+       The destination itself is re-recorded when normal playback resumes. */
+    var kept = pick.history.slice(0, pick.index).map(function(x){
       var copy = {};
-      Object.keys(x).forEach(function(k){ copy[k]=x[k]; });
+      Object.keys(x).forEach(function(k){ copy[k] = x[k]; });
       copy.at = Number(copy.at || 0) + shift;
       return copy;
     });
     saveHistory(kept);
 
-    writeJson(TARGET_KEY,{
+    writeJson(TARGET_KEY, {
       page: chosen.page,
       text: chosen.text,
-      occurrence: Number(chosen.occurrence || 1),
+      seq: Number(chosen.seq || 0),
       dev: !!chosen.dev,
       requestedAt: now
     });
@@ -464,7 +624,9 @@
       }
     } catch(e) {}
 
-    var dest = clean(chosen.page || PAGE) + '.html?rw=1&t=' + now;
+    showImmediateCurtain();
+
+    var dest = clean(chosen.page || PAGE) + '.html?rw=1&rt=' + now;
     if (chosen.dev || /(?:^|[?&])dev=1(?:&|$)/.test(location.search)) dest += '&dev=1';
     location.assign(dest);
   }
@@ -486,6 +648,7 @@
 
   function addButton(){
     if (!document.body || document.getElementById('numeroRewindButton')) return;
+
     var btn = document.createElement('button');
     btn.id = 'numeroRewindButton';
     btn.type = 'button';
@@ -498,33 +661,47 @@
       'border:1px solid rgba(255,255,255,.20);box-shadow:0 12px 30px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.08);' +
       'backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);cursor:pointer;user-select:none;' +
       'font:800 11px Arial,Helvetica,sans-serif;letter-spacing:.5px;touch-action:manipulation;transition:none;';
-    btn.addEventListener('click',function(ev){ ev.preventDefault(); ev.stopPropagation(); rewind15(); });
+
+    btn.addEventListener('click', function(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+      rewind15();
+    });
+
     document.body.appendChild(btn);
     positionButton(btn);
-    window.addEventListener('resize',function(){ positionButton(btn); });
+    window.addEventListener('resize', function(){ positionButton(btn); });
+
     if (window.ResizeObserver) {
       var c = document.querySelector('.presentation-control');
-      if (c) { try { new ResizeObserver(function(){ positionButton(btn); }).observe(c); } catch(e) {} }
+      if (c) {
+        try { new ResizeObserver(function(){ positionButton(btn); }).observe(c); } catch(e) {}
+      }
     }
   }
 
   function initButton(){
     addButton();
-    /* Keep it hidden behind the first START TOUR gate. */
+
+    /* Keep it hidden behind START TOUR on the entrance. */
     if (PAGE === 'index') {
       var btn = document.getElementById('numeroRewindButton');
       var started = false;
       try { started = sessionStorage.getItem('numero_tour_started') === '1'; } catch(e) {}
       if (btn && !started && !fastForward) btn.style.visibility = 'hidden';
-      window.addEventListener('numero-tour-started',function(){
+
+      window.addEventListener('numero-tour-started', function(){
         var b = document.getElementById('numeroRewindButton');
         if (b) b.style.visibility = 'visible';
       });
     }
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',initButton,{once:true});
-  else initButton();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initButton, {once:true});
+  } else {
+    initButton();
+  }
 
   window.SupportTourRewind = {
     rewind15: rewind15,
