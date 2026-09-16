@@ -58,7 +58,6 @@
   
   <!-- FIXED_TOUR_AUDIO -->
   <script src="tour-audio-map.js?v=20260916-exactfix-1789553853"></script>
-  <script src="tour-rewind.js?v=20260916-rewind-v14"></script>
   <script src="tour-audio.js?v=20260916-head-gap-v10"></script>
 <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
@@ -8260,7 +8259,137 @@
 
       syncPauseState();
 
-    })();
+    
+
+      /* =========================================================
+         V16 — SEMANTIC BACK (Assistant Head)
+         Dialogues go one complete sentence back. During the system
+         showcase, BACK selects the previous complete system.
+      ========================================================== */
+      function numeroStopIndex3Voice(){
+        try{
+          if(typeof window.supportTourStopPageVoice==='function') window.supportTourStopPageVoice();
+          if(typeof window.supportTourStopSystemSpeech==='function') window.supportTourStopSystemSpeech();
+          if(window.speechSynthesis) window.speechSynthesis.cancel();
+        }catch(e){}
+      }
+
+      function numeroUnpauseIndex3(){
+        manualPaused=false; interactionPaused=false; syncPauseState();
+      }
+
+      const numeroIntroNodes3=[d1,d2,d3,d4,computerPrompt];
+      const numeroEndingNodes3=[end1,end2,end3];
+
+      function numeroShowIndex3Intro(target){
+        target=Math.max(0,Math.min(numeroIntroNodes3.length-1,target));
+        showcaseChainToken+=1;
+        showcaseChainStarted=false;
+        numeroStopIndex3Voice();
+        numeroUnpauseIndex3();
+        phase='intro'; phaseElapsed=0; firedEvents.clear(); lastTick=performance.now();
+        desktopLayer.classList.remove('show','closing-mode');
+        scene.classList.remove('zoom-laptop','bridge-leaving');
+        transitionCover.classList.remove('active');
+        numeroIntroNodes3.forEach(function(n){ if(n)n.classList.remove('show','hide'); });
+        numeroEndingNodes3.forEach(function(n){ if(n)n.classList.remove('show','hide'); });
+        for(let i=target;i<numeroIntroNodes3.length;i++){
+          const n=numeroIntroNodes3[i]; if(n&&n.id) dialogueVoiceCompleted.delete(n.id);
+        }
+        const node=numeroIntroNodes3[target];
+        if(node) node.classList.add('show');
+        introDialogueStage=target+1;
+        introDialogueStageStartedAt=0;
+      }
+
+      function numeroStartIndex3Showcase(target){
+        if(!systemsReady || !systemsData.length) return false;
+        target=Math.max(0,Math.min(systemsData.length-1,target));
+        numeroStopIndex3Voice();
+        numeroUnpauseIndex3();
+        phase='showcase'; phaseElapsed=0; firedEvents.clear(); lastTick=performance.now();
+        desktopLayer.classList.add('show');
+        scene.classList.add('zoom-laptop');
+        transitionCover.classList.remove('active');
+        showcaseChainToken+=1;
+        const token=showcaseChainToken;
+        showcaseChainStarted=true;
+        showcaseLastIndex=target;
+
+        function playAt(i){
+          if(token!==showcaseChainToken || phase!=='showcase') return;
+          if(i>=systemsData.length){
+            let remaining=950,last=Date.now();
+            const fin=window.setInterval(function(){
+              if(token!==showcaseChainToken||phase!=='showcase'){clearInterval(fin);return;}
+              const now=Date.now(),delta=now-last;last=now;
+              if(!isPresentationPaused())remaining-=delta;
+              if(remaining<=0){clearInterval(fin);forceAssistantHeadExit();}
+            },120);
+            return;
+          }
+          focusSystemCard(i,function(){
+            if(token!==showcaseChainToken || phase!=='showcase') return;
+            let remaining=850, last=Date.now();
+            const waiter=window.setInterval(function(){
+              if(token!==showcaseChainToken || phase!=='showcase'){clearInterval(waiter);return;}
+              const now=Date.now(),delta=now-last;last=now;
+              if(!isPresentationPaused()) remaining-=delta;
+              if(remaining<=0){clearInterval(waiter);playAt(i+1);}
+            },120);
+          });
+        }
+        playAt(target);
+        return true;
+      }
+
+      function numeroShowIndex3Ending(target){
+        target=Math.max(0,Math.min(numeroEndingNodes3.length-1,target));
+        showcaseChainToken+=1;
+        numeroStopIndex3Voice();
+        numeroUnpauseIndex3();
+        phase='ending'; phaseElapsed=0; firedEvents.clear(); lastTick=performance.now();
+        transitionCover.classList.remove('active');
+        numeroEndingNodes3.forEach(function(n){ if(n)n.classList.remove('show','hide'); });
+        for(let i=target;i<numeroEndingNodes3.length;i++){
+          const n=numeroEndingNodes3[i]; if(n&&n.id) dialogueVoiceCompleted.delete(n.id);
+        }
+        const node=numeroEndingNodes3[target]; if(node) node.classList.add('show');
+        endingDialogueStage=target+1; endingDialogueStageStartedAt=0;
+      }
+
+      window.numeroCanStepBack=function(){
+        if(phase==='intro') return introDialogueStage>1;
+        if(phase==='showcase') return systemsData.length>0;
+        if(phase==='ending') return true;
+        return false;
+      };
+
+      window.numeroStepBack=function(){
+        if(phase==='intro'){
+          if(introDialogueStage>numeroIntroNodes3.length){
+            numeroShowIndex3Intro(numeroIntroNodes3.length-1); return true;
+          }
+          const current=Math.max(0,Math.min(numeroIntroNodes3.length-1,introDialogueStage-1));
+          if(current<=0) return false;
+          numeroShowIndex3Intro(current-1); return true;
+        }
+        if(phase==='showcase'){
+          const current=Math.max(0,showcaseLastIndex);
+          if(current>0) return numeroStartIndex3Showcase(current-1);
+          /* First system -> previous spoken prompt/sentence. */
+          numeroShowIndex3Intro(numeroIntroNodes3.length-1); return true;
+        }
+        if(phase==='ending'){
+          if(endingDialogueStage>numeroEndingNodes3.length){numeroShowIndex3Ending(numeroEndingNodes3.length-1);return true;}
+          const current=Math.max(0,Math.min(numeroEndingNodes3.length-1,endingDialogueStage-1));
+          if(current>0){ numeroShowIndex3Ending(current-1); return true; }
+          if(systemsData.length) return numeroStartIndex3Showcase(systemsData.length-1);
+        }
+        return false;
+      };
+
+})();
 
   </script>
 
@@ -9319,5 +9448,6 @@
   if(document.body) obs.observe(document.body,{subtree:true,childList:true,characterData:true});
 })();
 </script>
+  <script src="tour-step-back.js?v=20260916-step-back-v16"></script>
 </body>
 </html>

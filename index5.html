@@ -58,7 +58,6 @@
   
   <!-- FIXED_TOUR_AUDIO -->
   <script src="tour-audio-map.js?v=20260916-exactfix-1789553853"></script>
-  <script src="tour-rewind.js?v=20260916-rewind-v14"></script>
   <script src="tour-audio.js?v=20260916-head-gap-v10"></script>
 <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
@@ -5229,7 +5228,89 @@
 
       syncPauseState();
 
-    })();
+    
+
+      /* =========================================================
+         V16 — SEMANTIC BACK (Quality Team)
+      ========================================================== */
+      const numeroIntroNodes5=[dialogue1,dialogue2,dialogue3,dialogue4];
+      const numeroEndingNodes5=[endDialogue1,endDialogue2,endDialogue3];
+
+      function numeroStopIndex5Voice(){
+        try{
+          if(typeof window.supportTourStopPageVoice==='function') window.supportTourStopPageVoice();
+          if(typeof window.supportTourStopSystemSpeech==='function') window.supportTourStopSystemSpeech();
+          if(window.speechSynthesis) window.speechSynthesis.cancel();
+        }catch(e){}
+      }
+      function numeroUnpauseIndex5(){manualPaused=false;interactionPaused=false;syncPauseState();}
+
+      function numeroShowIndex5Intro(target){
+        target=Math.max(0,Math.min(numeroIntroNodes5.length-1,target));
+        numeroStopIndex5Voice(); numeroUnpauseIndex5();
+        phase='intro'; phaseElapsed=0; firedEvents.clear(); lastTick=performance.now();
+        teamScene.classList.remove('workspace-mode'); reviewWorkspace.classList.remove('show');
+        numeroIntroNodes5.forEach(function(n){if(n)n.classList.remove('show','hide');});
+        numeroEndingNodes5.forEach(function(n){if(n)n.classList.remove('show','hide');});
+        for(let i=target;i<numeroIntroNodes5.length;i++){const n=numeroIntroNodes5[i];if(n&&n.id)dialogueVoiceCompleted.delete(n.id);}
+        numeroIntroNodes5[target].classList.add('show');
+        introDialogueStage=target+1; introDialogueStageStartedAt=0;
+      }
+
+      function numeroFocusIndex5System(target){
+        if(!systemsReady||!teamSystems.length)return false;
+        target=Math.max(0,Math.min(teamSystems.length-1,target));
+        numeroStopIndex5Voice(); numeroUnpauseIndex5();
+        phase='showcase'; phaseElapsed=0; firedEvents.clear(); lastTick=performance.now();
+        teamScene.classList.add('workspace-mode'); reviewWorkspace.classList.add('show');
+        showcaseSequenceStarted=true; showcaseSequenceIndex=target; showcaseLastIndex=target;
+        showcaseWaitingForNarration=true; showcaseAdvanceAt=null; showcaseFinishAt=null;
+        focusTeamSystem(target,function(){
+          showcaseWaitingForNarration=false;
+          if(showcaseSequenceIndex>=teamSystems.length-1) showcaseFinishAt=phaseElapsed+1100;
+          else showcaseAdvanceAt=phaseElapsed+650;
+        });
+        return true;
+      }
+
+      function numeroShowIndex5Ending(target){
+        target=Math.max(0,Math.min(numeroEndingNodes5.length-1,target));
+        numeroStopIndex5Voice(); numeroUnpauseIndex5();
+        phase='ending'; phaseElapsed=0; firedEvents.clear(); lastTick=performance.now();
+        nextTransitionCover.classList.remove('active');
+        numeroEndingNodes5.forEach(function(n){if(n)n.classList.remove('show','hide');});
+        for(let i=target;i<numeroEndingNodes5.length;i++){const n=numeroEndingNodes5[i];if(n&&n.id)dialogueVoiceCompleted.delete(n.id);}
+        numeroEndingNodes5[target].classList.add('show');
+        endingDialogueStage=target+1; endingDialogueStageStartedAt=0;
+      }
+
+      window.numeroCanStepBack=function(){
+        if(phase==='intro')return introDialogueStage>1;
+        if(phase==='showcase')return teamSystems.length>0;
+        if(phase==='ending')return true;
+        return false;
+      };
+      window.numeroStepBack=function(){
+        if(phase==='intro'){
+          if(introDialogueStage>numeroIntroNodes5.length){numeroShowIndex5Intro(numeroIntroNodes5.length-1);return true;}
+          const current=Math.max(0,Math.min(numeroIntroNodes5.length-1,introDialogueStage-1));
+          if(current<=0)return false; numeroShowIndex5Intro(current-1);return true;
+        }
+        if(phase==='showcase'){
+          const current=Math.max(0,showcaseSequenceIndex>=0?showcaseSequenceIndex:showcaseLastIndex);
+          if(current>0)return numeroFocusIndex5System(current-1);
+          numeroShowIndex5Intro(numeroIntroNodes5.length-1);return true;
+        }
+        if(phase==='ending'){
+          if(endingDialogueStage>numeroEndingNodes5.length){numeroShowIndex5Ending(numeroEndingNodes5.length-1);return true;}
+          const current=Math.max(0,Math.min(numeroEndingNodes5.length-1,endingDialogueStage-1));
+          if(current>0){numeroShowIndex5Ending(current-1);return true;}
+          if(teamSystems.length)return numeroFocusIndex5System(teamSystems.length-1);
+        }
+        return false;
+      };
+
+})();
 
   </script>
 
@@ -6108,5 +6189,6 @@
 })();
 </script>
 
+  <script src="tour-step-back.js?v=20260916-step-back-v16"></script>
 </body>
 </html>

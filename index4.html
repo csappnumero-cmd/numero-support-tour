@@ -58,7 +58,6 @@
   
   <!-- FIXED_TOUR_AUDIO -->
   <script src="tour-audio-map.js?v=20260916-exactfix-1789553853"></script>
-  <script src="tour-rewind.js?v=20260916-rewind-v14"></script>
   <script src="tour-audio.js?v=20260916-head-gap-v10"></script>
 <meta name="referrer" content="no-referrer">
 
@@ -5623,7 +5622,214 @@
 
 
 
-    })();
+    
+
+    /* =========================================================
+       V16 — SEMANTIC BACK (Quality Manager)
+       No seconds, no fast-forward. Dialogue goes back one complete
+       sentence; the system wall goes back one complete system.
+    ========================================================== */
+    let numeroBackEpoch = 0;
+    let numeroQualityMode = 'dialogue';
+    let numeroQualityDialogueIndex = -1;
+    let numeroQualitySystemIndex = -1;
+    const numeroQualityDialogues = [dialogue1, dialogue2, dialogue3, dialogue4];
+    const numeroQualityEndingDialogues = [
+      document.getElementById('endDialogue1'),
+      document.getElementById('endDialogue2'),
+      document.getElementById('endDialogue3')
+    ];
+    let numeroQualityEndingIndex = -1;
+
+    const numeroOriginalPlayQualityDialogue = playManualQualityDialogue;
+    playManualQualityDialogue = function(node, onComplete) {
+      const idx = numeroQualityDialogues.indexOf(node);
+      const endingIdx = numeroQualityEndingDialogues.indexOf(node);
+      if (idx >= 0) {
+        numeroQualityMode = 'dialogue';
+        numeroQualityDialogueIndex = idx;
+      } else if (endingIdx >= 0) {
+        numeroQualityMode = 'ending-dialogue';
+        numeroQualityEndingIndex = endingIdx;
+      }
+      const epoch = numeroBackEpoch;
+      return numeroOriginalPlayQualityDialogue(node, function() {
+        if (epoch !== numeroBackEpoch) return;
+        if (typeof onComplete === 'function') onComplete();
+      });
+    };
+
+    const numeroOriginalFocusQualityModule = focusQualityModule;
+    focusQualityModule = function(index, onComplete) {
+      numeroQualityMode = 'system';
+      numeroQualitySystemIndex = Number(index) || 0;
+      const epoch = numeroBackEpoch;
+      return numeroOriginalFocusQualityModule(index, function() {
+        if (epoch !== numeroBackEpoch) return;
+        if (typeof onComplete === 'function') onComplete();
+      });
+    };
+
+    function numeroCancelQualityFlow() {
+      numeroBackEpoch += 1;
+      sectionEnding = true; /* makes any stale system callback stop immediately */
+      presentationTimers.forEach(function(timer) {
+        if (timer && timer.timeoutId !== null) {
+          try { window.clearTimeout(timer.timeoutId); } catch (e) {}
+        }
+      });
+      presentationTimers.clear();
+      try {
+        if (typeof window.supportTourStopPageVoice === 'function') window.supportTourStopPageVoice();
+        if (typeof window.supportTourStopSystemSpeech === 'function') window.supportTourStopSystemSpeech();
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
+      } catch (e) {}
+      sectionEnding = false;
+      manualPaused = false;
+      interactionPaused = false;
+      presentationPaused = false;
+      document.body.classList.remove('presentation-paused');
+      updatePlayPauseButton();
+    }
+
+    function numeroHideQualityDialogues() {
+      numeroQualityDialogues.forEach(function(node) {
+        if (node) node.classList.remove('show','hide');
+      });
+    }
+
+    function numeroRunQualityDialogueFrom(index) {
+      const target = Math.max(0, Math.min(numeroQualityDialogues.length - 1, Number(index) || 0));
+      numeroCancelQualityFlow();
+      numeroHideQualityDialogues();
+      qualityScene.classList.remove('wall-mode');
+      qualityWall.classList.remove('show');
+      const continueBtn = document.getElementById('continueTour');
+      if (continueBtn) continueBtn.classList.remove('show');
+      qualityAutoShowcaseStarted = false;
+      numeroQualityMode = 'dialogue';
+      numeroQualityDialogueIndex = target;
+
+      const epoch = numeroBackEpoch;
+      function playAt(i) {
+        if (epoch !== numeroBackEpoch) return;
+        if (i >= numeroQualityDialogues.length) {
+          qualityScene.classList.add('wall-mode');
+          presentationTimer(function() {
+            if (epoch !== numeroBackEpoch) return;
+            qualityWall.classList.add('show');
+            if (continueBtn) continueBtn.classList.add('show');
+            if (qualitySystems && qualitySystems.length) {
+              numeroRunQualitySystemsFrom(0, true);
+            } else {
+              qualityAutoShowcaseStarted = false;
+              loadQualitySystems();
+            }
+          }, 700);
+          return;
+        }
+        playManualQualityDialogue(numeroQualityDialogues[i], function() { playAt(i + 1); });
+      }
+      playAt(target);
+    }
+
+    function numeroRunQualitySystemsFrom(index, keepEpoch) {
+      if (!keepEpoch) numeroCancelQualityFlow();
+      const total = qualitySystems.length;
+      if (!total) return false;
+      qualityScene.classList.add('wall-mode');
+      qualityWall.classList.add('show');
+      qualityAutoShowcaseStarted = true;
+      const start = Math.max(0, Math.min(total - 1, Number(index) || 0));
+      numeroQualityMode = 'system';
+      numeroQualitySystemIndex = start;
+      const epoch = numeroBackEpoch;
+
+      function playAt(i) {
+        if (epoch !== numeroBackEpoch || sectionEnding) return;
+        if (i >= total) {
+          presentationTimer(function() {
+            if (epoch === numeroBackEpoch) finishQualitySection();
+          }, 1100);
+          return;
+        }
+        focusQualityModule(i, function() {
+          if (epoch !== numeroBackEpoch) return;
+          presentationTimer(function() { playAt(i + 1); }, 650);
+        });
+      }
+      playAt(start);
+      return true;
+    }
+
+    function numeroRunQualityEndingFrom(index) {
+      const target=Math.max(0,Math.min(numeroQualityEndingDialogues.length-1,Number(index)||0));
+      numeroCancelQualityFlow();
+      sectionEnding=true;
+      qualityWall.classList.remove('show');
+      qualityScene.classList.remove('wall-mode');
+      const continueBtn=document.getElementById('continueTour');
+      if(continueBtn){continueBtn.classList.remove('show');continueBtn.disabled=true;}
+      numeroQualityEndingDialogues.forEach(function(n){if(n)n.classList.remove('show','hide');});
+      numeroQualityMode='ending-dialogue';numeroQualityEndingIndex=target;
+      const epoch=numeroBackEpoch;
+      function playAt(i){
+        if(epoch!==numeroBackEpoch)return;
+        if(i>=numeroQualityEndingDialogues.length){
+          const cover=document.getElementById('nextTransitionCover');
+          if(cover)cover.classList.add('active');
+          presentationTimer(function(){
+            if(epoch!==numeroBackEpoch)return;
+            try{
+              if(typeof google!=='undefined'&&google.script&&google.script.run){
+                google.script.run.withSuccessHandler(function(html){document.open();document.write(html);document.close();})
+                  .withFailureHandler(function(err){console.error('Index5 load failed:',err);})
+                  .getPage('index5');
+              }
+            }catch(e){}
+          },900);
+          return;
+        }
+        playManualQualityDialogue(numeroQualityEndingDialogues[i],function(){playAt(i+1);});
+      }
+      playAt(target);return true;
+    }
+
+    window.numeroCanStepBack = function() {
+      if (numeroQualityMode === 'system') return numeroQualitySystemIndex >= 0;
+      if (numeroQualityMode === 'ending-dialogue') return true;
+      return numeroQualityDialogueIndex > 0;
+    };
+
+    window.numeroStepBack = function() {
+      try {
+        if (detailOverlay && detailOverlay.classList.contains('show')) {
+          detailOverlay.classList.remove('show');
+          interactionPaused = false;
+        }
+      } catch (e) {}
+
+      if (numeroQualityMode === 'ending-dialogue') {
+        if (numeroQualityEndingIndex > 0) return numeroRunQualityEndingFrom(numeroQualityEndingIndex - 1);
+        if (qualitySystems.length) return numeroRunQualitySystemsFrom(qualitySystems.length - 1);
+        return numeroRunQualityDialogueFrom(numeroQualityDialogues.length - 1);
+      }
+      if (numeroQualityMode === 'system') {
+        if (numeroQualitySystemIndex > 0) {
+          return numeroRunQualitySystemsFrom(numeroQualitySystemIndex - 1);
+        }
+        /* First system -> previous spoken sentence (dialogue 4). */
+        numeroRunQualityDialogueFrom(numeroQualityDialogues.length - 1);
+        return true;
+      }
+      if (numeroQualityDialogueIndex > 0) {
+        numeroRunQualityDialogueFrom(numeroQualityDialogueIndex - 1);
+        return true;
+      }
+      return false;
+    };
+
+})();
 
   </script>
 
@@ -6668,5 +6874,6 @@
   if(document.body) obs.observe(document.body,{subtree:true,childList:true,characterData:true});
 })();
 </script>
+  <script src="tour-step-back.js?v=20260916-step-back-v16"></script>
 </body>
 </html>

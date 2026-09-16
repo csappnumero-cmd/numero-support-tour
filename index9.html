@@ -58,7 +58,6 @@
   
   <!-- FIXED_TOUR_AUDIO -->
   <script src="tour-audio-map.js?v=20260916-controls-v3"></script>
-  <script src="tour-rewind.js?v=20260916-rewind-v14"></script>
   <script src="tour-audio.js?v=20260916-head-gap-v10"></script>
 <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
@@ -1534,7 +1533,18 @@
     state.dialogueLoaded = true;
     tryStartTour();
   }
+
+
+  /* V16 — OPDC dialogue back is one complete line at a time. */
+  window.numeroCanStepBack=function(){ return state.index>0; };
+  window.numeroStepBack=function(){
+    if(state.index<=0) return false;
+    prev();
+    return true;
+  };
+
 })();
 </script>
+  <script src="tour-step-back.js?v=20260916-step-back-v16"></script>
 </body>
 </html>

@@ -58,7 +58,6 @@
   
   <!-- FIXED_TOUR_AUDIO -->
   <script src="tour-audio-map.js?v=20260916-controls-v3"></script>
-  <script src="tour-rewind.js?v=20260916-rewind-v14"></script>
   <script src="tour-audio.js?v=20260916-head-gap-v10"></script>
 <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
@@ -1947,8 +1946,43 @@ body:has(#photoScene.active) .ctl{
     start();
   }
 
+
+
+  /* V16 — semantic BACK for Employee tour.
+     Dialogue -> previous sentence. Systems -> previous system. */
+  function numeroBackEmployeeStep(){
+    if(state.phase==='photo'){
+      if(state.photoIndex<=0) return false;
+      state.photoIndex-=1;
+      render(); return true;
+    }
+    if(state.phase==='systemIntro'){
+      if(state.systemIntroIndex>0){ state.systemIntroIndex-=1; }
+      else { state.phase='photo'; state.photoIndex=Math.max(0,fallbackPhotoRows.length-1); }
+      render(); return true;
+    }
+    if(state.phase==='systems'){
+      if(state.systemIndex>0){ state.systemIndex-=1; }
+      else { state.phase='systemIntro'; state.systemIntroIndex=Math.max(0,systemIntroRows.length-1); }
+      render(); return true;
+    }
+    if(state.phase==='closing'){
+      if(state.closingIndex>0){ state.closingIndex-=1; }
+      else if(state.systems.length){ state.phase='systems'; state.systemIndex=Math.max(0,state.systems.length-1); }
+      else { state.phase='systemIntro'; state.systemIntroIndex=Math.max(0,systemIntroRows.length-1); }
+      render(); return true;
+    }
+    return false;
+  }
+  window.numeroCanStepBack=function(){
+    if(state.phase==='photo') return state.photoIndex>0;
+    return true;
+  };
+  window.numeroStepBack=numeroBackEmployeeStep;
+
 })();
 </script>
 
+  <script src="tour-step-back.js?v=20260916-step-back-v16"></script>
 </body>
 </html>

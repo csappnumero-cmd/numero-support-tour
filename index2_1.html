@@ -58,7 +58,6 @@
   
   <!-- FIXED_TOUR_AUDIO -->
   <script src="tour-audio-map.js?v=20260916-exactfix-1789553853"></script>
-  <script src="tour-rewind.js?v=20260916-rewind-v14"></script>
   <script src="tour-audio.js?v=20260916-head-gap-v10"></script>
 <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
@@ -367,6 +366,17 @@
     google.script.run.withSuccessHandler(r=>{applyDialogue(r);ready()}).withFailureHandler(()=>{applyDialogue([]);ready()}).getPresentationDialogue();
     google.script.run.withSuccessHandler(c=>{applyContent(c);ready()}).withFailureHandler(()=>{applyContent({});ready()}).getContent();
   }else{state.profiles=[];applyDialogue([]);applyContent({});waits=0;render()}
+
+
+  /* V16 — semantic BACK: previous spoken sentence, never time-based. */
+  window.numeroCanStepBack=function(){ return state.index>0; };
+  window.numeroStepBack=function(){
+    if(state.index<=0) return false;
+    state.index-=1;
+    render();
+    return true;
+  };
+
 })();
 </script>
 <script id="numero-final-compact-controls">
@@ -575,5 +585,6 @@
   if(document.body) obs.observe(document.body,{subtree:true,childList:true,characterData:true});
 })();
 </script>
+  <script src="tour-step-back.js?v=20260916-step-back-v16"></script>
 </body>
 </html>

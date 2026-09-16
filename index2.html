@@ -58,7 +58,6 @@
   
   <!-- FIXED_TOUR_AUDIO -->
   <script src="tour-audio-map.js?v=20260916-exactfix-1789553853"></script>
-  <script src="tour-rewind.js?v=20260916-rewind-v14"></script>
   <script src="tour-audio.js?v=20260916-index2-sound-v12"></script>
 <meta charset="UTF-8">
 
@@ -5848,7 +5847,293 @@
 
     loadManagementDataAndStart();
 
-    })();
+    
+    /* =========================================================
+       V16 — SEMANTIC BACK (HEAD / INDEX2)
+       - Manager dialogue: previous complete sentence.
+       - Management dialogue: previous spoken sentence.
+       - Management systems: previous system.
+       - Multi-screen system: previous screenshot first.
+       This never fast-forwards from the beginning and never uses seconds.
+    ========================================================== */
+    let numeroIndex2Mode='manager-dialogue';
+    let numeroManagerDialogueIndex=0;
+    let numeroManagementStepIndex=-1;
+    let numeroManagementSystemIndex=-1;
+    let numeroManagementShotIndex=-1;
+    let numeroManagementShotTotal=0;
+    let numeroManagementLandscapeActive=false;
+
+    const numeroOriginalRunManagerDialogue=runManagerDialogue;
+    runManagerDialogue=function(index,done){
+      numeroIndex2Mode='manager-dialogue';
+      numeroManagerDialogueIndex=Math.max(0,Number(index)||0);
+      return numeroOriginalRunManagerDialogue(index,done);
+    };
+
+    const numeroOriginalRunSteps=runSteps;
+    runSteps=function(steps,index,done){
+      numeroManagementStepIndex=Number(index)||0;
+      const s=steps&&steps[index];
+      if(s&&s.text){numeroIndex2Mode='management-dialogue';numeroManagementLandscapeActive=false;}
+      return numeroOriginalRunSteps(steps,index,done);
+    };
+
+    const numeroOriginalRenderManagementSystem=renderManagementSystem;
+    renderManagementSystem=function(system,index){
+      numeroIndex2Mode='management-system';
+      numeroManagementSystemIndex=Math.max(0,Number(index)||0);
+      numeroManagementShotIndex=-1;
+      numeroManagementShotTotal=0;
+      numeroManagementLandscapeActive=false;
+      return numeroOriginalRenderManagementSystem(system,index);
+    };
+
+    const numeroOriginalShowManagementScreenshot=showManagementScreenshot;
+    showManagementScreenshot=function(url,position,total){
+      numeroIndex2Mode='management-screenshot';
+      numeroManagementShotIndex=Math.max(0,Number(position)||0);
+      numeroManagementShotTotal=Math.max(0,Number(total)||0);
+      return numeroOriginalShowManagementScreenshot(url,position,total);
+    };
+
+    const numeroOriginalLandscapeShowcase=runManagementLandscapeShowcase;
+    runManagementLandscapeShowcase=function(done){
+      numeroIndex2Mode='management-landscape';
+      numeroManagementLandscapeActive=true;
+      return numeroOriginalLandscapeShowcase(done);
+    };
+
+    function numeroClearIndex2Timers(){
+      presentationTimers.forEach(function(timer){
+        if(timer&&timer.timeoutId!==null){try{window.clearTimeout(timer.timeoutId);}catch(e){}}
+      });
+      presentationTimers.clear();
+    }
+
+    function numeroStopIndex2Flow(){
+      numeroClearIndex2Timers();
+      managementSystemShowcaseToken+=1;
+      managementLandscapeShowcaseToken+=1;
+      try{
+        if(typeof window.supportTourStopPageVoice==='function')window.supportTourStopPageVoice();
+        if(typeof window.supportTourStopSystemSpeech==='function')window.supportTourStopSystemSpeech();
+        if(window.speechSynthesis)window.speechSynthesis.cancel();
+      }catch(e){}
+      presentationPaused=false;
+      document.body.classList.remove('presentation-paused');
+      try{
+        document.getElementById('presentationControlIcon').textContent='⏸';
+        document.getElementById('presentationControlText').textContent='PAUSE';
+      }catch(e){}
+      try{transitionCover.classList.remove('active');}catch(e){}
+      try{bridgeDialogue.classList.remove('show','hide');}catch(e){}
+      try{
+        if(managementSystemModal.classList.contains('open')){
+          managementSystemModal.classList.remove('open');
+          managementSystemModal.setAttribute('aria-hidden','true');
+        }
+      }catch(e){}
+    }
+
+    function numeroFindPrevTextStep(steps,current){
+      for(let i=Math.min(current-1,steps.length-1);i>=0;i--){
+        if(steps[i]&&steps[i].text)return i;
+      }
+      return -1;
+    }
+
+    function numeroFindSystemRunnerStep(steps){
+      for(let i=0;i<steps.length;i++){
+        if(steps[i]&&steps[i].runner===runManagementSystemsShowcase)return i;
+      }
+      /* runManagementSystemsShowcase may be wrapped later by this patch; fallback to the known first runner after ACTION_PLAN. */
+      for(let i=0;i<steps.length;i++){
+        if(steps[i]&&steps[i].runner&&i>2)return i;
+      }
+      return 5;
+    }
+
+    function numeroFindLandscapeRunnerStep(steps){
+      for(let i=0;i<steps.length;i++){
+        if(steps[i]&&steps[i].runner===runManagementLandscapeShowcase)return i;
+      }
+      return 7;
+    }
+
+    function numeroPrepareManagementStep(index){
+      managementBridge.classList.add('active');
+      managementBridge.setAttribute('aria-hidden','false');
+      const managerScene=document.querySelector('.manager-scene');
+      if(managerScene)managerScene.classList.add('bridge-leaving');
+      if(index<=4){
+        showManagementGroupAgain();
+      }else if(index<=6){
+        showManagementSystemsView();
+      }else if(index===7){
+        showManagementLandscapeView();
+      }else if(index<=9){
+        showManagementGroupAgain();
+      }else{
+        showDecisionHub();
+      }
+    }
+
+    function numeroRestartManagerDialogue(target){
+      numeroStopIndex2Flow();
+      target=Math.max(0,Math.min(dialogues.length-1,target));
+      managementSequenceStarted=false;
+      try{
+        managementBridge.classList.remove('active');
+        managementBridge.setAttribute('aria-hidden','true');
+        const managerScene=document.querySelector('.manager-scene');
+        if(managerScene)managerScene.classList.remove('bridge-leaving');
+        hideAllManagerDialogues();
+      }catch(e){}
+      numeroIndex2Mode='manager-dialogue';
+      numeroManagerDialogueIndex=target;
+      runManagerDialogue(target,function(){activateManagementBridge(startManagementSequenceOnce);});
+      return true;
+    }
+
+    function numeroRestartManagementStep(target){
+      const steps=buildManagementSteps();
+      if(!steps.length)return false;
+      target=Math.max(0,Math.min(steps.length-1,target));
+      numeroStopIndex2Flow();
+      managementSequenceStarted=true;
+      numeroPrepareManagementStep(target);
+      numeroManagementStepIndex=target;
+      numeroIndex2Mode=steps[target]&&steps[target].text?'management-dialogue':'management-step';
+      runSteps(steps,target,loadIndex3);
+      return true;
+    }
+
+    function numeroRunManagementSystemsFrom(systemIndex,shotIndex){
+      const systems=managementSystemsData.slice();
+      if(!systems.length)return false;
+      systemIndex=Math.max(0,Math.min(systems.length-1,Number(systemIndex)||0));
+      shotIndex=Math.max(0,Number(shotIndex)||0);
+      numeroStopIndex2Flow();
+      managementSequenceStarted=true;
+      showManagementSystemsView();
+      managementSystemShowcaseToken+=1;
+      const token=managementSystemShowcaseToken;
+      const steps=buildManagementSteps();
+      const runnerStep=numeroFindSystemRunnerStep(steps);
+      numeroManagementStepIndex=runnerStep;
+
+      function playSystem(index,startShot){
+        if(token!==managementSystemShowcaseToken)return;
+        if(index>=systems.length){
+          presentationTimer(function(){
+            if(token!==managementSystemShowcaseToken)return;
+            runSteps(steps,runnerStep+1,loadIndex3);
+          },900);
+          return;
+        }
+        const system=systems[index];
+        const screenshots=renderManagementSystem(system,index);
+        const shortText=String(system.description||'').trim();
+        const profileKey='assistant_head';
+        const visualDuration=Math.max(5200,Math.max(1,screenshots.length)*5000);
+        const speechEstimate=estimateDialogueDuration(shortText,profileKey);
+        const dwell=Math.max(visualDuration,speechEstimate+900);
+        const firstShot=Math.max(0,Math.min(Math.max(0,screenshots.length-1),Number(startShot)||0));
+
+        if(screenshots.length){
+          showManagementScreenshot(screenshots[firstShot],firstShot,screenshots.length);
+          for(let s=firstShot+1;s<screenshots.length;s++){
+            (function(url,pos,delay){
+              presentationTimer(function(){
+                if(token!==managementSystemShowcaseToken||activeManagementSystem!==system)return;
+                showManagementScreenshot(url,pos,screenshots.length);
+              },delay);
+            })(screenshots[s],s,(s-firstShot)*5000);
+          }
+        }else{
+          showManagementScreenshot('',0,0);
+        }
+
+        let advanced=false;
+        function next(){
+          if(advanced||token!==managementSystemShowcaseToken)return;
+          advanced=true;
+          presentationTimer(function(){if(token===managementSystemShowcaseToken)playSystem(index+1,0);},850);
+        }
+        if(shortText&&voiceEnabled){
+          let started=false;
+          managementSystemShort.classList.add('is-speaking');
+          try{
+            started=speakText(shortText,profileKey,function(){
+              managementSystemShort.classList.remove('is-speaking');
+              next();
+            });
+          }catch(e){started=false;}
+          if(!started){managementSystemShort.classList.remove('is-speaking');presentationTimer(next,dwell);}
+        }else presentationTimer(next,dwell);
+      }
+
+      playSystem(systemIndex,shotIndex);
+      return true;
+    }
+
+    window.numeroCanStepBack=function(){
+      if(numeroIndex2Mode==='manager-dialogue')return numeroManagerDialogueIndex>0;
+      if(numeroIndex2Mode==='management-screenshot'){
+        return numeroManagementShotIndex>0||numeroManagementSystemIndex>0||numeroManagementStepIndex>0;
+      }
+      if(numeroIndex2Mode==='management-system')return numeroManagementSystemIndex>0||numeroManagementStepIndex>0;
+      if(numeroIndex2Mode==='management-landscape')return numeroManagementStepIndex>0;
+      if(numeroIndex2Mode==='management-dialogue'||numeroIndex2Mode==='management-step')return numeroManagementStepIndex>0;
+      return false;
+    };
+
+    window.numeroStepBack=function(){
+      if(numeroIndex2Mode==='manager-dialogue'){
+        if(numeroManagerDialogueIndex<=0)return false;
+        return numeroRestartManagerDialogue(numeroManagerDialogueIndex-1);
+      }
+
+      const steps=buildManagementSteps();
+      const systemRunner=numeroFindSystemRunnerStep(steps);
+      const landscapeRunner=numeroFindLandscapeRunnerStep(steps);
+
+      if(numeroIndex2Mode==='management-screenshot'){
+        if(numeroManagementShotIndex>0){
+          return numeroRunManagementSystemsFrom(numeroManagementSystemIndex,numeroManagementShotIndex-1);
+        }
+        if(numeroManagementSystemIndex>0){
+          return numeroRunManagementSystemsFrom(numeroManagementSystemIndex-1,0);
+        }
+        const prev=numeroFindPrevTextStep(steps,systemRunner);
+        if(prev>=0)return numeroRestartManagementStep(prev);
+        return false;
+      }
+
+      if(numeroIndex2Mode==='management-system'){
+        if(numeroManagementSystemIndex>0)return numeroRunManagementSystemsFrom(numeroManagementSystemIndex-1,0);
+        const prev=numeroFindPrevTextStep(steps,systemRunner);
+        if(prev>=0)return numeroRestartManagementStep(prev);
+        return false;
+      }
+
+      if(numeroIndex2Mode==='management-landscape'){
+        const prev=numeroFindPrevTextStep(steps,landscapeRunner);
+        if(prev>=0)return numeroRestartManagementStep(prev);
+        return false;
+      }
+
+      if(numeroIndex2Mode==='management-dialogue'||numeroIndex2Mode==='management-step'){
+        const prev=numeroFindPrevTextStep(steps,numeroManagementStepIndex);
+        if(prev>=0)return numeroRestartManagementStep(prev);
+        /* First bridge sentence -> last manager-room sentence. */
+        if(numeroManagementStepIndex<=0)return numeroRestartManagerDialogue(dialogues.length-1);
+      }
+      return false;
+    };
+
+})();
 
   </script>
 
@@ -6104,5 +6389,6 @@
   if(document.body) obs.observe(document.body,{subtree:true,childList:true,characterData:true});
 })();
 </script>
+  <script src="tour-step-back.js?v=20260916-step-back-v16"></script>
 </body>
 </html>

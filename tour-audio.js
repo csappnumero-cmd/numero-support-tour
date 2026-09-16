@@ -15,20 +15,18 @@
   // its own timeline paused until the audio layer dispatches numero-tour-started.
   var fileName = (window.location.pathname.split('/').pop() || '').toLowerCase();
   var isDoorPage = !fileName || fileName === 'index.html';
-  var rewindReplayActive = !!window.__NUMERO_REWIND_ACTIVE;
 
   // START TOUR is the single permission/start gesture for the whole visit.
   // Entering the door page begins a fresh visit; later chapters inherit the
   // session flag without asking the visitor to click again.
   var tourWasStarted = false;
   try {
-    if (isDoorPage && !rewindReplayActive) sessionStorage.removeItem('numero_tour_started');
-    if (rewindReplayActive) sessionStorage.setItem('numero_tour_started','1');
-    tourWasStarted = rewindReplayActive || sessionStorage.getItem('numero_tour_started') === '1';
+    if (isDoorPage) sessionStorage.removeItem('numero_tour_started');
+    tourWasStarted = sessionStorage.getItem('numero_tour_started') === '1';
   } catch(e) {}
 
   var canInstallFixedAudio = !!window.speechSynthesis;
-  if (isDoorPage && canInstallFixedAudio && !rewindReplayActive) window.__numeroTourStartPending = true;
+  if (isDoorPage && canInstallFixedAudio) window.__numeroTourStartPending = true;
 
   // Reuse ONE HTMLAudioElement for the entire tour. When START TOUR is clicked
   // this element is "blessed" by the real user gesture, then reused for every
@@ -63,7 +61,7 @@
 
   // SIMPLE/STABLE first-page start gate.
   // The page timeline itself is paused by index.html until the start event.
-  var userStarted = !isDoorPage || rewindReplayActive;
+  var userStarted = !isDoorPage;
   var startGateEl = null;
   var pendingFirstPlay = null;
 
@@ -741,7 +739,7 @@
 
   window.supportTourFixedAudio = { stop:function(){ synth.cancel(); }, usingFixedAudio:true, isActive:function(){return !!activeAudio;}, isPaused:function(){return !!paused;} };
 
-  if (isDoorPage && !rewindReplayActive) {
+  if (isDoorPage) {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', showStartGate, {once:true});
     } else {
