@@ -8353,33 +8353,41 @@
             if(!idleSince) idleSince=now;
             if(now-idleSince>=650){
               /*
-                V20: if Chrome played the replayed audio but dropped the
-                utterance.onend callback, the page voice layer can still have
-                voiceBusy/activeVoiceUtterance stuck on the OLD line.  V18/V19
-                advanced the visual timeline, but left that stale state behind;
-                the next dialogue was therefore queued forever until VOICE was
-                toggled OFF/ON.  Clear that stale page-voice state at the exact
-                moment we accept the replay as genuinely finished, then let the
-                existing master clock advance to the next line normally.
+                V21: the accept step must never interrupt the NEXT line.
+                Once the replayed line is genuinely idle, the master clock can
+                already have advanced and started narrating the following
+                dialogue. The old global voice reset at this moment killed the
+                new utterance token, so the sentence after the replay stayed
+                silent forever. Reset the page voice only while THIS node is
+                still the active line, and never when its completion already
+                arrived naturally.
               */
-              try{
-                if(typeof window.supportTourStopPageVoice==='function'){
-                  window.supportTourStopPageVoice();
-                }
-              }catch(e){}
-              dialogueVoiceCompleted.add(node.id);
+              var already=dialogueVoiceCompleted.has(node.id);
+              var stillCurrent=node.classList.contains('show') && !node.classList.contains('hide');
+              if(!already && stillCurrent && !numeroIndex3NarrationBusy()){
+                try{
+                  if(typeof window.supportTourResetPageVoiceForNode==='function'){
+                    window.supportTourResetPageVoiceForNode(node);
+                  }else if(typeof window.supportTourStopPageVoice==='function'){
+                    window.supportTourStopPageVoice();
+                  }
+                }catch(e){}
+                dialogueVoiceCompleted.add(node.id);
+              }
               window.clearInterval(watcher);
             }
           }
 
           /* Last-resort guard only for a BACK replay; normal playback is untouched. */
           if(now-born>45000){
-            try{
-              if(typeof window.supportTourStopPageVoice==='function'){
-                window.supportTourStopPageVoice();
-              }
-            }catch(e){}
-            dialogueVoiceCompleted.add(node.id);
+            if(!dialogueVoiceCompleted.has(node.id)){
+              try{
+                if(typeof window.supportTourResetPageVoiceForNode==='function'){
+                  window.supportTourResetPageVoiceForNode(node);
+                }
+              }catch(e){}
+              dialogueVoiceCompleted.add(node.id);
+            }
             window.clearInterval(watcher);
           }
         },120);
@@ -8522,7 +8530,59 @@
         return false;
       };
 
+      /* =========================================================
+         V21 — NEXT-LINE STALL RECOVERY
+         Safety net for the semantic BACK feature. If a dialogue line is
+         visible and nothing is being narrated while its completion never
+         arrives, re-dispatch it once; if it is still silent, release the
+         timeline so the presentation keeps reading the following lines.
+      ========================================================== */
+      (function(){
+        var watchedNode=null, silentSince=0, retried=false;
+
+        function visibleDialogueNode3(){
+          var list = phase==='intro' ? numeroIntroNodes3 : (phase==='ending' ? numeroEndingNodes3 : null);
+          if(!list) return null;
+          for(var i=0;i<list.length;i++){
+            var n=list[i];
+            if(n && n.classList.contains('show') && !n.classList.contains('hide')) return n;
+          }
+          return null;
+        }
+
+        window.setInterval(function(){
+          if(!numeroIndex3VoicePreferenceOn()) return;
+          if(isPresentationPaused()){ silentSince=0; return; }
+
+          var node=visibleDialogueNode3();
+          if(!node || !node.id){ watchedNode=null; silentSince=0; retried=false; return; }
+          if(node!==watchedNode){ watchedNode=node; silentSince=0; retried=false; return; }
+          if(dialogueVoiceCompleted.has(node.id)){ silentSince=0; return; }
+          if(numeroIndex3NarrationBusy()){ silentSince=0; return; }
+
+          var now=performance.now();
+          if(!silentSince){ silentSince=now; return; }
+
+          if(!retried && now-silentSince>=2200){
+            retried=true;
+            silentSince=now;
+            try{
+              if(typeof window.supportTourForceSpeakNode==='function'){
+                window.supportTourForceSpeakNode(node);
+              }
+            }catch(e){}
+            return;
+          }
+
+          if(retried && now-silentSince>=3200){
+            silentSince=0;
+            dialogueVoiceCompleted.add(node.id);
+          }
+        },250);
+      })();
+
 })();
+
 
   </script>
 
@@ -9031,6 +9091,42 @@
       user toggled sound OFF/ON.
     */
     window.supportTourStopPageVoice = stopVoice;
+
+    /*
+      V21 helpers for the semantic BACK feature.
+      resetForNode clears voice state only while the given node is still the
+      active dialogue, so a late reset can never mute the next sentence.
+      forceSpeakNode re-dispatches a visible line whose narration was lost
+      (cancelled utterance, dropped onend) without touching normal playback.
+    */
+    window.supportTourResetPageVoiceForNode = function(node) {
+      if (node && currentDialogueNode && currentDialogueNode !== node) return false;
+      if (voiceBusy || activeVoiceUtterance) { stopVoice(); return true; }
+      pendingDialogueQueue = [];
+      return true;
+    };
+
+    window.supportTourForceSpeakNode = function(node) {
+      if (!node || !voiceEnabled) return false;
+      if (!isDialogueVisible(node)) return false;
+
+      voiceSequenceToken += 1;
+      pendingDialogueQueue = [];
+      voiceBusy = false;
+      activeVoiceUtterance = null;
+
+      if (activeVoiceWatchdog) {
+        window.clearTimeout(activeVoiceWatchdog);
+        activeVoiceWatchdog = null;
+      }
+
+      try { window.speechSynthesis.cancel(); } catch (error) {}
+
+      currentDialogueNode = node;
+      node.setAttribute('data-tour-spoken', '1');
+      window.setTimeout(function() { speakNode(node); }, 120);
+      return true;
+    };
 
 
     function speakNode(node) {
