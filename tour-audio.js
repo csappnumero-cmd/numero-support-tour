@@ -15,8 +15,32 @@
   // its own timeline paused until the audio layer dispatches numero-tour-started.
   var fileName = (window.location.pathname.split('/').pop() || '').toLowerCase();
   var isDoorPage = !fileName || fileName === 'index.html';
+
+  // START TOUR is the single permission/start gesture for the whole visit.
+  // Entering the door page begins a fresh visit; later chapters inherit the
+  // session flag without asking the visitor to click again.
+  var tourWasStarted = false;
+  try {
+    if (isDoorPage) sessionStorage.removeItem('numero_tour_started');
+    tourWasStarted = sessionStorage.getItem('numero_tour_started') === '1';
+  } catch(e) {}
+
   var canInstallFixedAudio = !!window.speechSynthesis;
   if (isDoorPage && canInstallFixedAudio) window.__numeroTourStartPending = true;
+
+  // Reuse ONE HTMLAudioElement for the entire tour. When START TOUR is clicked
+  // this element is "blessed" by the real user gesture, then reused for every
+  // MP3 instead of creating a new Audio() object for each sentence.
+  var sharedAudio = window.__numeroTourSharedAudio;
+  if (!sharedAudio) {
+    try {
+      sharedAudio = new Audio();
+      sharedAudio.preload = 'auto';
+      window.__numeroTourSharedAudio = sharedAudio;
+    } catch(e) {
+      sharedAudio = null;
+    }
+  }
 
   if (!canInstallFixedAudio || window.__tourFixedAudioInstalled) return;
   window.__tourFixedAudioInstalled = true;
@@ -50,32 +74,62 @@
 
   function notifyTourStarted(){
     userStarted = true;
+    tourWasStarted = true;
     window.__numeroTourStartPending = false;
+    try { sessionStorage.setItem('numero_tour_started','1'); } catch(e) {}
     try { localStorage.setItem('support_center_voice','1'); } catch(e) {}
     try { window.dispatchEvent(new CustomEvent('numero-tour-started')); }
     catch(e) { try { window.dispatchEvent(new Event('numero-tour-started')); } catch(_) {} }
   }
 
   function primeMediaFromGesture(){
-    // Prime the browser's media policy while we are still inside the user's click.
-    // The clip is silent; it only establishes an explicit audio gesture.
-    try {
-      var primer = new Audio('data:audio/wav;base64,UklGRkQDAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YSADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==');
-      primer.preload = 'auto';
-      var pp = primer.play();
-      if (pp && pp.then) {
-        pp.then(function(){
-          try { primer.pause(); primer.removeAttribute('src'); primer.load(); } catch(e) {}
-        }).catch(function(){});
+    /*
+      Do not merely fire a silent temporary Audio() and immediately continue.
+      That was the source of the later ENABLE AUDIO interruption. We start the
+      SAME shared media element here, inside the real START TOUR click, and keep
+      it alive until the first narration replaces its source.
+    */
+    return new Promise(function(resolve){
+      try {
+        var SILENT =
+          'data:audio/wav;base64,UklGRkQDAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YSADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==';
+
+        if (!sharedAudio) {
+          sharedAudio = new Audio();
+          sharedAudio.preload = 'auto';
+          window.__numeroTourSharedAudio = sharedAudio;
+        }
+
+        // Clear handlers left by any previous narration before using the
+        // element as the start-permission primer.
+        sharedAudio.onended = null;
+        sharedAudio.onerror = null;
+        sharedAudio.onplaying = null;
+        sharedAudio.loop = true;
+        sharedAudio.volume = 1;
+        sharedAudio.src = SILENT;
+        try { sharedAudio.currentTime = 0; } catch(e) {}
+
+        var p = sharedAudio.play();
+        if (p && typeof p.then === 'function') {
+          p.then(function(){
+            // Also resume WebAudio while the user gesture is still active.
+            try {
+              var AC = window.AudioContext || window.webkitAudioContext;
+              if (AC) {
+                var ctx = window.__numeroAudioContext || (window.__numeroAudioContext = new AC());
+                if (ctx.state === 'suspended') ctx.resume().catch(function(){});
+              }
+            } catch(e) {}
+            resolve(true);
+          }).catch(function(){ resolve(false); });
+        } else {
+          resolve(true);
+        }
+      } catch(e) {
+        resolve(false);
       }
-    } catch(e) {}
-    try {
-      var AC = window.AudioContext || window.webkitAudioContext;
-      if (AC) {
-        var ctx = window.__numeroAudioContext || (window.__numeroAudioContext = new AC());
-        if (ctx.state === 'suspended') ctx.resume().catch(function(){});
-      }
-    } catch(e) {}
+    });
   }
 
   function showStartGate(){
@@ -171,41 +225,32 @@
       btn.innerHTML = '<span aria-hidden="true">●</span><span>STARTING…</span>';
       errorHint.style.display = 'none';
 
-      // If an utterance was already waiting, start it inside the same real click.
-      if (pendingFirstPlay) {
-        var rec = pendingFirstPlay;
-        try {
-          var p = rec.audio.play();
-          if (p && p.then) {
-            p.then(function(){
-              pendingFirstPlay = null;
-              notifyTourStarted();
-              removeStartGate();
-              if (paused) { try { rec.audio.pause(); } catch(e) {} }
-            }).catch(function(err){
-              btn.removeAttribute('data-starting');
-              btn.innerHTML = '<span aria-hidden="true" style="font-size:17px">▶</span><span>START TOUR</span>';
-              errorHint.textContent = 'Audio was blocked. Tap START TOUR again.';
-              errorHint.style.display = 'block';
-              if (!err || (err.name !== 'NotAllowedError' && err.name !== 'AbortError')) rec.fallback();
-            });
-          } else {
-            pendingFirstPlay = null;
-            notifyTourStarted();
-            removeStartGate();
-          }
-        } catch(e) {
+      // START TOUR does not release the timeline until the browser confirms
+      // that audio has actually been unlocked by this click.
+      primeMediaFromGesture().then(function(unlocked){
+        if (!unlocked) {
           btn.removeAttribute('data-starting');
           btn.innerHTML = '<span aria-hidden="true" style="font-size:17px">▶</span><span>START TOUR</span>';
-          errorHint.textContent = 'Audio was blocked. Tap START TOUR again.';
+          errorHint.textContent = 'Tap START TOUR once more to allow sound.';
           errorHint.style.display = 'block';
+          return;
         }
-        return;
-      }
 
-      primeMediaFromGesture();
-      notifyTourStarted();
-      removeStartGate();
+        // A sentence should never be pending here because the entrance
+        // timeline is hard-frozen. This branch is only a safety net.
+        if (pendingFirstPlay) {
+          var rec = pendingFirstPlay;
+          pendingFirstPlay = null;
+          try {
+            rec.audio.loop = false;
+            var p = rec.audio.play();
+            if (p && p.catch) p.catch(function(){});
+          } catch(e) {}
+        }
+
+        notifyTourStarted();
+        removeStartGate();
+      });
     });
   }
 
@@ -255,8 +300,25 @@
     if (!item || !item.file) return false;
 
     var mySerial = ++serial;
-    var audio = new Audio(item.file);
-    audio.preload = 'auto';
+    var audio = sharedAudio;
+    try {
+      if (!audio) {
+        audio = new Audio();
+        sharedAudio = audio;
+        window.__numeroTourSharedAudio = audio;
+      }
+      try { audio.pause(); } catch(e) {}
+      audio.onended = null;
+      audio.onerror = null;
+      audio.onplaying = null;
+      audio.loop = false;
+      audio.preload = 'auto';
+      audio.src = item.file;
+      try { audio.currentTime = 0; } catch(e) {}
+      try { audio.load(); } catch(e) {}
+    } catch(e) {
+      return false;
+    }
     activeAudio = audio;
     pendingAmbiguous = null;
 
@@ -322,6 +384,50 @@
       },250);
     }
     var gateEl = null;
+
+    function fallbackToNativeSpeech(){
+      if (endedFired || mySerial !== serial) return;
+      endedFired = true;
+      clearEndGuard();
+      try {
+        audio.onended = null;
+        audio.onerror = null;
+        audio.onplaying = null;
+        audio.pause();
+      } catch(e) {}
+      if (mySerial === serial) activeAudio = null;
+
+      /*
+        If a browser still refuses HTMLAudio after START TOUR, do not interrupt
+        the visitor with another permission screen and do not skip the line.
+        Speak the SAME full line through the browser's native speech engine.
+      */
+      try {
+        if (typeof window.SpeechSynthesisUtterance === 'function') {
+          var nativeUtterance = new SpeechSynthesisUtterance(fullText);
+          try { nativeUtterance.voice = utterance && utterance.voice ? utterance.voice : null; } catch(e) {}
+          try { nativeUtterance.lang = (utterance && utterance.lang) || 'en-US'; } catch(e) {}
+          try { nativeUtterance.rate = (utterance && utterance.rate) || 1; } catch(e) {}
+          try { nativeUtterance.pitch = (utterance && utterance.pitch) || 1; } catch(e) {}
+          try { nativeUtterance.volume = (utterance && utterance.volume != null) ? utterance.volume : 1; } catch(e) {}
+
+          nativeUtterance.onend = function(){ finishUtterance(utterance); };
+          nativeUtterance.onerror = function(){
+            if (utterance && typeof utterance.onerror === 'function') {
+              try { utterance.onerror({type:'error',error:'native-speech-failed',utterance:utterance}); return; } catch(e) {}
+            }
+            finishUtterance(utterance);
+          };
+          original.speak(nativeUtterance);
+          return;
+        }
+      } catch(e) {}
+
+      if (utterance && typeof utterance.onerror === 'function') {
+        try { utterance.onerror({type:'error',error:'audio-blocked',utterance:utterance}); return; } catch(e) {}
+      }
+      finishUtterance(utterance);
+    }
 
     function removeGate(){
       if (gateEl && gateEl.parentNode) {
@@ -416,7 +522,7 @@
 
     audio.onended=function(){ removeGate(); fireEnd(); };
     audio.onerror=fallback;
-    audio.addEventListener('playing',startEndGuard);
+    audio.onplaying=startEndGuard;
 
     // On the first page, wait for the explicit START TOUR click.
     // Holding utterance.onend here keeps the tour on the first scene without
@@ -436,16 +542,20 @@
       var p=audio.play();
       if(paused) audio.pause();
       if(p&&p.catch)p.catch(function(err){
-        // Normal browsers may still block autoplay on later pages.
         if (err && (err.name === 'NotAllowedError' || err.name === 'AbortError')) {
-          showAutoplayGate();
+          if (tourWasStarted) fallbackToNativeSpeech();
+          else showAutoplayGate();
         } else {
           fallback();
         }
       });
     } catch(e) {
-      if (e && (e.name === 'NotAllowedError' || e.name === 'AbortError')) showAutoplayGate();
-      else fallback();
+      if (e && (e.name === 'NotAllowedError' || e.name === 'AbortError')) {
+        if (tourWasStarted) fallbackToNativeSpeech();
+        else showAutoplayGate();
+      } else {
+        fallback();
+      }
     }
     return true;
   }
