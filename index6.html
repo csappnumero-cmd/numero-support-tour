@@ -565,6 +565,101 @@
 #pauseBtn::before,#pauseToggle::before{content:'⏸';font-size:18px!important;line-height:1!important;}
 #pauseBtn[aria-label="Play"]::before,#pauseToggle[aria-label="Play"]::before{content:'▶';}
 #pauseBtn[aria-label="Pause"]::before,#pauseToggle[aria-label="Pause"]::before{content:'⏸';}
+
+/* Keep Play/Pause perfectly stable on tap/click. */
+#pauseBtn,#pauseToggle{
+  box-sizing:border-box!important;
+  flex:0 0 46px!important;
+  min-width:46px!important;
+  width:46px!important;
+  max-width:46px!important;
+  min-height:40px!important;
+  height:40px!important;
+  max-height:40px!important;
+  transform:none!important;
+  -webkit-transform:none!important;
+  scale:1!important;
+  transition:background-color .12s ease,border-color .12s ease,color .12s ease!important;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+  appearance:none;
+  -webkit-appearance:none;
+}
+#pauseBtn:hover,#pauseToggle:hover,
+#pauseBtn:active,#pauseToggle:active,
+#pauseBtn:focus,#pauseToggle:focus,
+#pauseBtn:focus-visible,#pauseToggle:focus-visible{
+  transform:none!important;
+  -webkit-transform:none!important;
+  scale:1!important;
+  min-width:46px!important;
+  width:46px!important;
+  max-width:46px!important;
+  min-height:40px!important;
+  height:40px!important;
+  max-height:40px!important;
+}
+#pauseBtn::before,#pauseToggle::before{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:22px!important;
+  height:22px!important;
+  flex:0 0 22px!important;
+  transform:none!important;
+  -webkit-transform:none!important;
+}
+@media (hover:none),(pointer:coarse){
+  #pauseBtn:hover,#pauseToggle:hover{transform:none!important;-webkit-transform:none!important;}
+}
+</style>
+
+
+<style id="numero-stable-play-pause-all-pages-v4">
+/* Keep the top Play/Pause control visually fixed on mouse, touch and focus. */
+#presentationControl,#pauseBtn,#pauseToggle,#tourPauseToggle{
+  box-sizing:border-box!important;
+  transform:none!important;
+  -webkit-transform:none!important;
+  scale:1!important;
+  transition:none!important;
+  animation:none!important;
+  transform-origin:center center!important;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+#presentationControl:hover,#presentationControl:active,#presentationControl:focus,#presentationControl:focus-visible,
+#pauseBtn:hover,#pauseBtn:active,#pauseBtn:focus,#pauseBtn:focus-visible,
+#pauseToggle:hover,#pauseToggle:active,#pauseToggle:focus,#pauseToggle:focus-visible,
+#tourPauseToggle:hover,#tourPauseToggle:active,#tourPauseToggle:focus,#tourPauseToggle:focus-visible{
+  transform:none!important;
+  -webkit-transform:none!important;
+  scale:1!important;
+  transition:none!important;
+  animation:none!important;
+}
+#presentationControlIcon{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:22px!important;
+  min-width:22px!important;
+  max-width:22px!important;
+  height:22px!important;
+  min-height:22px!important;
+  max-height:22px!important;
+  margin:0!important;
+  transform:none!important;
+  -webkit-transform:none!important;
+  line-height:1!important;
+}
+@media (hover:none),(pointer:coarse){
+  #presentationControl:hover,#pauseBtn:hover,#pauseToggle:hover,#tourPauseToggle:hover{
+    transform:none!important;
+    -webkit-transform:none!important;
+    scale:1!important;
+  }
+}
 </style>
 
 </head>
@@ -985,7 +1080,7 @@
 
   els.arabicToggle.addEventListener('click',function(){state.arabicEnabled=!state.arabicEnabled;safeSet(AR_KEY,state.arabicEnabled?'1':'0');syncControls()});
   els.voiceToggle.addEventListener('click',function(){state.voiceEnabled=!state.voiceEnabled;safeSet(VOICE_KEY,state.voiceEnabled?'1':'0');if(!state.voiceEnabled){stopVoice();scheduleAdvance(Math.min(5200,estimateDuration(state.currentRow)),state.token)}else if(state.currentRow&&!state.paused){clearTimer();speakAndAdvance(state.currentRow,state.token)}syncControls()});
-  els.pauseToggle.addEventListener('click',function(){state.paused?resumeTimeline():pauseTimeline()});
+  els.pauseToggle.addEventListener('click',function(){state.paused?resumeTimeline():pauseTimeline();try{this.blur()}catch(e){}});
   els.prevBtn.addEventListener('click',function(){goBack()});els.nextBtn.addEventListener('click',function(){advance()});els.expandBtn.addEventListener('click',openInspect);els.inspectClose.addEventListener('click',closeInspect);els.inspect.addEventListener('click',function(e){if(e.target===els.inspect)closeInspect()});
 
   buildDots();showShot(0);syncControls();loadVoices();if('speechSynthesis' in window&&'onvoiceschanged' in window.speechSynthesis)window.speechSynthesis.onvoiceschanged=loadVoices;

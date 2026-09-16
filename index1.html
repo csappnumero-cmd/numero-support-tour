@@ -412,6 +412,54 @@
 }
 </style>
 
+
+<style id="numero-stable-play-pause-all-pages-v4">
+/* Keep the top Play/Pause control visually fixed on mouse, touch and focus. */
+#presentationControl,#pauseBtn,#pauseToggle,#tourPauseToggle{
+  box-sizing:border-box!important;
+  transform:none!important;
+  -webkit-transform:none!important;
+  scale:1!important;
+  transition:none!important;
+  animation:none!important;
+  transform-origin:center center!important;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+#presentationControl:hover,#presentationControl:active,#presentationControl:focus,#presentationControl:focus-visible,
+#pauseBtn:hover,#pauseBtn:active,#pauseBtn:focus,#pauseBtn:focus-visible,
+#pauseToggle:hover,#pauseToggle:active,#pauseToggle:focus,#pauseToggle:focus-visible,
+#tourPauseToggle:hover,#tourPauseToggle:active,#tourPauseToggle:focus,#tourPauseToggle:focus-visible{
+  transform:none!important;
+  -webkit-transform:none!important;
+  scale:1!important;
+  transition:none!important;
+  animation:none!important;
+}
+#presentationControlIcon{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:22px!important;
+  min-width:22px!important;
+  max-width:22px!important;
+  height:22px!important;
+  min-height:22px!important;
+  max-height:22px!important;
+  margin:0!important;
+  transform:none!important;
+  -webkit-transform:none!important;
+  line-height:1!important;
+}
+@media (hover:none),(pointer:coarse){
+  #presentationControl:hover,#pauseBtn:hover,#pauseToggle:hover,#tourPauseToggle:hover{
+    transform:none!important;
+    -webkit-transform:none!important;
+    scale:1!important;
+  }
+}
+</style>
+
 </head>
 
 
