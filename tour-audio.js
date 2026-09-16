@@ -737,7 +737,7 @@
     __installCompactControls();
   }
 
-  window.supportTourFixedAudio = { stop:function(){ synth.cancel(); }, speakNative:function(utterance){ return original.speak(utterance); }, usingFixedAudio:true, isActive:function(){return !!activeAudio;}, isPaused:function(){return !!paused;} };
+  window.supportTourFixedAudio = { stop:function(){ synth.cancel(); }, usingFixedAudio:true, isActive:function(){return !!activeAudio;}, isPaused:function(){return !!paused;} };
 
   if (isDoorPage) {
     if (document.readyState === 'loading') {

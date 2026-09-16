@@ -54,11 +54,11 @@
   <base target="_top">
   <link rel="stylesheet" href="tour-runtime.css?v=20260916-exactfix-1789553853">
   <script src="tour-data.js?v=20260916-exactfix-1789553853"></script>
-  <script src="tour-runtime.js?v=20260916-index2-sheet-v11"></script>
+  <script src="tour-runtime.js?v=20260916-index2-sound-v12"></script>
   
   <!-- FIXED_TOUR_AUDIO -->
   <script src="tour-audio-map.js?v=20260916-exactfix-1789553853"></script>
-  <script src="tour-audio.js?v=20260916-index2-sheet-v11"></script>
+  <script src="tour-audio.js?v=20260916-index2-sound-v12"></script>
 <meta charset="UTF-8">
 
   <meta
@@ -3260,7 +3260,7 @@
       if (!source) {
         return [];
       }
-      if (!forceSplit && window.supportTourFixedAudio && window.supportTourFixedAudio.usingFixedAudio) { return [source]; } /* FIXED_AUDIO_NO_SPLIT */
+      if (window.supportTourFixedAudio && window.supportTourFixedAudio.usingFixedAudio) { return [source]; } /* FIXED_AUDIO_NO_SPLIT */
 
 
       /*
@@ -3353,12 +3353,8 @@
     function speakText(
       text,
       speakerKey,
-      onComplete,
-      forceNativeSpeech
+      onComplete
     ) {
-
-      const normalizedSpeechText = String(text || '').replace(/\s+/g,' ').trim();
-      const useNativeSpeech = !!forceNativeSpeech || INDEX2_NATIVE_SHEET_LINES.has(normalizedSpeechText);
 
       currentSpeechLine = {
         text: text,
@@ -3373,23 +3369,6 @@
       ) {
         return false;
       }
-
-      /* The Head must never switch to an arbitrary browser voice mid-tour.
-         If a Head label/bridge has no prerecorded GuyNeural MP3, keep the
-         visual timing but do not speak it with a different synthetic voice. */
-      if (
-        !useNativeSpeech &&
-        speakerKey === 'support_manager' &&
-        window.supportTourFixedAudio &&
-        window.supportTourFixedAudio.usingFixedAudio
-      ) {
-        const fixedKey = String(text || '').replace(/\s+/g, ' ').trim();
-        const fixedMap = window.TOUR_AUDIO_MAP || {};
-        if (!fixedMap[fixedKey]) {
-          return false;
-        }
-      }
-
 
       try {
 
@@ -3425,8 +3404,7 @@
         const chunks =
           splitSpeechChunks(
             text,
-            105,
-            useNativeSpeech
+            105
           );
 
 
@@ -3591,7 +3569,7 @@
 
                 const synth =
                   window.speechSynthesis;
-                if (!useNativeSpeech && window.supportTourFixedAudio && window.supportTourFixedAudio.usingFixedAudio) { return; } /* FIXED_AUDIO_MONITOR_GUARD */
+                if (window.supportTourFixedAudio && window.supportTourFixedAudio.usingFixedAudio) { return; } /* FIXED_AUDIO_MONITOR_GUARD */
 
 
                 if (
@@ -3737,19 +3715,10 @@
             utterance;
 
 
-          if (
-            useNativeSpeech &&
-            window.supportTourFixedAudio &&
-            typeof window.supportTourFixedAudio.speakNative === 'function'
-          ) {
-            window.supportTourFixedAudio.speakNative(utterance);
-          }
-          else {
-            window.speechSynthesis
-              .speak(
-                utterance
-              );
-          }
+          window.speechSynthesis
+            .speak(
+              utterance
+            );
 
         }
 
@@ -3949,52 +3918,13 @@
     updateLanguageControl();
 
 
-    const INDEX2_SHEET_DIALOGUE_LOCK = {
-      MGR_006: {
-        dialogue_key:'MGR_006', speaker_key:'support_manager',
-        text_en:'Certainly. Let me introduce the Customer Support Management Team first, then I will show you how decisions move into action.',
-        text_ar:'بالتأكيد. دعني أعرّفك أولًا على فريق إدارة دعم العملاء، ثم أريك كيف تتحول القرارات إلى خطوات عملية.'
-      },
-      MGMT_003: {
-        dialogue_key:'MGMT_003', speaker_key:'support_manager',
-        text_en:'Together, we form the Customer Support Management Team. We plan, measure performance, review priorities, and agree on the actions needed across the center.',
-        text_ar:'معًا نشكل فريق إدارة دعم العملاء. نخطط ونقيس الأداء ونراجع الأولويات ونتفق على الإجراءات المطلوبة على مستوى المركز.'
-      },
-      ACTION_PLAN_001: {
-        dialogue_key:'ACTION_PLAN_001', speaker_key:'support_manager',
-        text_en:'At the beginning of each year, the Customer Support Management Team prepares the annual action plan and defines the KPIs, targets, and criteria we want to achieve.',
-        text_ar:'في بداية كل سنة، يجهز فريق إدارة دعم العملاء خطة العمل السنوية ويحدد مؤشرات الأداء والأهداف والمعايير التي نريد تحقيقها.'
-      },
-      ACTION_PLAN_002: {
-        dialogue_key:'ACTION_PLAN_002', speaker_key:'assistant_head',
-        text_en:'We review performance quarter by quarter — Q1, Q2, Q3 and Q4. The results tell us where we are on track, where we need improvement, and what systems or automation we need to measure and improve the operation.',
-        text_ar:'ونراجع الأداء ربعًا بعد ربع، من الربع الأول حتى الربع الرابع. وتوضح لنا النتائج أين نسير حسب الخطة، وأين نحتاج تحسينًا، وما الأنظمة أو الأتمتة التي نحتاجها للقياس والتطوير.'
-      },
-      MGMT_SYSTEMS_BRIDGE_001: {
-        dialogue_key:'MGMT_SYSTEMS_BRIDGE_001', speaker_key:'support_manager',
-        text_en:'We also use many other systems across Customer Support. Here are a few examples.',
-        text_ar:'كما نستخدم العديد من الأنظمة الأخرى في دعم العملاء. وهذه بعض الأمثلة.'
-      },
-      CLICKUP_DEV_002: {
-        dialogue_key:'CLICKUP_DEV_002', speaker_key:'support_manager',
-        text_en:'We validate the need as the Customer Support Management Team and decide who owns the change before anything is sent for implementation.',
-        text_ar:'نتحقق من الحاجة كفريق إدارة دعم العملاء ونحدد الجهة المسؤولة عن التغيير قبل إرسال أي شيء للتنفيذ.'
-      }
-    };
-
-    const INDEX2_NATIVE_SHEET_LINES = new Set(
-      Object.keys(INDEX2_SHEET_DIALOGUE_LOCK)
-        .map(function(key){ return String(INDEX2_SHEET_DIALOGUE_LOCK[key].text_en || '').replace(/\s+/g,' ').trim(); })
-        .filter(function(text){ return text && !(window.TOUR_AUDIO_MAP || {})[text]; })
-    );
-
     function getDialogueRow(
       key,
       fallbackEn,
       fallbackAr,
       speakerKey
     ) {
-      const row = INDEX2_SHEET_DIALOGUE_LOCK[key] || dialogueMap[key] || {};
+      const row = dialogueMap[key] || {};
 
       const rawSpeakerKey = String(
         row.speaker_key || speakerKey || 'support_manager'
@@ -5038,7 +4968,7 @@
             speechStarted = speakText(shortText, profileKey, function() {
               managementSystemShort.classList.remove('is-speaking');
               advanceAfterCurrentSystem();
-            }, true);
+            });
           }
           catch (error) {
             speechStarted = false;
