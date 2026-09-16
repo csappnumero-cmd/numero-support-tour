@@ -412,10 +412,11 @@
   function presentationDialogue(){
     return (DATA.PresentationDialogue||[]).filter(function(r){return r&&clean(r.dialogue_key)&&enabled(r.active);}).map(function(r){
       var order=num(r.order_no,0), en=clean(r.text_en), ar=clean(r.text_ar);
+      /* Keep spoken PresentationDialogue text aligned with the prerecorded
+         fixed-audio manifest. Changing these exact lines here makes the Head
+         appear silent because the audio layer can no longer find the MP3 key. */
       en=en.replace(/The Committee Manager assigns/g,'The Committee Chair assigns')
-           .replace(/Let me introduce the management team first/g,'Let me introduce the Customer Support Management Team first')
-           .replace(/Certainly\. Let me introduce the Customer Support Management Team first, then I will show you how we coordinate issues and development requests\./g,'Certainly. Let me introduce the Customer Support Management Team first. We will start with our annual plan, KPIs and systems, then show you how we coordinate issues and development requests.')
-           .replace(/Together, we review issues and improvement needs, agree ownership, and decide the right next action\./g,'Together, we form the Customer Support Management Team. We plan, measure performance, review priorities, and agree on the actions needed across the center.');
+           .replace(/Let me introduce the management team first/g,'Let me introduce the Customer Support Management Team first');
       ar=ar.replace(/يقوم مسؤول اللجنة بتوزيع/g,'يقوم رئيس اللجنة بتوزيع')
            .replace(/دعني أعرّفك أولًا على فريق الإدارة/g,'دعني أعرّفك أولًا على فريق إدارة دعم العملاء');
       var originalSpeaker=clean(r.speaker_key);
