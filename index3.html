@@ -8531,55 +8531,11 @@
       };
 
       /* =========================================================
-         V21 — NEXT-LINE STALL RECOVERY
-         Safety net for the semantic BACK feature. If a dialogue line is
-         visible and nothing is being narrated while its completion never
-         arrives, re-dispatch it once; if it is still silent, release the
-         timeline so the presentation keeps reading the following lines.
+         SAFE BACK AUDIO — global silent-line retry intentionally removed.
+         The node-specific BACK completion guard above remains active.
+         Normal dialogue audio is never cancelled/re-dispatched by a background
+         retry loop, so fixed MP3 voice routing stays unchanged.
       ========================================================== */
-      (function(){
-        var watchedNode=null, silentSince=0, retried=false;
-
-        function visibleDialogueNode3(){
-          var list = phase==='intro' ? numeroIntroNodes3 : (phase==='ending' ? numeroEndingNodes3 : null);
-          if(!list) return null;
-          for(var i=0;i<list.length;i++){
-            var n=list[i];
-            if(n && n.classList.contains('show') && !n.classList.contains('hide')) return n;
-          }
-          return null;
-        }
-
-        window.setInterval(function(){
-          if(!numeroIndex3VoicePreferenceOn()) return;
-          if(isPresentationPaused()){ silentSince=0; return; }
-
-          var node=visibleDialogueNode3();
-          if(!node || !node.id){ watchedNode=null; silentSince=0; retried=false; return; }
-          if(node!==watchedNode){ watchedNode=node; silentSince=0; retried=false; return; }
-          if(dialogueVoiceCompleted.has(node.id)){ silentSince=0; return; }
-          if(numeroIndex3NarrationBusy()){ silentSince=0; return; }
-
-          var now=performance.now();
-          if(!silentSince){ silentSince=now; return; }
-
-          if(!retried && now-silentSince>=2200){
-            retried=true;
-            silentSince=now;
-            try{
-              if(typeof window.supportTourForceSpeakNode==='function'){
-                window.supportTourForceSpeakNode(node);
-              }
-            }catch(e){}
-            return;
-          }
-
-          if(retried && now-silentSince>=3200){
-            silentSince=0;
-            dialogueVoiceCompleted.add(node.id);
-          }
-        },250);
-      })();
 
 })();
 
