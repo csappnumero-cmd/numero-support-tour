@@ -385,6 +385,38 @@
     }
     var gateEl = null;
 
+    function pickMatchingNativeVoice(){
+      try {
+        var mapItem = (window.TOUR_AUDIO_MAP || {})[fullText] || null;
+        var wanted = mapItem && mapItem.voice ? String(mapItem.voice).toLowerCase() : '';
+        var base = wanted.replace(/^.*-/, '').replace(/neural$/i, '').trim();
+        var aliases = {
+          guy:['guy'], christopher:['christopher'], eric:['eric'],
+          ava:['ava'], aria:['aria'], jenny:['jenny']
+        };
+        var tokens = aliases[base] || (base ? [base] : []);
+        if (!tokens.length) return utterance && utterance.voice ? utterance.voice : null;
+        var voices = synth.getVoices ? (synth.getVoices() || []) : [];
+        var ranked = voices.filter(function(v){
+          var lang = String(v && v.lang || '').toLowerCase();
+          return !lang || lang.indexOf('en') === 0;
+        }).map(function(v){
+          var name = (String(v && v.name || '') + ' ' + String(v && v.voiceURI || '')).toLowerCase();
+          var score = 0;
+          tokens.forEach(function(t){ if (name.indexOf(t) >= 0) score += 1000; });
+          if (name.indexOf('natural') >= 0) score += 80;
+          if (name.indexOf('online') >= 0) score += 50;
+          if (name.indexOf('microsoft') >= 0) score += 20;
+          if (/^en[-_]us/.test(String(v && v.lang || '').toLowerCase())) score += 20;
+          return {voice:v,score:score};
+        }).filter(function(x){ return x.score >= 1000; })
+          .sort(function(a,b){ return b.score-a.score; });
+        return ranked.length ? ranked[0].voice : (utterance && utterance.voice ? utterance.voice : null);
+      } catch(e) {
+        return utterance && utterance.voice ? utterance.voice : null;
+      }
+    }
+
     function fallbackToNativeSpeech(){
       if (endedFired || mySerial !== serial) return;
       endedFired = true;
@@ -405,7 +437,7 @@
       try {
         if (typeof window.SpeechSynthesisUtterance === 'function') {
           var nativeUtterance = new SpeechSynthesisUtterance(fullText);
-          try { nativeUtterance.voice = utterance && utterance.voice ? utterance.voice : null; } catch(e) {}
+          try { nativeUtterance.voice = pickMatchingNativeVoice(); } catch(e) {}
           try { nativeUtterance.lang = (utterance && utterance.lang) || 'en-US'; } catch(e) {}
           try { nativeUtterance.rate = (utterance && utterance.rate) || 1; } catch(e) {}
           try { nativeUtterance.pitch = (utterance && utterance.pitch) || 1; } catch(e) {}

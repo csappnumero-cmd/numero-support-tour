@@ -98,7 +98,7 @@
      exposes them, and save the exact voice name/URI in localStorage.
      This keeps management and recurring characters consistent from page
      to page while still giving visitor/team pools different voices. */
-  var VOICE_MAP_KEY='numero_support_voice_map_us_v7_safe_visitors';
+  var VOICE_MAP_KEY='numero_support_voice_map_us_v9_fixed_management';
 
   var femaleTokens=[
     'jenny','aria','ava','emma','michelle','sonia','libby','susan','karen','victoria','fiona','tessa','moira','natasha',
@@ -116,9 +116,9 @@
      gender.  Assistant Head gets first pick because it is the user's main
      recurring character. */
   var preferredBySpeaker={
-    assistant_head:['guy online','guy','christopher online','christopher','eric online','eric','andrew online','andrew'],
-    support_manager:['davis online','davis','roger online','roger','brian online','brian','david','mark'],
-    quality_manager:['ryan online','ryan','jason online','jason','david','mark','george'],
+    assistant_head:['christopher online','christopher','andrew online','andrew','brian online','brian','david','mark'],
+    support_manager:['guy online','guy','davis online','davis','roger online','roger','brian online','brian','david','mark'],
+    quality_manager:['eric online','eric','ryan online','ryan','jason online','jason','david','mark','george'],
     ai_employee:['eric online','eric','christopher','andrew','brian','roger'],
 
     visitor_female_01:['jenny online','jenny','aria online','aria','zira'],
@@ -299,7 +299,7 @@
          rest.  With enough installed voices, each visitor/team member gets a
          distinct voice.  When the OS has fewer voices, reuse is deterministic
          and rate/pitch still remain fixed per character. */
-      var priority={assistant_head:0,support_manager:1,quality_manager:2,ai_employee:3};
+      var priority={support_manager:0,assistant_head:1,quality_manager:2,ai_employee:3};
       var allocation=profiles.slice().sort(function(a,b){
         var pa=Object.prototype.hasOwnProperty.call(priority,a.speaker_key)?priority[a.speaker_key]:50;
         var pb=Object.prototype.hasOwnProperty.call(priority,b.speaker_key)?priority[b.speaker_key]:50;

@@ -54,11 +54,11 @@
   <base target="_top">
   <link rel="stylesheet" href="tour-runtime.css?v=20260916-exactfix-1789553853">
   <script src="tour-data.js?v=20260916-exactfix-1789553853"></script>
-  <script src="tour-runtime.js?v=20260916-true-start-v8"></script>
+  <script src="tour-runtime.js?v=20260916-head-voice-v9"></script>
   
   <!-- FIXED_TOUR_AUDIO -->
   <script src="tour-audio-map.js?v=20260916-exactfix-1789553853"></script>
-  <script src="tour-audio.js?v=20260916-true-start-v8"></script>
+  <script src="tour-audio.js?v=20260916-head-voice-v9"></script>
 <meta charset="UTF-8">
 
   <meta
@@ -2930,7 +2930,7 @@
         title: 'HEAD OF CUSTOMER SUPPORT CENTER',
         gender: 'male',
         lang: 'en-US',
-        voice_hint: '',
+        voice_hint: 'guy',
         rate: .93,
         pitch: .91
       },
@@ -2939,7 +2939,7 @@
         title: 'ASSISTANT HEAD OF CUSTOMER SUPPORT CENTER',
         gender: 'male',
         lang: 'en-US',
-        voice_hint: '',
+        voice_hint: 'christopher',
         rate: .96,
         pitch: .97
       },
@@ -2948,7 +2948,7 @@
         title: 'QUALITY MANAGER',
         gender: 'male',
         lang: 'en-US',
-        voice_hint: '',
+        voice_hint: 'eric',
         rate: .94,
         pitch: .92
       },
@@ -3368,6 +3368,21 @@
         !('SpeechSynthesisUtterance' in window)
       ) {
         return false;
+      }
+
+      /* The Head must never switch to an arbitrary browser voice mid-tour.
+         If a Head label/bridge has no prerecorded GuyNeural MP3, keep the
+         visual timing but do not speak it with a different synthetic voice. */
+      if (
+        speakerKey === 'support_manager' &&
+        window.supportTourFixedAudio &&
+        window.supportTourFixedAudio.usingFixedAudio
+      ) {
+        const fixedKey = String(text || '').replace(/\s+/g, ' ').trim();
+        const fixedMap = window.TOUR_AUDIO_MAP || {};
+        if (!fixedMap[fixedKey]) {
+          return false;
+        }
       }
 
 
