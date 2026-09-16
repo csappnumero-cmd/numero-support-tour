@@ -8380,8 +8380,20 @@
         transitionCover.classList.remove('active');
         numeroIntroNodes3.forEach(function(n){ if(n)n.classList.remove('show','hide'); });
         numeroEndingNodes3.forEach(function(n){ if(n)n.classList.remove('show','hide'); });
+        /*
+          V19: BACK can revisit an earlier line and then naturally reach lines
+          that were already spoken on the first pass. Reset BOTH completion
+          state and the voice observer's data-tour-spoken flag for the target
+          and every following intro line, so each one narrates again when it
+          becomes visible. Without this, the replayed previous line works but
+          the next Assistant Head line can stay silent until VOICE is toggled.
+        */
         for(let i=target;i<numeroIntroNodes3.length;i++){
-          const n=numeroIntroNodes3[i]; if(n&&n.id) dialogueVoiceCompleted.delete(n.id);
+          const n=numeroIntroNodes3[i];
+          if(n&&n.id){
+            dialogueVoiceCompleted.delete(n.id);
+            n.setAttribute('data-tour-spoken','0');
+          }
         }
         const node=numeroIntroNodes3[target];
         if(node){
@@ -8442,8 +8454,13 @@
         phase='ending'; phaseElapsed=0; firedEvents.clear(); lastTick=performance.now();
         transitionCover.classList.remove('active');
         numeroEndingNodes3.forEach(function(n){ if(n)n.classList.remove('show','hide'); });
+        /* Same reset for closing-dialogue replays. */
         for(let i=target;i<numeroEndingNodes3.length;i++){
-          const n=numeroEndingNodes3[i]; if(n&&n.id) dialogueVoiceCompleted.delete(n.id);
+          const n=numeroEndingNodes3[i];
+          if(n&&n.id){
+            dialogueVoiceCompleted.delete(n.id);
+            n.setAttribute('data-tour-spoken','0');
+          }
         }
         const node=numeroEndingNodes3[target];
         if(node){
