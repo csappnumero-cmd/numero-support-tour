@@ -52,13 +52,13 @@
 </script>
 
   <base target="_top">
-  <link rel="stylesheet" href="tour-runtime.css?v=20260916-exactfix-1789553853">
-  <script src="tour-data.js?v=20260916-exactfix-1789553853"></script>
-  <script src="tour-runtime.js?v=20260916-exactfix-1789553853"></script>
+  <link rel="stylesheet" href="tour-runtime.css?v=20260916-controls-v3">
+  <script src="tour-data.js?v=20260916-controls-v3"></script>
+  <script src="tour-runtime.js?v=20260916-controls-v3"></script>
   
   <!-- FIXED_TOUR_AUDIO -->
-  <script src="tour-audio-map.js?v=20260916-exactfix-1789553853"></script>
-  <script src="tour-audio.js?v=20260916-exactfix-1789553853"></script>
+  <script src="tour-audio-map.js?v=20260916-controls-v3"></script>
+  <script src="tour-audio.js?v=20260916-controls-v3"></script>
 <meta name="referrer" content="no-referrer">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -559,6 +559,14 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
+
+<style id="numero-top-pause-state-fix">
+#pauseBtn,#pauseToggle{min-width:46px!important;width:46px!important;height:40px!important;padding:0!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;font-size:0!important;line-height:1!important;letter-spacing:0!important;}
+#pauseBtn::before,#pauseToggle::before{content:'⏸';font-size:18px!important;line-height:1!important;}
+#pauseBtn[aria-label="Play"]::before,#pauseToggle[aria-label="Play"]::before{content:'▶';}
+#pauseBtn[aria-label="Pause"]::before,#pauseToggle[aria-label="Pause"]::before{content:'⏸';}
+</style>
+
 </head>
 <body>
 <main class="scene">
@@ -927,7 +935,6 @@
   function pauseTimeline(){
     if(state.paused)return;
     state.paused=true;
-    syncControls();
     if(state.timer){
       var e=Math.max(0,Date.now()-state.timerStarted);
       state.timerRemaining=Math.max(1,(state.timerRemaining||0)-e);
@@ -944,12 +951,17 @@
     if(!state.paused)return;
     state.paused=false;
     syncControls();
-    if(window.supportTourFixedAudio&&window.supportTourFixedAudio.usingFixedAudio&&state.currentUtterance){
+
+    var fixed=window.supportTourFixedAudio&&window.supportTourFixedAudio.usingFixedAudio;
+    var fixedActive=fixed&&typeof window.supportTourFixedAudio.isActive==='function'&&window.supportTourFixedAudio.isActive();
+    if(fixed&&state.currentUtterance&&fixedActive){
       try{window.speechSynthesis.resume();}catch(e){}
       return;
     }
+
     if(state.currentRow){
       clearTimer();
+      state.currentUtterance=null;
       speakAndAdvance(state.currentRow,state.token);
     }else{
       scheduleAdvance(state.timerRemaining||1000,state.token);
@@ -997,6 +1009,21 @@
   function start(rows){
     state.timeline=buildCompleteTimeline(rows);
     state.index=0;
+
+    var devEntry=false;
+    try{devEntry=new URLSearchParams(location.search).get('dev')==='1';}catch(e){}
+    if(devEntry){
+      state.paused=true;
+      state.token+=1;
+      clearTimer();
+      stopVoice();
+      updateProgress();
+      var firstRow=state.timeline[0]||null;
+      if(firstRow)showDialogue(firstRow);
+      syncControls();
+      return;
+    }
+
     runIndex(0);
   }
 

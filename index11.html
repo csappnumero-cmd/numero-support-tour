@@ -52,13 +52,13 @@
 </script>
 
   <base target="_top">
-  <link rel="stylesheet" href="tour-runtime.css?v=20260916-exactfix-1789553853">
-  <script src="tour-data.js?v=20260916-exactfix-1789553853"></script>
-  <script src="tour-runtime.js?v=20260916-exactfix-1789553853"></script>
+  <link rel="stylesheet" href="tour-runtime.css?v=20260916-controls-v3">
+  <script src="tour-data.js?v=20260916-controls-v3"></script>
+  <script src="tour-runtime.js?v=20260916-controls-v3"></script>
   
   <!-- FIXED_TOUR_AUDIO -->
-  <script src="tour-audio-map.js?v=20260916-exactfix-1789553853"></script>
-  <script src="tour-audio.js?v=20260916-exactfix-1789553853"></script>
+  <script src="tour-audio-map.js?v=20260916-controls-v3"></script>
+  <script src="tour-audio.js?v=20260916-controls-v3"></script>
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -796,6 +796,14 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
+
+<style id="numero-top-pause-state-fix">
+#pauseBtn,#pauseToggle{min-width:46px!important;width:46px!important;height:40px!important;padding:0!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;font-size:0!important;line-height:1!important;letter-spacing:0!important;}
+#pauseBtn::before,#pauseToggle::before{content:'⏸';font-size:18px!important;line-height:1!important;}
+#pauseBtn[aria-label="Play"]::before,#pauseToggle[aria-label="Play"]::before{content:'▶';}
+#pauseBtn[aria-label="Pause"]::before,#pauseToggle[aria-label="Pause"]::before{content:'⏸';}
+</style>
+
 </head>
 
 <body>
@@ -2279,7 +2287,6 @@
 
   els.pauseBtn.addEventListener('click',()=>{
     state.paused=!state.paused;
-    updateControls();
 
     if(state.paused){
       clearTimer();
