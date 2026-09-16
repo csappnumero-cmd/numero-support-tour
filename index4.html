@@ -3389,16 +3389,15 @@
 </style>
 
 
-<style id="numero-stable-play-pause-all-pages-v4">
-/* Keep the top Play/Pause control visually fixed on mouse, touch and focus. */
+<style id="numero-play-pause-stable-safe-v1">
+/* Visual-only fix. Do not rewrite button text/HTML or presentation state. */
 #presentationControl,#pauseBtn,#pauseToggle,#tourPauseToggle{
   box-sizing:border-box!important;
   transform:none!important;
   -webkit-transform:none!important;
   scale:1!important;
-  transition:none!important;
-  animation:none!important;
   transform-origin:center center!important;
+  animation:none!important;
   touch-action:manipulation;
   -webkit-tap-highlight-color:transparent;
 }
@@ -3409,29 +3408,21 @@
   transform:none!important;
   -webkit-transform:none!important;
   scale:1!important;
-  transition:none!important;
   animation:none!important;
 }
-#presentationControlIcon{
-  display:inline-flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  width:22px!important;
-  min-width:22px!important;
-  max-width:22px!important;
-  height:22px!important;
-  min-height:22px!important;
-  max-height:22px!important;
-  margin:0!important;
-  transform:none!important;
-  -webkit-transform:none!important;
-  line-height:1!important;
+#presentationControl{
+  min-width:46px!important;width:46px!important;max-width:46px!important;
+  min-height:40px!important;height:40px!important;max-height:40px!important;
+  padding:0!important;gap:0!important;
+}
+#pauseBtn,#pauseToggle,#tourPauseToggle{
+  min-width:46px!important;width:46px!important;max-width:46px!important;
+  min-height:40px!important;height:40px!important;max-height:40px!important;
+  padding:0!important;overflow:hidden!important;
 }
 @media (hover:none),(pointer:coarse){
   #presentationControl:hover,#pauseBtn:hover,#pauseToggle:hover,#tourPauseToggle:hover{
-    transform:none!important;
-    -webkit-transform:none!important;
-    scale:1!important;
+    transform:none!important;-webkit-transform:none!important;scale:1!important;
   }
 }
 </style>
@@ -6470,68 +6461,10 @@
 })();
 </script>
 
-<style id="numero-controls-final-v6">
-/* Final stable top controls: fixed geometry, no hover/tap growth, no clipped or duplicated labels. */
-#arabicToggle,#arBtn,#tourArabicToggle,
-#voiceToggle,#voiceBtn,#tourVoiceToggle,
-#pauseBtn,#pauseToggle,#tourPauseToggle,
-#languageControl,#soundControl{
-  box-sizing:border-box!important;
-  flex:0 0 46px!important;
-  min-width:46px!important;width:46px!important;max-width:46px!important;
-  min-height:40px!important;height:40px!important;max-height:40px!important;
-  padding:0!important;
-  display:inline-flex!important;align-items:center!important;justify-content:center!important;
-  overflow:hidden!important;white-space:nowrap!important;
-  font-size:0!important;letter-spacing:0!important;line-height:1!important;
-  transform:none!important;-webkit-transform:none!important;scale:1!important;
-  transform-origin:center center!important;
-  transition:background-color .12s ease,border-color .12s ease,color .12s ease,opacity .12s ease!important;
-  animation:none!important;
-  touch-action:manipulation;
-  -webkit-tap-highlight-color:transparent;
-}
-#arabicToggle:hover,#arabicToggle:active,#arabicToggle:focus,#arabicToggle:focus-visible,
-#arBtn:hover,#arBtn:active,#arBtn:focus,#arBtn:focus-visible,
-#tourArabicToggle:hover,#tourArabicToggle:active,#tourArabicToggle:focus,#tourArabicToggle:focus-visible,
-#voiceToggle:hover,#voiceToggle:active,#voiceToggle:focus,#voiceToggle:focus-visible,
-#voiceBtn:hover,#voiceBtn:active,#voiceBtn:focus,#voiceBtn:focus-visible,
-#tourVoiceToggle:hover,#tourVoiceToggle:active,#tourVoiceToggle:focus,#tourVoiceToggle:focus-visible,
-#pauseBtn:hover,#pauseBtn:active,#pauseBtn:focus,#pauseBtn:focus-visible,
-#pauseToggle:hover,#pauseToggle:active,#pauseToggle:focus,#pauseToggle:focus-visible,
-#tourPauseToggle:hover,#tourPauseToggle:active,#tourPauseToggle:focus,#tourPauseToggle:focus-visible,
-#languageControl:hover,#languageControl:active,#languageControl:focus,#languageControl:focus-visible,
-#soundControl:hover,#soundControl:active,#soundControl:focus,#soundControl:focus-visible{
-  transform:none!important;-webkit-transform:none!important;scale:1!important;
-  min-width:46px!important;width:46px!important;max-width:46px!important;
-  min-height:40px!important;height:40px!important;max-height:40px!important;
-}
-.numero-control-glyph{
-  display:inline-flex!important;align-items:center!important;justify-content:center!important;
-  width:28px!important;height:24px!important;margin:0!important;padding:0!important;
-  font:900 16px/1 Arial,Helvetica,sans-serif!important;
-  letter-spacing:0!important;white-space:nowrap!important;pointer-events:none!important;
-  transform:none!important;-webkit-transform:none!important;
-}
-.numero-control-glyph.voice{font-size:19px!important;font-family:Arial,Helvetica,sans-serif!important}
-.numero-control-glyph.pause{font-size:17px!important;font-family:Arial,Helvetica,sans-serif!important}
-/* Existing span-based controls on index2: hide the long labels but keep the icon shell fixed. */
-#languageControlText,#soundControlText{display:none!important}
-#languageControlIcon,#soundControlIcon{margin:0!important;transform:none!important;-webkit-transform:none!important}
-@media (hover:none),(pointer:coarse){
-  #arabicToggle:hover,#arBtn:hover,#tourArabicToggle:hover,
-  #voiceToggle:hover,#voiceBtn:hover,#tourVoiceToggle:hover,
-  #pauseBtn:hover,#pauseToggle:hover,#tourPauseToggle:hover,
-  #languageControl:hover,#soundControl:hover{transform:none!important;-webkit-transform:none!important;scale:1!important}
-}
-</style>
-<script id="numero-controls-final-v6-script">
+<script id="numero-final-compact-controls">
 (function(){
   'use strict';
-  var AR_IDS=['arabicToggle','arBtn','tourArabicToggle'];
-  var VOICE_IDS=['voiceToggle','voiceBtn','tourVoiceToggle'];
-  var PAUSE_IDS=['pauseBtn','pauseToggle','tourPauseToggle'];
-  var busy=false, queued=false;
+  var AR_KEY='support_center_ar', VOICE_KEY='support_center_voice';
 
   function get(ids){
     for(var i=0;i<ids.length;i++){
@@ -6540,124 +6473,198 @@
     }
     return null;
   }
-  function stored(key,fallback){
-    try{
-      var v=localStorage.getItem(key);
-      if(v===null) return fallback;
-      return v!=='0';
-    }catch(e){ return fallback; }
+  function compact(el){
+    if(!el) return;
+    el.style.setProperty('min-width','46px','important');
+    el.style.setProperty('width','46px','important');
+    el.style.setProperty('height','38px','important');
+    el.style.setProperty('padding','0','important');
+    el.style.setProperty('font-size','18px','important');
+    el.style.setProperty('letter-spacing','0','important');
+    el.style.setProperty('display','inline-flex','important');
+    el.style.setProperty('align-items','center','important');
+    el.style.setProperty('justify-content','center','important');
   }
-  function parseOnOff(text){
-    var t=String(text||'').toUpperCase();
-    if(/\b(?:VOICE\s+)?OFF\b/.test(t)) return false;
-    if(/\b(?:VOICE\s+)?ON\b/.test(t)) return true;
-    if(/\bAR\s+OFF\b/.test(t)) return false;
-    if(/\bAR\s+ON\b/.test(t)) return true;
-    return null;
+  function pref(key, fallback){
+    try{ var v=localStorage.getItem(key); return v===null?fallback:v==='1'; }
+    catch(e){ return fallback; }
   }
-  function makeGlyph(text,kind){
-    var s=document.createElement('span');
-    s.className='numero-control-glyph '+kind;
-    s.setAttribute('aria-hidden','true');
-    s.textContent=text;
-    return s;
+  function infer(text, key, fallback){
+    text=String(text||'').toUpperCase();
+    if(/\bOFF\b/.test(text)) return false;
+    if(/\bON\b/.test(text)) return true;
+    return pref(key,fallback);
   }
-  function setGlyph(btn,text,kind){
-    if(!btn) return;
-    var child=btn.firstElementChild;
-    if(btn.childElementCount===1 && child && child.classList.contains('numero-control-glyph') && child.textContent===text && child.classList.contains(kind)) return;
-    btn.replaceChildren(makeGlyph(text,kind));
-  }
-  function syncArabic(){
-    var b=get(AR_IDS); if(!b) return;
-    var nativeText=(b.textContent||'').trim();
-    var parsed=parseOnOff(nativeText);
-    if(parsed!==null) b.dataset.numeroArState=parsed?'1':'0';
-    var on=b.dataset.numeroArState ? b.dataset.numeroArState==='1' :
-      (b.classList.contains('active')||b.classList.contains('on') ? true : stored('support_center_ar',true));
-    b.dataset.numeroArState=on?'1':'0';
-    setGlyph(b,'AR','ar');
-    b.title=on?'Arabic translation: ON':'Arabic translation: OFF';
-    b.setAttribute('aria-label',b.title);
-  }
-  function syncVoice(){
-    var b=get(VOICE_IDS); if(!b) return;
-    var nativeText=(b.textContent||'').trim();
-    var parsed=parseOnOff(nativeText);
-    if(parsed!==null) b.dataset.numeroVoiceState=parsed?'1':'0';
-    if(/N\/A/i.test(nativeText)) b.dataset.numeroVoiceState='na';
-    var state=b.dataset.numeroVoiceState;
-    if(!state){
-      if(b.classList.contains('off')) state='0';
-      else if(b.classList.contains('active')||b.classList.contains('on')) state='1';
-      else state=stored('support_center_voice',true)?'1':'0';
-      b.dataset.numeroVoiceState=state;
+  var trIcon='<span aria-hidden="true" style="position:relative;width:25px;height:22px;display:inline-block;pointer-events:none">'+
+    '<span style="position:absolute;right:0;top:1px;width:16px;height:17px;border-radius:3px;background:#eef1f4;border:1px solid #bcc5ce;display:flex;align-items:center;justify-content:center;color:#4d5964;font:700 10px Arial;line-height:1">文</span>'+
+    '<span style="position:absolute;left:0;bottom:0;width:17px;height:17px;border-radius:3px;background:#4285f4;display:flex;align-items:center;justify-content:center;color:#fff;font:700 10px Arial;line-height:1;box-shadow:0 1px 2px rgba(0,0,0,.18)">G</span>'+
+    '</span>';
+
+  function sync(){
+    var ar=get(['arBtn','arabicToggle','tourArabicToggle']);
+    var voice=get(['voiceBtn','voiceToggle','tourVoiceToggle']);
+    var pause=get(['pauseBtn','pauseToggle','tourPauseToggle']);
+
+    if(ar){
+      var raw=ar.getAttribute('data-numero-last-native') || ar.textContent;
+      if(/\b(?:AR\s+)?(?:ON|OFF)\b/i.test(ar.textContent||'')){
+        raw=ar.textContent; ar.setAttribute('data-numero-last-native',raw);
+      }
+      var on=infer(raw,AR_KEY,true);
+      compact(ar);
+      if(ar.innerHTML!==trIcon) ar.innerHTML=trIcon;
+      ar.title=on?'Arabic translation: ON':'Arabic translation: OFF';
+      ar.setAttribute('aria-label',ar.title);
+      ar.style.setProperty('background',on?'#ffffff':'rgba(9,17,23,.78)','important');
+      ar.style.setProperty('border-color',on?'#ffffff':'rgba(255,255,255,.18)','important');
+      ar.style.setProperty('opacity',on?'1':'.65','important');
     }
-    var unavailable=state==='na';
-    var on=state==='1';
-    setGlyph(b,unavailable?'—':(on?'🔊':'🔇'),'voice');
-    b.title=unavailable?'Audio unavailable':(on?'Audio on':'Audio muted');
-    b.setAttribute('aria-label',b.title);
+
+    if(voice){
+      var vraw=voice.getAttribute('data-numero-last-native') || voice.textContent;
+      if(/\bVOICE\s+(?:ON|OFF)\b/i.test(voice.textContent||'')){
+        vraw=voice.textContent; voice.setAttribute('data-numero-last-native',vraw);
+      }
+      var von=infer(vraw,VOICE_KEY,true);
+      compact(voice);
+      var ico=von?'🔊':'🔇';
+      if(voice.textContent!==ico) voice.textContent=ico;
+      voice.title=von?'Sound: ON':'Sound: MUTED';
+      voice.setAttribute('aria-label',voice.title);
+      voice.style.setProperty('background',von?'rgba(9,17,23,.78)':'#b42318','important');
+      voice.style.setProperty('border-color',von?'rgba(255,255,255,.18)':'#ff6b5f','important');
+      voice.style.setProperty('color','#fff','important');
+    }
+
+    if(pause){
+      var praw=pause.getAttribute('data-numero-last-native') || pause.textContent;
+      if(/PAUSE|PLAY|REPLAY/i.test(pause.textContent||'')){
+        praw=pause.textContent; pause.setAttribute('data-numero-last-native',praw);
+      }
+      compact(pause);
+      var picon=/PLAY/i.test(praw)?'▶️':(/REPLAY/i.test(praw)?'↻':'⏸️');
+      if(pause.textContent!==picon) pause.textContent=picon;
+      pause.title=picon==='▶️'?'Play':(picon==='↻'?'Replay':'Pause');
+      pause.setAttribute('aria-label',pause.title);
+    }
   }
-  function syncPause(){
-    var b=get(PAUSE_IDS); if(!b) return;
-    var raw=((b.getAttribute('aria-label')||'')+' '+(b.textContent||'')).toUpperCase();
-    var action=b.dataset.numeroPauseAction||'';
-    if(/REPLAY|RESTART|↻/.test(raw)) action='replay';
-    else if(/\bPLAY\b|RESUME|▶/.test(raw)) action='play';
-    else if(/PAUSE|⏸/.test(raw)) action='pause';
-    if(!action) action='pause';
-    b.dataset.numeroPauseAction=action;
-    var icon=action==='play'?'▶':(action==='replay'?'↻':'⏸');
-    setGlyph(b,icon,'pause');
-    b.title=action==='play'?'Play':(action==='replay'?'Replay':'Pause');
-    b.setAttribute('aria-label',b.title);
-  }
-  function syncIndex2Shells(){
-    var lang=document.getElementById('languageControl');
-    var sound=document.getElementById('soundControl');
-    if(lang){lang.style.setProperty('transform','none','important');lang.style.setProperty('transition','none','important');}
-    if(sound){sound.style.setProperty('transform','none','important');sound.style.setProperty('transition','none','important');}
-  }
-  function syncAll(){
-    if(busy) return;
-    busy=true;
-    try{ syncArabic(); syncVoice(); syncPause(); syncIndex2Shells(); }
-    finally{ busy=false; }
-  }
-  function queue(){
-    if(queued) return;
-    queued=true;
-    Promise.resolve().then(function(){queued=false;syncAll();});
-  }
+
   function install(){
-    syncAll();
-    var obs=new MutationObserver(function(mutations){
-      if(busy) return;
-      for(var i=0;i<mutations.length;i++){
-        var t=mutations[i].target;
-        if(t && t.nodeType===3) t=t.parentElement;
-        if(!t) continue;
-        var btn=(t.tagName==='BUTTON')?t:(t.closest?t.closest('button'):null);
-        if(!btn) continue;
-        var id=btn.id||'';
-        if(AR_IDS.indexOf(id)>=0 || VOICE_IDS.indexOf(id)>=0 || PAUSE_IDS.indexOf(id)>=0 || id==='languageControl' || id==='soundControl'){
-          queue(); return;
-        }
-      }
-    });
-    if(document.body) obs.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class','aria-label']});
+    sync();
     document.addEventListener('click',function(e){
-      var b=e.target&&e.target.closest?e.target.closest('button'):null;
-      if(!b) return;
-      var id=b.id||'';
-      if(AR_IDS.indexOf(id)>=0 || VOICE_IDS.indexOf(id)>=0 || PAUSE_IDS.indexOf(id)>=0 || id==='languageControl' || id==='soundControl'){
-        setTimeout(syncAll,0); setTimeout(syncAll,60); setTimeout(syncAll,180);
+      var id=(e.target&&e.target.id)||'';
+      if(/^(arBtn|arabicToggle|tourArabicToggle|voiceBtn|voiceToggle|tourVoiceToggle|pauseBtn|pauseToggle|tourPauseToggle)$/.test(id)){
+        setTimeout(sync,80);
+        setTimeout(sync,250);
       }
-    },false);
+    },true);
+    setInterval(sync,700);
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',install,{once:true});
   else install();
+})();
+</script>
+<script id="numero-icon-controls-v3">
+(function(){
+  'use strict';
+  var AR_IDS=['arBtn','arabicToggle','tourArabicToggle'];
+  var VOICE_IDS=['voiceBtn','voiceToggle','tourVoiceToggle'];
+  var PAUSE_IDS=['pauseBtn','pauseToggle','tourPauseToggle'];
+
+  function firstByIds(ids){
+    for(var i=0;i<ids.length;i++){
+      var el=document.getElementById(ids[i]);
+      if(el) return el;
+    }
+    return null;
+  }
+
+  function forceBaseStyle(btn){
+    if(!btn) return;
+    btn.style.setProperty('width','46px','important');
+    btn.style.setProperty('min-width','46px','important');
+    btn.style.setProperty('height','38px','important');
+    btn.style.setProperty('padding','0','important');
+    btn.style.setProperty('display','inline-flex','important');
+    btn.style.setProperty('align-items','center','important');
+    btn.style.setProperty('justify-content','center','important');
+    btn.style.setProperty('font-size','18px','important');
+    btn.style.setProperty('letter-spacing','0','important');
+    btn.style.setProperty('line-height','1','important');
+  }
+
+  var translateIcon =
+    '<span class="numero-translate-icon" aria-hidden="true" style="position:relative;width:25px;height:22px;display:inline-block;pointer-events:none">' +
+      '<span style="position:absolute;right:0;top:1px;width:16px;height:17px;border-radius:3px;background:#eef1f4;border:1px solid #bcc5ce;display:flex;align-items:center;justify-content:center;color:#4d5964;font:700 10px Arial;line-height:1">文</span>' +
+      '<span style="position:absolute;left:0;bottom:0;width:17px;height:17px;border-radius:3px;background:#4285f4;display:flex;align-items:center;justify-content:center;color:#fff;font:700 10px Arial;line-height:1;box-shadow:0 1px 2px rgba(0,0,0,.18)">G</span>' +
+    '</span>';
+
+  function decorateArabic(){
+    var b=firstByIds(AR_IDS); if(!b) return;
+    var raw=(b.textContent||'').trim().toUpperCase();
+    if(raw.indexOf('AR ON')>=0) b.dataset.numeroAr='on';
+    else if(raw.indexOf('AR OFF')>=0) b.dataset.numeroAr='off';
+    if(!b.dataset.numeroAr) b.dataset.numeroAr=(b.classList.contains('active')||b.classList.contains('on'))?'on':'off';
+    forceBaseStyle(b);
+    if(!b.querySelector('.numero-translate-icon')) b.innerHTML=translateIcon;
+    var on=b.dataset.numeroAr==='on';
+    b.title=on?'Arabic translation: ON':'Arabic translation: OFF';
+    b.setAttribute('aria-label',b.title);
+    b.style.setProperty('background',on?'#ffffff':'rgba(9,17,23,.76)','important');
+    b.style.setProperty('border-color',on?'#ffffff':'rgba(255,255,255,.18)','important');
+    b.style.setProperty('opacity',on?'1':'.62','important');
+  }
+
+  function decorateVoice(){
+    var b=firstByIds(VOICE_IDS); if(!b) return;
+    var raw=(b.textContent||'').trim().toUpperCase();
+    if(raw.indexOf('VOICE ON')>=0 || raw==='🔊') b.dataset.numeroMuted='0';
+    else if(raw.indexOf('VOICE OFF')>=0 || raw==='🔇') b.dataset.numeroMuted='1';
+    if(!b.dataset.numeroMuted) b.dataset.numeroMuted=(b.classList.contains('active')||b.classList.contains('on'))?'0':'1';
+    forceBaseStyle(b);
+    var muted=b.dataset.numeroMuted==='1';
+    var icon=muted?'🔇':'🔊';
+    if(b.textContent!==icon) b.textContent=icon;
+    b.title=muted?'Audio muted':'Audio on';
+    b.setAttribute('aria-label',b.title);
+    b.style.setProperty('background',muted?'#c62828':'rgba(9,17,23,.82)','important');
+    b.style.setProperty('border-color',muted?'#ff6b6b':'rgba(255,255,255,.18)','important');
+    b.style.setProperty('color','#ffffff','important');
+  }
+
+  function decoratePause(){
+    var b=firstByIds(PAUSE_IDS); if(!b) return;
+    var raw=(b.textContent||'').trim().toUpperCase();
+    if(raw.indexOf('REPLAY')>=0 || raw==='↻') b.dataset.numeroAction='replay';
+    else if(raw.indexOf('PLAY')>=0 || raw==='▶' || raw==='▶️') b.dataset.numeroAction='play';
+    else if(raw.indexOf('PAUSE')>=0 || raw==='⏸' || raw==='⏸️') b.dataset.numeroAction='pause';
+    if(!b.dataset.numeroAction) b.dataset.numeroAction='pause';
+    forceBaseStyle(b);
+    var action=b.dataset.numeroAction;
+    var icon=action==='play'?'▶':(action==='replay'?'↻':'⏸');
+    if(b.textContent!==icon) b.textContent=icon;
+    b.title=action==='play'?'Play':(action==='replay'?'Replay':'Pause');
+    b.setAttribute('aria-label',b.title);
+  }
+
+  var queued=false;
+  function decorateAll(){ queued=false; decorateArabic(); decorateVoice(); decoratePause(); }
+  function queueDecorate(){ if(queued) return; queued=true; Promise.resolve().then(decorateAll); }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',decorateAll,{once:true});
+  else decorateAll();
+
+  var obs=new MutationObserver(function(mutations){
+    for(var i=0;i<mutations.length;i++){
+      var t=mutations[i].target;
+      if(t && t.nodeType===3) t=t.parentElement;
+      if(!t) continue;
+      var btn=(t.tagName==='BUTTON')?t:(t.closest?t.closest('button'):null);
+      var id=btn?btn.id:'';
+      if(AR_IDS.indexOf(id)>=0 || VOICE_IDS.indexOf(id)>=0 || PAUSE_IDS.indexOf(id)>=0){ queueDecorate(); return; }
+    }
+  });
+  if(document.body) obs.observe(document.body,{subtree:true,childList:true,characterData:true});
 })();
 </script>
 </body>
