@@ -852,6 +852,54 @@
 }
 </style>
 
+
+<style id="numero-stable-top-controls-v5">
+/* Keep AR / Voice controls fixed even when page scripts rewrite AR ON / VOICE ON text. */
+#arabicToggle,#arBtn,#tourArabicToggle,#voiceToggle,#voiceBtn,#tourVoiceToggle{
+  box-sizing:border-box!important;
+  flex:0 0 46px!important;
+  min-width:46px!important;width:46px!important;max-width:46px!important;
+  min-height:40px!important;height:40px!important;max-height:40px!important;
+  padding:0!important;margin-top:0!important;margin-bottom:0!important;
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  overflow:hidden!important;white-space:nowrap!important;
+  font-size:0!important;letter-spacing:0!important;line-height:1!important;
+  transform:none!important;-webkit-transform:none!important;scale:1!important;
+  transform-origin:center center!important;
+  transition:background-color .12s ease,border-color .12s ease,color .12s ease,opacity .12s ease!important;
+  animation:none!important;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+}
+#arabicToggle:hover,#arabicToggle:active,#arabicToggle:focus,#arabicToggle:focus-visible,
+#arBtn:hover,#arBtn:active,#arBtn:focus,#arBtn:focus-visible,
+#tourArabicToggle:hover,#tourArabicToggle:active,#tourArabicToggle:focus,#tourArabicToggle:focus-visible,
+#voiceToggle:hover,#voiceToggle:active,#voiceToggle:focus,#voiceToggle:focus-visible,
+#voiceBtn:hover,#voiceBtn:active,#voiceBtn:focus,#voiceBtn:focus-visible,
+#tourVoiceToggle:hover,#tourVoiceToggle:active,#tourVoiceToggle:focus,#tourVoiceToggle:focus-visible{
+  transform:none!important;-webkit-transform:none!important;scale:1!important;
+  min-width:46px!important;width:46px!important;max-width:46px!important;
+  min-height:40px!important;height:40px!important;max-height:40px!important;
+}
+/* Page/runtime scripts sometimes inject labels or icon spans; hide them so no temporary reflow can occur. */
+#arabicToggle > *,#arBtn > *,#tourArabicToggle > *,
+#voiceToggle > *,#voiceBtn > *,#tourVoiceToggle > *{display:none!important}
+#arabicToggle::before,#arBtn::before,#tourArabicToggle::before{
+  content:'AR';display:inline-flex!important;align-items:center;justify-content:center;
+  font:900 12px/1 Arial,Helvetica,sans-serif!important;letter-spacing:.2px!important;
+}
+#voiceToggle::before,#voiceBtn::before,#tourVoiceToggle::before{
+  content:'🔇';display:inline-flex!important;align-items:center;justify-content:center;
+  font-size:18px!important;line-height:1!important;
+}
+#voiceToggle.active::before,#voiceToggle.on::before,
+#voiceBtn.active::before,#voiceBtn.on::before,
+#tourVoiceToggle.active::before,#tourVoiceToggle.on::before{content:'🔊'}
+@media (hover:none),(pointer:coarse){
+  #arabicToggle:hover,#arBtn:hover,#tourArabicToggle:hover,
+  #voiceToggle:hover,#voiceBtn:hover,#tourVoiceToggle:hover{transform:none!important;-webkit-transform:none!important;scale:1!important}
+}
+</style>
+
 </head>
 
 <body>

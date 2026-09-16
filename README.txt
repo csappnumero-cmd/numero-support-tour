@@ -1,17 +1,11 @@
-Replace ONLY these files in the current website project:
-- tour-runtime.js
-- tour-audio.js
+Replace these files in the current website project:
 - index6.html
-- index9.html
-- index10.html
-- index11.html
+- tour-audio.js
 - build-version.txt
 
-This build is based on the ZIP you uploaded, before the last failed patch.
-
-Fixes:
-- DEV -> Management Structure lands intentionally paused with ▶ so it cannot freeze on blocked first audio. One click starts the first line.
-- Top pause buttons show ⏸ while playing and ▶ while paused via aria-state CSS, independent of text rewrites.
-- Fixed MP3 playback has a safe end guard that only advances when the real MP3 reaches its end.
-- Employee local system screenshot support is preserved.
-- build-version is bumped for the existing automatic cache refresh.
+Fixes in this build:
+- Removed the delayed 80 ms speechSynthesis.cancel() race that stopped index6's first MP3 without firing its completion event.
+- index6 now starts immediately even when the URL contains ?dev=1.
+- Fixed-audio playback now has startup/stall/error safety so a broken audio file cannot freeze the presentation forever.
+- Pause/resume keeps the active MP3 position and the pause/play icon remains synchronized with the state.
+- build-version was bumped to force the existing cache refresh.
