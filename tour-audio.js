@@ -199,7 +199,7 @@
 
     var subHint = document.createElement('div');
     subHint.dir = 'rtl';
-    subHint.textContent = 'اضغط بدء الجولة لتفعيل الصوت — ولن يتم تخطي أول جملة.';
+    subHint.textContent = 'Click START TOUR to begin with audio.';
     subHint.style.cssText = 'font-size:12px;line-height:1.55;color:rgba(255,255,255,.52);margin-top:5px;';
 
     var errorHint = document.createElement('div');
