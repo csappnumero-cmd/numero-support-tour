@@ -808,7 +808,7 @@
   <div class="controls">
     <button id="arBtn" class="ctl">AR OFF</button>
     <button id="voiceBtn" class="ctl">VOICE ON</button>
-    <button id="pauseBtn" class="ctl">PAUSE</button>
+    <button id="pauseBtn" class="ctl" aria-label="Pause">⏸</button>
   </div>
 
   <div id="visualHost" class="stage"></div>
@@ -2202,7 +2202,8 @@
     els.voiceBtn.textContent=state.voice?'VOICE ON':'VOICE OFF';
     els.voiceBtn.classList.toggle('on',state.voice);
 
-    els.pauseBtn.textContent=state.paused?'PLAY':'PAUSE';
+    els.pauseBtn.textContent=state.paused?'▶':'⏸';
+    els.pauseBtn.setAttribute('aria-label',state.paused?'Play':'Pause');
     els.ar.classList.toggle('on',state.arabic);
   }
 

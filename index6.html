@@ -571,7 +571,7 @@
     <div class="controls">
       <button id="arabicToggle" class="ctl">AR OFF</button>
       <button id="voiceToggle" class="ctl">VOICE ON</button>
-      <button id="pauseToggle" class="ctl">PAUSE</button>
+      <button id="pauseToggle" class="ctl" aria-label="Pause">⏸</button>
     </div>
   </header>
   <div class="progress"><div id="progressFill"></div></div>
@@ -718,7 +718,7 @@
     document.body.classList.toggle('tour-arabic-enabled',state.arabicEnabled);
     els.arabicToggle.textContent=state.arabicEnabled?'AR ON':'AR OFF'; els.arabicToggle.classList.toggle('active',state.arabicEnabled);
     els.voiceToggle.textContent=state.voiceEnabled?'VOICE ON':'VOICE OFF'; els.voiceToggle.classList.toggle('active',state.voiceEnabled);
-    els.pauseToggle.textContent=state.paused?'PLAY':'PAUSE'; els.pauseToggle.classList.toggle('active',state.paused);
+    els.pauseToggle.textContent=state.paused?'▶':'⏸'; els.pauseToggle.setAttribute('aria-label',state.paused?'Play':'Pause'); els.pauseToggle.classList.toggle('active',state.paused);
   }
   function normalizeGender(v){v=String(v||'').toLowerCase();return v.indexOf('female')>-1?'female':v.indexOf('male')>-1?'male':''}
   function defaultProfile(k){
@@ -889,6 +889,7 @@
         if(settled||lineFinished||token!==state.token||serial!==state.speechSerial){clearSpeechWatchdog();return}
         var now=Date.now(),elapsed=now-last;last=now;
         if(state.paused||window.speechSynthesis.paused)return;
+        if(window.supportTourFixedAudio&&window.supportTourFixedAudio.usingFixedAudio)return;
         budget-=elapsed;
         if(budget<=0){
           settled=true;clearSpeechWatchdog();

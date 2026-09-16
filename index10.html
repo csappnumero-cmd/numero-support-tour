@@ -710,7 +710,7 @@ body:has(#photoScene.active) .ctl{
     <div class="controls">
       <button id="arabicToggle" class="ctl">AR OFF</button>
       <button id="voiceToggle" class="ctl">VOICE ON</button>
-      <button id="pauseBtn" class="ctl">PAUSE</button>
+      <button id="pauseBtn" class="ctl" aria-label="Pause">⏸</button>
     </div>
 
     <!-- ==========================================================
@@ -1327,7 +1327,8 @@ body:has(#photoScene.active) .ctl{
     els.voiceToggle.textContent = state.voiceEnabled ? 'VOICE ON' : 'VOICE OFF';
     els.voiceToggle.classList.toggle('on', state.voiceEnabled);
 
-    els.pauseBtn.textContent = state.paused ? 'PLAY' : 'PAUSE';
+    els.pauseBtn.textContent = state.paused ? '▶' : '⏸';
+    els.pauseBtn.setAttribute('aria-label', state.paused ? 'Play' : 'Pause');
 
     els.photoDialogueAr.classList.toggle('on', state.arabicEnabled);
     els.systemDialogueAr.classList.toggle('on', state.arabicEnabled);
@@ -1441,18 +1442,50 @@ body:has(#photoScene.active) .ctl{
 
   function systemImageCandidates(system) {
     const list=[];
+
     function add(value){
-      const v=String(value||'').trim();
-      if(!v || !/^https?:\/\//i.test(v) || list.indexOf(v)>=0) return;
-      list.push(v);
+      if(value===null || value===undefined) return;
+      const v=String(value).trim();
+      if(!v || v==='-' || /^javascript:/i.test(v) || list.indexOf(v)>=0) return;
+
+      /* Website version: screenshots may be local paths such as
+         assets/images/file.png, not only http(s) URLs. */
+      const valid =
+        /^https?:\/\//i.test(v) ||
+        /^data:image\//i.test(v) ||
+        /^blob:/i.test(v) ||
+        /^(?:\.\.?\/)?assets\//i.test(v) ||
+        /^[^:?#]+\.(?:png|jpe?g|webp|gif|svg)(?:[?#].*)?$/i.test(v);
+
+      if(valid) list.push(v);
     }
+
+    function addMany(value){
+      if(Array.isArray(value)){
+        value.forEach(add);
+        return;
+      }
+      const raw=String(value||'').trim();
+      if(!raw || raw==='-') return;
+
+      /* Accept JSON arrays as well as newline/semicolon/comma-separated links. */
+      if(raw.charAt(0)==='['){
+        try{
+          const arr=JSON.parse(raw);
+          if(Array.isArray(arr)){ arr.forEach(add); return; }
+        }catch(e){}
+      }
+
+      raw.split(/\r?\n|[;,]+/).forEach(add);
+    }
+
     if(!system) return list;
     add(system.image_url);
+    addMany(system.image_urls);
     add(system.screenshot_url);
     add(system.screenshot);
     add(system.image);
-    if(Array.isArray(system.screenshots)) system.screenshots.forEach(add);
-    else add(system.screenshots);
+    addMany(system.screenshots);
     return list;
   }
 
