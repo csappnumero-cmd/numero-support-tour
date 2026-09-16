@@ -24,6 +24,8 @@
   var activeAudio = null;
   var serial = 0;
   var paused = false;
+  var activeAudioHasStarted = false;
+  var activeAudioStartTimer = null;
   var chunkSequence = null;     // full MP3 already played; silently consume later chunks
   var pendingAmbiguous = null;  // wait for enough chunks to identify a line
 
@@ -159,6 +161,11 @@
 
   function stopAudio(){
     serial += 1;
+    if (activeAudioStartTimer) {
+      try { clearTimeout(activeAudioStartTimer); } catch(e) {}
+      activeAudioStartTimer = null;
+    }
+    activeAudioHasStarted = false;
     try {
       var __g = document.querySelector('[data-tour-audio-gate="1"]');
       if (__g && __g.parentNode) __g.parentNode.removeChild(__g);
@@ -184,15 +191,19 @@
   synth.cancel = function(){ stopAudio(); try { original.cancel(); } catch(e) {} };
   synth.pause = function(){
     paused = true;
+    try { __syncPauseButtons(); } catch(e) {}
     if (activeAudio) { try { activeAudio.pause(); } catch(e) {} }
     try { original.pause(); } catch(e) {}
+    try { setTimeout(__syncPauseButtons, 0); setTimeout(__syncPauseButtons, 80); } catch(e) {}
   };
   synth.resume = function(){
     paused = false;
+    try { __syncPauseButtons(); } catch(e) {}
     if (activeAudio) {
       try { var p=activeAudio.play(); if(p&&p.catch)p.catch(function(){}); } catch(e) {}
     }
     try { original.resume(); } catch(e) {}
+    try { setTimeout(__syncPauseButtons, 0); setTimeout(__syncPauseButtons, 80); } catch(e) {}
   };
 
   function startFullAudio(fullText, consumedText, utterance){
@@ -204,6 +215,11 @@
     var audio = new Audio(item.file);
     audio.preload = 'auto';
     activeAudio = audio;
+    activeAudioHasStarted = false;
+    if (activeAudioStartTimer) {
+      try { clearTimeout(activeAudioStartTimer); } catch(e) {}
+      activeAudioStartTimer = null;
+    }
     pendingAmbiguous = null;
 
     var consumed = norm(consumedText);
@@ -213,7 +229,16 @@
       chunkSequence = null;
     }
 
-    function clearAudioOnly(){ if (mySerial === serial) activeAudio = null; }
+    function clearAudioOnly(){
+      if (mySerial === serial) {
+        activeAudio = null;
+        activeAudioHasStarted = false;
+        if (activeAudioStartTimer) {
+          try { clearTimeout(activeAudioStartTimer); } catch(e) {}
+          activeAudioStartTimer = null;
+        }
+      }
+    }
     function fireEnd(){
       if (mySerial !== serial) return;
       clearAudioOnly();
@@ -308,10 +333,47 @@
 
     audio.onended=function(){ removeGate(); fireEnd(); };
     audio.onerror=fallback;
+    audio.addEventListener('playing', function(){
+      if (mySerial !== serial) return;
+      activeAudioHasStarted = true;
+      if (activeAudioStartTimer) {
+        try { clearTimeout(activeAudioStartTimer); } catch(e) {}
+        activeAudioStartTimer = null;
+      }
+      removeGate();
+    });
+
+    function handlePlayFailure(err){
+      if (mySerial !== serial || activeAudioHasStarted || paused) return;
+      if (err && err.name === 'NotAllowedError') {
+        showAutoplayGate();
+        return;
+      }
+      /* AbortError often means the browser interrupted an early play() while
+         the MP3 was still loading. Retry when media is ready instead of
+         freezing the tour or falling back immediately. */
+      if (err && err.name === 'AbortError') return;
+      fallback();
+    }
+
+    function tryStartAudio(){
+      if (mySerial !== serial || activeAudioHasStarted || paused) return;
+      try {
+        var playPromise = audio.play();
+        if (playPromise && playPromise.catch) playPromise.catch(handlePlayFailure);
+      } catch(e) {
+        handlePlayFailure(e);
+      }
+    }
+
+    /* A DEV jump can land on a page before its first MP3 has enough data.
+       Retrying on canplay + a short readiness watchdog prevents the scene from
+       sitting forever until the user presses Pause/Play. */
+    audio.addEventListener('canplay', function(){ tryStartAudio(); }, {once:true});
+    audio.addEventListener('loadeddata', function(){ tryStartAudio(); }, {once:true});
+    try { audio.load(); } catch(e) {}
 
     // On the first page, wait for the explicit START TOUR click.
-    // Holding utterance.onend here keeps the tour on the first scene without
-    // hijacking any page timers.
     if (isDoorPage && !userStarted) {
       pendingFirstPlay = {
         audio: audio,
@@ -323,21 +385,24 @@
       return true;
     }
 
-    try {
-      var p=audio.play();
-      if(paused) audio.pause();
-      if(p&&p.catch)p.catch(function(err){
-        // Normal browsers may still block autoplay on later pages.
-        if (err && (err.name === 'NotAllowedError' || err.name === 'AbortError')) {
-          showAutoplayGate();
-        } else {
-          fallback();
-        }
-      });
-    } catch(e) {
-      if (e && (e.name === 'NotAllowedError' || e.name === 'AbortError')) showAutoplayGate();
-      else fallback();
-    }
+    tryStartAudio();
+
+    activeAudioStartTimer = setTimeout(function(){
+      if (mySerial !== serial || activeAudioHasStarted || paused) return;
+      if (audio.readyState >= 2) {
+        tryStartAudio();
+      } else {
+        try { audio.load(); } catch(e) {}
+      }
+
+      /* Never leave a DEV jump looking frozen. If playback still did not start,
+         surface the explicit audio-unlock gate instead of silently hanging. */
+      setTimeout(function(){
+        if (mySerial !== serial || activeAudioHasStarted || paused) return;
+        showAutoplayGate();
+      }, 1400);
+    }, 900);
+
     return true;
   }
 
@@ -390,6 +455,59 @@
     // Not part of the generated tour audio: keep original browser TTS as a safety fallback.
     return original.speak(utterance);
   };
+
+
+  /* Keep pause/play icons tied to the REAL fixed-audio paused state.
+     This is intentionally shared because several pages use different local
+     pause-button implementations. */
+  function __pauseButton(){
+    return document.getElementById('pauseBtn') ||
+           document.getElementById('pauseToggle') ||
+           document.getElementById('presentationControl');
+  }
+
+  function __syncPauseButtons(){
+    var btn = __pauseButton();
+    if (!btn) return;
+
+    /* Prefer the page's own state label when it exists. This also works when
+       the user pauses between spoken lines and there is no active MP3 for
+       speechSynthesis.pause() to update. */
+    var nativeLabel = String(btn.getAttribute('aria-label') || '').toLowerCase();
+    var uiPaused = paused;
+    if (nativeLabel.indexOf('play') >= 0 || nativeLabel.indexOf('resume') >= 0) uiPaused = true;
+    else if (nativeLabel.indexOf('pause') >= 0) uiPaused = false;
+
+    var symbol = uiPaused ? '▶' : '⏸';
+    var icon = document.getElementById('presentationControlIcon');
+    var text = document.getElementById('presentationControlText');
+    if (btn.id === 'presentationControl' && icon) {
+      icon.textContent = symbol;
+      if (text) text.style.display = 'none';
+    } else {
+      if (btn.textContent !== symbol) btn.textContent = symbol;
+    }
+    btn.setAttribute('aria-label', uiPaused ? 'Play' : 'Pause');
+    btn.title = uiPaused ? 'Play' : 'Pause';
+    try {
+      btn.style.setProperty('min-width','46px','important');
+      btn.style.setProperty('width','46px','important');
+      btn.style.setProperty('padding','0','important');
+      btn.style.setProperty('letter-spacing','0','important');
+      btn.style.setProperty('display','inline-flex','important');
+      btn.style.setProperty('align-items','center','important');
+      btn.style.setProperty('justify-content','center','important');
+    } catch(e) {}
+  }
+
+  document.addEventListener('click', function(ev){
+    var t = ev.target && ev.target.closest ? ev.target.closest('#pauseBtn,#pauseToggle,#presentationControl') : null;
+    if (!t) return;
+    /* Target handlers run before this document bubble handler.  A second pass
+       covers pages whose local handler updates after the click stack. */
+    setTimeout(__syncPauseButtons, 0);
+    setTimeout(__syncPauseButtons, 80);
+  }, false);
 
 
   // Compact control labels: Arabic = ع, Voice = speaker icon only.
@@ -467,6 +585,7 @@
 
   function __installCompactControls(){
     __syncCompactControls();
+    __syncPauseButtons();
     document.addEventListener('click', function(ev){
       var t = ev.target;
       if (!t) return;

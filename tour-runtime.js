@@ -60,10 +60,11 @@
   }
   function navigate(page){
     page=clean(page)||'index';
-    stopSpeech();
-    try{ sessionStorage.setItem('numero_tour_nav_epoch',String(Date.now())); }catch(e){}
-    var target=page+'.html';
-    if(location.pathname.split('/').pop()===target){ location.reload(); }
+    hardStopSpeech();
+    var epoch=Date.now();
+    try{ sessionStorage.setItem('numero_tour_nav_epoch',String(epoch)); }catch(e){}
+    var target=page+'.html?nav='+epoch;
+    if((location.pathname.split('/').pop()||'')===(page+'.html')) location.replace(target);
     else location.assign(target);
   }
   window.SupportTourShared={page:ACTIVE_PAGE,normalizeImageUrl:normalizeImageUrl,stopSpeech:stopSpeech,hardStopSpeech:hardStopSpeech,navigate:navigate};
